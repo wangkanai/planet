@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/.github/" />
+  <Folder Name="/.solutions/">
+    <File Path="build.ps1" />
+    <File Path="db.ps1" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="Directory.Packages.props" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path="sign.ps1" />
+    <File Path="SonarQube.Analysis.xml" />
+    <File Path="Version.ps1" />
+  </Folder>
+</Solution>
