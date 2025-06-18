@@ -1,7 +1,47 @@
 <Project>
-  <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
-  <PropertyGroup>
+    <PropertyGroup>
+        <Version>0.0.0</Version>
+        <Authors>Sarin Na Wangkanai</Authors>
+        <Company>Wangkanai</Company>
+        <Description>Planetary distributed map service server built with .NET Core</Description>
+        <Copyright>©2024-2025 Sarin Na Wangkanai, All rights reserved</Copyright>
 
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>git://github.com/wangkanai/planet</RepositoryUrl>
 
-  </PropertyGroup>
+        <PackageProjectUrl>https://github.com/wangkanai/planet</PackageProjectUrl>
+        <PackageLicense>https://github.com/wangkanai/planet/blob/main/LICENSE</PackageLicense>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Wangkanai.Caster'">
+        <PackageIcon>wangkanai-logo.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(MSBuildProjectName)' == 'Wangkanai.Caster'">
+        <None Include="$(RepoRoot)\assets\wangkanai-logo.png" Pack="true" PackagePath="\" />
+        <None Include="$(RepoRoot)\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <RepoRoot Condition=" '$(RepoRoot)' == '' OR !HasTrailingSlash('$(RepoRoot)') ">$(MSBuildThisFileDirectory)</RepoRoot>
+        <SharedSourceRoot>$(MSBuildThisFileDirectory)Shared\src\</SharedSourceRoot>
+    </PropertyGroup>
 </Project>

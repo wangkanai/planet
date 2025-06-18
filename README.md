@@ -1,8 +1,6 @@
 # Wangkanai Planet
 
-Planetary distributed map service server
-
-Lightweight, high-performance NTRIP Caster Broadcast Server built with .NET Core for distributing GNSS/GPS RTK correction data over the internet.
+Planetary distributed map service server built with .NET Core
 
 [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.planet)](https://www.nuget.org/packages/wangkanai.planet)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.planet)](https://www.nuget.org/packages/wangkanai.planet)
