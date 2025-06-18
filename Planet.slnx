@@ -1,5 +1,7 @@
 <Solution>
-  <Folder Name="/.github/" />
+  <Folder Name="/.github/">
+    <File Path=".github\workflows\dotnet.yml" />
+  </Folder>
   <Folder Name="/.solutions/">
     <File Path="build.ps1" />
     <File Path="db.ps1" />
@@ -11,5 +13,7 @@
     <File Path="sign.ps1" />
     <File Path="SonarQube.Analysis.xml" />
     <File Path="Version.ps1" />
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
   </Folder>
 </Solution>
