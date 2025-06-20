@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Admin\src\Domain\Wangkanai.Planet.Admin.Domain.csproj" />
+    <ProjectReference Include="..\Infrastructure\Wangkanai.Planet.Portal.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

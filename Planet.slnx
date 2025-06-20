@@ -39,6 +39,8 @@
     <Project Path="Portal\src\Application\Wangkanai.Planet.Portal.Application.csproj" Type="Classic C#" />
     <Project Path="Portal\src\Client\Wangkanai.Planet.Portal.Client.csproj" Type="Classic C#" />
     <Project Path="Portal\src\Domain\Wangkanai.Planet.Portal.Domain.csproj" Type="Classic C#" />
+    <Project Path="Portal\src\Infrastructure\Wangkanai.Planet.Portal.Infrastructure.csproj" Type="Classic C#" />
+    <Project Path="Portal\src\Persistence\Wangkanai.Planet.Portal.Persistence.csproj" Type="Classic C#" />
     <Project Path="Portal\src\Server\Wangkanai.Planet.Portal.csproj" Type="Classic C#" />
     <File Path="Portal\Directory.Build.props" />
   </Folder>
