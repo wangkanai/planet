@@ -19,6 +19,7 @@
   </Folder>
   <Folder Name="/Common/">
     <Project Path="Common\src\Domain\Wangkanai.Planet.Common.Domain.csproj" Type="Classic C#" />
+    <Project Path="Common\tests\Wangkanai.Planet.Common.Tests.csproj" Type="Classic C#" />
     <File Path="Common\Directory.Build.props" />
   </Folder>
   <Folder Name="/Engine/">
