@@ -6,7 +6,6 @@
   </Folder>
   <Folder Name="/.solutions/">
     <File Path="build.ps1" />
-    <File Path="db.ps1" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Build.targets" />
     <File Path="Directory.Packages.props" />
@@ -20,8 +19,10 @@
   </Folder>
   <Folder Name="/Common/">
     <Project Path="Common\src\Domain\Wangkanai.Planet.Common.Domain.csproj" Type="Classic C#" />
-    <Project Path="Common\tests\Wangkanai.Planet.Common.Tests.csproj" Type="Classic C#" />
     <File Path="Common\Directory.Build.props" />
+  </Folder>
+  <Folder Name="/Common/tests/">
+    <Project Path="Common\tests\Wangkanai.Planet.Common.Tests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Engine/">
     <Project Path="Engine\src\Console\Wangkanai.Planet.Engine.Console.csproj" Type="Classic C#" />
@@ -39,6 +40,7 @@
     <Project Path="Portal\src\Persistence\Wangkanai.Planet.Portal.Persistence.csproj" Type="Classic C#" />
     <Project Path="Portal\src\Server\Wangkanai.Planet.Portal.csproj" Type="Classic C#" />
     <File Path="Portal\Directory.Build.props" />
+    <File Path="Portal\db.ps1" />
   </Folder>
   <Folder Name="/Portal/tests/">
     <Project Path="Portal\tests\Wangkanai.Planet.Portal.Tests.csproj" Type="Classic C#" />
