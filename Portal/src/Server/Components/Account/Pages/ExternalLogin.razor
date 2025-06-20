@@ -8,10 +8,10 @@
 @using Microsoft.AspNetCore.WebUtilities
 @using Wangkanai.Planet.Portal.Data
 
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
-@inject IUserStore<ApplicationUser> UserStore
-@inject IEmailSender<ApplicationUser> EmailSender
+@inject SignInManager<PlanetUser> SignInManager
+@inject UserManager<PlanetUser> UserManager
+@inject IUserStore<PlanetUser> UserStore
+@inject IEmailSender<PlanetUser> EmailSender
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<ExternalLogin> Logger
@@ -174,26 +174,26 @@
         message = $"Error: {string.Join(",", result.Errors.Select(error => error.Description))}";
     }
 
-    private ApplicationUser CreateUser()
+    private PlanetUser CreateUser()
     {
         try
         {
-            return Activator.CreateInstance<ApplicationUser>();
+            return Activator.CreateInstance<PlanetUser>();
         }
         catch
         {
-            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
-                $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor");
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(PlanetUser)}'. " +
+                $"Ensure that '{nameof(PlanetUser)}' is not an abstract class and has a parameterless constructor");
         }
     }
 
-    private IUserEmailStore<ApplicationUser> GetEmailStore()
+    private IUserEmailStore<PlanetUser> GetEmailStore()
     {
         if (!UserManager.SupportsUserEmail)
         {
             throw new NotSupportedException("The default UI requires a user store with email support.");
         }
-        return (IUserEmailStore<ApplicationUser>)UserStore;
+        return (IUserEmailStore<PlanetUser>)UserStore;
     }
 
     private sealed class InputModel

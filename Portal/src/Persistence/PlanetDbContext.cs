@@ -3,6 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Wangkanai.Planet.Portal.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
+public class PlanetDbContext(DbContextOptions<PlanetDbContext> options) : IdentityDbContext<PlanetUser>(options)
 {
 }

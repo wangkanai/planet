@@ -1,13 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Admin\src\Domain\Wangkanai.Planet.Admin.Domain.csproj" />
+    <ProjectReference Include="..\Domain\Wangkanai.Planet.Portal.Domain.csproj" />
   </ItemGroup>
 
 </Project>

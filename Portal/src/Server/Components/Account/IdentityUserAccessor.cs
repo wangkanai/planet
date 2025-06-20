@@ -3,9 +3,9 @@ using Wangkanai.Planet.Portal.Data;
 
 namespace Wangkanai.Planet.Portal.Components.Account;
 
-internal sealed class IdentityUserAccessor(UserManager<ApplicationUser> userManager, IdentityRedirectManager redirectManager)
+internal sealed class IdentityUserAccessor(UserManager<PlanetUser> userManager, IdentityRedirectManager redirectManager)
 {
-    public async Task<ApplicationUser> GetRequiredUserAsync(HttpContext context)
+    public async Task<PlanetUser> GetRequiredUserAsync(HttpContext context)
     {
         var user = await userManager.GetUserAsync(context.User);
 
