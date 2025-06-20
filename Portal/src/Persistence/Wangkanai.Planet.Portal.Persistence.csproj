@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Infrastructure\Wangkanai.Planet.Portal.Infrastructure.csproj" />
+	</ItemGroup>
+
+</Project>
