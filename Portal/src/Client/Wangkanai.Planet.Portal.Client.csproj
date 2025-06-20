@@ -3,6 +3,7 @@
   <PropertyGroup>
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
     <StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
+		<RootNamespace>Wangkanai.Planet.Portal.Client</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
