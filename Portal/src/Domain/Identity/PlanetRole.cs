@@ -6,5 +6,5 @@ namespace Wangkanai.Planet.Portal.Data;
 
 public class PlanetRole : IdentityRole
 {
-
+	public string Description { get; set; }
 }
