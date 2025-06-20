@@ -18,15 +18,6 @@
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
   </Folder>
-  <Folder Name="/Admin/">
-    <Project Path="Admin\src\Client\Wangkanai.Planet.Admin.Client.csproj" Type="Classic C#" />
-    <Project Path="Admin\src\Domain\Wangkanai.Planet.Admin.Domain.csproj" Type="Classic C#" />
-    <Project Path="Admin\src\Server\Wangkanai.Planet.Admin.csproj" Type="Classic C#" />
-    <File Path="Admin\Directory.Build.props" />
-  </Folder>
-  <Folder Name="/Admin/tests/">
-    <Project Path="Admin\tests\Wangkanai.Planet.Admin.Tests.csproj" Type="Classic C#" />
-  </Folder>
   <Folder Name="/Common/">
     <Project Path="Common\src\Domain\Wangkanai.Planet.Common.Domain.csproj" Type="Classic C#" />
     <Project Path="Common\tests\Wangkanai.Planet.Common.Tests.csproj" Type="Classic C#" />
