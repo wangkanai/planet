@@ -7,8 +7,8 @@ public static class Program
 {
 	private static async Task<int> Main(string[] args)
 	{
-		if (System.Console.IsInputRedirected)
-			System.Console.OutputEncoding = Encoding.UTF8;
+		if (Console.IsInputRedirected)
+			Console.OutputEncoding = Encoding.UTF8;
 
 		var rootCommand = new RootCommand("Wangkanai Planet Engine");
 
