@@ -1,0 +1,11 @@
+<Project>
+	<Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory)..\, Directory.Build.props))\Directory.Build.props" />
+	<PropertyGroup>
+
+
+	</PropertyGroup>
+	<ItemGroup Condition="'$(MSBuildProjectName)' == 'Wangkanai.Planet.Spatial'">
+		<None Include="$(RepoRoot)\assets\wangkanai-logo.png" Pack="true" PackagePath="\" />
+		<None Include="$(RepoRoot)\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+</Project>

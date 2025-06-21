@@ -25,6 +25,9 @@
   <Folder Name="/Engine/tests/">
     <Project Path="Engine\tests\Wangkanai.Planet.Engine.Tests.csproj" Type="Classic C#" />
   </Folder>
+  <Folder Name="/Extensions/">
+    <File Path="Extensions\Directory.Build.props" />
+  </Folder>
   <Folder Name="/Portal/">
     <Project Path="Portal\src\Application\Wangkanai.Planet.Portal.Application.csproj" Type="Classic C#" />
     <Project Path="Portal\src\Client\Wangkanai.Planet.Portal.Client.csproj" Type="Classic C#" />
@@ -37,5 +40,10 @@
   </Folder>
   <Folder Name="/Portal/tests/">
     <Project Path="Portal\tests\Wangkanai.Planet.Portal.Tests.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Spatial/">
+    <Project Path="Spatial\src\Abstractions\Wangkanai.Planet.Spatial.Abstractions.csproj" Type="Classic C#" />
+    <Project Path="Spatial\src\Root\Wangkanai.Planet.Spatial.csproj" Type="Classic C#" />
+    <File Path="Spatial\Directory.Build.props" />
   </Folder>
 </Solution>
