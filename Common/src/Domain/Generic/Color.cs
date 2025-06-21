@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-namespace Wangkanai.Planet.Common.Domain.Generic;
+namespace Wangkanai.Planet.Common.Generic;
 
 // https://tabler.io/docs/base/colors
 [Flags]
