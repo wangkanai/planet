@@ -1,4 +1,4 @@
-namespace Wangkanai.Planet.Extensions.Google.Tests;
+namespace Wangkanai.Planet.Providers.Google.Tests;
 
 public class GoogleProviderTests
 {

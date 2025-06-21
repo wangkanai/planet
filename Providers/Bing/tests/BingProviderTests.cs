@@ -1,4 +1,6 @@
-namespace Wangkanai.Planet.Extensions.Bing.Tests;
+using Wangkanai.Planet.Extensions.Bing;
+
+namespace Wangkanai.Planet.Providers.Bing.Tests;
 
 public class BingProviderTests
 {

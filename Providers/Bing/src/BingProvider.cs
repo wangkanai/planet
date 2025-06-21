@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Planet.Extensions.Bing.Extensions;
+using Wangkanai.Planet.Providers.Bing.Extensions;
 
 namespace Wangkanai.Planet.Extensions.Bing;
 

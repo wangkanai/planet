@@ -49,12 +49,12 @@
     <File Path="Providers\README.md" />
   </Folder>
   <Folder Name="/Providers/Bing/">
-    <Project Path="Extensions\Bing\src\Wangkanai.Planet.Extensions.Bing.csproj" Type="Classic C#" />
-    <Project Path="Extensions\Bing\tests\Wangkanai.Planet.Extensions.Bing.Tests.csproj" Type="Classic C#" />
+    <Project Path="Providers\Bing\src\Wangkanai.Planet.Providers.Bing.csproj" Type="Classic C#" />
+    <Project Path="Providers\Bing\tests\Wangkanai.Planet.Providers.Bing.Tests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Providers/Google/">
-    <Project Path="Extensions\Google\src\Wangkanai.Planet.Extensions.Google.csproj" Type="Classic C#" />
-    <Project Path="Extensions\Google\tests\Wangkanai.Planet.Extensions.Google.Tests.csproj" Type="Classic C#" />
+    <Project Path="Providers\Google\src\Wangkanai.Planet.Providers.Google.csproj" Type="Classic C#" />
+    <Project Path="Providers\Google\tests\Wangkanai.Planet.Providers.Google.Tests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Spatial/">
     <Project Path="Spatial\src\Abstractions\Wangkanai.Planet.Spatial.Abstractions.csproj" Type="Classic C#" />

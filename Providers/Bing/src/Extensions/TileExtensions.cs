@@ -2,7 +2,7 @@
 
 using System.Text;
 
-namespace Wangkanai.Planet.Extensions.Bing.Extensions;
+namespace Wangkanai.Planet.Providers.Bing.Extensions;
 
 public static class TileExtensions
 {
