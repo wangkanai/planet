@@ -4,4 +4,8 @@
     <ProjectReference Include="..\src\Root\Wangkanai.Planet.Spatial.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Coordinates\" />
+  </ItemGroup>
+
 </Project>
