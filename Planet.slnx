@@ -21,12 +21,14 @@
     <Project Path="Engine\src\Console\Wangkanai.Planet.Engine.Console.csproj" Type="Classic C#" />
     <Project Path="Engine\src\Domain\Wangkanai.Planet.Engine.Domain.csproj" Type="Classic C#" />
     <File Path="Engine\Directory.Build.props" />
+    <File Path="Engine\README.md" />
   </Folder>
   <Folder Name="/Engine/tests/">
     <Project Path="Engine\tests\Wangkanai.Planet.Engine.Tests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Extensions/">
     <File Path="Extensions\Directory.Build.props" />
+    <File Path="Extensions\README.md" />
   </Folder>
   <Folder Name="/Portal/">
     <Project Path="Portal\src\Application\Wangkanai.Planet.Portal.Application.csproj" Type="Classic C#" />
@@ -37,6 +39,7 @@
     <Project Path="Portal\src\Server\Wangkanai.Planet.Portal.csproj" Type="Classic C#" />
     <File Path="Portal\Directory.Build.props" />
     <File Path="Portal\db.ps1" />
+    <File Path="Portal\README.md" />
   </Folder>
   <Folder Name="/Portal/tests/">
     <Project Path="Portal\tests\Wangkanai.Planet.Portal.Tests.csproj" Type="Classic C#" />
@@ -45,5 +48,6 @@
     <Project Path="Spatial\src\Abstractions\Wangkanai.Planet.Spatial.Abstractions.csproj" Type="Classic C#" />
     <Project Path="Spatial\src\Root\Wangkanai.Planet.Spatial.csproj" Type="Classic C#" />
     <File Path="Spatial\Directory.Build.props" />
+    <File Path="Spatial\README.md" />
   </Folder>
 </Solution>
