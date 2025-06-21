@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Wangkanai.Planet.Providers.Bing</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Wangkanai.Planet.Providers.Bing.csproj" />
+  </ItemGroup>
+
+</Project>

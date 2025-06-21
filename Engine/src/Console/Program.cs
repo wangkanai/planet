@@ -1,2 +1,17 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using System.CommandLine;
+using System.Text;
+
+namespace Wangkanai.Planet.Engine;
+
+public static class Program
+{
+	private static async Task<int> Main(string[] args)
+	{
+		if (Console.IsInputRedirected)
+			Console.OutputEncoding = Encoding.UTF8;
+
+		var rootCommand = new RootCommand("Wangkanai Planet Engine");
+
+		return await rootCommand.InvokeAsync(args);
+	}
+}
