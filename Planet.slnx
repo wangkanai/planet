@@ -42,6 +42,8 @@
     <Project Path="Portal\tests\Wangkanai.Planet.Portal.Tests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Spatial/">
+    <Project Path="Spatial\src\Abstractions\Wangkanai.Planet.Spatial.Abstractions.csproj" Type="Classic C#" />
+    <Project Path="Spatial\src\Root\Wangkanai.Planet.Spatial.csproj" Type="Classic C#" />
     <File Path="Spatial\Directory.Build.props" />
   </Folder>
 </Solution>

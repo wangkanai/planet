@@ -21,12 +21,12 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Wangkanai.Caster'">
+    <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Wangkanai.Planet'">
         <PackageIcon>wangkanai-logo.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(MSBuildProjectName)' == 'Wangkanai.Caster'">
+    <ItemGroup Condition="'$(MSBuildProjectName)' == 'Wangkanai.Planet'">
         <None Include="$(RepoRoot)\assets\wangkanai-logo.png" Pack="true" PackagePath="\" />
         <None Include="$(RepoRoot)\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
