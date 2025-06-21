@@ -4,4 +4,8 @@
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Generic\" />
+	</ItemGroup>
+
 </Project>
