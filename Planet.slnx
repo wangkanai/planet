@@ -17,13 +17,6 @@
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
   </Folder>
-  <Folder Name="/Common/">
-    <Project Path="Common\src\Domain\Wangkanai.Planet.Common.Domain.csproj" Type="Classic C#" />
-    <File Path="Common\Directory.Build.props" />
-  </Folder>
-  <Folder Name="/Common/tests/">
-    <Project Path="Common\tests\Wangkanai.Planet.Common.Tests.csproj" Type="Classic C#" />
-  </Folder>
   <Folder Name="/Engine/">
     <Project Path="Engine\src\Console\Wangkanai.Planet.Engine.Console.csproj" Type="Classic C#" />
     <Project Path="Engine\src\Domain\Wangkanai.Planet.Engine.Domain.csproj" Type="Classic C#" />
