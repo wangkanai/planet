@@ -1,6 +1,7 @@
 <Project>
 	<Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory)..\, Directory.Build.props))\Directory.Build.props" />
 	<PropertyGroup>
+		<RootNamespace>Wangkanai.Planet.Spatial</RootNamespace>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 	<ItemGroup Condition="'$(MSBuildProjectName)' == 'Wangkanai.Planet.Spatial'">
