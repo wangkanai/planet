@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Wangkanai.Planet.Extensions.Google</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Wangkanai.Planet.Extensions.Google.csproj" />
+  </ItemGroup>
+
+
+</Project>

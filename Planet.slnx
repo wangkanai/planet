@@ -30,6 +30,14 @@
     <File Path="Extensions\Directory.Build.props" />
     <File Path="Extensions\README.md" />
   </Folder>
+  <Folder Name="/Extensions/Bing/">
+    <Project Path="Extensions\Bing\src\Wangkanai.Planet.Extensions.Bing.csproj" Type="Classic C#" />
+    <Project Path="Extensions\Bing\tests\Wangkanai.Planet.Extensions.Bing.Tests.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Extensions/Google/">
+    <Project Path="Extensions\Google\src\Wangkanai.Planet.Extensions.Google.csproj" Type="Classic C#" />
+    <Project Path="Extensions\Google\tests\Wangkanai.Planet.Extensions.Google.Tests.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Portal/">
     <Project Path="Portal\src\Application\Wangkanai.Planet.Portal.Application.csproj" Type="Classic C#" />
     <Project Path="Portal\src\Client\Wangkanai.Planet.Portal.Client.csproj" Type="Classic C#" />
