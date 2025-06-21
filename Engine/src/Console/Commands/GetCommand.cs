@@ -2,7 +2,7 @@
 
 namespace Wangkanai.Planet.Engine.Commands;
 
-internal class GetCommand
+public class GetCommand
 {
-	
+
 }
