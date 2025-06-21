@@ -1,6 +1,8 @@
-# Wangkanai Planet
+# Wangkanai Planet 🌎
 
-Planetary distributed map service server built with .NET Core
+Planetary distributed map service server cross-platform built with C#.NET.
+Lightweight and easy to use to serve raster and vector map tiles through the browser.
+Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 
 [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.planet)](https://www.nuget.org/packages/wangkanai.planet)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.planet)](https://www.nuget.org/packages/wangkanai.planet)
@@ -11,3 +13,61 @@ Planetary distributed map service server built with .NET Core
 [![Open Collective](https://img.shields.io/badge/open%20collective-support%20me-3385FF.svg)](https://opencollective.com/wangkanai)
 [![Patreon](https://img.shields.io/badge/patreon-support%20me-d9643a.svg)](https://www.patreon.com/wangkanai)
 [![GitHub](https://img.shields.io/github/license/wangkanai/caster)](https://github.com/wangkanai/caster/blob/main/LICENSE)
+
+## Features 🌟
+
+- Portal for viewing raster and vector map tiles
+- Administration portal for managing map tiles
+- Engine for rendering raster geotiff to indexable map tiles
+
+## Map standards ️🗺️
+
+- MBTiles
+- GeoPackage
+- WMTS
+- WMS
+- TileJSON
+
+## Supported tiles formats 🗜️
+
+- Raster .mbtiles
+- Vector .mbtiles
+- Raster .geopackage
+- Raster and vector .mtpkg
+- Quantized mesh terrain (3D) .geopackage
+- Vector tiles from PostGIS geometries
+
+## Supported CRS 🏁
+
+- Complete EPSG database + custom defined SRS via Proj4. Over 6000 systems world-wide
+- Base map mercator only
+
+## Desktop viewers 🖥️
+
+- [QGIS](https://www.qgis.org/en/site/)
+- ArcGIS for Desktop
+- Google Earth
+- Tableau
+- any viewer supporting WMTS
+
+## Mobile viewers 📱
+
+- Google Maps SDK for iOS
+- Google Maps SDK for Android
+- MapLibre iOS SDK
+- MapLibre Android SDK
+- Apple MapKit
+- RouteMe
+- OSMDroid
+- any viewer supporting WMTS, or TileJSON
+
+## Sponsoring ❤️
+
+If you like this project and want to support its development,
+please consider sponsoring it through [Open Collective](https://opencollective.com/wangkanai) or [Patreon](https://www.patreon.com/wangkanai).
+Your support helps keep the project alive and thriving!
+
+## Contributing 🤝
+
+We welcome contributions to Wangkanai Planet!
+If you have ideas, suggestions, or improvements, please feel free to open an issue or submit a pull request.
