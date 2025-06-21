@@ -5,6 +5,17 @@
         <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All"/>
     </ItemGroup>
     <!-- xUnit Tests-->
+	<PropertyGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
+		<OutputType>Exe</OutputType>
+		<TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+		<UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+	</PropertyGroup>
+	<ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
+		<Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
+		<Using Include="Xunit"/>
+	</ItemGroup>
     <ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
         <PackageReference Include="Microsoft.AspNetCore.TestHost"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
@@ -17,7 +28,5 @@
         <PackageReference Include="FluentAssertions"/>
         <PackageReference Include="FluentAssertions.AspNetCore.Mvc"/>
     </ItemGroup>
-    <ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
-        <Using Include="Xunit"/>
-    </ItemGroup>
+
 </Project>

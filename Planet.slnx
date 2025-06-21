@@ -50,4 +50,7 @@
     <File Path="Spatial\Directory.Build.props" />
     <File Path="Spatial\README.md" />
   </Folder>
+  <Folder Name="/Spatial/tests/">
+    <Project Path="Spatial\tests\Wangkanai.Planet.Spatial.Tests.csproj" Type="Classic C#" />
+  </Folder>
 </Solution>
