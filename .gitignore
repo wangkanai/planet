@@ -8,6 +8,7 @@ wwwroot/lib/
 .vscode/
 DS_Store
 Migrattions/
+pacgage-lock.json
 # User-specific files
 *.rsuser
 *.suo
