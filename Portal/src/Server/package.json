@@ -14,7 +14,7 @@
 		"lib": "npm-run-all -p lib-*",
 		"lib-tabler": "cpx \"node_modules/@tabler/core/**/*.*\" wwwroot/lib/tabler/",
 		"lib-icons": "cpx \"node_modules/@tabler/icons/**/*.*\" wwwroot/lib/icons/",
-		"lib-webfont": "cpx \"node_modules/@tabler/icons-webfont/**/*.*\" wwwroot/lib/icons-webfont/",
+		"lib-webfont": "cpx \"node_modules/@tabler/icons-webfont/**/*.*\" wwwroot/lib/webfont/",
 		"clean": "npm-run-all -p clean-*",
 		"clean-dist": "rimraf wwwroot/dist/",
 		"clean-lib": "rimraf wwwroot/lib/",
