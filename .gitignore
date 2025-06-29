@@ -10,12 +10,20 @@ dist/
 DS_Store
 Migrattions/
 package-lock.json
+
+# JetBrains Rider
+.DS_Store
+/Portal/src/Server/Provision-AutoGenKeys.ps1
+
 # User-specific files
 *.rsuser
 *.suo
 *.user
 *.userosscache
+*.sln.iml
 *.sln.docstates
+*.slnx.iml
+*.slnx.docstates
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -409,6 +417,3 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
-# JetBrains Rider
-*.sln.iml
-.DS_Store
