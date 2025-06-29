@@ -6,8 +6,8 @@ param(
     [Parameter(Mandatory=$false)] [switch]$reset
 )
 
-$startup="./src/Server/Wangkanai.Plant.Portal.Server.csproj"
-$project="./src/Persistence/Wangkanai.Plant.Portal.Persistence.csproj"
+$startup="./src/Server/Wangkanai.Planet.Portal.csproj"
+$project="./src/Persistence/Wangkanai.Planet.Portal.Persistence.csproj"
 
 if ($add)
 {

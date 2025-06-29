@@ -8,7 +8,7 @@ dist/
 .idea/
 .vscode/
 DS_Store
-Migrattions/
+Migrations/
 package-lock.json
 
 # JetBrains Rider
