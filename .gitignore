@@ -3,8 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
-wwwroot/lib/
-wwwroot/dist/
+lib/
+dist/
 .idea/
 .vscode/
 DS_Store
