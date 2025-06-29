@@ -3,10 +3,13 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+lib/
+dist/
 .idea/
 .vscode/
 DS_Store
 Migrattions/
+package-lock.json
 # User-specific files
 *.rsuser
 *.suo

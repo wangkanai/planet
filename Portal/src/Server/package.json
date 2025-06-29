@@ -1,0 +1,60 @@
+{
+	"name": "plant",
+	"version": "1.0.0",
+	"description": "Wangkanai Planet - A modern, extensible, and powerful CMS for .NET",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wangkanai/planet.git"
+	},
+	"private": true,
+	"scripts": {
+		"watch": "sass --watch wwwroot/planet.scss:wwwroot/dist/planet.css",
+		"build": "npm-run-all -s build-scss build-minify",
+		"build-scss": "sass --style=expanded --source-map  wwwroot/planet.scss:wwwroot/dist/planet.css",
+		"build-minify": "postcss wwwroot/dist/planet.css --no-map --use cssnano --output wwwroot/dist/planet.min.css",
+		"lib": "npm-run-all -p lib-*",
+		"lib-tabler": "cpx \"node_modules/@tabler/core/**/*.*\" wwwroot/lib/tabler/",
+		"lib-icons": "cpx \"node_modules/@tabler/icons/**/*.*\" wwwroot/lib/icons/",
+		"lib-webfont": "cpx \"node_modules/@tabler/icons-webfont/**/*.*\" wwwroot/lib/webfont/",
+		"clean": "npm-run-all -p clean-*",
+		"clean-dist": "rimraf wwwroot/dist/",
+		"clean-lib": "rimraf wwwroot/lib/",
+		"deploy": "npm run clean && npm run lib && npm run build"
+	},
+	"dependencies": {
+		"@tabler/core": "^1.3.2",
+		"@tabler/icons": "^3.34.0",
+		"@tabler/icons-webfont": "^3.34.0"
+	},
+	"devDependencies": {
+		"browser-sync": "^3.0.2",
+		"cpy-cli": "^5.0.0",
+		"cpx": "^1.5.0",
+		"cssnano": "^7.0.7",
+		"nodemon": "^3.1.10",
+		"npm-run-all": "^4.1.5",
+		"postcss": "^8.5.6",
+		"postcss-cli": "^11.0.1",
+		"postcss-import": "^16.1.1",
+		"prettier": "^3.6.2",
+		"rimraf": "^6.0.1",
+		"sass": "^1.89.2",
+		"sass-true": "^8.1.0"
+	},
+	"keywords": [
+		"css",
+		"sass",
+		"scss",
+		"flexbox",
+		"grid",
+		"responsive",
+		"framework"
+	],
+	"files": [
+		"css",
+		"scss",
+		"accouter.scss",
+		"LICENSE",
+		"README.md"
+	]
+}
