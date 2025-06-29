@@ -33,5 +33,9 @@
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
     <PackageVersion Include="FluentAssertions" Version="8.3.0" />
     <PackageVersion Include="FluentAssertions.AspNetCore.Mvc" Version="4.2.0" />
+		<!--wangkanai-->
+		<PackageVersion Include="Wangkanai.System" Version="5.7.0" />
+		<PackageVersion Include="Wangkanai.Validation" Version="4.5.0" />
+		<PackageVersion Include="Wangkanai.Domain" Version="5.0.0-Beta-8" />
   </ItemGroup>
 </Project>
