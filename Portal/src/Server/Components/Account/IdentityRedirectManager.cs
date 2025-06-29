@@ -11,12 +11,12 @@ internal sealed class IdentityRedirectManager(NavigationManager navigationManage
 	public const string StatusCookieName = "Identity.StatusMessage";
 
 	private static readonly CookieBuilder StatusCookieBuilder = new()
-	{
-	    SameSite    = SameSiteMode.Strict,
-	    HttpOnly    = true,
-	    IsEssential = true,
-	    MaxAge      = TimeSpan.FromSeconds(5),
-	};
+    {
+        SameSite    = SameSiteMode.Strict,
+        HttpOnly    = true,
+        IsEssential = true,
+        MaxAge      = TimeSpan.FromSeconds(5),
+    };
 
 	[DoesNotReturn]
 	public void RedirectTo(string? uri)
