@@ -13,7 +13,7 @@ public class PlanetDbContext(DbContextOptions<PlanetDbContext> options)
 
 	protected override void OnModelCreating(ModelBuilder builder)
 	{
-		builder.ApplyConfigurationsFromAssembly(typeof(PlanetConstants).Assembly);
+		//builder.ApplyConfigurationsFromAssembly(typeof(PlanetConstants).Assembly);
 		base.OnModelCreating(builder);
 	}
 }

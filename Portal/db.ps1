@@ -3,6 +3,7 @@ param(
     [Parameter(Mandatory=$false)] [switch]$list,
     [Parameter(Mandatory=$false)] [switch]$remove,
     [Parameter(Mandatory=$false)] [switch]$clean,
+    [Parameter(Mandatory=$false)] [switch]$update,
     [Parameter(Mandatory=$false)] [switch]$reset
 )
 
@@ -20,6 +21,10 @@ if ($list -eq $true)
 if ($remove)
 {
     dotnet ef migrations remove --startup-project $startup --project $project --force
+}
+if ($update)
+{
+    dotnet ef database update --startup-project $startup --project $project
 }
 if($clean)
 {
