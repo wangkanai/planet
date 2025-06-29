@@ -1,5 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" PrivateAssets="all"/>
+	</ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Application\Wangkanai.Planet.Portal.Application.csproj" />
   </ItemGroup>
