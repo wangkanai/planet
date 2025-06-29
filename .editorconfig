@@ -103,11 +103,24 @@ ij_any_align_multiline_array_initializer_expression=true
 resharper_csharp_space_before_trailing_comment     =false
 
 [*.{cs, cpp, h}]
-file_header_template=Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
+file_header_template=Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.Apache License, Version 2.0
 
-[*.{html, cshtml}]
-indent_size                           =4
-ij_html_do_not_indent_children_of_tags=none
+[*.{html,cshtml,razor}]
+indent_size                                                           =3
+max_line_length                                                       =1000
+resharper_no_indent_inside_elements                                   =html, thead, tbody, tfoot
+resharper_no_indent_inside_if_element_longer_than                     =1000
+resharper_normalize_tag_names                                         =true
+resharper_html_allow_far_alignment                                    =true
+resharper_html_attribute_indent                                       =single_indent
+resharper_html_attribute_style                                        =on_single_line
+resharper_html_linebreak_before_elements                              =body, div, p, main, section, article, form, h1, h2, h3, svg, path
+resharper_html_linebreak_before_multiline_elements                    =false
+resharper_html_linebreaks_inside_tags_for_elements_with_child_elements=false
+resharper_html_linebreaks_inside_tags_for_multiline_elements          =false
+ij_html_do_not_align_children_of_min_lines                            =0
+ij_html_do_not_break_if_inline_tags                                   =title, h1, h2, h3, h4, h5, h6, p, li, span
+ij_html_do_not_indent_children_of_tags                                =form, ul, ol, script, style, h1, h2, h3, h4, h5, h6, table, thead, tbody, tfoot
 
 [*.csproj]
 indent_size                  =2
@@ -130,7 +143,8 @@ ij_powershell_align_multiline_chained_methods   =true
 indent_style=tab
 
 [*.{css, scss, less, sass}]
-indent_size=2
+indent_size           =2
+ij_css_value_alignment=on_value
 
 [*.{js, js.map}]
 indent_size=2
