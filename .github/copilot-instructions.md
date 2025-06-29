@@ -9,8 +9,9 @@ This file contains instructions for Copilot on how to operate in this repository
 ## Code Commits
 
 - When writing commit messages, ensure that the message is descriptive and summarizes the changes made.
+- When writing commit messages, the first line title should not be a markdown header.
+- When writing commit messages, the first line title should be no longer than 50 characters.
 - When writing commit messages, titles use the format: `[type]: [short description]`, where `type` can be one of `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, or `chore`.
-- When writing commit messages, first line title should be no longer than 50 characters and must not have markdown header.
 - When suggesting changes to a commit message, ensure that the changes are relevant to the content of the commit.
 
 ## Pull Requests
