@@ -10,10 +10,6 @@ namespace Wangkanai.Planet.Portal.Identity;
 public class RoleConfiguration : IEntityTypeConfiguration<PlanetRole> {
 	public void Configure(EntityTypeBuilder<PlanetRole> builder)
 	{
-		builder.Property(x => x.Description)
-		       .HasMaxLength(250)
-		       .IsUnicode();
-
 		builder.HasData(RoleSeed.Roles);
 	}
 }

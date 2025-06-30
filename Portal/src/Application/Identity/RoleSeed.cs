@@ -4,22 +4,22 @@ using Wangkanai.Planet.Portal.Data;
 
 namespace Wangkanai.Planet.Portal.Identity;
 
-public static class RoleSeed
+internal static class RoleSeed
 {
 	internal static List<PlanetRole> Roles =>
 	[
-		Create("Admin", "Administrator"),
-		Create("Moderator", "Moderator"),
-		Create("Editor", "Editor"),
-		Create("Contributor", "Contributor"),
-		Create("User", "Registered User"),
+		Create(PlanetRoles.Admin),
+		Create(PlanetRoles.Moderator),
+		Create(PlanetRoles.Editor),
+		Create(PlanetRoles.Contributor),
+		Create(PlanetRoles.User),
+		Create(PlanetRoles.Guest),
 	];
 
-	private static PlanetRole Create(string name, string description = "")
+	private static PlanetRole Create(PlanetRoles role)
 		=> new()
 		   {
-			   Name           = name,
-			   NormalizedName = name.ToUpperInvariant(),
-			   Description    = description
+			   Name           = role.ToString(),
+			   NormalizedName = role.ToString().ToUpperInvariant(),
 		   };
 }

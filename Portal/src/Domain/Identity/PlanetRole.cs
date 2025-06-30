@@ -4,7 +4,4 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Wangkanai.Planet.Portal.Data;
 
-public class PlanetRole : IdentityRole
-{
-	public string Description { get; set; }
-}
+public class PlanetRole : IdentityRole<int>;
