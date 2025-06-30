@@ -4,7 +4,7 @@ using Wangkanai.Planet.Portal.Data;
 
 namespace Wangkanai.Planet.Portal.Identity;
 
-public static class RoleSeed
+internal static class RoleSeed
 {
 	internal static List<PlanetRole> Roles =>
 	[
@@ -13,6 +13,7 @@ public static class RoleSeed
 		Create(PlanetRoles.Editor),
 		Create(PlanetRoles.Contributor),
 		Create(PlanetRoles.User),
+		Create(PlanetRoles.Guest),
 	];
 
 	private static PlanetRole Create(PlanetRoles role)

@@ -8,5 +8,6 @@ public enum PlanetRoles
 	Moderator,
 	Editor,
 	Contributor,
-	User
+	User,
+	Guest
 }

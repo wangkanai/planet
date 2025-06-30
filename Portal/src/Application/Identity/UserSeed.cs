@@ -6,19 +6,24 @@ using Wangkanai.Planet.Portal.Data;
 
 namespace Wangkanai.Planet.Portal.Identity;
 
-public static class UserSeed
+internal static class UserSeed
 {
 	internal static List<PlanetUser> Users =>
 	[
-		Create("sarin@wangkanai.com", "P@ssw0rd", "Sarin", "Na Wangkanai"),
-		Create("user@demo.com", "P@ssw0rd", "User", "Demo"),
+		Create(1, "sarin@wangkanai.com", "P@ssw0rd", "Sarin", "Na Wangkanai"),
+		Create(2, "admin@demo.com", "P@ssw0rd", "Admin", "Demo"),
+		Create(3, "moderator@demo.com", "P@ssw0rd", "Moderator", "Demo"),
+		Create(4, "editor@demo.com", "P@ssw0rd", "Editor", "Demo"),
+		Create(5, "contributor@demo.com", "P@ssw0rd", "Contributor", "Demo"),
+		Create(6, "user@demo.com", "P@ssw0rd", "User", "Demo"),
 	];
 
 	private static PasswordHasher<PlanetUser> Hasher => new();
 
-	private static PlanetUser Create(string email, string password, string firstname, string lastname)
+	private static PlanetUser Create(int id, string email, string password, string firstname, string lastname)
 		=> new()
 		   {
+			   Id                 = id,
 			   Email              = email,
 			   EmailConfirmed     = true,
 			   UserName           = email,
