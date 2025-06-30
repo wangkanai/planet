@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Wangkanai.Planet.Portal.Identity;
 
-public sealed class UserRoleConfiguration: IEntityTypeConfiguration<IdentityUserRole<string>>
+public sealed class UserRoleConfiguration : IEntityTypeConfiguration<IdentityUserRole<string>>
 {
 	public void Configure(EntityTypeBuilder<IdentityUserRole<string>> builder)
 	{
-
+		builder.HasData(UserRoleSeed.UserRoles);
 	}
 }
