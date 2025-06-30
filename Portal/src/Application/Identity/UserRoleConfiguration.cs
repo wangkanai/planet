@@ -10,6 +10,6 @@ public sealed class UserRoleConfiguration: IEntityTypeConfiguration<IdentityUser
 {
 	public void Configure(EntityTypeBuilder<IdentityUserRole<string>> builder)
 	{
-		builder.HasData();
+
 	}
 }
