@@ -8,18 +8,17 @@ public static class RoleSeed
 {
 	internal static List<PlanetRole> Roles =>
 	[
-		Create("Admin", "Administrator"),
-		Create("Moderator", "Moderator"),
-		Create("Editor", "Editor"),
-		Create("Contributor", "Contributor"),
-		Create("User", "Registered User"),
+		Create("Admin"),
+		Create("Moderator"),
+		Create("Editor"),
+		Create("Contributor"),
+		Create("User"),
 	];
 
-	private static PlanetRole Create(string name, string description = "")
+	private static PlanetRole Create(string name)
 		=> new()
 		   {
 			   Name           = name,
 			   NormalizedName = name.ToUpperInvariant(),
-			   Description    = description
 		   };
 }
