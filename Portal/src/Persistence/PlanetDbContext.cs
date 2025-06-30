@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Wangkanai.Planet.Portal.Data;
 
 public class PlanetDbContext(DbContextOptions<PlanetDbContext> options)
-	: IdentityDbContext<PlanetUser>(options), IDataProtectionKeyContext
+	: IdentityDbContext<PlanetUser, PlanetRole, string>(options), IDataProtectionKeyContext
 {
 	public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
 

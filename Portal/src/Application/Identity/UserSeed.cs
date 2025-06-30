@@ -10,7 +10,8 @@ public static class UserSeed
 {
 	internal static List<PlanetUser> Users =>
 	[
-		Create("sarin@wangkanai.com", "P@ssw0rd", "Sarin", "Na Wangkanai")
+		Create("sarin@wangkanai.com", "P@ssw0rd", "Sarin", "Na Wangkanai"),
+		Create("user@demo.com", "P@ssw0rd", "Demo", "User"),
 	];
 
 	private static PasswordHasher<PlanetUser> Hasher => new();
