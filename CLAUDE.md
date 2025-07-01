@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Coding Guidelines
+
+- Always use descriptive variable name
+
 ## Commands
 
 ### Build Commands
@@ -23,10 +27,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `./Portal/db.ps1 -add "<migration-name>"` - Add new Entity Framework migration
 - `./Portal/db.ps1 -list` - List all migrations
 - `./Portal/db.ps1 -remove` - Remove the last migration
+- `./Portal/db.ps1 -update` - Update database to latest migration
+- `./Portal/db.ps1 -clean` - Clean all migration files
 - `./Portal/db.ps1 -reset` - Clean all migrations and create initial migration
 
 ### Engine Console Build
 - `./Engine/src/Console/build.ps1` - Build and publish Engine console as 'tiler' executable
+
+### Frontend Commands (Portal)
+- `npm run build` - Build CSS from SCSS sources
+- `npm run watch` - Watch and rebuild CSS on changes
+- `npm run lib` - Copy library files to wwwroot
+- `npm run clean` - Clean generated files
+- `npm run deploy` - Full deployment build (clean, lib, build)
 
 ## Architecture
 
@@ -44,14 +57,17 @@ The Planet solution follows a modular architecture with these main components:
 - Console layer for CLI operations
 
 **Spatial** - Geospatial data handling library
-- Core coordinate systems (Geodetic, Mercator)
-- Map extent and tile calculations
-- Abstractions layer for extensibility
+- Root: Core coordinate systems (Geodetic, Mercator), map extent and tile calculations
+- MbTiles: MBTiles format support with SQLite-based tile storage
+- GeoPackages: GeoPackage format support for geospatial data containers
+- GeoTiffs: GeoTIFF format support for georeferenced raster imagery
 
 **Providers** - External map service integrations
 - Bing Maps provider
 - Google Maps provider
 - Each provider has corresponding test projects
+
+**Extensions** - Extension methods and utilities for the Planet ecosystem
 
 **Common** - Shared components and utilities
 
@@ -62,6 +78,8 @@ The Planet solution follows a modular architecture with these main components:
 - Entity Framework Core with SQLite
 - xUnit for testing
 - PowerShell scripts for automation
+- Sass/SCSS for styling with Tabler UI framework
+- NPM for frontend asset management
 
 ### Database Context
 - Portal uses `PlanetDbContext` with SQLite connection
@@ -78,3 +96,20 @@ The Planet solution follows a modular architecture with these main components:
 - Directory.Build.props defines common MSBuild properties
 - Target framework: net9.0
 - Solution uses .slnx format (new VS solution format)
+- Frontend assets managed via NPM with Tabler UI components
+
+### Project Structure Details
+- **Portal/src/Server**: Main Blazor Server application with hybrid WASM components
+- **Portal/src/Client**: Blazor WebAssembly client components
+- **Portal/src/Application**: Application layer with business logic and Identity configuration
+- **Portal/src/Domain**: Domain entities including custom Identity models
+- **Portal/src/Infrastructure**: Infrastructure services and external integrations
+- **Portal/src/Persistence**: Entity Framework data access with SQLite
+- **Engine/src/Console**: Console application for tile processing operations
+- **Engine/src/Domain**: Engine domain logic
+- **Spatial/src/Root**: Core spatial data types and coordinate systems
+- **Spatial/src/MbTiles**: MBTiles format implementation
+- **Spatial/src/GeoPackages**: GeoPackage format support
+- **Spatial/src/GeoTiffs**: GeoTIFF format support
+- **Providers/Bing**: Bing Maps service integration
+- **Providers/Google**: Google Maps service integration
