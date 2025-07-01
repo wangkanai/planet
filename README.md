@@ -16,17 +16,34 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 
 ## Features 🌟
 
+- Engine for rendering raster geotiff to indexable map tiles
 - Portal for viewing raster and vector map tiles
 - Administration portal for managing map tiles
-- Engine for rendering raster geotiff to indexable map tiles
 
-## Map standards ️🗺️
+## Solution Structure 🏗️
 
-- MBTiles
-- GeoPackage
-- WMTS
-- WMS
-- TileJSON
+- **[Wangkanai.Planet.Portal](Portal)** - Web portal for viewing map tiles
+- **[Wangkanai.Planet.Engine](Engine)** - Engine for rendering and processing map tiles
+- **[Wangkanai.Planet.Spatial](Spatial)** - Library for rendering raster geotiff to map tiles
+- **[Wangkanai.Planet.Providers](Providers)** - Providers for different map storage standards
+- **[Wangkanai.Planet.Extensions](Extensions)** - Extensions for integrating with various map services and protocols
+- **[Wangkanai.Planet.Protocols](Protocols)** - Protocols for serving map tiles through different services
+
+## Map storage standards ️🗺️
+
+- MBTiles    (SQLite) - Standardized SQLite database for storing raster and vector tiles
+- GeoPackage (SQLite) - OGC standard for storing raster and vector data in a single file
+- MTPKG      (SQLite) - Multi-layer package for storing raster and vector tiles
+- TileJSON   (JSON)   - Standardized JSON format for tile metadata and access
+
+## Map services protocols 📡
+
+- Web (Static Raster Tiles)    - Simple HTTP-based tile access
+- TMS (Tile Map Service)       - Simple HTTP-based tile access
+- WMTS (Web Map Tile Service)  - OGC standard for tile services
+- WMS  (Web Map Service)       - OGC standard for map services
+- WMSC (Web Map Service Cache) - OGC standard for cached map services
+- XYZ Tiles (TileJSON)         - Standardized tile access using XYZ coordinates
 
 ## Supported tiles formats 🗜️
 
@@ -45,9 +62,9 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 ## Desktop viewers 🖥️
 
 - [QGIS](https://www.qgis.org/en/site/)
-- ArcGIS for Desktop
-- Google Earth
-- Tableau
+- [ArcGIS for Desktop](https://www.esri.com/en-us/arcgis/products/arcgis-desktop/overview)
+- [Google Earth](https://www.google.com/earth/)
+- [Tableau](https://www.tableau.com/)
 - any viewer supporting WMTS
 
 ## Mobile viewers 📱
@@ -64,7 +81,8 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 ## Sponsoring ❤️
 
 If you like this project and want to support its development,
-please consider sponsoring it through [Open Collective](https://opencollective.com/wangkanai) or [Patreon](https://www.patreon.com/wangkanai).
+please consider sponsoring it through [Open Collective](https://opencollective.com/wangkanai)
+or [Patreon](https://www.patreon.com/wangkanai).
 Your support helps keep the project alive and thriving!
 
 ## Contributing 🤝
