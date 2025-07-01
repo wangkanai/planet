@@ -15,9 +15,10 @@ public class PlanetDbContext(DbContextOptions<PlanetDbContext> options)
 
 	protected override void OnModelCreating(ModelBuilder builder)
 	{
-		builder.ApplyConfiguration(new UserConfiguration());
-		builder.ApplyConfiguration(new RoleConfiguration());
-		builder.ApplyConfiguration(new UserRoleConfiguration());
+		// builder.ApplyConfiguration(new UserConfiguration());
+		// builder.ApplyConfiguration(new RoleConfiguration());
+		// builder.ApplyConfiguration(new UserRoleConfiguration());
+		builder.ApplyConfigurationsFromAssembly(typeof(PlanetConstants).Assembly);
 		base.OnModelCreating(builder);
 	}
 }
