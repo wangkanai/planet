@@ -2,7 +2,7 @@
 
 namespace Wangkanai.Planet.Portal.Data;
 
-public enum Theme
+public enum PlanetTheme
 {
 	System = 0,
 	Light  = 1,
