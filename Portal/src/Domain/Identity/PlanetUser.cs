@@ -6,8 +6,8 @@ namespace Wangkanai.Planet.Portal.Data;
 
 public class PlanetUser : IdentityUser<int>
 {
-	public string   Firstname { get; set; }
-	public string   Lastname  { get; set; }
-	public DateOnly Birthday  { get; set; }
-	public PlanetTheme    Theme     { get; set; }
+	public required string      Firstname { get; set; }
+	public required string      Lastname  { get; set; }
+	public          DateOnly    Birthday  { get; set; }
+	public          PlanetTheme Theme     { get; set; }
 }
