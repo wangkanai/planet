@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\src\Root\Wangkanai.Planet.Protocols.csproj" />
+  </ItemGroup>
+</Project>

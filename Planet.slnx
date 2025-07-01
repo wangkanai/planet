@@ -50,6 +50,14 @@
   <Folder Name="/Portal/tests/">
     <Project Path="Portal\tests\Wangkanai.Planet.Portal.Tests.csproj" Type="Classic C#" />
   </Folder>
+  <Folder Name="/Protocols/">
+    <Project Path="Protocols\src\Root\Wangkanai.Planet.Protocols.csproj" Type="Classic C#" />
+    <File Path="Protocols\Directory.Build.props" />
+    <File Path="Protocols\README.md" />
+  </Folder>
+  <Folder Name="/Protocols/tests/">
+    <Project Path="Protocols\tests\Wangkanai.Planet.Protocols.Tests.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Providers/">
     <File Path="Providers\Directory.Build.props" />
     <File Path="Providers\README.md" />
