@@ -12,8 +12,7 @@ internal static class RoleSeed
 		Create(PlanetRoles.Moderator),
 		Create(PlanetRoles.Editor),
 		Create(PlanetRoles.Contributor),
-		Create(PlanetRoles.User),
-		Create(PlanetRoles.None),
+		Create(PlanetRoles.User)
 	];
 
 	private static PlanetRole Create(PlanetRoles role)
