@@ -20,13 +20,21 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 - Administration portal for managing map tiles
 - Engine for rendering raster geotiff to indexable map tiles
 
-## Map standards ️🗺️
+## Map storage standards ️🗺️
 
-- MBTiles
-- GeoPackage
-- WMTS
-- WMS
-- TileJSON
+- MBTiles    (SQLite)
+- GeoPackage (SQLite)
+- MTPKG      (SQLite)
+- TileJSON   (JSON)
+
+## Map services protocols 📡
+
+- Web (Static Raster Tiles)
+- TMS (Tile Map Service)
+- WMTS (Web Map Tile Service)
+- WMS  (Web Map Service)
+- WMSC (Web Map Service Cache)
+- XYZ Tiles (TileJSON)
 
 ## Supported tiles formats 🗜️
 
@@ -45,9 +53,9 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 ## Desktop viewers 🖥️
 
 - [QGIS](https://www.qgis.org/en/site/)
-- ArcGIS for Desktop
-- Google Earth
-- Tableau
+- [ArcGIS for Desktop](https://www.esri.com/en-us/arcgis/products/arcgis-desktop/overview)
+- [Google Earth](https://www.google.com/earth/)
+- [Tableau](https://www.tableau.com/)
 - any viewer supporting WMTS
 
 ## Mobile viewers 📱
@@ -64,7 +72,8 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 ## Sponsoring ❤️
 
 If you like this project and want to support its development,
-please consider sponsoring it through [Open Collective](https://opencollective.com/wangkanai) or [Patreon](https://www.patreon.com/wangkanai).
+please consider sponsoring it through [Open Collective](https://opencollective.com/wangkanai)
+or [Patreon](https://www.patreon.com/wangkanai).
 Your support helps keep the project alive and thriving!
 
 ## Contributing 🤝
