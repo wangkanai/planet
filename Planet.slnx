@@ -60,7 +60,6 @@
     <Project Path="Providers\Google\tests\Wangkanai.Planet.Providers.Google.Tests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Spatial/">
-    <Project Path="Spatial\src\Abstractions\Wangkanai.Planet.Spatial.Abstractions.csproj" Type="Classic C#" />
     <Project Path="Spatial\src\GeoPackages\Wangkanai.Planet.Spatial.GeoPackages.csproj" Type="Classic C#" />
     <Project Path="Spatial\src\GeoTiffs\Wangkanai.Planet.Spatial.GeoTiffs.csproj" Type="Classic C#" />
     <Project Path="Spatial\src\MbTiles\Wangkanai.Planet.Spatial.MbTiles.csproj" Type="Classic C#" />
