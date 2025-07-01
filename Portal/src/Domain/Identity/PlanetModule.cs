@@ -5,11 +5,11 @@ namespace Wangkanai.Planet.Portal.Data;
 [Flags]
 public enum PlanetModule
 {
-	None      = 0,     // 000_000
-	Dashboard = 1 << 0,// 000_001
-	Maps      = 1 << 1,// 000_010
-	Tiles     = 1 << 2,// 0b0100
-	Settings  = 1 << 3,// 0b1000
-	Identity  = 1 << 4,// 0b10000
-	Full      = Dashboard | Maps | Tiles | Settings | Identity
+	None      = 0,                                            // 000_000
+	Dashboard = 1 << 0,                                       // 000_001
+	Maps      = 1 << 1,                                       // 000_010
+	Tiles     = 1 << 2,                                       // 000_100
+	Settings  = 1 << 3,                                       // 001_000
+	Identity  = 1 << 4,                                       // 010_000
+	Full      = Dashboard | Maps | Tiles | Settings | Identity// 011_111
 }
