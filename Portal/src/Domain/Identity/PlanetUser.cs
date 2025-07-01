@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 namespace Wangkanai.Planet.Portal.Data;
 
 /// <summary>Represents a user in the system.</summary>
-public class PlanetUser : IdentityUser<int>
+public sealed class PlanetUser : IdentityUser<int>
 {
 	public required string      Firstname { get; set; }
 	public required string      Lastname  { get; set; }
