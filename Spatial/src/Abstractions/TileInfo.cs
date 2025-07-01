@@ -2,7 +2,8 @@
 
 namespace Wangkanai.Planet.Spatial;
 
-public interface ILocalTileSource : ITileSource
+public class TileInfo
 {
-	Task<byte[]?> GetTileAsync(TileInfo tileInfo);
+	public Extent    Extent { get; set; }
+	public TileIndex Index  { get; set; }
 }

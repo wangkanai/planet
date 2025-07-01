@@ -2,7 +2,4 @@
 
 namespace Wangkanai.Planet.Spatial;
 
-public interface ILocalTileSource : ITileSource
-{
-	Task<byte[]?> GetTileAsync(TileInfo tileInfo);
-}
+public readonly struct Extent{}
