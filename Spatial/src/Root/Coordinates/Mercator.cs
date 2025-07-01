@@ -2,6 +2,11 @@
 
 namespace Wangkanai.Planet.Spatial.Coordinates;
 
+/// <summary>
+/// Represents a Mercator coordinate system, commonly used in mapping applications,
+/// based on the Spherical Mercator projection (EPSG:3857).
+/// Provides properties and methods to calculate coordinates and conversions.
+/// </summary>
 public class Mercator
 {
 	/// <summary>Gets the size of the Mercator coordinate.</summary>
