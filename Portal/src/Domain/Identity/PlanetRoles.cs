@@ -6,7 +6,7 @@ namespace Wangkanai.Planet.Portal.Data;
 [Flags]
 public enum PlanetRoles
 {
-	Guest       = 0,     // 0000_0000
+	None        = 0,     // 0000_0000
 	Admin       = 1 << 0,// 0000_0001
 	Moderator   = 1 << 1,// 0000_0010
 	Editor      = 1 << 2,// 0000_0100
