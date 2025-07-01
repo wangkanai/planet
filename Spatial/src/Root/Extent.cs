@@ -24,7 +24,9 @@ public readonly struct Extent
 		MaxX = maxX;
 		MaxY = maxY;
 
-		if (minX > maxX || minY > maxY)
-			throw new ArgumentException("Min cannot be greater than Max");
+		if (minX > maxX)
+			throw new ArgumentException("X Min cannot be greater than Max");
+		if (minY > maxY)
+			throw new ArgumentException("Y Min cannot be greater than Max");
 	}
 }
