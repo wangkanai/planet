@@ -120,7 +120,7 @@ resharper_html_linebreaks_inside_tags_for_elements_with_child_elements=false
 resharper_html_linebreaks_inside_tags_for_multiline_elements          =false
 ij_html_do_not_align_children_of_min_lines                            =0
 ij_html_do_not_break_if_inline_tags                                   =title, h1, h2, h3, h4, h5, h6, p, li, span
-ij_html_do_not_indent_children_of_tags                                =form, ul, ol, script, style, h1, h2, h3, h4, h5, h6, table, thead, tbody, tfoot
+ij_html_do_not_indent_children_of_tags                                =form, ol, script, style, h1, h2, h3, h4, h5, h6, table, thead, tbody, tfoot
 
 [*.csproj]
 indent_size                  =2

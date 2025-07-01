@@ -1,20 +1,54 @@
-<div class="nav-item dropdown">
-	<a href="#" class="nav-link d-flex lh-1 p-0 px-2" data-bs-toggle="dropdown" aria-label="Open user menu">
-		<span class="avatar avatar-sm" style="background-image: url(./images/avatars/sarin-avatar.png)"> </span>
-		<div class="d-none d-xl-block ps-2">
-			<div>Sarin Na Wangkanai</div>
-			<div class="mt-1 small text-secondary">Chief Architect</div>
+@implements IDisposable
+
+@inject NavigationManager NavigationManager
+
+<AuthorizeView>
+	<Authorized>
+		<div class="nav-item dropdown">
+			<a href="#" class="nav-link d-flex lh-1 p-0 px-2" data-bs-toggle="dropdown" aria-label="Open user menu">
+				<span class="avatar avatar-sm" style="background-image: url(./images/avatars/sarin-avatar.png)"> </span>
+				<div class="d-none d-xl-block ps-2">
+					<div>@context.User.Identity?.Name</div>
+					<div class="mt-1 small text-secondary">Chief Architect</div>
+				</div>
+			</a>
+			<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+				<NavLink class="nav-link" href="Account/Manage">Profile</NavLink>
+				<div class="dropdown-divider"></div>
+				<a href="./settings.html" class="dropdown-item">Settings</a>
+				<a href="./sign-in.html" class="dropdown-item">Logout</a>c
+				<div class="dropdown-item">
+					<form action="Account/Logout" method="post">
+					<AntiforgeryToken/>
+					<input type="hidden" name="ReturnUrl" value="@currentUrl"/>
+					<button type="submit" class="nav-link">
+						<span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+					</button>
+					</form>
+				</div>
+			</div>
 		</div>
-	</a>
-	<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-		<a href="#" class="dropdown-item">Status</a>
-		<a href="./profile.html" class="dropdown-item">Profile</a>
-		<div class="dropdown-divider"></div>
-		<a href="./settings.html" class="dropdown-item">Settings</a>
-		<a href="./sign-in.html" class="dropdown-item">Logout</a>
-	</div>
-</div>
+	</Authorized>
+</AuthorizeView>
 
 @code {
+	private string? currentUrl;
+
+	protected override void OnInitialized()
+	{
+		currentUrl                        =  NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+		NavigationManager.LocationChanged += OnLocationChanged;
+	}
+
+	private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+	{
+		currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+		StateHasChanged();
+	}
+
+	public void Dispose()
+	{
+		NavigationManager.LocationChanged -= OnLocationChanged;
+	}
 
 }
