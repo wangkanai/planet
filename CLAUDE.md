@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Coding Guidelines
 
-- Always use descriptive variable name
+- Always use a descriptive variable name
 
 ## Commands
 
@@ -16,7 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Test Commands
 - `dotnet test` - Run all tests across the solution
 - `dotnet test --project <specific-test-project>` - Run tests for a specific project
-- Tests use xUnit framework (check xunit.runner.json files in test projects)
+- Tests use xUnit v3 framework with testing platform support enabled (check xunit.runner.json files in test projects)
 
 ### Development Commands
 - `dotnet restore` - Restore NuGet packages
@@ -76,7 +76,7 @@ The Planet solution follows a modular architecture with these main components:
 - Blazor Server + WebAssembly (hybrid hosting model)
 - ASP.NET Core Identity for authentication
 - Entity Framework Core with SQLite
-- xUnit for testing
+- xUnit v3 for testing with testing platform support
 - PowerShell scripts for automation
 - Sass/SCSS for styling with Tabler UI framework
 - NPM for frontend asset management
@@ -88,7 +88,7 @@ The Planet solution follows a modular architecture with these main components:
 
 ### Testing Strategy
 - All major components have corresponding test projects
-- Tests use xUnit framework
+- Tests use xUnit v3 framework with testing platform support enabled
 - Test projects follow naming convention: `<ProjectName>.Tests`
 
 ### Build Configuration
