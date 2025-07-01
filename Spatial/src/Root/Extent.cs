@@ -2,4 +2,29 @@
 
 namespace Wangkanai.Planet.Spatial;
 
-public readonly struct Extent{}
+/// <summary>Represents a rectangular extent with minimum and maximum X and Y coordinates.</summary>
+public readonly struct Extent
+{
+	public double MinX { get; }
+	public double MinY { get; }
+	public double MaxX { get; }
+	public double MaxY { get; }
+
+	public double CenterX => (MinX + MaxX) / 2;
+	public double CenterY => (MinY + MaxY) / 2;
+	public double Width   => MaxX - MinX;
+	public double Height  => MaxY - MinY;
+	public double Area    => Width * Height;
+
+	/// <summary>Represents a rectangular extent with minimum and maximum X and Y coordinates.</summary>
+	public Extent(double minX, double minY, double maxX, double maxY)
+	{
+		MinX = minX;
+		MinY = minY;
+		MaxX = maxX;
+		MaxY = maxY;
+
+		if (minX > maxX || minY > maxY)
+			throw new ArgumentException("Min cannot be greater than Max");
+	}
+}
