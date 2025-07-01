@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/.clauda/">
+    <File Path=".claude\settings.json" />
+  </Folder>
   <Folder Name="/.github/">
     <File Path=".github\workflows\dotnet.yml" />
     <File Path=".github\FUNDING.yml" />
