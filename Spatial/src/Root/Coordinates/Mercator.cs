@@ -5,10 +5,10 @@ namespace Wangkanai.Planet.Spatial.Coordinates;
 public class Mercator
 {
 	/// <summary>Gets the size of the Mercator coordinate.</summary>
-	public int Size { get; private set; }
+	public int TileSize { get; private set; }
 
 	/// <summary>Gets the resolution (meters / pixel) of the Mercator coordinate. </summary>
-	public double Resolution { get; private set; }
+	public double InitialResolution { get; private set; }
 
 	/// <summary>Gets the maximum extent of the Mercator coordinate.</summary>
 	public double OriginShift { get; private set; }
@@ -20,9 +20,9 @@ public class Mercator
 	/// </summary>
 	public Mercator(int size = 512)
 	{
-		Size        = size;
-		Resolution  = 2 * Math.PI * MapExtent.Max / Size;
-		OriginShift = 2 * Math.PI * MapExtent.Max / 2.0;
+		TileSize          = size;
+		InitialResolution = 2 * Math.PI * MapExtent.Max / TileSize;
+		OriginShift       = 2 * Math.PI * MapExtent.Max / 2.0;
 	}
 
 	/// <summary>
@@ -64,4 +64,52 @@ public class Mercator
 
 		return new Coordinate(mx, my);
 	}
+
+	/// <summary>Converts pixel coordinates to meters in the Mercator coordinate system.</summary>
+	/// <param name="px">The x-coordinate in pixels.</param>
+	/// <param name="py">The y-coordinate in pixels.</param>
+	/// <param name="zoom">The zoom level.</param>
+	/// <returns>A Coordinate object representing the meter coordinates.</returns>
+	public Coordinate PixelToMeters(double px, double py, int zoom)
+	{
+		var coordinate = new Coordinate();
+		try
+		{
+			var resolution = Resolution(zoom);
+			coordinate.X = px * resolution - OriginShift;
+			coordinate.Y = py * resolution - OriginShift;
+			return coordinate;
+		}
+		catch (Exception ex)
+		{
+			throw ex;
+		}
+	}
+
+	/// <summary>Converts Mercator meters coordinates to pixel coordinates.</summary>
+	/// <param name="mx">The x-coordinate in Mercator meters.</param>
+	/// <param name="my">The y-coordinate in Mercator meters.</param>
+	/// <param name="zoom">The zoom level.</param>
+	/// <returns>A Coordinate containing the pixel x and y coordinates.</returns>
+	public Coordinate MetersToPixels(double mx, double my, int zoom)
+	{
+		var coordinate = new Coordinate();
+		try
+		{
+			var resolution = Resolution(zoom);
+			coordinate.X = (mx + OriginShift) / resolution;
+			coordinate.Y = (my + OriginShift) / resolution;
+			return coordinate;
+		}
+		catch (Exception ex)
+		{
+			throw ex;
+		}
+	}
+
+	/// <summary>Gets the resolution at a specified zoom level.</summary>
+	/// <param name="zoom">The zoom level.</param>
+	/// <returns>The resolution at the specified zoom level.</returns>
+	private double Resolution(int zoom)
+		=> InitialResolution / (1 << zoom);
 }

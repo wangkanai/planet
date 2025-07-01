@@ -11,7 +11,7 @@ public class MercatorTests
 		var mercator = new Mercator();
 
 		// Assert
-		Assert.Equal(512, mercator.Size);
+		Assert.Equal(512, mercator.TileSize);
 		Assert.NotEqual(0, mercator.Resolution);
 		Assert.NotEqual(0, mercator.OriginShift);
 	}
@@ -23,7 +23,7 @@ public class MercatorTests
 		var mercator = new Mercator(1024);
 
 		// Assert
-		Assert.Equal(1024, mercator.Size);
+		Assert.Equal(1024, mercator.TileSize);
 		Assert.NotEqual(0, mercator.Resolution);
 		Assert.NotEqual(0, mercator.OriginShift);
 	}

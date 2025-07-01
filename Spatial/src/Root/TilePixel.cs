@@ -2,8 +2,9 @@
 
 namespace Wangkanai.Planet.Spatial;
 
-public class AddressTile
+public class TilePixel
 {
 	public int X { get; set; }
 	public int Y { get; set; }
+	public int Z { get; set; }
 }
