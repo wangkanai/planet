@@ -31,19 +31,19 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 
 ## Map storage standards ️🗺️
 
-- MBTiles    (SQLite)
-- GeoPackage (SQLite)
-- MTPKG      (SQLite)
-- TileJSON   (JSON)
+- MBTiles    (SQLite) - Standardized SQLite database for storing raster and vector tiles
+- GeoPackage (SQLite) - OGC standard for storing raster and vector data in a single file
+- MTPKG      (SQLite) - Multi-layer package for storing raster and vector tiles
+- TileJSON   (JSON)   - Standardized JSON format for tile metadata and access
 
 ## Map services protocols 📡
 
-- Web (Static Raster Tiles)
-- TMS (Tile Map Service)
-- WMTS (Web Map Tile Service)
-- WMS  (Web Map Service)
-- WMSC (Web Map Service Cache)
-- XYZ Tiles (TileJSON)
+- Web (Static Raster Tiles)    - Simple HTTP-based tile access
+- TMS (Tile Map Service)       - Simple HTTP-based tile access
+- WMTS (Web Map Tile Service)  - OGC standard for tile services
+- WMS  (Web Map Service)       - OGC standard for map services
+- WMSC (Web Map Service Cache) - OGC standard for cached map services
+- XYZ Tiles (TileJSON)         - Standardized tile access using XYZ coordinates
 
 ## Supported tiles formats 🗜️
 
