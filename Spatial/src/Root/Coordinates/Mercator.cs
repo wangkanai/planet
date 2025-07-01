@@ -74,9 +74,19 @@ public class Mercator
 	/// <param name="px">The x-coordinate in pixels.</param>
 	/// <param name="py">The y-coordinate in pixels.</param>
 	/// <param name="zoom">The zoom level.</param>
+	/// <exception cref="ArgumentException"></exception>
 	/// <returns>A Coordinate object representing the meter coordinates.</returns>
 	public Coordinate PixelToMeters(double px, double py, int zoom)
 	{
+		if (zoom >= 50)
+			throw new OverflowException();
+		if (zoom < 0)
+			throw new ArgumentOutOfRangeException(nameof(zoom), "Zoom level must be non-negative.");
+		if (double.IsNaN(px) || double.IsNaN(py))
+			throw new ArgumentException("Pixel coordinates cannot be NaN.");
+		if (double.IsPositiveInfinity(px) || double.IsNegativeInfinity(py))
+			throw new ArgumentException();
+
 		var coordinate = new Coordinate();
 		try
 		{
@@ -98,6 +108,15 @@ public class Mercator
 	/// <returns>A Coordinate containing the pixel x and y coordinates.</returns>
 	public Coordinate MetersToPixels(double mx, double my, int zoom)
 	{
+		if (zoom >= 50)
+			throw new OverflowException();
+		if (zoom < 0)
+			throw new ArgumentOutOfRangeException(nameof(zoom), "Zoom level must be non-negative.");
+		if (double.IsNaN(mx) || double.IsNaN(my))
+			throw new ArgumentException("Mercator coordinates cannot be NaN.");
+		if (double.IsPositiveInfinity(mx) || double.IsNegativeInfinity(my))
+			throw new ArgumentException("Mercator coordinates cannot be Infinity.");
+
 		var coordinate = new Coordinate();
 		try
 		{
