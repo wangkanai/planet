@@ -67,6 +67,11 @@ The Planet solution follows a modular architecture with these main components:
 - Google Maps provider
 - Each provider has corresponding test projects
 
+**Protocols** - Map service protocol implementations
+- WMS (Web Map Service) protocol support
+- Root protocol abstractions and utilities
+- Protocol-specific implementations for serving map tiles
+
 **Extensions** - Extension methods and utilities for the Planet ecosystem
 
 **Common** - Shared components and utilities
@@ -111,5 +116,6 @@ The Planet solution follows a modular architecture with these main components:
 - **Spatial/src/MbTiles**: MBTiles format implementation
 - **Spatial/src/GeoPackages**: GeoPackage format support
 - **Spatial/src/GeoTiffs**: GeoTIFF format support
+- **Protocols/src/Root**: Protocol abstractions and WMS implementations
 - **Providers/Bing**: Bing Maps service integration
 - **Providers/Google**: Google Maps service integration
