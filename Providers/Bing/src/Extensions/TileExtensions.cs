@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Wangkanai.Planet.Providers.Bing.Extensions;
 
+/// <summary>Provides extension methods for working with tile coordinates.</summary>
 public static class TileExtensions
 {
 	/// <summary>Converts tile XYZ coordinates into a QuadKey at a specified level of detail.</summary>
@@ -35,4 +36,3 @@ public static class TileExtensions
 		return quadKey.ToString();
 	}
 }
-
