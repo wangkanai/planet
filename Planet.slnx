@@ -1,8 +1,13 @@
 <Solution>
+  <Folder Name="/.clauda/">
+    <File Path=".claude\settings.json" />
+  </Folder>
   <Folder Name="/.github/">
     <File Path=".github\workflows\dotnet.yml" />
     <File Path=".github\FUNDING.yml" />
     <File Path=".github\copilot-instructions.md" />
+    <File Path=".github\workflows\claude-code-review.yml" />
+    <File Path=".github\workflows\claude.yml" />
   </Folder>
   <Folder Name="/.solutions/">
     <File Path="build.ps1" />
@@ -58,7 +63,8 @@
     <Project Path="Providers\Google\tests\Wangkanai.Planet.Providers.Google.Tests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Spatial/">
-    <Project Path="Spatial\src\Abstractions\Wangkanai.Planet.Spatial.Abstractions.csproj" Type="Classic C#" />
+    <Project Path="Spatial\src\GeoPackages\Wangkanai.Planet.Spatial.GeoPackages.csproj" Type="Classic C#" />
+    <Project Path="Spatial\src\GeoTiffs\Wangkanai.Planet.Spatial.GeoTiffs.csproj" Type="Classic C#" />
     <Project Path="Spatial\src\MbTiles\Wangkanai.Planet.Spatial.MbTiles.csproj" Type="Classic C#" />
     <Project Path="Spatial\src\Root\Wangkanai.Planet.Spatial.csproj" Type="Classic C#" />
     <File Path="Spatial\Directory.Build.props" />
