@@ -10,7 +10,7 @@ internal static class UserSeed
 {
 	internal static List<PlanetUser> Users =>
 	[
-		Create(1, "sarin@wangkanai.com", "P@ssw0rd", "Sarin", "Na Wangkanai"),
+		Create(1, "sarin@wangkanai.com", "P@ssw0rd", "Sarin", "Na Wangkanai", Theme.Dark),
 		Create(2, "admin@demo.com", "P@ssw0rd", "Admin", "Demo"),
 		Create(3, "moderator@demo.com", "P@ssw0rd", "Moderator", "Demo"),
 		Create(4, "editor@demo.com", "P@ssw0rd", "Editor", "Demo"),
@@ -20,7 +20,7 @@ internal static class UserSeed
 
 	private static PasswordHasher<PlanetUser> Hasher => new();
 
-	private static PlanetUser Create(int id, string email, string password, string firstname, string lastname)
+	private static PlanetUser Create(int id, string email, string password, string firstname, string lastname, Theme theme = Theme.System)
 		=> new()
 		   {
 			   Id                 = id,
@@ -32,5 +32,6 @@ internal static class UserSeed
 			   PasswordHash       = Hasher.HashPassword(null!, password),
 			   Firstname          = firstname,
 			   Lastname           = lastname,
+			   Theme              = theme
 		   };
 }
