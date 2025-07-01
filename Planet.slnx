@@ -3,6 +3,8 @@
     <File Path=".github\workflows\dotnet.yml" />
     <File Path=".github\FUNDING.yml" />
     <File Path=".github\copilot-instructions.md" />
+    <File Path=".github\workflows\claude-code-review.yml" />
+    <File Path=".github\workflows\claude.yml" />
   </Folder>
   <Folder Name="/.solutions/">
     <File Path="build.ps1" />
