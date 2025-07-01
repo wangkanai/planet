@@ -14,5 +14,5 @@ public enum MbTileFormat
 	/// <summary>WebP format</summary>
 	Webp,
 	/// <summary>Protobuf vector format</summary>
-	Pdf,
+	Pbf,
 }
