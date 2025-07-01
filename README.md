@@ -16,9 +16,18 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 
 ## Features 🌟
 
+- Engine for rendering raster geotiff to indexable map tiles
 - Portal for viewing raster and vector map tiles
 - Administration portal for managing map tiles
-- Engine for rendering raster geotiff to indexable map tiles
+
+## Solution Structure 🏗️
+
+- **[Wangkanai.Planet.Portal](Portal)** - Web portal for viewing map tiles
+- **[Wangkanai.Planet.Engine](Engine)** - Engine for rendering and processing map tiles
+- **[Wangkanai.Planet.Spatial](Spatial)** - Library for rendering raster geotiff to map tiles
+- **[Wangkanai.Planet.Providers](Providers)** - Providers for different map storage standards
+- **[Wangkanai.Planet.Extensions](Extensions)** - Extensions for integrating with various map services and protocols
+- **[Wangkanai.Planet.Protocols](Protocols)** - Protocols for serving map tiles through different services
 
 ## Map storage standards ️🗺️
 
