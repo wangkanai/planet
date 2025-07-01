@@ -4,4 +4,5 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Wangkanai.Planet.Portal.Data;
 
-public class PlanetRole : IdentityRole<int>;
+/// <summary>Represents a role in the Planet portal.</summary>
+public sealed class PlanetRole : IdentityRole<int> { }

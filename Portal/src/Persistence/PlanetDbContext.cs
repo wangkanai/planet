@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
+using Wangkanai.Planet.Portal.Identity;
+
 namespace Wangkanai.Planet.Portal.Data;
 
 public class PlanetDbContext(DbContextOptions<PlanetDbContext> options)
@@ -13,7 +15,7 @@ public class PlanetDbContext(DbContextOptions<PlanetDbContext> options)
 
 	protected override void OnModelCreating(ModelBuilder builder)
 	{
-		//builder.ApplyConfigurationsFromAssembly(typeof(PlanetConstants).Assembly);
+		builder.ApplyConfigurationsFromAssembly(typeof(PlanetConstants).Assembly);
 		base.OnModelCreating(builder);
 	}
 }

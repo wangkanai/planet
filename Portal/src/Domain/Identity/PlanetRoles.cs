@@ -2,12 +2,13 @@
 
 namespace Wangkanai.Planet.Portal.Data;
 
+/// <summary>Defines the different roles that a user can have in the system.</summary>
 public enum PlanetRoles
 {
-	Admin,
-	Moderator,
-	Editor,
-	Contributor,
-	User,
-	Guest
+	None        = 0,
+	Admin       = 1,
+	Moderator   = 2,
+	Editor      = 3,
+	Contributor = 4,
+	User        = 5,
 }

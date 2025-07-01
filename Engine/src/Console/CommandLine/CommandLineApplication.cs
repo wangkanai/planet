@@ -4,5 +4,5 @@ namespace Wangkanai.Planet.Engine.CommandLine;
 
 public class CommandLineApplication
 {
-	public string Name { get; set; }
+	public required string Name { get; set; }
 }
