@@ -43,7 +43,7 @@ public class ExtentTests
 	{
 		// Act & Assert
 		var exception = Assert.Throws<ArgumentException>(() => new Extent(30.0, 20.0, 10.0, 40.0));
-		Assert.Equal("Min cannot be greater than Max", exception.Message);
+		Assert.Equal("X Min cannot be greater than Max", exception.Message);
 	}
 
 	[Fact]
@@ -51,7 +51,7 @@ public class ExtentTests
 	{
 		// Act & Assert
 		var exception = Assert.Throws<ArgumentException>(() => new Extent(10.0, 40.0, 30.0, 20.0));
-		Assert.Equal("Min cannot be greater than Max", exception.Message);
+		Assert.Equal("Y Min cannot be greater than Max", exception.Message);
 	}
 
 	[Fact]
@@ -59,7 +59,7 @@ public class ExtentTests
 	{
 		// Act & Assert
 		var exception = Assert.Throws<ArgumentException>(() => new Extent(30.0, 40.0, 10.0, 20.0));
-		Assert.Equal("Min cannot be greater than Max", exception.Message);
+		Assert.Equal("X Min cannot be greater than Max", exception.Message);
 	}
 
 	[Fact]
