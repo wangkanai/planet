@@ -64,7 +64,7 @@
     <File Path="Providers\README.md" />
   </Folder>
   <Folder Name="/Providers/tests/">
-    <Project Path="Providers\tests\Unit\Wangkanai.Planet.Providers.Tests.csproj" Type="Classic C#" />
+    <Project Path="Providers\tests\Unit\Wangkanai.Planet.Providers.UnitTests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Spatial/">
     <Project Path="Spatial\src\GeoPackages\Wangkanai.Planet.Spatial.GeoPackages.csproj" Type="Classic C#" />

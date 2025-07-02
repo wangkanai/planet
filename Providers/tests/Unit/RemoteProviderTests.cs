@@ -19,16 +19,16 @@ public class RemoteProviderTests
 	{
 		// Arrange
 		var expectedValues = new[]
-		{
-			RemoteProviders.Google,
-			RemoteProviders.Bing,
-			RemoteProviders.MapBox,
-			RemoteProviders.OpenStreetMap,
-			RemoteProviders.OpenTopoMap,
-			RemoteProviders.StamenTerrain,
-			RemoteProviders.StamenToner,
-			RemoteProviders.StamenWatercolor
-		};
+		                     {
+			                     RemoteProviders.Google,
+			                     RemoteProviders.Bing,
+			                     RemoteProviders.MapBox,
+			                     RemoteProviders.OpenStreetMap,
+			                     RemoteProviders.OpenTopoMap,
+			                     RemoteProviders.StamenTerrain,
+			                     RemoteProviders.StamenToner,
+			                     RemoteProviders.StamenWatercolor
+		                     };
 
 		// Act
 		var actualValues = Enum.GetValues<RemoteProviders>();
@@ -145,10 +145,10 @@ public class RemoteProviderTests
 	{
 		// Arrange
 		var expectedNames = new[]
-		{
-			"Google", "Bing", "MapBox", "OpenStreetMap",
-			"OpenTopoMap", "StamenTerrain", "StamenToner", "StamenWatercolor"
-		};
+		                    {
+			                    "Google", "Bing", "MapBox", "OpenStreetMap",
+			                    "OpenTopoMap", "StamenTerrain", "StamenToner", "StamenWatercolor"
+		                    };
 
 		// Act
 		var actualNames = Enum.GetNames<RemoteProviders>();
