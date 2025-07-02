@@ -76,7 +76,9 @@
     <Project Path="Spatial\src\GeoPackages\Wangkanai.Planet.Spatial.GeoPackages.csproj" Type="Classic C#" />
     <Project Path="Spatial\src\GeoTiffs\Wangkanai.Planet.Spatial.GeoTiffs.csproj" Type="Classic C#" />
     <Project Path="Spatial\src\MbTiles\Wangkanai.Planet.Spatial.MbTiles.csproj" Type="Classic C#" />
+    <Project Path="Spatial\src\MtPkgs\Wangkanai.Planet.Spatial.MtPkgs.csproj" Type="Classic C#" />
     <Project Path="Spatial\src\Root\Wangkanai.Planet.Spatial.csproj" Type="Classic C#" />
+    <Project Path="Spatial\src\ShapeFiles\Wangkanai.Planet.Spatial.ShapeFiles.csproj" Type="Classic C#" />
     <File Path="Spatial\Directory.Build.props" />
     <File Path="Spatial\README.md" />
   </Folder>
