@@ -1,0 +1,5 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Wangkanai.Planet.Extensions.Storage</RootNamespace>
+  </PropertyGroup>
+</Project>
