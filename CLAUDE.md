@@ -72,15 +72,13 @@ The Planet solution follows a modular architecture with these main components:
 - Root protocol abstractions and utilities
 - Protocol-specific implementations for serving map tiles
 
-**Extensions** - Extension methods and utilities for the Planet ecosystem
-
-**Common** - Shared components and utilities
+**Extensions** - Extension methods and utilities for the Planet ecosystem (currently empty structure)
 
 ### Key Technologies
 - .NET 9.0 with nullable reference types enabled
 - Blazor Server + WebAssembly (hybrid hosting model)
 - ASP.NET Core Identity for authentication
-- Entity Framework Core with SQLite
+- Entity Framework Core with SQLite and PostgreSQL support
 - xUnit v3 for testing with testing platform support
 - PowerShell scripts for automation
 - Sass/SCSS for styling with Tabler UI framework
