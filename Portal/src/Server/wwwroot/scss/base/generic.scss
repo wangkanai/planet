@@ -1,5 +1,9 @@
-@charset "utf-8";
-
-/* Planet Base */
-@forward "reboot";
-@forward "generic";
+article,
+aside,
+figure,
+footer,
+header,
+hgroup,
+section {
+	display: block;
+}
