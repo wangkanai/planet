@@ -68,7 +68,7 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 
 - GeoJSON (vector data in JSON format)
 - TopoJSON (vector data in JSON format with topology)
-- Shapefile (vector data in ESRI format)
+- ShapeFile (vector data in ESRI format)
 - KML (Keyhole Markup Language for vector data)
 - GML (Geography Markup Language for vector data)
 - GPX (GPS Exchange Format for vector data)

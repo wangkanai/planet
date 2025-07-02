@@ -36,11 +36,11 @@
     <File Path="Extensions\Directory.Build.props" />
     <File Path="Extensions\README.md" />
   </Folder>
-  <Folder Name="/Extensions/Storage/">
-    <Project Path="Extensions\Storage\src\Wangkanai.Planet.Extensions.Storage.csproj" Type="Classic C#" />
+  <Folder Name="/Extensions/Datastore/">
+    <Project Path="Extensions\Datastore\src\Wangkanai.Planet.Extensions.Datastore.csproj" Type="Classic C#" />
   </Folder>
-  <Folder Name="/Extensions/Storage/tests/">
-    <Project Path="Extensions\Storage\tests\Wangkanai.Planet.Extensions.Storage.Tests.csproj" Type="Classic C#" />
+  <Folder Name="/Extensions/Datastore/tests/">
+    <Project Path="Extensions\Datastore\tests\Wangkanai.Planet.Extensions.Datastore.Tests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Portal/">
     <Project Path="Portal\src\Application\Wangkanai.Planet.Portal.Application.csproj" Type="Classic C#" />
@@ -76,7 +76,9 @@
     <Project Path="Spatial\src\GeoPackages\Wangkanai.Planet.Spatial.GeoPackages.csproj" Type="Classic C#" />
     <Project Path="Spatial\src\GeoTiffs\Wangkanai.Planet.Spatial.GeoTiffs.csproj" Type="Classic C#" />
     <Project Path="Spatial\src\MbTiles\Wangkanai.Planet.Spatial.MbTiles.csproj" Type="Classic C#" />
+    <Project Path="Spatial\src\MtPkgs\Wangkanai.Planet.Spatial.MtPkgs.csproj" Type="Classic C#" />
     <Project Path="Spatial\src\Root\Wangkanai.Planet.Spatial.csproj" Type="Classic C#" />
+    <Project Path="Spatial\src\ShapeFiles\Wangkanai.Planet.Spatial.ShapeFiles.csproj" Type="Classic C#" />
     <File Path="Spatial\Directory.Build.props" />
     <File Path="Spatial\README.md" />
   </Folder>
