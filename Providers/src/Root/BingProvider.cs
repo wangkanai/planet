@@ -5,7 +5,7 @@ using Wangkanai.Planet.Providers.Extensions;
 namespace Wangkanai.Planet.Providers;
 
 /// <summary>Provides functionality for generating Bing tile URLs.</summary>
-public sealed class BingProvider
+public static class BingProvider
 {
 	/// <summary>Generates a URL for a Bing tile.</summary>
 	/// <param name="x">The x-coordinate of the tile.</param>

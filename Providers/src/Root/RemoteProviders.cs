@@ -9,8 +9,5 @@ public enum RemoteProviders
 	Bing,
 	MapBox,
 	OpenStreetMap,
-	OpenTopoMap,
-	StamenTerrain,
-	StamenToner,
-	StamenWatercolor
+	OpenTopoMap
 }

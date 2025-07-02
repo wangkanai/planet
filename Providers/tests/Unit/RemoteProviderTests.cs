@@ -25,9 +25,6 @@ public class RemoteProviderTests
 			                     RemoteProviders.MapBox,
 			                     RemoteProviders.OpenStreetMap,
 			                     RemoteProviders.OpenTopoMap,
-			                     RemoteProviders.StamenTerrain,
-			                     RemoteProviders.StamenToner,
-			                     RemoteProviders.StamenWatercolor
 		                     };
 
 		// Act
@@ -47,9 +44,6 @@ public class RemoteProviderTests
 	[InlineData(RemoteProviders.MapBox, "MapBox")]
 	[InlineData(RemoteProviders.OpenStreetMap, "OpenStreetMap")]
 	[InlineData(RemoteProviders.OpenTopoMap, "OpenTopoMap")]
-	[InlineData(RemoteProviders.StamenTerrain, "StamenTerrain")]
-	[InlineData(RemoteProviders.StamenToner, "StamenToner")]
-	[InlineData(RemoteProviders.StamenWatercolor, "StamenWatercolor")]
 	public void RemoteProviders_ToString_ShouldReturnCorrectName(RemoteProviders provider, string expectedName)
 	{
 		// Act
@@ -65,9 +59,6 @@ public class RemoteProviderTests
 	[InlineData("MapBox", RemoteProviders.MapBox)]
 	[InlineData("OpenStreetMap", RemoteProviders.OpenStreetMap)]
 	[InlineData("OpenTopoMap", RemoteProviders.OpenTopoMap)]
-	[InlineData("StamenTerrain", RemoteProviders.StamenTerrain)]
-	[InlineData("StamenToner", RemoteProviders.StamenToner)]
-	[InlineData("StamenWatercolor", RemoteProviders.StamenWatercolor)]
 	public void RemoteProviders_Parse_ShouldReturnCorrectValue(string name, RemoteProviders expectedProvider)
 	{
 		// Act
@@ -146,8 +137,11 @@ public class RemoteProviderTests
 		// Arrange
 		var expectedNames = new[]
 		                    {
-			                    "Google", "Bing", "MapBox", "OpenStreetMap",
-			                    "OpenTopoMap", "StamenTerrain", "StamenToner", "StamenWatercolor"
+			                    "Google",
+			                    "Bing",
+			                    "MapBox",
+			                    "OpenStreetMap",
+			                    "OpenTopoMap"
 		                    };
 
 		// Act
@@ -167,9 +161,6 @@ public class RemoteProviderTests
 	[InlineData(RemoteProviders.MapBox, 2)]
 	[InlineData(RemoteProviders.OpenStreetMap, 3)]
 	[InlineData(RemoteProviders.OpenTopoMap, 4)]
-	[InlineData(RemoteProviders.StamenTerrain, 5)]
-	[InlineData(RemoteProviders.StamenToner, 6)]
-	[InlineData(RemoteProviders.StamenWatercolor, 7)]
 	public void RemoteProviders_ShouldHaveCorrectUnderlyingValues(RemoteProviders provider, int expectedValue)
 	{
 		// Act
