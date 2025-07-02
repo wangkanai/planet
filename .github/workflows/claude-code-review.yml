@@ -14,7 +14,7 @@ jobs:
   claude-review:
     # Optional: Filter by PR author
     if: |
-      contains(github.event.comment.body, '@claude')      ||
+      contains(github.event.comment.body, '@claude')      &&
       github.event.pull_request.user.login == 'wangkanai'
     #   github.event.pull_request.user.login == 'new-developer' ||
     #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
