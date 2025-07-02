@@ -24,7 +24,7 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 
 - **[Wangkanai.Planet.Portal](Portal)** - Web portal for viewing map tiles
 - **[Wangkanai.Planet.Engine](Engine)** - Engine for rendering and processing map tiles
-- **[Wangkanai.Planet.Spatial](Spatial)** - Library for rendering raster geotiff to map tiles
+- **[Wangkanai.Planet.Spatial](Spatial)** - Library for rendering raster GeoTiff to map tiles
 - **[Wangkanai.Planet.Providers](Providers)** - Providers for different map storage standards
 - **[Wangkanai.Planet.Extensions](Extensions)** - Extensions for integrating with various map services and protocols
 - **[Wangkanai.Planet.Protocols](Protocols)** - Protocols for serving map tiles through different services
@@ -32,8 +32,9 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 ## Map storage standards ️🗺️
 
 - MBTiles    (SQLite) - Standardized SQLite database for storing raster and vector tiles
-- GeoPackage (SQLite) - OGC standard for storing raster and vector data in a single file
 - MTPKG      (SQLite) - Multi-layer package for storing raster and vector tiles
+- GeoPackage (SQLite) - OGC standard for storing raster and vector data in a single file
+- GeoTiff    (TIFF)   - Standardized format for georeferenced raster imagery
 - TileJSON   (JSON)   - Standardized JSON format for tile metadata and access
 
 ## Map services protocols 📡
@@ -53,6 +54,27 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 - Raster and vector .mtpkg
 - Quantized mesh terrain (3D) .geopackage
 - Vector tiles from PostGIS geometries
+
+## Supported raster formats 🗺️
+
+- GeoTIFF (raster imagery)
+- JPEG (compressed raster imagery)
+- JPEG2000 (compressed raster imagery)
+- PNG (lossless raster imagery)
+- WebP (compressed raster imagery)
+- HEIF (compressed raster imagery)
+
+## Supported vector formats 📊
+
+- GeoJSON (vector data in JSON format)
+- TopoJSON (vector data in JSON format with topology)
+- Shapefile (vector data in ESRI format)
+- KML (Keyhole Markup Language for vector data)
+- GML (Geography Markup Language for vector data)
+- GPX (GPS Exchange Format for vector data)
+- WKT (Well-Known Text for vector geometries)
+- WKB (Well-Known Binary for vector geometries)
+- PostGIS (vector data in PostgreSQL/PostGIS format)
 
 ## Supported CRS 🏁
 

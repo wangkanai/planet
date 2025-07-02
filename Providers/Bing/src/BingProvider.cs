@@ -15,6 +15,6 @@ public class BingProvider
 	public static string GetTileUrl(int x, int y, int z)
 	{
 		var q = TileExtensions.QuadKey(x, y, z);
-		return $"http://ecn.t3.tiles.virtualearth.net/tiles/a{q}.jpeg?g=1";
+		return $"https://ecn.t3.tiles.virtualearth.net/tiles/a{q}.jpeg?g=1";
 	}
 }
