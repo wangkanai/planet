@@ -39,7 +39,7 @@
   <Folder Name="/Extensions/Datastore/">
     <Project Path="Extensions\Datastore\src\Wangkanai.Planet.Extensions.Datastore.csproj" Type="Classic C#" />
   </Folder>
-  <Folder Name="/Extensions/Storage/tests/">
+  <Folder Name="/Extensions/Datastore/tests/">
     <Project Path="Extensions\Datastore\tests\Wangkanai.Planet.Extensions.Datastore.Tests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Portal/">
