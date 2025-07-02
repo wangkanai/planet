@@ -11,7 +11,7 @@ public class RemoteProviderTests
 		var values = Enum.GetValues<RemoteProviders>();
 
 		// Assert
-		Assert.Equal(8, values.Length);
+		Assert.Equal(5, values.Length);
 	}
 
 	[Fact]
