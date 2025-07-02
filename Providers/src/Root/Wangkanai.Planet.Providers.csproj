@@ -4,7 +4,6 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>Wangkanai.Planet.Providers.Bing</RootNamespace>
   </PropertyGroup>
 
 </Project>

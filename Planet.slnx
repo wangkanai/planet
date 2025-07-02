@@ -59,16 +59,12 @@
     <Project Path="Protocols\tests\Wangkanai.Planet.Protocols.Tests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Providers/">
+    <Project Path="Providers\src\Root\Wangkanai.Planet.Providers.csproj" Type="Classic C#" />
     <File Path="Providers\Directory.Build.props" />
     <File Path="Providers\README.md" />
   </Folder>
-  <Folder Name="/Providers/Bing/">
-    <Project Path="Providers\Bing\src\Wangkanai.Planet.Providers.Bing.csproj" Type="Classic C#" />
-    <Project Path="Providers\Bing\tests\Wangkanai.Planet.Providers.Bing.Tests.csproj" Type="Classic C#" />
-  </Folder>
-  <Folder Name="/Providers/Google/">
-    <Project Path="Providers\Google\src\Wangkanai.Planet.Providers.Google.csproj" Type="Classic C#" />
-    <Project Path="Providers\Google\tests\Wangkanai.Planet.Providers.Google.Tests.csproj" Type="Classic C#" />
+  <Folder Name="/Providers/tests/">
+    <Project Path="Providers\tests\Unit\Wangkanai.Planet.Providers.Tests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Spatial/">
     <Project Path="Spatial\src\GeoPackages\Wangkanai.Planet.Spatial.GeoPackages.csproj" Type="Classic C#" />

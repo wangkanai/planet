@@ -2,7 +2,7 @@
 
 using System.Text;
 
-namespace Wangkanai.Planet.Providers.Bing.Extensions;
+namespace Wangkanai.Planet.Providers.Extensions;
 
 /// <summary>Provides extension methods for working with tile coordinates.</summary>
 public static class TileExtensions
