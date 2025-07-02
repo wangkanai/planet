@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <RootNamespace>Wangkanai.Planet.Extensions.Storage.Tests</RootNamespace>
+    <RootNamespace>Wangkanai.Planet.Extensions.Datastore.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\Wangkanai.Planet.Extensions.Datastore.csproj" />
