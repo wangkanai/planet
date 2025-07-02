@@ -13,7 +13,7 @@ public class BingProviderTests
 		var x        = 1;
 		var y        = 2;
 		var z        = 3;
-		var expected = "http://ecn.t3.tiles.virtualearth.net/tiles/a021.jpeg?g=1";
+		var expected = "https://ecn.t3.tiles.virtualearth.net/tiles/a021.jpeg?g=1";
 
 		// Act
 		var actual = BingProvider.GetTileUrl(x, y, z);
