@@ -3,7 +3,7 @@
 namespace Wangkanai.Planet.Providers;
 
 /// <summary>Provides functionality for interacting with Google map tiles.</summary>
-public class GoogleProvider
+public sealed class GoogleProvider
 {
 	/// <summary>Gets the URL of a Google map tile.</summary>
 	/// <param name="x">The x-coordinate of the tile.</param>
