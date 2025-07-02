@@ -1,11 +1,11 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Planet.Providers.Bing.Extensions;
+using Wangkanai.Planet.Providers.Extensions;
 
-namespace Wangkanai.Planet.Extensions.Bing;
+namespace Wangkanai.Planet.Providers;
 
 /// <summary>Provides functionality for generating Bing tile URLs.</summary>
-public class BingProvider
+public static class BingProvider
 {
 	/// <summary>Generates a URL for a Bing tile.</summary>
 	/// <param name="x">The x-coordinate of the tile.</param>

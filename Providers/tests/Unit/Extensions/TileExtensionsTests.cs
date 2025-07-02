@@ -1,8 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Planet.Providers.Bing.Extensions;
-
-namespace Wangkanai.Planet.Providers.Bing.Tests;
+namespace Wangkanai.Planet.Providers.Extensions.Tests;
 
 public class TileExtensionsTests
 {
@@ -43,8 +41,8 @@ public class TileExtensionsTests
 	{
 		// Arrange
 		var zoom            = 3;
-		var x               = (1 << zoom) - 1; // 7 for zoom=3
-		var y               = (1 << zoom) - 1; // 7 for zoom=3
+		var x               = (1 << zoom) - 1;// 7 for zoom=3
+		var y               = (1 << zoom) - 1;// 7 for zoom=3
 		var expectedQuadKey = "333";
 
 		// Act
@@ -147,7 +145,7 @@ public class TileExtensionsTests
 	public void QuadKey_ZoomLevel23_GeneratesCorrectLength()
 	{
 		// Arrange
-		var zoom = 23; // Maximum zoom level typically used
+		var zoom = 23;// Maximum zoom level typically used
 		var x    = 1234567;
 		var y    = 7654321;
 

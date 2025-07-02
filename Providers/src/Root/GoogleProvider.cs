@@ -1,9 +1,9 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-namespace Wangkanai.Planet.Providers.Google;
+namespace Wangkanai.Planet.Providers;
 
 /// <summary>Provides functionality for interacting with Google map tiles.</summary>
-public class GoogleProvider
+public static class GoogleProvider
 {
 	/// <summary>Gets the URL of a Google map tile.</summary>
 	/// <param name="x">The x-coordinate of the tile.</param>
