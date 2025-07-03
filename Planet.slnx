@@ -23,6 +23,25 @@
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
   </Folder>
+  <Folder Name="/Drawing/">
+    <Project Path="Drawing\Abstractions\src\Wangkanai.Planet.Drawing.Abstractions.csproj" Type="Classic C#" />
+    <File Path="Drawing\Directory.Build.props" />
+    <File Path="Drawing\README.md" />
+  </Folder>
+  <Folder Name="/Drawing/Rasters/">
+    <Project Path="Drawing\Rasters\src\Root\Wangkanai.Planet.Drawing.Rasters.csproj" Type="Classic C#" />
+    <File Path="Drawing\Rasters\README.md" />
+  </Folder>
+  <Folder Name="/Drawing/Rasters/tests/">
+    <Project Path="Drawing\Rasters\tests\Unit\Wangkanai.Planet.Drawing.Rasters.UnitTests.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Drawing/Vectors/">
+    <Project Path="Drawing\Vectors\src\Root\Wangkanai.Planet.Drawing.Vectors.csproj" Type="Classic C#" />
+    <File Path="Drawing\Vectors\README.md" />
+  </Folder>
+  <Folder Name="/Drawing/Vectors/tests/">
+    <Project Path="Drawing\Vectors\tests\Unit\Wangkanai.Planet.Drawing.Vectors.UnitTests.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Engine/">
     <Project Path="Engine\src\Console\Wangkanai.Planet.Engine.Console.csproj" Type="Classic C#" />
     <Project Path="Engine\src\Domain\Wangkanai.Planet.Engine.Domain.csproj" Type="Classic C#" />
