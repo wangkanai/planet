@@ -91,6 +91,8 @@ public class Mercator
 		try
 		{
 			var resolution = Resolution(zoom);
+			// Convert pixel coordinates to meters using standard web mapping convention
+			// Pixel (0,0) is at top-left corner of world map (-OriginShift, +OriginShift)
 			coordinate.X = px * resolution - OriginShift;
 			coordinate.Y = OriginShift - py * resolution;
 			return coordinate;
@@ -121,6 +123,8 @@ public class Mercator
 		try
 		{
 			var resolution = Resolution(zoom);
+			// Convert meters to pixel coordinates using standard web mapping convention
+			// Inverse of PixelToMeters: pixel (0,0) at top-left (-OriginShift, +OriginShift)
 			coordinate.X = (mx + OriginShift) / resolution;
 			coordinate.Y = (OriginShift - my) / resolution;
 			return coordinate;
