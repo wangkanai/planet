@@ -2,7 +2,7 @@
 
 namespace Wangkanai.Planet.Drawing.Rasters;
 
-/// <summary>Represents a raster object.</summary>
+/// <summary>Represents a raster image</summary>
 public interface IRaster : IImage
 {
 

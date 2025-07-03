@@ -2,7 +2,7 @@
 
 namespace Wangkanai.Planet.Drawing.Rasters;
 
-/// <summary>Represents a raster object.</summary>
+/// <summary>Represents a raster image</summary>
 public class Raster : IRaster
 {
 	public int Width  { get; set; }
@@ -10,6 +10,7 @@ public class Raster : IRaster
 
 	public void Dispose()
 	{
-		throw new NotImplementedException();
+		// Implementation for resource cleanup
+		GC.SuppressFinalize(this);
 	}
 }

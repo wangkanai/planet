@@ -2,7 +2,7 @@
 
 namespace Wangkanai.Planet.Drawing.Vectors;
 
-/// <summary>Represents a vector object.</summary>
+/// <summary>Represents a vector image</summary>
 public class Vector : IVector
 {
 	public int Width  { get; set; }
@@ -10,6 +10,7 @@ public class Vector : IVector
 
 	public void Dispose()
 	{
-		throw new NotImplementedException();
+		// Implementation for resource cleanup
+		GC.SuppressFinalize(this);
 	}
 }
