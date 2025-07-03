@@ -7,6 +7,8 @@ namespace Wangkanai.Planet.Drawing.Rasters.UnitTests.Tiffs;
 
 public class TiffValidatorTests
 {
+	private static readonly int[] BitsPerSampleSingle = [8, 8, 8];
+
 	[Theory]
 	[InlineData(TiffColorDepth.Bilevel, true)]
 	[InlineData(TiffColorDepth.EightBit, true)]
@@ -16,11 +18,11 @@ public class TiffValidatorTests
 	{
 		// Act
 		var result = TiffValidator.IsValidColorDepth(colorDepth);
-		
+
 		// Assert
 		Assert.Equal(expected, result);
 	}
-	
+
 	[Theory]
 	[InlineData(TiffCompression.None, true)]
 	[InlineData(TiffCompression.Lzw, true)]
@@ -30,11 +32,11 @@ public class TiffValidatorTests
 	{
 		// Act
 		var result = TiffValidator.IsValidCompression(compression);
-		
+
 		// Assert
 		Assert.Equal(expected, result);
 	}
-	
+
 	[Theory]
 	[InlineData(PhotometricInterpretation.BlackIsZero, TiffColorDepth.Bilevel, true)]
 	[InlineData(PhotometricInterpretation.Rgb, TiffColorDepth.TwentyFourBit, true)]
@@ -42,17 +44,17 @@ public class TiffValidatorTests
 	[InlineData(PhotometricInterpretation.Cmyk, TiffColorDepth.ThirtyTwoBit, true)]
 	[InlineData(PhotometricInterpretation.Rgb, TiffColorDepth.Bilevel, false)]
 	public void IsValidPhotometricInterpretation_ShouldReturnExpectedResult(
-		PhotometricInterpretation photometric, 
-		TiffColorDepth colorDepth, 
+		PhotometricInterpretation photometric,
+		TiffColorDepth colorDepth,
 		bool expected)
 	{
 		// Act
 		var result = TiffValidator.IsValidPhotometricInterpretation(photometric, colorDepth);
-		
+
 		// Assert
 		Assert.Equal(expected, result);
 	}
-	
+
 	[Theory]
 	[InlineData(3, PhotometricInterpretation.Rgb, false, true)]
 	[InlineData(4, PhotometricInterpretation.Rgb, true, true)]
@@ -61,18 +63,18 @@ public class TiffValidatorTests
 	[InlineData(5, PhotometricInterpretation.Cmyk, true, true)]
 	[InlineData(2, PhotometricInterpretation.Rgb, false, false)]
 	public void IsValidSamplesPerPixel_ShouldReturnExpectedResult(
-		int samplesPerPixel, 
-		PhotometricInterpretation photometric, 
-		bool hasAlpha, 
+		int samplesPerPixel,
+		PhotometricInterpretation photometric,
+		bool hasAlpha,
 		bool expected)
 	{
 		// Act
 		var result = TiffValidator.IsValidSamplesPerPixel(samplesPerPixel, photometric, hasAlpha);
-		
+
 		// Assert
 		Assert.Equal(expected, result);
 	}
-	
+
 	[Theory]
 	[InlineData(new[] { 8, 8, 8 }, 3, true)]
 	[InlineData(new[] { 16, 16, 16 }, 3, true)]
@@ -83,11 +85,11 @@ public class TiffValidatorTests
 	{
 		// Act
 		var result = TiffValidator.IsValidBitsPerSample(bitsPerSample.AsSpan(), samplesPerPixel);
-		
+
 		// Assert
 		Assert.Equal(expected, result);
 	}
-	
+
 	[Fact]
 	public void IsValid_WithValidConfiguration_ShouldReturnTrue()
 	{
@@ -100,24 +102,24 @@ public class TiffValidatorTests
 			SamplesPerPixel = 3,
 			HasAlpha = false
 		};
-		tiffRaster.SetBitsPerSample(new[] { 8, 8, 8 });
-		
+		tiffRaster.SetBitsPerSample(BitsPerSampleSingle);
+
 		// Act
 		var result = TiffValidator.IsValid(tiffRaster);
-		
+
 		// Assert
 		Assert.True(result);
 	}
-	
+
 	[Fact]
 	public void IsValid_WithInvalidDimensions_ShouldReturnFalse()
 	{
 		// Arrange
 		var tiffRaster = new TiffRaster(0, 768);
-		
+
 		// Act
 		var result = TiffValidator.IsValid(tiffRaster);
-		
+
 		// Assert
 		Assert.False(result);
 	}
