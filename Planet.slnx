@@ -24,6 +24,7 @@
     <File Path=".gitignore" />
   </Folder>
   <Folder Name="/Drawing/">
+    <Project Path="Drawing\Abstractions\src\Wangkanai.Planet.Drawing.Abstractions.csproj" Type="Classic C#" />
     <File Path="Drawing\Directory.Build.props" />
     <File Path="Drawing\README.md" />
   </Folder>
