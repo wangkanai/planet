@@ -2,5 +2,5 @@
 
 namespace Wangkanai.Planet.Drawing.Vectors;
 
-/// <summary>Represents a vector object.</summary>
+/// <summary>Represents a vector image</summary>
 public interface IVector : IImage { }

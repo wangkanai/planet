@@ -84,21 +84,18 @@ public class Mercator
 			throw new ArgumentOutOfRangeException(nameof(zoom), "Zoom level must be non-negative.");
 		if (double.IsNaN(px) || double.IsNaN(py))
 			throw new ArgumentException("Pixel coordinates cannot be NaN.");
-		if (double.IsPositiveInfinity(px) || double.IsNegativeInfinity(py))
-			throw new ArgumentException();
+		if (double.IsInfinity(px) || double.IsInfinity(py))
+			throw new ArgumentException("Pixel coordinates cannot be Infinity.");
 
 		var coordinate = new Coordinate();
-		try
-		{
-			var resolution = Resolution(zoom);
-			coordinate.X = px * resolution - OriginShift;
-			coordinate.Y = py * resolution - OriginShift;
-			return coordinate;
-		}
-		catch (Exception ex)
-		{
-			throw ex;
-		}
+		var resolution = Resolution(zoom);
+
+		// Convert pixel coordinates to meters using standard web mapping convention
+		// Pixel (0,0) is at top-left corner of world map (-OriginShift, +OriginShift)
+		coordinate.X = px * resolution - OriginShift;
+		coordinate.Y = py * resolution - OriginShift;
+
+		return coordinate;
 	}
 
 	/// <summary>Converts Mercator meters coordinates to pixel coordinates.</summary>
@@ -114,21 +111,18 @@ public class Mercator
 			throw new ArgumentOutOfRangeException(nameof(zoom), "Zoom level must be non-negative.");
 		if (double.IsNaN(mx) || double.IsNaN(my))
 			throw new ArgumentException("Mercator coordinates cannot be NaN.");
-		if (double.IsPositiveInfinity(mx) || double.IsNegativeInfinity(my))
+		if (double.IsInfinity(mx) || double.IsInfinity(my))
 			throw new ArgumentException("Mercator coordinates cannot be Infinity.");
 
 		var coordinate = new Coordinate();
-		try
-		{
-			var resolution = Resolution(zoom);
-			coordinate.X = (mx + OriginShift) / resolution;
-			coordinate.Y = (my + OriginShift) / resolution;
-			return coordinate;
-		}
-		catch (Exception ex)
-		{
-			throw ex;
-		}
+		var resolution = Resolution(zoom);
+
+		// Convert meters to pixel coordinates using standard web mapping convention
+		// Inverse of PixelToMeters: pixel (0,0) at top-left (-OriginShift, +OriginShift)
+		coordinate.X = (mx + OriginShift) / resolution;
+		coordinate.Y = (my + OriginShift) / resolution;
+
+		return coordinate;
 	}
 
 	/// <summary>Gets the resolution at a specified zoom level.</summary>
