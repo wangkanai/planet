@@ -119,12 +119,12 @@ public class MercatorTests
 
 
 	[Theory]
-	[InlineData(0, 0, 0, 100)]     // Top-left corner at zoom 0
-	[InlineData(256, 0, 1, 1000)]  // Top edge at zoom 1
-	[InlineData(0, 256, 1, 1000)]  // Left edge at zoom 1
-	[InlineData(256, 256, 1, 1000)]// Quarter point at zoom 1
-	[InlineData(512, 512, 2, 2000)]// Quarter point at zoom 2
-	public void PixelToMeters_WithValidInput_ReturnsCorrectCoordinates(double px, double py, int zoom, double expectedDelta)
+	[InlineData(0, 0, 0)]    // Top-left corner at zoom 0
+	[InlineData(256, 0, 1)]  // Top edge at zoom 1
+	[InlineData(0, 256, 1)]  // Left edge at zoom 1
+	[InlineData(256, 256, 1)]// Quarter point at zoom 1
+	[InlineData(512, 512, 2)]// Quarter point at zoom 2
+	public void PixelToMeters_WithValidInput_ReturnsCorrectCoordinates(double px, double py, int zoom)
 	{
 		// Arrange
 		var mercator = new Mercator();
