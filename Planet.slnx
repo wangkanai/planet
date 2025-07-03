@@ -32,9 +32,15 @@
     <File Path="Drawing\Rasters\README.md" />
   </Folder>
   <Folder Name="/Drawing/Rasters/tests/">
-    <Project Path="Drawing\Rasters\tests\Unit\Wangkanai.Planet.Drawing.Rasters.Tests.csproj" Type="Classic C#" />
+    <Project Path="Drawing\Rasters\tests\Unit\Wangkanai.Planet.Drawing.Rasters.UnitTests.csproj" Type="Classic C#" />
   </Folder>
-  <Folder Name="/Drawing/Vectors/" />
+  <Folder Name="/Drawing/Vectors/">
+    <Project Path="Drawing\Vectors\src\Root\Wangkanai.Planet.Drawing.Vectors.csproj" Type="Classic C#" />
+    <File Path="Drawing\Vectors\README.md" />
+  </Folder>
+  <Folder Name="/Drawing/Vectors/tests/">
+    <Project Path="Drawing\Vectors\tests\Unit\Wangkanai.Planet.Drawing.Vectors.UnitTests.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Engine/">
     <Project Path="Engine\src\Console\Wangkanai.Planet.Engine.Console.csproj" Type="Classic C#" />
     <Project Path="Engine\src\Domain\Wangkanai.Planet.Engine.Domain.csproj" Type="Classic C#" />
