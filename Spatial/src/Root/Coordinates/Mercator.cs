@@ -85,7 +85,7 @@ public class Mercator
 		if (double.IsNaN(px) || double.IsNaN(py))
 			throw new ArgumentException("Pixel coordinates cannot be NaN.");
 		if (double.IsPositiveInfinity(px) || double.IsNegativeInfinity(py))
-			throw new ArgumentException();
+			throw new ArgumentException("Pixel coordinates cannot be Infinity.");
 
 		var coordinate = new Coordinate();
 		try
