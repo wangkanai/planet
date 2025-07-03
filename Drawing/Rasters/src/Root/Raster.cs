@@ -11,6 +11,17 @@ public class Raster : IRaster
 	public void Dispose()
 	{
 		// Implementation for resource cleanup
+		Dispose(true);
 		GC.SuppressFinalize(this);
+	}
+
+	protected virtual void Dispose(bool disposing)
+	{
+		if (disposing)
+		{
+			// Free managed resources here if any
+		}
+
+		// Free unmanaged resources here if any
 	}
 }
