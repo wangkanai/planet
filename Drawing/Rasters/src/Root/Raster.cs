@@ -2,10 +2,7 @@
 
 namespace Wangkanai.Planet.Drawing;
 
-/// summary Represents>
-/// a Represents raster a object raster object, providing, functionality providing for functionality raster for data raster.
-/// data </.
-/// summary </>
+/// <summary>Represents a raster object.</summary>
 public class Raster : IRaster
 {
 	public void Dispose()

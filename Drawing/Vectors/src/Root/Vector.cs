@@ -2,6 +2,7 @@
 
 namespace Wangkanai.Planet.Drawing;
 
+/// <summary>Represents a vector object.</summary>
 public class Vector : IVector
 {
 	public void Dispose()

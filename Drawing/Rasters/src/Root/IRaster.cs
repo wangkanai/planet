@@ -2,6 +2,7 @@
 
 namespace Wangkanai.Planet.Drawing;
 
+/// <summary>Represents a raster object.</summary>
 public interface IRaster : IDisposable
 {
 

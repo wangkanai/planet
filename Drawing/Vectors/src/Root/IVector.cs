@@ -2,7 +2,8 @@
 
 namespace Wangkanai.Planet.Drawing;
 
+/// <summary>Represents a vector object.</summary>
 public interface IVector: IDisposable
 {
-	
+
 }
