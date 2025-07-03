@@ -73,7 +73,6 @@ public class TiffRaster : ITiffRaster
 		{
 			// Fast path for most common cases using unsafe operations for better performance
 			if (_samplesCount <= 4)
-			{
 				return _samplesCount switch
 				{
 					0 => ReadOnlySpan<int>.Empty,
@@ -81,9 +80,8 @@ public class TiffRaster : ITiffRaster
 					2 => MemoryMarshal.CreateReadOnlySpan(ref _sample1, 2),
 					3 => MemoryMarshal.CreateReadOnlySpan(ref _sample1, 3),
 					4 => MemoryMarshal.CreateReadOnlySpan(ref _sample1, 4),
-					_ => ReadOnlySpan<int>.Empty// Should never hit this
+					_ => ReadOnlySpan<int>.Empty // Should never hit this
 				};
-			}
 
 			// Fallback to array for larger cases
 			return _bitsPerSampleArray.AsSpan();
@@ -94,9 +92,7 @@ public class TiffRaster : ITiffRaster
 	/// <summary>Sets the bits per sample values with optimal performance for common cases.</summary>
 	/// <param name="bitsPerSample">The bits per sample array.</param>
 	public void SetBitsPerSample(int[] bitsPerSample)
-	{
-		SetBitsPerSample(bitsPerSample.AsSpan());
-	}
+		=> SetBitsPerSample(bitsPerSample.AsSpan());
 
 	/// <summary>Sets the bits per sample values with optimal performance for common cases.</summary>
 	/// <param name="bitsPerSample">The bits per sample span.</param>
