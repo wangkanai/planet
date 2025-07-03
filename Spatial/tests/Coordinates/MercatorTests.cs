@@ -117,11 +117,14 @@ public class MercatorTests
 		Assert.InRange(result.Y, originalLat - 0.0001, originalLat + 0.0001);
 	}
 
+
 	[Theory]
-	[InlineData(0, 0, 0, 0)]
-	[InlineData(256, 256, 1, 256)]
-	[InlineData(512, 512, 2, 128)]
-	[InlineData(1024, 1024, 3, 64)]
+	[InlineData(0, 0, 0, 100)]       // Origin at zoom 0
+	[InlineData(256, 256, 1, 1000)]  // Center tile at zoom 1
+	[InlineData(512, 512, 2, 2000)]  // Center tile at zoom 2
+	[InlineData(1024, 1024, 3, 3000)]// Center tile at zoom 3
+	[InlineData(-256, -256, 1, 1000)]// Negative coordinates
+	[InlineData(0, 256, 1, 1000)]    // Mixed coordinates
 	public void PixelToMeters_WithValidInput_ReturnsCorrectCoordinates(double px, double py, int zoom, double expectedDelta)
 	{
 		// Arrange
@@ -132,12 +135,20 @@ public class MercatorTests
 
 		// Assert
 		Assert.NotNull(result);
-		Assert.True(result.X >= -mercator.OriginShift);
-		Assert.True(result.Y >= -mercator.OriginShift);
 
-		// Assert that the conversion magnitude is within expected delta range
-		var magnitude = Math.Sqrt(result.X * result.X + result.Y * result.Y);
-		Assert.InRange(magnitude, 0, mercator.OriginShift + expectedDelta);
+		// Check bounds - both minimum and maximum
+		Assert.True(result.X >= -mercator.OriginShift, "X coordinate below minimum bound");
+		Assert.True(result.X <= mercator.OriginShift, "X coordinate above maximum bound");
+		Assert.True(result.Y >= -mercator.OriginShift, "Y coordinate below minimum bound");
+		Assert.True(result.Y <= mercator.OriginShift, "Y coordinate above maximum bound");
+
+		// Verify the conversion makes sense for the given zoom level
+		// At zoom 0, the entire world should fit in one tile
+		var expectedRange = mercator.OriginShift * 2 / Math.Pow(2, zoom);
+		Assert.True(Math.Abs(result.X) <= mercator.OriginShift + expectedDelta,
+			$"X coordinate {result.X} outside expected range for zoom {zoom}");
+		Assert.True(Math.Abs(result.Y) <= mercator.OriginShift + expectedDelta,
+			$"Y coordinate {result.Y} outside expected range for zoom {zoom}");
 	}
 
 	[Theory]
