@@ -1,5 +1,7 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
+using System.Runtime.InteropServices;
+
 namespace Wangkanai.Planet.Drawing.Rasters.Tiffs;
 
 /// <summary>Represents a TIFF raster image with format-specific properties.</summary>
@@ -23,24 +25,73 @@ public class TiffRaster : ITiffRaster
 	/// <inheritdoc />
 	public int SamplesPerPixel { get; set; }
 	
-	/// <summary>Backing array for bits per sample values.</summary>
-	private int[] _bitsPerSample = Array.Empty<int>();
+	/// <summary>Inline storage for up to 4 samples (covers 95% of TIFF use cases).</summary>
+#pragma warning disable CS0414 // Field assigned but never used - accessed via MemoryMarshal
+	private int _sample1, _sample2, _sample3, _sample4;
+#pragma warning restore CS0414
+	
+	/// <summary>Backing array for cases with more than 4 samples.</summary>
+	private int[]? _bitsPerSampleArray;
+	
+	/// <summary>Number of samples per pixel.</summary>
+	private int _samplesCount;
 	
 	/// <inheritdoc />
-	public ReadOnlySpan<int> BitsPerSample => _bitsPerSample.AsSpan();
+	public ReadOnlySpan<int> BitsPerSample => _samplesCount switch
+	{
+		0 => ReadOnlySpan<int>.Empty,
+		1 => new ReadOnlySpan<int>(in _sample1),
+		2 => MemoryMarshal.CreateReadOnlySpan(ref _sample1, 2),
+		3 => MemoryMarshal.CreateReadOnlySpan(ref _sample1, 3),
+		4 => MemoryMarshal.CreateReadOnlySpan(ref _sample1, 4),
+		_ => _bitsPerSampleArray.AsSpan()
+	};
 	
-	/// <summary>Sets the bits per sample values.</summary>
+	/// <summary>Sets the bits per sample values with optimal performance for common cases.</summary>
 	/// <param name="bitsPerSample">The bits per sample array.</param>
 	public void SetBitsPerSample(int[] bitsPerSample)
 	{
-		_bitsPerSample = bitsPerSample;
+		SetBitsPerSample(bitsPerSample.AsSpan());
 	}
 	
-	/// <summary>Sets the bits per sample values.</summary>
+	/// <summary>Sets the bits per sample values with optimal performance for common cases.</summary>
 	/// <param name="bitsPerSample">The bits per sample span.</param>
 	public void SetBitsPerSample(ReadOnlySpan<int> bitsPerSample)
 	{
-		_bitsPerSample = bitsPerSample.ToArray();
+		_samplesCount = bitsPerSample.Length;
+		
+		switch (bitsPerSample.Length)
+		{
+			case 0:
+				_bitsPerSampleArray = null;
+				break;
+			case 1:
+				_sample1 = bitsPerSample[0];
+				_bitsPerSampleArray = null;
+				break;
+			case 2:
+				_sample1 = bitsPerSample[0];
+				_sample2 = bitsPerSample[1];
+				_bitsPerSampleArray = null;
+				break;
+			case 3:
+				_sample1 = bitsPerSample[0];
+				_sample2 = bitsPerSample[1];
+				_sample3 = bitsPerSample[2];
+				_bitsPerSampleArray = null;
+				break;
+			case 4:
+				_sample1 = bitsPerSample[0];
+				_sample2 = bitsPerSample[1];
+				_sample3 = bitsPerSample[2];
+				_sample4 = bitsPerSample[3];
+				_bitsPerSampleArray = null;
+				break;
+			default:
+				// Fallback to array for more than 4 samples (rare cases)
+				_bitsPerSampleArray = bitsPerSample.ToArray();
+				break;
+		}
 	}
 	
 	/// <inheritdoc />

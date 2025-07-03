@@ -128,6 +128,60 @@ public class TiffRasterTests
 		Assert.True(bitsPerSample.SequenceEqual(new[] { 8, 8, 8 }));
 	}
 	
+	[Theory]
+	[InlineData(new int[] { })]
+	[InlineData(new[] { 8 })]
+	[InlineData(new[] { 8, 8 })]
+	[InlineData(new[] { 8, 8, 8 })]
+	[InlineData(new[] { 8, 8, 8, 8 })]
+	[InlineData(new[] { 8, 8, 8, 8, 8 })]
+	[InlineData(new[] { 8, 8, 8, 8, 8, 8, 8, 8 })]
+	public void BitsPerSample_WithVariousSampleCounts_ShouldStoreAndRetrieveCorrectly(int[] expected)
+	{
+		// Arrange
+		var tiffRaster = new TiffRaster();
+		
+		// Act
+		tiffRaster.SetBitsPerSample(expected);
+		var actual = tiffRaster.BitsPerSample;
+		
+		// Assert
+		Assert.Equal(expected.Length, actual.Length);
+		Assert.True(actual.SequenceEqual(expected));
+	}
+	
+	[Fact]
+	public void BitsPerSample_WithInlineStorage_ShouldUseStackAllocation()
+	{
+		// Arrange
+		var tiffRaster = new TiffRaster();
+		var expected = new[] { 16, 16, 16 };
+		
+		// Act
+		tiffRaster.SetBitsPerSample(expected);
+		var actual = tiffRaster.BitsPerSample;
+		
+		// Assert - Verify behavior for inline storage (1-4 samples)
+		Assert.Equal(3, actual.Length);
+		Assert.True(actual.SequenceEqual(expected));
+	}
+	
+	[Fact]
+	public void BitsPerSample_WithLargeArray_ShouldFallbackToHeapAllocation()
+	{
+		// Arrange
+		var tiffRaster = new TiffRaster();
+		var expected = new[] { 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 }; // More than 4 samples
+		
+		// Act
+		tiffRaster.SetBitsPerSample(expected);
+		var actual = tiffRaster.BitsPerSample;
+		
+		// Assert - Verify behavior for heap allocation (>4 samples)
+		Assert.Equal(10, actual.Length);
+		Assert.True(actual.SequenceEqual(expected));
+	}
+	
 	[Fact]
 	public void Dispose_ShouldNotThrow()
 	{

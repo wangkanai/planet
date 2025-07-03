@@ -32,6 +32,9 @@
     <Project Path="Drawing\Rasters\src\Root\Wangkanai.Planet.Drawing.Rasters.csproj" Type="Classic C#" />
     <File Path="Drawing\Rasters\README.md" />
   </Folder>
+  <Folder Name="/Drawing/Rasters/benchmark/">
+    <Project Path="Drawing\Rasters\benchmark\Wangkanai.Planet.Drawing.Rasters.Benchmark.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Drawing/Rasters/tests/">
     <Project Path="Drawing\Rasters\tests\Unit\Wangkanai.Planet.Drawing.Rasters.UnitTests.csproj" Type="Classic C#" />
   </Folder>
