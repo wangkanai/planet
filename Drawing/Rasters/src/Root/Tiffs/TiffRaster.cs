@@ -37,15 +37,28 @@ public class TiffRaster : ITiffRaster
 	private int _samplesCount;
 	
 	/// <inheritdoc />
-	public ReadOnlySpan<int> BitsPerSample => _samplesCount switch
+	public ReadOnlySpan<int> BitsPerSample
 	{
-		0 => ReadOnlySpan<int>.Empty,
-		1 => new ReadOnlySpan<int>(in _sample1),
-		2 => MemoryMarshal.CreateReadOnlySpan(ref _sample1, 2),
-		3 => MemoryMarshal.CreateReadOnlySpan(ref _sample1, 3),
-		4 => MemoryMarshal.CreateReadOnlySpan(ref _sample1, 4),
-		_ => _bitsPerSampleArray.AsSpan()
-	};
+		get
+		{
+			// Fast path for most common cases using unsafe operations for better performance
+			if (_samplesCount <= 4)
+			{
+				return _samplesCount switch
+				{
+					0 => ReadOnlySpan<int>.Empty,
+					1 => MemoryMarshal.CreateReadOnlySpan(ref _sample1, 1),
+					2 => MemoryMarshal.CreateReadOnlySpan(ref _sample1, 2),
+					3 => MemoryMarshal.CreateReadOnlySpan(ref _sample1, 3),
+					4 => MemoryMarshal.CreateReadOnlySpan(ref _sample1, 4),
+					_ => ReadOnlySpan<int>.Empty // Should never hit this
+				};
+			}
+			
+			// Fallback to array for larger cases
+			return _bitsPerSampleArray.AsSpan();
+		}
+	}
 	
 	/// <summary>Sets the bits per sample values with optimal performance for common cases.</summary>
 	/// <param name="bitsPerSample">The bits per sample array.</param>
