@@ -119,12 +119,11 @@ public class MercatorTests
 
 
 	[Theory]
-	[InlineData(0, 0, 0, 100)]       // Origin at zoom 0
-	[InlineData(256, 256, 1, 1000)]  // Center tile at zoom 1
-	[InlineData(512, 512, 2, 2000)]  // Center tile at zoom 2
-	[InlineData(1024, 1024, 3, 3000)]// Center tile at zoom 3
-	[InlineData(-256, -256, 1, 1000)]// Negative coordinates
-	[InlineData(0, 256, 1, 1000)]    // Mixed coordinates
+	[InlineData(0, 0, 0, 100)]       // Top-left corner at zoom 0
+	[InlineData(256, 0, 1, 1000)]    // Top edge at zoom 1
+	[InlineData(0, 256, 1, 1000)]    // Left edge at zoom 1
+	[InlineData(256, 256, 1, 1000)]  // Quarter point at zoom 1
+	[InlineData(512, 512, 2, 2000)]  // Quarter point at zoom 2
 	public void PixelToMeters_WithValidInput_ReturnsCorrectCoordinates(double px, double py, int zoom, double expectedDelta)
 	{
 		// Arrange
@@ -136,19 +135,17 @@ public class MercatorTests
 		// Assert
 		Assert.NotNull(result);
 
-		// Check bounds - both minimum and maximum
+		// These coordinates should be within valid Mercator bounds since they represent
+		// actual locations within the projected world map
 		Assert.True(result.X >= -mercator.OriginShift, "X coordinate below minimum bound");
 		Assert.True(result.X <= mercator.OriginShift, "X coordinate above maximum bound");
 		Assert.True(result.Y >= -mercator.OriginShift, "Y coordinate below minimum bound");
 		Assert.True(result.Y <= mercator.OriginShift, "Y coordinate above maximum bound");
 
-		// Verify the conversion makes sense for the given zoom level
-		// At zoom 0, the entire world should fit in one tile
-		var expectedRange = mercator.OriginShift * 2 / Math.Pow(2, zoom);
-		Assert.True(Math.Abs(result.X) <= mercator.OriginShift + expectedDelta,
-			$"X coordinate {result.X} outside expected range for zoom {zoom}");
-		Assert.True(Math.Abs(result.Y) <= mercator.OriginShift + expectedDelta,
-			$"Y coordinate {result.Y} outside expected range for zoom {zoom}");
+		// Verify round-trip conversion works
+		var backToPixels = mercator.MetersToPixels(result.X, result.Y, zoom);
+		Assert.True(Math.Abs(backToPixels.X - px) < 0.001, "Round-trip X conversion failed");
+		Assert.True(Math.Abs(backToPixels.Y - py) < 0.001, "Round-trip Y conversion failed");
 	}
 
 	[Theory]
