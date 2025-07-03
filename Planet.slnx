@@ -23,6 +23,10 @@
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
   </Folder>
+  <Folder Name="/Drawing/">
+    <File Path="Drawing\Directory.Build.props" />
+    <File Path="Drawing\README.md" />
+  </Folder>
   <Folder Name="/Engine/">
     <Project Path="Engine\src\Console\Wangkanai.Planet.Engine.Console.csproj" Type="Classic C#" />
     <Project Path="Engine\src\Domain\Wangkanai.Planet.Engine.Domain.csproj" Type="Classic C#" />
