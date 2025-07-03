@@ -23,10 +23,10 @@ public class GeoTiffRaster : TiffRaster, IGeoTiffRaster
 		Extent != null;
 	
 	/// <inheritdoc />
-	public double? PixelSizeX => GeoTransform?[1];
+	public double? PixelSizeX => GeoTransform?.Length >= 6 ? GeoTransform[1] : null;
 	
 	/// <inheritdoc />
-	public double? PixelSizeY => GeoTransform?[5];
+	public double? PixelSizeY => GeoTransform?.Length >= 6 ? GeoTransform[5] : null;
 	
 	/// <summary>Initializes a new instance of the <see cref="GeoTiffRaster"/> class.</summary>
 	public GeoTiffRaster() : base()
