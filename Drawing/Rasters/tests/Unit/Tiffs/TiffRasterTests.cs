@@ -1,9 +1,9 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Planet.Drawing.Rasters.Tiff;
+using Wangkanai.Planet.Drawing.Rasters.Tiffs;
 using Xunit;
 
-namespace Wangkanai.Planet.Drawing.Rasters.UnitTests.Tiff;
+namespace Wangkanai.Planet.Drawing.Rasters.UnitTests.Tiffs;
 
 public class TiffRasterTests
 {

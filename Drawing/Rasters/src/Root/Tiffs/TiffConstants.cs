@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-namespace Wangkanai.Planet.Drawing.Rasters.Tiff;
+namespace Wangkanai.Planet.Drawing.Rasters.Tiffs;
 
 /// <summary>Contains TIFF format constants and specifications.</summary>
 public static class TiffConstants

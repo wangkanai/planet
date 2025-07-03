@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-namespace Wangkanai.Planet.Drawing.Rasters.Tiff;
+namespace Wangkanai.Planet.Drawing.Rasters.Tiffs;
 
 /// <summary>Represents TIFF format specifications and properties.</summary>
 public interface ITiffRaster : IRaster
