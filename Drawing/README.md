@@ -9,3 +9,4 @@ We need a high-performance image manipulation tool that utilizes parallel CPU an
 
 - **Raster**: [Support for raster graphics, including pixel manipulation and image processing](https://github.com/wangkanai/planet/issues/49)
 - **Vector**: [Support for vector graphics, allowing for scalable shapes and lines](https://github.com/wangkanai/planet/issues/51)
+

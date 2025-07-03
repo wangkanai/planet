@@ -27,6 +27,14 @@
     <File Path="Drawing\Directory.Build.props" />
     <File Path="Drawing\README.md" />
   </Folder>
+  <Folder Name="/Drawing/Rasters/">
+    <Project Path="Drawing\Rasters\src\Root\Wangkanai.Planet.Drawing.Rasters.csproj" Type="Classic C#" />
+    <File Path="Drawing\Rasters\README.md" />
+  </Folder>
+  <Folder Name="/Drawing/Rasters/tests/">
+    <Project Path="Drawing\Rasters\tests\Unit\Wangkanai.Planet.Drawing.Rasters.Tests.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Drawing/Vectors/" />
   <Folder Name="/Engine/">
     <Project Path="Engine\src\Console\Wangkanai.Planet.Engine.Console.csproj" Type="Classic C#" />
     <Project Path="Engine\src\Domain\Wangkanai.Planet.Engine.Domain.csproj" Type="Classic C#" />
