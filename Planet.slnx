@@ -1,5 +1,5 @@
 <Solution>
-  <Folder Name="/.clauda/">
+  <Folder Name="/.claude/">
     <File Path=".claude\settings.json" />
     <File Path="CLAUDE.md" />
   </Folder>
