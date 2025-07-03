@@ -41,18 +41,18 @@ public class MercatorTests
 		// Assert
 		Assert.Equal(tileSize, mercator.TileSize);
 		var expectedInitialResolution = 2 * Math.PI * MapExtent.Max / tileSize;
-		var expectedOriginShift = 2 * Math.PI * MapExtent.Max / 2.0;
+		var expectedOriginShift       = 2 * Math.PI * MapExtent.Max / 2.0;
 
 		Assert.Equal(expectedInitialResolution, mercator.InitialResolution, 10);
 		Assert.Equal(expectedOriginShift, mercator.OriginShift, 10);
 	}
 
 	[Theory]
-	[InlineData(0, 0, 0, 0)] // Origin point
-	[InlineData(20037508.34, 0, 180, 0)] // Right edge of the world
-	[InlineData(-20037508.34, 0, -180, 0)] // Left edge of the world
-	[InlineData(0, 20037508.34, 0, 85.05112878)] // Top edge (approximately)
-	[InlineData(0, -20037508.34, 0, -85.05112878)] // Bottom edge (approximately)
+	[InlineData(0, 0, 0, 0)]                      // Origin point
+	[InlineData(20037508.34, 0, 180, 0)]          // Right edge of the world
+	[InlineData(-20037508.34, 0, -180, 0)]        // Left edge of the world
+	[InlineData(0, 20037508.34, 0, 85.05112878)]  // Top edge (approximately)
+	[InlineData(0, -20037508.34, 0, -85.05112878)]// Bottom edge (approximately)
 	public void MetersToLatLon_WithValidInput_ReturnsCorrectCoordinates(double mx, double my, double expectedLon, double expectedLat)
 	{
 		// Arrange
@@ -62,16 +62,16 @@ public class MercatorTests
 		var result = mercator.MetersToLatLon(mx, my);
 
 		// Assert
-		Assert.InRange(result.X, expectedLon - 0.01, expectedLon + 0.01); // Longitude with small delta
-		Assert.InRange(result.Y, expectedLat - 0.01, expectedLat + 0.01); // Latitude with small delta
+		Assert.InRange(result.X, expectedLon - 0.01, expectedLon + 0.01);// Longitude with small delta
+		Assert.InRange(result.Y, expectedLat - 0.01, expectedLat + 0.01);// Latitude with small delta
 	}
 
 	[Theory]
-	[InlineData(0, 0, 0, 0)] // Origin point
-	[InlineData(180, 0, 20037508.34, 0)] // Right edge of the world
-	[InlineData(-180, 0, -20037508.34, 0)] // Left edge of the world
-	[InlineData(0, 85.05112878, 0, 20037508.34)] // Top edge (approximately)
-	[InlineData(0, -85.05112878, 0, -20037508.34)] // Bottom edge (approximately)
+	[InlineData(0, 0, 0, 0)]                      // Origin point
+	[InlineData(180, 0, 20037508.34, 0)]          // Right edge of the world
+	[InlineData(-180, 0, -20037508.34, 0)]        // Left edge of the world
+	[InlineData(0, 85.05112878, 0, 20037508.34)]  // Top edge (approximately)
+	[InlineData(0, -85.05112878, 0, -20037508.34)]// Bottom edge (approximately)
 	public void LatLonToMeters_WithValidInput_ReturnsCorrectCoordinates(double lon, double lat, double expectedX, double expectedY)
 	{
 		// Arrange
@@ -81,8 +81,8 @@ public class MercatorTests
 		var result = mercator.LatLonToMeters(lon, lat);
 
 		// Assert
-		Assert.InRange(result.X, expectedX - 0.01, expectedX + 0.01); // X with small delta
-		Assert.InRange(result.Y, expectedY - 0.01, expectedY + 0.01); // Y with small delta
+		Assert.InRange(result.X, expectedX - 0.01, expectedX + 0.01);// X with small delta
+		Assert.InRange(result.Y, expectedY - 0.01, expectedY + 0.01);// Y with small delta
 	}
 
 	[Fact]
@@ -93,18 +93,18 @@ public class MercatorTests
 
 		// Act - Using values beyond the valid range
 		var result1 = mercator.LatLonToMeters(0, 90); // North pole
-		var result2 = mercator.LatLonToMeters(0, -90); // South pole
+		var result2 = mercator.LatLonToMeters(0, -90);// South pole
 
 		// Assert - Should be clamped to the valid range (-85.05112878, 85.05112878)
-		Assert.InRange(result1.Y, 20037508.33, 20037508.35); // Close to max value
-		Assert.InRange(result2.Y, -20037508.35, -20037508.33); // Close to min value
+		Assert.InRange(result1.Y, 20037508.33, 20037508.35);  // Close to max value
+		Assert.InRange(result2.Y, -20037508.35, -20037508.33);// Close to min value
 	}
 
 	[Fact]
 	public void ConversionRoundTrip_ShouldBeApproximatelyEqual()
 	{
 		// Arrange
-		var mercator = new Mercator();
+		var mercator    = new Mercator();
 		var originalLon = 45.0;
 		var originalLat = 30.0;
 
@@ -134,6 +134,10 @@ public class MercatorTests
 		Assert.NotNull(result);
 		Assert.True(result.X >= -mercator.OriginShift);
 		Assert.True(result.Y >= -mercator.OriginShift);
+
+		// Assert that the conversion magnitude is within expected delta range
+		var magnitude = Math.Sqrt(result.X * result.X + result.Y * result.Y);
+		Assert.InRange(magnitude, 0, mercator.OriginShift + expectedDelta);
 	}
 
 	[Theory]
@@ -159,10 +163,10 @@ public class MercatorTests
 	public void PixelToMeters_MetersToPixels_RoundTrip_ShouldBeApproximatelyEqual()
 	{
 		// Arrange
-		var mercator = new Mercator();
+		var mercator   = new Mercator();
 		var originalPx = 256.0;
 		var originalPy = 256.0;
-		var zoom = 5;
+		var zoom       = 5;
 
 		// Act - Convert from pixels to meters and back
 		var meters = mercator.PixelToMeters(originalPx, originalPy, zoom);
@@ -182,7 +186,7 @@ public class MercatorTests
 	public void Resolution_AtDifferentZoomLevels_ReturnsCorrectValues(int zoom, double expectedRatio)
 	{
 		// Arrange
-		var mercator = new Mercator();
+		var mercator       = new Mercator();
 		var baseResolution = mercator.InitialResolution;
 
 		// Act - Use reflection to test private Resolution method
@@ -202,7 +206,7 @@ public class MercatorTests
 
 		// Act
 		var result1 = mercator.LatLonToMeters(0, 100); // Beyond max latitude
-		var result2 = mercator.LatLonToMeters(0, -100); // Beyond min latitude
+		var result2 = mercator.LatLonToMeters(0, -100);// Beyond min latitude
 
 		// Assert - Should be clamped to valid range
 		var maxResult = mercator.LatLonToMeters(0, 85.05112878);
@@ -217,7 +221,7 @@ public class MercatorTests
 	[InlineData(45, 45)]
 	[InlineData(-45, -45)]
 	[InlineData(180, 0)] // Edge case: longitude wrapping
-	[InlineData(-180, 0)] // Edge case: longitude wrapping
+	[InlineData(-180, 0)]// Edge case: longitude wrapping
 	public void MetersToLatLon_WithSymmetricCoordinates_ProducesExpectedResults(double lon, double lat)
 	{
 		// Arrange
