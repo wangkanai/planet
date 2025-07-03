@@ -9,13 +9,13 @@ public static class TiffValidator
 	/// <param name="colorDepth">The color depth to validate.</param>
 	/// <returns>True if the color depth is valid, otherwise false.</returns>
 	public static bool IsValidColorDepth(TiffColorDepth colorDepth)
-		=> Enum.IsDefined(colorDepth);
+		=> Enum.IsDefined<TiffColorDepth>(colorDepth);
 
 	/// <summary>Validates that the compression algorithm is supported by TIFF format.</summary>
 	/// <param name="compression">The compression algorithm to validate.</param>
 	/// <returns>True if the compression is valid, otherwise false.</returns>
 	public static bool IsValidCompression(TiffCompression compression)
-		=> Enum.IsDefined(compression);
+		=> Enum.IsDefined<TiffCompression>(compression);
 
 	/// <summary>Validates that the photometric interpretation is valid for the given color depth.</summary>
 	/// <param name="photometric">The photometric interpretation.</param>
