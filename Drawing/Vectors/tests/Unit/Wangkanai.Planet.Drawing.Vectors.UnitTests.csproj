@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Root\Wangkanai.Planet.Drawing.Vectors.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\Root\Wangkanai.Planet.Drawing.Vectors.csproj" />
+	</ItemGroup>
 </Project>
