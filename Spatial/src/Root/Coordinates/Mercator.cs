@@ -97,7 +97,7 @@ public class Mercator
 		}
 		catch (Exception ex)
 		{
-			throw ex;
+			throw;
 		}
 	}
 
@@ -127,7 +127,7 @@ public class Mercator
 		}
 		catch (Exception ex)
 		{
-			throw ex;
+			throw;
 		}
 	}
 
