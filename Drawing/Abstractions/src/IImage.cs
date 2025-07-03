@@ -2,4 +2,12 @@
 
 namespace Wangkanai.Planet.Drawing;
 
-public interface IImage : IDisposable { }
+/// <summary>Represents an image object with width and height properties.</summary>
+public interface IImage : IDisposable
+{
+	/// <summary>Gets and sets the width of the image.</summary>
+	int Width { get; set; }
+
+	/// <summary>Gets and sets the height of the image.</summary>
+	int Height { get; set; }
+}

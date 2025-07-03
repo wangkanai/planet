@@ -5,6 +5,9 @@ namespace Wangkanai.Planet.Drawing.Rasters;
 /// <summary>Represents a raster object.</summary>
 public class Raster : IRaster
 {
+	public int Width  { get; set; }
+	public int Height { get; set; }
+
 	public void Dispose()
 	{
 		throw new NotImplementedException();

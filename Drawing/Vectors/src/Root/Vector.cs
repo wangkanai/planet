@@ -5,6 +5,9 @@ namespace Wangkanai.Planet.Drawing.Vectors;
 /// <summary>Represents a vector object.</summary>
 public class Vector : IVector
 {
+	public int Width  { get; set; }
+	public int Height { get; set; }
+
 	public void Dispose()
 	{
 		throw new NotImplementedException();
