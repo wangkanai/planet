@@ -18,7 +18,7 @@ public class TiffRasterTests
 		Assert.Equal(TiffCompression.None, tiffRaster.Compression);
 		Assert.Equal(PhotometricInterpretation.Rgb, tiffRaster.PhotometricInterpretation);
 		Assert.Equal(3, tiffRaster.SamplesPerPixel);
-		Assert.Equal(new[] { 8, 8, 8 }, tiffRaster.BitsPerSample);
+		Assert.True(tiffRaster.BitsPerSample.SequenceEqual(new[] { 8, 8, 8 }));
 		Assert.False(tiffRaster.HasAlpha);
 		Assert.Equal(1, tiffRaster.PlanarConfiguration);
 		Assert.NotNull(tiffRaster.Metadata);
@@ -84,6 +84,48 @@ public class TiffRasterTests
 		Assert.Equal("Test Image", tiffRaster.Metadata.ImageDescription);
 		Assert.Equal("Test Camera", tiffRaster.Metadata.Make);
 		Assert.Equal("Test Model", tiffRaster.Metadata.Model);
+	}
+	
+	[Fact]
+	public void SetBitsPerSample_WithArray_ShouldUpdateBitsPerSample()
+	{
+		// Arrange
+		var tiffRaster = new TiffRaster();
+		var newBitsPerSample = new[] { 16, 16, 16, 16 };
+		
+		// Act
+		tiffRaster.SetBitsPerSample(newBitsPerSample);
+		
+		// Assert
+		Assert.True(tiffRaster.BitsPerSample.SequenceEqual(newBitsPerSample));
+	}
+	
+	[Fact]
+	public void SetBitsPerSample_WithSpan_ShouldUpdateBitsPerSample()
+	{
+		// Arrange
+		var tiffRaster = new TiffRaster();
+		var newBitsPerSample = new[] { 32, 32 };
+		
+		// Act
+		tiffRaster.SetBitsPerSample(newBitsPerSample.AsSpan());
+		
+		// Assert
+		Assert.True(tiffRaster.BitsPerSample.SequenceEqual(newBitsPerSample));
+	}
+	
+	[Fact]
+	public void BitsPerSample_ShouldReturnReadOnlySpan()
+	{
+		// Arrange
+		var tiffRaster = new TiffRaster();
+		
+		// Act
+		var bitsPerSample = tiffRaster.BitsPerSample;
+		
+		// Assert
+		Assert.Equal(3, bitsPerSample.Length);
+		Assert.True(bitsPerSample.SequenceEqual(new[] { 8, 8, 8 }));
 	}
 	
 	[Fact]

@@ -23,8 +23,25 @@ public class TiffRaster : ITiffRaster
 	/// <inheritdoc />
 	public int SamplesPerPixel { get; set; }
 	
+	/// <summary>Backing array for bits per sample values.</summary>
+	private int[] _bitsPerSample = Array.Empty<int>();
+	
 	/// <inheritdoc />
-	public int[] BitsPerSample { get; set; } = Array.Empty<int>();
+	public ReadOnlySpan<int> BitsPerSample => _bitsPerSample.AsSpan();
+	
+	/// <summary>Sets the bits per sample values.</summary>
+	/// <param name="bitsPerSample">The bits per sample array.</param>
+	public void SetBitsPerSample(int[] bitsPerSample)
+	{
+		_bitsPerSample = bitsPerSample;
+	}
+	
+	/// <summary>Sets the bits per sample values.</summary>
+	/// <param name="bitsPerSample">The bits per sample span.</param>
+	public void SetBitsPerSample(ReadOnlySpan<int> bitsPerSample)
+	{
+		_bitsPerSample = bitsPerSample.ToArray();
+	}
 	
 	/// <inheritdoc />
 	public PhotometricInterpretation PhotometricInterpretation { get; set; }
@@ -42,7 +59,7 @@ public class TiffRaster : ITiffRaster
 		Compression = TiffCompression.None;
 		PhotometricInterpretation = PhotometricInterpretation.Rgb;
 		SamplesPerPixel = 3;
-		BitsPerSample = new[] { 8, 8, 8 };
+		SetBitsPerSample(new[] { 8, 8, 8 });
 	}
 	
 	/// <summary>Initializes a new instance of the <see cref="TiffRaster"/> class with specified dimensions.</summary>

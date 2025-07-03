@@ -61,17 +61,23 @@ public static class TiffValidator
 		return samplesPerPixel == expectedSamples;
 	}
 	
-	/// <summary>Validates the bits per sample array.</summary>
-	/// <param name="bitsPerSample">The bits per sample array.</param>
+	/// <summary>Validates the bits per sample span.</summary>
+	/// <param name="bitsPerSample">The bits per sample span.</param>
 	/// <param name="samplesPerPixel">The number of samples per pixel.</param>
 	/// <returns>True if the bits per sample is valid, otherwise false.</returns>
-	public static bool IsValidBitsPerSample(int[] bitsPerSample, int samplesPerPixel)
+	public static bool IsValidBitsPerSample(ReadOnlySpan<int> bitsPerSample, int samplesPerPixel)
 	{
 		if (bitsPerSample.Length != samplesPerPixel)
 			return false;
 		
 		// All values should be valid bit depths
-		return bitsPerSample.All(bits => bits is 1 or 4 or 8 or 16 or 32);
+		foreach (var bits in bitsPerSample)
+		{
+			if (bits is not (1 or 4 or 8 or 16 or 32))
+				return false;
+		}
+		
+		return true;
 	}
 	
 	/// <summary>Validates a complete TIFF raster configuration.</summary>

@@ -17,8 +17,8 @@ public interface ITiffRaster : IRaster
 	/// <summary>Gets the number of samples per pixel.</summary>
 	int SamplesPerPixel { get; }
 	
-	/// <summary>Gets the bits per sample for each channel.</summary>
-	int[] BitsPerSample { get; }
+	/// <summary>Gets the bits per sample for each channel as a read-only span for optimal performance.</summary>
+	ReadOnlySpan<int> BitsPerSample { get; }
 	
 	/// <summary>Gets the photometric interpretation of the image data.</summary>
 	PhotometricInterpretation PhotometricInterpretation { get; }

@@ -82,7 +82,7 @@ public class TiffValidatorTests
 	public void IsValidBitsPerSample_ShouldReturnExpectedResult(int[] bitsPerSample, int samplesPerPixel, bool expected)
 	{
 		// Act
-		var result = TiffValidator.IsValidBitsPerSample(bitsPerSample, samplesPerPixel);
+		var result = TiffValidator.IsValidBitsPerSample(bitsPerSample.AsSpan(), samplesPerPixel);
 		
 		// Assert
 		Assert.Equal(expected, result);
@@ -98,9 +98,9 @@ public class TiffValidatorTests
 			Compression = TiffCompression.None,
 			PhotometricInterpretation = PhotometricInterpretation.Rgb,
 			SamplesPerPixel = 3,
-			BitsPerSample = new[] { 8, 8, 8 },
 			HasAlpha = false
 		};
+		tiffRaster.SetBitsPerSample(new[] { 8, 8, 8 });
 		
 		// Act
 		var result = TiffValidator.IsValid(tiffRaster);

@@ -16,7 +16,6 @@ public static class TiffExamples
 			Compression = TiffCompression.Lzw,
 			PhotometricInterpretation = PhotometricInterpretation.Rgb,
 			SamplesPerPixel = 3,
-			BitsPerSample = new[] { 8, 8, 8 },
 			HasAlpha = false,
 			Metadata = new TiffMetadata
 			{
@@ -28,6 +27,7 @@ public static class TiffExamples
 				ResolutionUnit = 2 // inches
 			}
 		};
+		tiff.SetBitsPerSample(new[] { 8, 8, 8 });
 
 		return tiff;
 	}
@@ -41,7 +41,6 @@ public static class TiffExamples
 			Compression = TiffCompression.None,
 			PhotometricInterpretation = PhotometricInterpretation.BlackIsZero,
 			SamplesPerPixel = 1,
-			BitsPerSample = new[] { 16 },
 			HasAlpha = false,
 			Metadata = new TiffMetadata
 			{
@@ -50,6 +49,7 @@ public static class TiffExamples
 				Model = "Model X"
 			}
 		};
+		tiff.SetBitsPerSample(new[] { 16 });
 
 		return tiff;
 	}
@@ -63,7 +63,6 @@ public static class TiffExamples
 			Compression = TiffCompression.PackBits,
 			PhotometricInterpretation = PhotometricInterpretation.Cmyk,
 			SamplesPerPixel = 4,
-			BitsPerSample = new[] { 8, 8, 8, 8 },
 			HasAlpha = false,
 			Metadata = new TiffMetadata
 			{
@@ -72,6 +71,7 @@ public static class TiffExamples
 				Copyright = "© 2025 Company Name"
 			}
 		};
+		tiff.SetBitsPerSample(new[] { 8, 8, 8, 8 });
 
 		return tiff;
 	}
