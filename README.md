@@ -22,20 +22,22 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 
 ## Solution Structure 🏗️
 
-- **[Wangkanai.Planet.Portal](Portal)** - Web portal for viewing map tiles
-- **[Wangkanai.Planet.Engine](Engine)** - Engine for rendering and processing map tiles
-- **[Wangkanai.Spatial](Spatial)** - Library for rendering raster GeoTiff to map tiles
-- **[Wangkanai.Planet.Providers](Providers)** - Providers for different map storage standards
-- **[Wangkanai.Planet.Extensions](Extensions)** - Extensions for integrating with various map services and protocols
-- **[Wangkanai.Planet.Protocols](Protocols)** - Protocols for serving map tiles through different services
+- **[Wangkanai.Planet.Portal](Portal)** - Blazor Server/WASM hybrid web application with ASP.NET Core Identity
+- **[Wangkanai.Planet.Engine](Engine)** - Console application for map tile processing and rendering
+- **[Wangkanai.Planet.Providers](Providers)** - External map service integrations (Bing Maps, Google Maps)
+- **[Wangkanai.Planet.Protocols](Protocols)** - Map service protocol implementations (WMS, WMTS)
+- **[Wangkanai.Planet.Extensions](Extensions)** - Extension methods and utilities for the Planet ecosystem
+- **[Wangkanai.Spatial](Spatial)** - Geospatial data handling library with coordinate systems and multiple format support
+- **[Wangkanai.Graphics](Graphics)** - Graphics processing library with raster, vector, and TIFF format support
 
 ## Map storage standards ️🗺️
 
-- MBTiles    (SQLite) - Standardized SQLite database for storing raster and vector tiles
-- MTPKG      (SQLite) - Multi-layer package for storing raster and vector tiles
-- GeoPackage (SQLite) - OGC standard for storing raster and vector data in a single file
-- GeoTiff    (TIFF)   - Standardized format for georeferenced raster imagery
-- TileJSON   (JSON)   - Standardized JSON format for tile metadata and access
+- **MBTiles** (SQLite) - Standardized SQLite database for storing raster and vector tiles
+- **MtPkgs** (SQLite) - Map tile package format for multi-layer storage
+- **GeoPackage** (SQLite) - OGC standard for storing raster and vector data in a single file
+- **GeoTiff** (TIFF) - Standardized format for georeferenced raster imagery with Graphics.Rasters integration
+- **ShapeFiles** - Shapefile format support for vector geospatial data
+- **TileJSON** (JSON) - Standardized JSON format for tile metadata and access
 
 ## Map services protocols 📡
 

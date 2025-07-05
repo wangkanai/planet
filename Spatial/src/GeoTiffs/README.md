@@ -1,12 +1,39 @@
-## Wangkanai Spatial GeoTiff
+## Wangkanai Spatial GeoTiffs
 
-This project provides a set of abstractions and implementations for working with GeoTiff files,
-a widely used format for storing raster geospatial data.
+**Namespace:** `Wangkanai.Spatial.GeoTiffs`
 
-### Features 🌟
+GeoTIFF format support for georeferenced raster imagery with integration to the Wangkanai.Graphics.Rasters library for comprehensive TIFF processing capabilities.
+
+## Features
 
 - **GeoTIFF Support**: Complete implementation of georeferenced TIFF images
-- **TIFF Specifications**: Full support for TIFF format specifications and standards
-- **Coordinate Reference Systems**: Support for various CRS formats
+- **Graphics Integration**: Built on Wangkanai.Graphics.Rasters for enhanced TIFF processing
+- **Coordinate Reference Systems**: Support for various CRS formats and transformations
 - **Geospatial Metadata**: Geographic extent, pixel size, and transformation matrices
-- **Format Validation**: Built-in validation for GeoTIFF compliance
+- **Format Validation**: Built-in validation for GeoTIFF compliance and standards
+- **Performance Optimized**: Efficient processing of large raster datasets
+
+## Key Classes
+
+- `GeoTiffRaster` - Main class for GeoTIFF raster operations, extends `TiffRaster`
+- `IGeoTiffRaster` - Interface defining GeoTIFF capabilities, extends `ITiffRaster`
+
+## Usage
+
+```csharp
+using Wangkanai.Spatial.GeoTiffs;
+
+// Create a GeoTIFF raster instance
+var geoTiffRaster = new GeoTiffRaster();
+
+// Access coordinate reference system
+string? crs = geoTiffRaster.CoordinateReferenceSystem;
+
+// Get geographic extent
+var extent = geoTiffRaster.GeographicExtent;
+```
+
+## Dependencies
+
+- **Wangkanai.Graphics.Rasters** - Core TIFF processing capabilities
+- **Wangkanai.Spatial** - Core spatial data types and operations
