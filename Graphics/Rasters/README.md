@@ -4,16 +4,31 @@
 
 A comprehensive raster image processing library with specialized support for TIFF and JPEG format specifications. Designed for high-performance pixel manipulation, image processing, and metadata handling with extensive benchmarking and validation capabilities.
 
+*This library addresses the need for high-performance raster manipulation to operate on large datasets of images across professional photography, document imaging, scientific imaging, geographic systems, and prepress workflows.*
+
+> 📋 **GitHub Issue Reference**: [#50 - Raster image manipulation library](https://github.com/wangkanai/planet/issues/50)  
+> **Status**: ✅ **Implemented** - Complete TIFF and JPEG format support with high-performance processing capabilities
+
 ## Features
 
+### ✅ Core Image Processing Capabilities
+- **Image Compression**: Multiple TIFF compression algorithms (LZW, JPEG, PackBits, Deflate, etc.) and JPEG quality control
+- **Image Conversion**: Format conversion between different image formats (TIFF, JPEG)
+- **Image Cropping**: Extract regions of interest from images with precise rectangle selection
+- **Image Resizing**: Scale images with multiple algorithm options and quality preservation
+- **Image Geo-tagging**: Add geographical information to images (GeoTIFF support)
+- **Image Grid Splitting**: Divide large images into smaller tiles for efficient processing
+- **Image Metadata**: Rich metadata support including EXIF, IPTC/XMP, camera settings, and custom tags
+
+### 🚀 Performance & Technical Features
 - **Multi-Format Support**: Complete TIFF and JPEG format implementations with full specification support
 - **High-Performance Processing**: Optimized for parallel CPU processing with cross-platform support
-- **Image Processing**: Comprehensive pixel manipulation and transformation capabilities
-- **Metadata Management**: Rich metadata support including EXIF, IPTC/XMP, camera settings, and custom tags
-- **Performance Optimization**: Benchmarked operations with performance analysis tools
+- **Memory-Efficient Operations**: Span-based pixel processing for large datasets
+- **Performance Optimization**: Benchmarked operations with comprehensive performance analysis tools
 - **Format Validation**: Built-in validation for TIFF and JPEG specification compliance
 - **Cross-Platform**: Works across Windows, macOS, and Linux environments
 - **Large Dataset Support**: Designed for high-performance raster manipulation on large image datasets
+- **Pipeline Architecture**: Flexible operation chaining for complex image processing workflows
 
 ## Core Components
 
@@ -119,12 +134,12 @@ The Tagged Image File Format (TIFF) is a versatile raster graphic format used fo
 - **BigTIFF extension**: Support for files >4GB with 64-bit offsets
 - **Strip/tile size**: Affects memory usage and access speed
 
-#### Common Use Cases
-- **Professional photography** - Uncompressed or lossless storage
-- **Document imaging** - Archival and scanning applications
-- **Scientific imaging** - Medical and research applications
-- **Geographic systems** - GeoTIFF for spatial data
-- **Prepress workflows** - Printing and publishing industries
+#### Industry Applications
+- **Professional Photography** - Uncompressed or lossless image storage with complete metadata preservation
+- **Document Imaging** - Archival and scanning applications with multiple compression options
+- **Scientific Imaging** - Medical and research applications requiring precise data integrity
+- **Geographic Systems** - GeoTIFF for spatial data and mapping applications
+- **Prepress Workflows** - Printing and publishing industries with CMYK support
 
 ## JPEG Specifications Support
 
