@@ -21,7 +21,8 @@ public static class JpegValidator
 		jpeg.ValidateCompressionRatio(result);
 		jpeg.ValidateEncodingConstraints(result);
 		jpeg.ValidateChromaSubsampling(result);
-		jpeg.Metadata.ValidateMetadata(result);
+
+		jpeg.Metadata.ValidateMetadata();
 
 		return result;
 	}
@@ -123,7 +124,7 @@ public static class JpegValidator
 	/// <summary>Validates JPEG metadata.</summary>
 	/// <param name="metadata">The metadata to validate.</param>
 	/// <returns>A validation result for the metadata.</returns>
-	public static JpegValidationResult ValidateMetadata(JpegMetadata metadata)
+	public static JpegValidationResult ValidateMetadata(this JpegMetadata metadata)
 	{
 		ArgumentNullException.ThrowIfNull(metadata);
 
