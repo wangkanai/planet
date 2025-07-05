@@ -93,7 +93,7 @@ public class JpegRaster : IJpegRaster
 	public void SetQuality(int quality)
 	{
 		Quality = Math.Clamp(quality, JpegConstants.MinQuality, JpegConstants.MaxQuality);
-		
+
 		// Estimate compression ratio based on quality
 		CompressionRatio = quality switch
 		{
@@ -126,7 +126,7 @@ public class JpegRaster : IJpegRaster
 	public long GetEstimatedFileSize()
 	{
 		if (!IsValid()) return 0;
-		
+
 		var uncompressedSize = (long)Width * Height * SamplesPerPixel * (BitsPerSample / 8);
 		return (long)(uncompressedSize / CompressionRatio);
 	}
@@ -148,8 +148,6 @@ public class JpegRaster : IJpegRaster
 	protected virtual void Dispose(bool disposing)
 	{
 		if (disposing)
-		{
 			Metadata = null!;
-		}
 	}
 }
