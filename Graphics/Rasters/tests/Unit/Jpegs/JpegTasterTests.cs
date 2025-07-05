@@ -125,7 +125,11 @@ public class JpegRasterTests
 	public void IsValid_ShouldReturnCorrectValidationResult(int width, int height, int quality, bool expected)
 	{
 		// Arrange
-		var jpegRaster = new JpegRaster(width, height, quality);
+		var jpegRaster = new JpegRaster(width, height, 75);
+		if (quality != 75) // Set quality directly if it's different from constructor default to bypass clamping
+		{
+			jpegRaster.Quality = quality;
+		}
 
 		// Act
 		var isValid = jpegRaster.IsValid();

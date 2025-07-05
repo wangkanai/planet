@@ -103,7 +103,8 @@ public class JpegValidatorTests
 	public void Validate_WithInvalidQuality_ShouldReturnError(int quality, string expectedError)
 	{
 		// Arrange
-		var jpeg = new JpegRaster(800, 600, quality);
+		var jpeg = new JpegRaster(800, 600, 75);
+		jpeg.Quality = quality; // Set invalid quality directly to bypass constructor clamping
 
 		// Act
 		var result = JpegValidator.Validate(jpeg);
