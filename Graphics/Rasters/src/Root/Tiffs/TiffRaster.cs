@@ -52,7 +52,7 @@ public class TiffRaster : ITiffRaster
 	{
 		ColorDepth                = TiffColorDepth.TwentyFourBit;
 		Compression               = TiffCompression.None;
-		PhotometricInterpretation = this.PhotometricInterpretation.Rgb;
+		PhotometricInterpretation = PhotometricInterpretation.Rgb;
 		SamplesPerPixel           = 3;
 		SetBitsPerSample(Int32Array);
 	}
