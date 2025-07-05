@@ -2,7 +2,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace Wangkanai.Planet.Spatial;
+namespace Wangkanai.Spatial;
 
 /// <summary>Represents a tile index with column, row, and level information.</summary>
 /// <param name="col">The column index.</param>

@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-namespace Wangkanai.Planet.Spatial;
+namespace Wangkanai.Spatial;
 
 /// <summary>Defines an interface for a tile source.</summary>
 public interface ITileSource

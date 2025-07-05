@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Root\Wangkanai.Planet.Spatial.csproj" />
+    <ProjectReference Include="..\Root\Wangkanai.Spatial.csproj" />
   </ItemGroup>
 
 </Project>

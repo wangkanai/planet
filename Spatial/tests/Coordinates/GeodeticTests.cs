@@ -2,7 +2,7 @@
 
 using Xunit;
 
-namespace Wangkanai.Planet.Spatial.Coordinates;
+namespace Wangkanai.Spatial.Coordinates;
 
 public class GeodeticTests
 {

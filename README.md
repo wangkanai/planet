@@ -24,7 +24,7 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 
 - **[Wangkanai.Planet.Portal](Portal)** - Web portal for viewing map tiles
 - **[Wangkanai.Planet.Engine](Engine)** - Engine for rendering and processing map tiles
-- **[Wangkanai.Planet.Spatial](Spatial)** - Library for rendering raster GeoTiff to map tiles
+- **[Wangkanai.Spatial](Spatial)** - Library for rendering raster GeoTiff to map tiles
 - **[Wangkanai.Planet.Providers](Providers)** - Providers for different map storage standards
 - **[Wangkanai.Planet.Extensions](Extensions)** - Extensions for integrating with various map services and protocols
 - **[Wangkanai.Planet.Protocols](Protocols)** - Protocols for serving map tiles through different services
