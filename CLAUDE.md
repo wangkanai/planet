@@ -6,6 +6,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - Always use a descriptive variable name
 
+## Claude Code
+
+- Claude Code local development has MCP access to extra resources like SonarCloud, GitHub issues, and discussions.
+
+## GitHub Repository
+
+- GitHub repo is at https://github.com/wangkanai/planet
+- Work item backlogs are in the GitHub issues https://github.com/wangkanai/planet/issues
+- Discussion board is at https://github.com/wangkanai/planet/discussions
+- Project planning is at https://github.com/wangkanai/planet/projects
+- CI/CD pipelines are configured in the GitHub Actions workflows https://github.com/wangkanai/planet/actions
+
+## Code Quality
+
+- SonarCloud report is available https://sonarcloud.io/project/overview?id=wangkanai_planet via MCP
+
 ## Commands
 
 ### Build Commands
@@ -133,13 +149,3 @@ The Planet solution follows a modular architecture with these main components or
 - **Protocols/src/Root**: Protocol abstractions and WMS implementations
 - **Providers/src/Root**: Map service provider implementations
 - **Extensions/Datastore/src**: Data storage extensions and utilities
-
-## Memories
-
-- Claude Code now has access to MCP
-- SonarCloud Code Quality report is available https://sonarcloud.io/project/overview?id=wangkanai_planet via MCP
-- GitHub repo is at https://github.com/wangkanai/planet
-- Work item backlogs are in the GitHub issues https://github.com/wangkanai/planet/issues
-- Discussion board is at https://github.com/wangkanai/planet/discussions
-- Project planning is at https://github.com/wangkanai/planet/projects
-- CI/CD pipelines are configured in the GitHub Actions workflows https://github.com/wangkanai/planet/actions
