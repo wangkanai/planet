@@ -1,6 +1,6 @@
-## Wangkanai Planet Spatial
+## Wangkanai Spatial
 
-Wangkanai Planet Spatial is a library designed to handle spatial data and operations,
+Wangkanai Spatial is a library designed to handle spatial data and operations,
 providing abstractions for working with geographic information systems (GIS) and spatial data formats.
 
 - [Spatial GeoTiff](src/GeoTiffs)
