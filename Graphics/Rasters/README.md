@@ -23,31 +23,91 @@ A comprehensive raster image processing library with specialized support for TIF
 
 ### TIFF Specifications Support
 
-#### Color Depths
-- **1-bit** - Bilevel (black and white)
-- **4-bit** - 16-color palette
-- **8-bit** - 256-color palette or grayscale
-- **16-bit** - High color depth
-- **24-bit** - True color RGB
-- **32-bit** - RGBA with alpha channel
-- **48-bit** - Extended color depth
-- **64-bit** - Maximum color precision
+The Tagged Image File Format (TIFF) is a versatile raster graphic format used for storing images. It supports a wide range of color depths and compression algorithms, making it suitable for various applications. TIFF files are commonly used in the printing and publishing industries due to their ability to retain high-quality image data.
 
-#### Compression Algorithms
+#### File Structure
+
+##### Header (8 bytes)
+- **Byte order indicator**: "II" (0x4949) for little-endian or "MM" (0x4D4D) for big-endian
+- **Magic number**: 42 (0x002A)
+- **Offset to first IFD**: Image File Directory pointer
+
+##### Image File Directory (IFD)
+- Contains metadata about the image through tags
+- Each IFD entry is 12 bytes:
+  - Tag identifier (2 bytes)
+  - Data type (2 bytes)
+  - Count of values (4 bytes)
+  - Value offset or actual value (4 bytes)
+
+#### Core Tags and Functions
+
+##### Required Tags
+- **ImageWidth (256)**: Number of columns in the image
+- **ImageLength (257)**: Number of rows in the image
+- **BitsPerSample (258)**: Number of bits per component
+- **Compression (259)**: Compression scheme used
+- **PhotometricInterpretation (262)**: Color space of image data
+- **StripOffsets (273)**: Byte offsets to image data strips
+- **RowsPerStrip (278)**: Number of rows in each strip
+- **StripByteCounts (279)**: Bytes in each strip
+- **XResolution (282)**: Pixels per unit in X direction
+- **YResolution (283)**: Pixels per unit in Y direction
+- **ResolutionUnit (296)**: Unit of measurement for resolution
+
+#### Supported Features
+
+##### Color Modes
+- **Bilevel (1-bit)** - Black and white
+- **Grayscale (4, 8, 16-bit)** - Single-channel intensity
+- **Palette color (4, 8-bit)** - Color-mapped images
+- **RGB (8, 16-bit per channel)** - True color
+- **CMYK (8, 16-bit per channel)** - Cyan, Magenta, Yellow, Key (black)
+- **LAB color space** - CIE L*a*b* color space
+
+##### Compression Methods
 - **None** - Uncompressed data
+- **CCITT Group 3/4** - For bilevel images
 - **LZW** - Lempel-Ziv-Welch compression
-- **JPEG** - JPEG compression within TIFF
+- **JPEG** - Baseline and progressive JPEG compression
 - **PackBits** - Run-length encoding
-- **CCITT** - Group 3 and Group 4 fax compression
-- **Deflate** - ZIP-style compression
+- **Deflate/ZIP** - ZIP-style compression
 
-#### Photometric Interpretations
-- **RGB** - Red, Green, Blue color model
-- **CMYK** - Cyan, Magenta, Yellow, Key (black)
-- **Grayscale** - Single-channel intensity
-- **Palette** - Color-mapped images
-- **Lab** - CIE L*a*b* color space
-- **YCbCr** - Luminance-chrominance color space
+##### Data Organizations
+- **Strips** - Image divided into horizontal bands
+- **Tiles** - Image divided into rectangular blocks
+- **Single strip** - Entire image as one strip
+
+#### Additional Capabilities
+
+##### Multiple Images
+- Support for multiple images in one file through IFD chaining
+- Each IFD points to the next IFD offset
+
+##### Metadata Support
+- **EXIF data** - Camera settings and image information
+- **IPTC/XMP metadata** - Professional metadata standards
+- **GeoTIFF tags** - Georeferencing information
+- **Custom private tags** - Application-specific metadata
+
+##### Advanced Features
+- **Alpha channels** - Transparency support
+- **Multiple resolution images** - Pyramid structures
+- **Planar configuration** - Chunky or planar data arrangement
+- **Predictor** - Improved compression efficiency
+- **Sample format** - Integer, floating-point, complex data types
+
+#### File Size Considerations
+- **Maximum file size**: 4GB for standard TIFF
+- **BigTIFF extension**: Support for files >4GB with 64-bit offsets
+- **Strip/tile size**: Affects memory usage and access speed
+
+#### Common Use Cases
+- **Professional photography** - Uncompressed or lossless storage
+- **Document imaging** - Archival and scanning applications
+- **Scientific imaging** - Medical and research applications
+- **Geographic systems** - GeoTIFF for spatial data
+- **Prepress workflows** - Printing and publishing industries
 
 ## Performance Benchmarking
 
