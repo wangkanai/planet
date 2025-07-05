@@ -11,7 +11,7 @@ A **comprehensive generic image rasterization library** designed to work with al
 
 ## Universal Image Processing Capabilities
 
-The Raster component is built as a **generic library for all image rasterization images**, providing a unified abstraction layer that works seamlessly across any raster image format. The architecture separates universal image operations from format-specific implementations, enabling consistent processing regardless of the underlying image format.
+The Raster component is built as a **generic library for all rasterized images**, providing a unified abstraction layer that works seamlessly across any raster image format. The architecture separates universal image operations from format-specific implementations, enabling consistent processing regardless of the underlying image format.
 
 ### Key Universal Features
 - **Format-Agnostic Operations**: All core image operations (resize, crop, compress, metadata handling) work universally across formats
