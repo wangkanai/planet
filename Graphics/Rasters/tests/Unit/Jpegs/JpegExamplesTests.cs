@@ -31,7 +31,7 @@ public class JpegExamplesTests
 		Assert.Equal(2, jpeg.Metadata.ResolutionUnit);
 		Assert.Equal(72.0, jpeg.Metadata.XResolution);
 		Assert.Equal(72.0, jpeg.Metadata.YResolution);
-		Assert.NotNull(jpeg.Metadata.DateTime);
+		Assert.NotNull(jpeg.Metadata.CaptureDateTime);
 		Assert.True(jpeg.IsValid());
 	}
 

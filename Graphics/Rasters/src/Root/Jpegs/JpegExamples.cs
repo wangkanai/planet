@@ -20,7 +20,7 @@ public static class JpegExamples
 		
 		// Set common metadata
 		jpeg.Metadata.Software = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.DateTime = DateTime.Now;
+		jpeg.Metadata.CaptureDateTime = DateTime.Now;
 		jpeg.Metadata.ResolutionUnit = 2; // Inches
 		jpeg.Metadata.XResolution = 72.0;
 		jpeg.Metadata.YResolution = 72.0;
@@ -42,7 +42,7 @@ public static class JpegExamples
 		
 		// Set metadata
 		jpeg.Metadata.Software = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.DateTime = DateTime.Now;
+		jpeg.Metadata.CaptureDateTime = DateTime.Now;
 		jpeg.Metadata.ResolutionUnit = 2; // Inches
 		jpeg.Metadata.XResolution = 300.0; // High resolution for grayscale
 		jpeg.Metadata.YResolution = 300.0;
@@ -66,7 +66,7 @@ public static class JpegExamples
 		
 		// Web-optimized metadata
 		jpeg.Metadata.Software = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.DateTime = DateTime.Now;
+		jpeg.Metadata.CaptureDateTime = DateTime.Now;
 		jpeg.Metadata.ResolutionUnit = 2; // Inches
 		jpeg.Metadata.XResolution = 72.0; // Web standard
 		jpeg.Metadata.YResolution = 72.0;
@@ -88,7 +88,7 @@ public static class JpegExamples
 		
 		// Photography metadata
 		jpeg.Metadata.Software = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.DateTime = DateTime.Now;
+		jpeg.Metadata.CaptureDateTime = DateTime.Now;
 		jpeg.Metadata.ResolutionUnit = 2; // Inches
 		jpeg.Metadata.XResolution = 300.0; // Print quality
 		jpeg.Metadata.YResolution = 300.0;
@@ -112,7 +112,7 @@ public static class JpegExamples
 		
 		// Print metadata
 		jpeg.Metadata.Software = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.DateTime = DateTime.Now;
+		jpeg.Metadata.CaptureDateTime = DateTime.Now;
 		jpeg.Metadata.ResolutionUnit = 2; // Inches
 		jpeg.Metadata.XResolution = 300.0; // Print resolution
 		jpeg.Metadata.YResolution = 300.0;
@@ -135,7 +135,7 @@ public static class JpegExamples
 		
 		// Thumbnail metadata
 		jpeg.Metadata.Software = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.DateTime = DateTime.Now;
+		jpeg.Metadata.CaptureDateTime = DateTime.Now;
 		jpeg.Metadata.ResolutionUnit = 2; // Inches
 		jpeg.Metadata.XResolution = 72.0; // Screen resolution
 		jpeg.Metadata.YResolution = 72.0;
@@ -159,7 +159,7 @@ public static class JpegExamples
 		jpeg.Metadata.Make = "Canon";
 		jpeg.Metadata.Model = "EOS R5";
 		jpeg.Metadata.Software = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.DateTime = DateTime.Now;
+		jpeg.Metadata.CaptureDateTime = DateTime.Now;
 		jpeg.Metadata.Artist = "John Doe";
 		jpeg.Metadata.Copyright = "Copyright 2025";
 		jpeg.Metadata.ImageDescription = "Sample image with EXIF data";

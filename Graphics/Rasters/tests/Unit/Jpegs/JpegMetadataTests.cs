@@ -36,7 +36,7 @@ public class JpegMetadataTests
 		metadata.Software = "Adobe Photoshop";
 		metadata.Copyright = "Copyright 2025";
 		metadata.Artist = "John Doe";
-		metadata.DateTime = now;
+		metadata.CaptureDateTime = now;
 
 		// Assert
 		Assert.Equal("Test JPEG Image", metadata.ImageDescription);
@@ -45,7 +45,7 @@ public class JpegMetadataTests
 		Assert.Equal("Adobe Photoshop", metadata.Software);
 		Assert.Equal("Copyright 2025", metadata.Copyright);
 		Assert.Equal("John Doe", metadata.Artist);
-		Assert.Equal(now, metadata.DateTime);
+		Assert.Equal(now, metadata.CaptureDateTime);
 	}
 
 	[Fact]
@@ -186,7 +186,7 @@ public class JpegMetadataTests
 			Software = "Test",
 			Copyright = "Test",
 			Artist = "Test",
-			DateTime = DateTime.Now,
+			CaptureDateTime = DateTime.Now,
 			XResolution = 300.0,
 			YResolution = 300.0,
 			ResolutionUnit = 2,
@@ -209,7 +209,7 @@ public class JpegMetadataTests
 		metadata.Software = null;
 		metadata.Copyright = null;
 		metadata.Artist = null;
-		metadata.DateTime = null;
+		metadata.CaptureDateTime = null;
 		metadata.XResolution = null;
 		metadata.YResolution = null;
 		metadata.ResolutionUnit = null;
@@ -231,7 +231,7 @@ public class JpegMetadataTests
 		Assert.Null(metadata.Software);
 		Assert.Null(metadata.Copyright);
 		Assert.Null(metadata.Artist);
-		Assert.Null(metadata.DateTime);
+		Assert.Null(metadata.CaptureDateTime);
 		Assert.Null(metadata.XResolution);
 		Assert.Null(metadata.YResolution);
 		Assert.Null(metadata.ResolutionUnit);
@@ -259,7 +259,7 @@ public class JpegMetadataTests
 			Software = "Adobe Lightroom Classic",
 			Copyright = "© 2025 John Doe Photography",
 			Artist = "John Doe",
-			DateTime = new DateTime(2025, 1, 15, 14, 30, 0),
+			CaptureDateTime = new DateTime(2025, 1, 15, 14, 30, 0),
 			XResolution = 300.0,
 			YResolution = 300.0,
 			ResolutionUnit = 2,

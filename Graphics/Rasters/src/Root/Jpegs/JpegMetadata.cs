@@ -24,7 +24,7 @@ public class JpegMetadata
 	public string? Artist { get; set; }
 
 	/// <summary>Gets or sets the creation date and time.</summary>
-	public DateTime? DateTime { get; set; }
+	public DateTime? CaptureDateTime { get; set; }
 
 	/// <summary>Gets or sets the horizontal resolution in pixels per inch.</summary>
 	public double? XResolution { get; set; }
