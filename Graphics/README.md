@@ -22,9 +22,9 @@ Provides modular components for raster and vector graphics processing, with part
 ## Components
 
 ### Core Components
-- **[Graphics Abstractions](Abstractions)** - Core image processing interfaces and contracts
-- **[Graphics Rasters](Rasters)** - Raster image processing with comprehensive TIFF support
-- **[Graphics Vectors](Vectors)** - Vector graphics processing and manipulation
+- **[Graphics Abstractions](Abstractions)** - Core image processing interfaces and contracts ([📖 Read more](Abstractions/README.md))
+- **[Graphics Rasters](Rasters)** - Raster image processing with comprehensive TIFF support ([📖 Read more](Rasters/README.md))
+- **[Graphics Vectors](Vectors)** - Vector graphics processing and manipulation ([📖 Read more](Vectors/README.md))
 
 ## Key Features by Component
 

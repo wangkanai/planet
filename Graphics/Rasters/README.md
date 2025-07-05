@@ -6,8 +6,24 @@ A comprehensive raster image processing library with specialized support for TIF
 
 *This library addresses the need for high-performance raster manipulation to operate on large datasets of images across professional photography, document imaging, scientific imaging, geographic systems, and prepress workflows.*
 
-> 📋 **GitHub Issue Reference**: [#50 - Raster image manipulation library](https://github.com/wangkanai/planet/issues/50)  
-> **Status**: ✅ **Implemented** - Complete TIFF and JPEG format support with high-performance processing capabilities
+## Related GitHub Issues
+
+This raster image library addresses the following GitHub issues:
+
+> 📋 **Core Issues**
+> - [#49 - General raster image manipulation capabilities](https://github.com/wangkanai/planet/issues/49)
+> - [#50 - Raster image manipulation library](https://github.com/wangkanai/planet/issues/50)  
+> 
+> 📋 **TIFF Support**
+> - [#54 - TIFF specifications and support](https://github.com/wangkanai/planet/issues/54)
+> - [#60 - GeoTIFF specifications support](https://github.com/wangkanai/planet/issues/60)
+> 
+> 📋 **Additional Format Support**
+> - [#53 - JPEG specifications and support](https://github.com/wangkanai/planet/issues/53)
+> - [#58 - PNG specifications support](https://github.com/wangkanai/planet/issues/58)
+> - [#59 - WebP specifications support](https://github.com/wangkanai/planet/issues/59)
+> 
+> **Status**: ✅ **Core Implementation Complete** - TIFF and JPEG support implemented with high-performance processing capabilities. Additional formats (PNG, WebP) are planned for future releases.
 
 ## Features
 
