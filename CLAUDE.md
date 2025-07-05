@@ -121,3 +121,9 @@ The Planet solution follows a modular architecture with these main components:
 ## Memories
 
 - Claude Code now has access to MCP
+- SonarCloud Code Quality report is available https://sonarcloud.io/project/overview?id=wangkanai_planet via MCP
+- GitHub repo is at https://github.com/wangkanai/planet
+- Work item backlogs are in the GitHub issues https://github.com/wangkanai/planet/issues
+- Discussion board is at https://github.com/wangkanai/planet/discussions
+- Project planning is at https://github.com/wangkanai/planet/projects
+- CI/CD pipelines are configured in the GitHub Actions workflows https://github.com/wangkanai/planet/actions
