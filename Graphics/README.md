@@ -94,3 +94,13 @@ var vector = new Vector();
 - GPU acceleration support (future enhancement)
 - Memory-efficient operations for large image datasets
 
+
+## References
+
+- https://github.com/emgucv/emgucv
+- https://github.com/JimBobSquarePants/ImageProcessor/tree/master
+- https://github.com/kunzmi/managedCuda
+- https://bitmiracle.com/libtiff/
+- https://products.aspose.com/imaging/net/
+- https://github.com/iron-software/IronSoftware.System.Drawing
+- https://github.com/veldrid/veldrid
