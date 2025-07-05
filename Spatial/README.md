@@ -16,12 +16,14 @@ multiple geospatial data formats. Built with .NET 9.0 and designed for high-perf
 
 ### Core Components
 
-- **[Spatial Root](src/Root)** - Core coordinate systems, map extent, and tile calculations
-- **[MbTiles](src/MbTiles)** - MBTiles format support with SQLite-based tile storage
-- **[GeoPackages](src/GeoPackages)** - GeoPackage format support for geospatial data containers
-- **[GeoTiffs](src/GeoTiffs)** - GeoTIFF format support with Graphics.Rasters integration
+- **[Spatial Core](src/Root/README.md)** - Core coordinate systems, map extent, and tile calculations with foundational abstractions
+- **[MbTiles](src/MbTiles/README.md)** - MBTiles format support with SQLite-based tile storage
+- **[GeoPackages](src/GeoPackages/README.md)** - GeoPackage format support for geospatial data containers
+- **[GeoTiffs](src/GeoTiffs/README.md)** - GeoTIFF format support with Graphics.Rasters integration
 - **[ShapeFiles](src/ShapeFiles)** - Shapefile format support for vector geospatial data
 - **[MtPkgs](src/MtPkgs)** - Map tile package format support
+
+Each component provides comprehensive documentation covering technical specifications, implementation status, usage examples, and integration details. For detailed information about each component, please refer to their individual README files.
 
 ### Key Classes
 
@@ -60,6 +62,27 @@ The library follows a modular architecture with clear separation between:
 - Format-specific implementations
 - Tile management and indexing
 - Integration with external graphics libraries
+
+### Raster Image Integration
+
+The Spatial library provides comprehensive integration with the Wangkanai Graphics.Rasters library for advanced raster image processing:
+
+- **GeoTIFF Processing**: Complete georeferenced TIFF support with Graphics.Rasters integration
+- **Tile-Based Raster Operations**: Efficient raster tile processing for MBTiles and GeoPackage formats
+- **Format Support**: PNG, JPEG, WebP, and TIFF raster processing capabilities
+- **Performance Optimization**: High-performance raster operations optimized for spatial data
+
+### Related GitHub Issues
+
+The spatial library addresses several key raster processing requirements:
+
+- **Issue #49**: [General raster image manipulation capabilities](https://github.com/wangkanai/planet/issues/49) - Foundation for raster operations
+- **Issue #50**: [Raster image manipulation library](https://github.com/wangkanai/planet/issues/50) - Core raster processing implementation
+- **Issue #53**: [JPEG specifications support](https://github.com/wangkanai/planet/issues/53) - JPEG format support
+- **Issue #54**: [TIFF specifications support](https://github.com/wangkanai/planet/issues/54) - Enhanced TIFF capabilities
+- **Issue #58**: [PNG specifications support](https://github.com/wangkanai/planet/issues/58) - PNG format support
+- **Issue #59**: [WebP specifications support](https://github.com/wangkanai/planet/issues/59) - WebP format support
+- **Issue #60**: [GeoTIFF specifications support](https://github.com/wangkanai/planet/issues/60) - Complete GeoTIFF implementation
 
 ## Dependencies
 
