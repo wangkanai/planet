@@ -7,4 +7,8 @@
     <RootNamespace>Wangkanai.Graphics</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Wangkanai.System" />
+  </ItemGroup>
+
 </Project>
