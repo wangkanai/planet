@@ -12,6 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## GitHub Repository
 
+- GitHub integration is enabled for this repository via MCP `github` command.
 - GitHub repo is at https://github.com/wangkanai/planet
 - Work item backlogs are in the GitHub issues https://github.com/wangkanai/planet/issues
 - Discussion board is at https://github.com/wangkanai/planet/discussions
@@ -20,7 +21,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Code Quality
 
-- SonarCloud report is available https://sonarcloud.io/project/overview?id=wangkanai_planet via MCP
+- SonarCube reposts are available via MCP `sonarqube` command.
 
 ## Commands
 
