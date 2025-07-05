@@ -1,4 +1,4 @@
-namespace Wangkanai.Planet.Protocols.Tests;
+namespace Wangkanai.Planet.Protocols;
 
 public class UnitTest1
 {

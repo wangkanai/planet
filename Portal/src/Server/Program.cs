@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
+using Wangkanai.Planet.Portal;
 using Wangkanai.Planet.Portal.Client.Pages;
 using Wangkanai.Planet.Portal.Components;
 using Wangkanai.Planet.Portal.Components.Account;
-using Wangkanai.Planet.Portal.Data;
+using Wangkanai.Planet.Portal.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -2,7 +2,7 @@
 
 using Wangkanai.Planet.Drawing.Rasters.Tiffs;
 
-namespace Wangkanai.Planet.Spatial.GeoTiffs;
+namespace Wangkanai.Planet.Spatial;
 
 /// <summary>Represents a GeoTIFF raster with geospatial metadata and TIFF specifications.</summary>
 public class GeoTiffRaster : TiffRaster, IGeoTiffRaster

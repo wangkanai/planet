@@ -3,9 +3,10 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Order;
-using Wangkanai.Planet.Drawing.Rasters.Tiffs;
 
-namespace Wangkanai.Planet.Drawing.Rasters.Benchmark;
+using Wangkanai.Graphics.Rasters.Tiffs;
+
+namespace Wangkanai.Graphics.Rasters.Benchmark;
 
 /// <summary>Comprehensive benchmarks comparing ReadOnlySpan&lt;int&gt; optimization vs int[] baseline for TiffRaster BitsPerSample.</summary>
 [MemoryDiagnoser]

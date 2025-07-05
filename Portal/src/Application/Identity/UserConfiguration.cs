@@ -3,8 +3,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Wangkanai.Planet.Portal.Data;
-
 namespace Wangkanai.Planet.Portal.Identity;
 
 public class UserConfiguration : IEntityTypeConfiguration<PlanetUser>

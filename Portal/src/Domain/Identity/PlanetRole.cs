@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Identity;
 
-namespace Wangkanai.Planet.Portal.Data;
+namespace Wangkanai.Planet.Portal.Identity;
 
 /// <summary>Represents a role in the Planet portal.</summary>
 public sealed class PlanetRole : IdentityRole<int> { }

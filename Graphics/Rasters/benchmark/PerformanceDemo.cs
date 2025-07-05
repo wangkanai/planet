@@ -1,9 +1,10 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
 using System.Diagnostics;
-using Wangkanai.Planet.Drawing.Rasters.Tiffs;
 
-namespace Wangkanai.Planet.Drawing.Rasters.Benchmark;
+using Wangkanai.Graphics.Rasters.Tiffs;
+
+namespace Wangkanai.Graphics.Rasters.Benchmark;
 
 /// <summary>Simple performance demonstration showing the benefits of ReadOnlySpan optimization.</summary>
 public static class PerformanceDemo

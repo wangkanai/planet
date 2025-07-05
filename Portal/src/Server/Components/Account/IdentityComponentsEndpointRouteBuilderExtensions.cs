@@ -12,9 +12,9 @@ using Microsoft.Extensions.Primitives;
 
 using Wangkanai.Planet.Portal.Components.Account.Pages;
 using Wangkanai.Planet.Portal.Components.Account.Pages.Manage;
-using Wangkanai.Planet.Portal.Data;
+using Wangkanai.Planet.Portal.Identity;
 
-namespace Microsoft.AspNetCore.Routing;
+namespace Wangkanai.Planet.Portal.Components.Account;
 
 internal static class IdentityComponentsEndpointRouteBuilderExtensions
 {

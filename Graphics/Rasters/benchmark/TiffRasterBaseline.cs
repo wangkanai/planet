@@ -1,8 +1,8 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Planet.Drawing.Rasters.Tiffs;
+using Wangkanai.Graphics.Rasters.Tiffs;
 
-namespace Wangkanai.Planet.Drawing.Rasters.Benchmark;
+namespace Wangkanai.Graphics.Rasters.Benchmark;
 
 /// <summary>Baseline TiffRaster implementation using int[] array for performance comparison.</summary>
 public class TiffRasterBaseline : ITiffRaster
@@ -57,10 +57,10 @@ public class TiffRasterBaseline : ITiffRaster
 	/// <summary>Initializes a new instance of the <see cref="TiffRasterBaseline"/> class.</summary>
 	public TiffRasterBaseline()
 	{
-		ColorDepth = TiffColorDepth.TwentyFourBit;
-		Compression = TiffCompression.None;
-		PhotometricInterpretation = PhotometricInterpretation.Rgb;
-		SamplesPerPixel = 3;
+		ColorDepth                = TiffColorDepth.TwentyFourBit;
+		Compression               = TiffCompression.None;
+		PhotometricInterpretation = this.PhotometricInterpretation.Rgb;
+		SamplesPerPixel           = 3;
 		SetBitsPerSample(new[] { 8, 8, 8 });
 	}
 

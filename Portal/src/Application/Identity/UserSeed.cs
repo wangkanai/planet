@@ -2,8 +2,6 @@
 
 using Microsoft.AspNetCore.Identity;
 
-using Wangkanai.Planet.Portal.Data;
-
 namespace Wangkanai.Planet.Portal.Identity;
 
 internal static class UserSeed

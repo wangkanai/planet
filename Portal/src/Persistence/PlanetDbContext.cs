@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Wangkanai.Planet.Portal.Identity;
 
-namespace Wangkanai.Planet.Portal.Data;
+namespace Wangkanai.Planet.Portal;
 
 public class PlanetDbContext(DbContextOptions<PlanetDbContext> options)
 	: IdentityDbContext<PlanetUser, PlanetRole, int>(options), IDataProtectionKeyContext

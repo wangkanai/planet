@@ -1,9 +1,10 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
 using System.Diagnostics;
-using Wangkanai.Planet.Drawing.Rasters.Tiffs;
 
-namespace Wangkanai.Planet.Drawing.Rasters.Benchmark;
+using Wangkanai.Graphics.Rasters.Tiffs;
+
+namespace Wangkanai.Graphics.Rasters.Benchmark;
 
 /// <summary>Realistic performance demonstration showing real-world benefits of ReadOnlySpan optimization.</summary>
 public static class RealisticPerformanceDemo
@@ -31,7 +32,7 @@ public static class RealisticPerformanceDemo
 	private static void TestRealWorldMemoryPressure()
 	{
 		const int iterations = 50_000;
-		
+
 		// Simulate processing many TIFF files with different configurations
 		Console.WriteLine($"Processing {iterations:N0} TIFF files (mixed types)...");
 
@@ -47,7 +48,7 @@ public static class RealisticPerformanceDemo
 			{
 				var imageType = i % 4;
 				var raster = new TiffRasterBaseline();
-				
+
 				switch (imageType)
 				{
 					case 0: // Grayscale
@@ -84,7 +85,7 @@ public static class RealisticPerformanceDemo
 			{
 				var imageType = i % 4;
 				var raster = new TiffRaster();
-				
+
 				switch (imageType)
 				{
 					case 0: // Grayscale
@@ -121,7 +122,7 @@ public static class RealisticPerformanceDemo
 	private static void TestTiffProcessingPipeline()
 	{
 		const int iterations = 10_000;
-		
+
 		Console.WriteLine($"Simulating TIFF processing pipeline ({iterations:N0} images)...");
 
 		var baselineTime = MeasureTime(() =>
@@ -134,7 +135,7 @@ public static class RealisticPerformanceDemo
 				{
 					rasters[j] = new TiffRasterBaseline();
 					rasters[j].SetBitsPerSample(new[] { 8, 8, 8 });
-					
+
 					// Simulate metadata processing
 					var bits = rasters[j].BitsPerSample;
 					var totalBits = 0;
@@ -156,7 +157,7 @@ public static class RealisticPerformanceDemo
 				{
 					rasters[j] = new TiffRaster();
 					rasters[j].SetBitsPerSample(new[] { 8, 8, 8 });
-					
+
 					// Simulate metadata processing
 					var bits = rasters[j].BitsPerSample;
 					var totalBits = 0;
@@ -177,7 +178,7 @@ public static class RealisticPerformanceDemo
 	private static void TestObjectCreationPerformance()
 	{
 		const int iterations = 100_000;
-		
+
 		Console.WriteLine($"Object creation test ({iterations:N0} objects)...");
 
 		var baselineTime = MeasureTime(() =>
@@ -207,7 +208,7 @@ public static class RealisticPerformanceDemo
 	private static void TestValidationPerformance()
 	{
 		const int iterations = 1_000_000;
-		
+
 		Console.WriteLine($"Validation performance test ({iterations:N0} validations)...");
 
 		var baselineRaster = new TiffRasterBaseline();
@@ -242,7 +243,7 @@ public static class RealisticPerformanceDemo
 	{
 		// Warm up
 		action();
-		
+
 		// Measure
 		var stopwatch = Stopwatch.StartNew();
 		action();
