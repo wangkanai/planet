@@ -1,32 +1,141 @@
 ## Wangkanai Planet Engine
 
-The Wangkanai Planet Engine is a powerful console application designed for rendering raster GeoTIFF files into indexable map tiles.
-It serves as the core processing engine for the Wangkanai Planet solution, enabling efficient tile generation and management.
+**Namespace:** `Wangkanai.Planet.Engine`
 
-### Features
+A powerful console application designed for map tile processing and rendering, serving as the core processing engine for geospatial data transformation and tile generation. Built for high-performance processing of raster GeoTIFF files and other geospatial formats.
 
-- **Raster Tile Generation**: Converts raster GeoTIFF files into map tiles suitable for web and mobile applications.
-- **Indexing**: Supports indexing of generated tiles for fast retrieval and display.
-- **Command-Line Interface**: Provides a CLI for easy integration into workflows and automation scripts.
-- **Extensible Architecture**: Built with a modular design, allowing for easy extension and integration with other components of the Wangkanai Planet ecosystem.
-- **Cross-Platform**: Runs on any platform that supports .NET, making it versatile for various deployment scenarios.
-- **Open Source**: Part of the Wangkanai Planet project, which is open source and welcomes contributions from the community.
+## Features
 
-### Getting Started
+- **Raster Tile Generation**: Converts raster GeoTIFF files into map tiles suitable for web and mobile applications
+- **Multi-Format Support**: Processes various geospatial formats through integration with Spatial and Graphics libraries
+- **Command-Line Interface**: Comprehensive CLI with command-line parsing for automation and workflow integration
+- **High Performance**: Optimized processing algorithms for large geospatial datasets
+- **Extensible Architecture**: Modular design allowing integration with other Wangkanai Planet components
+- **Cross-Platform**: Runs on Windows, macOS, and Linux with .NET 9.0 support
+- **Tile Indexing**: Efficient tile indexing and organization for fast retrieval
 
-To get started with the Wangkanai Planet Engine, follow these steps:
+## Architecture
 
-1. **Clone the Repository**: Clone the Wangkanai Planet repository from GitHub.
+The Engine follows a layered architecture:
+
+```
+Engine.Console (CLI Application)
+    ↓
+Engine.Domain (Core Business Logic)
+    ↓
+Spatial Library (Geospatial Operations)
+Graphics Library (Image Processing)
+```
+
+## Components
+
+### Console Application
+- **Command-Line Interface**: Full CLI with argument parsing and command routing
+- **Command Handlers**: Specialized handlers for different processing operations
+- **Output Management**: Structured output and progress reporting
+- **Error Handling**: Comprehensive error handling and logging
+
+### Domain Layer
+- **Processing Logic**: Core algorithms for tile generation and processing
+- **Business Rules**: Validation and business logic for geospatial operations
+- **Data Models**: Domain models for representing geospatial data and operations
+
+## Executable Output
+
+The Engine builds as `tiler` executable for easy command-line usage:
+
+```bash
+# Build the tiler executable
+./Engine/src/Console/build.ps1
+
+# Use the tiler command
+tiler --help
+```
+
+## Getting Started
+
+### Build and Run
+
+1. **Build the Solution**:
    ```bash
-   git clone
+   dotnet build -c Release
    ```
 
-2. **Navigate to the Engine Directory**: Change into the `Engine` directory.
+2. **Run the Engine**:
    ```bash
-   cd Engine
+   dotnet run --project Engine/src/Console
    ```
 
-3. **Build the Project**: Use the .NET CLI to build the project.
+3. **Build Standalone Executable**:
    ```bash
-   dotnet build
+   ./Engine/src/Console/build.ps1
    ```
+
+### Command Usage
+
+```bash
+# Display help
+tiler --help
+
+# Process GeoTIFF to tiles
+tiler process --input data.tiff --output tiles/ --format mbtiles
+
+# Get information about supported formats
+tiler info --formats
+```
+
+## Integration
+
+The Engine integrates with:
+
+- **Wangkanai.Spatial** - Geospatial data processing and coordinate transformations
+- **Wangkanai.Graphics** - Image processing and TIFF handling
+- **External Services** - Map service providers and protocols
+
+## Supported Input Formats
+
+- **GeoTIFF** - Georeferenced raster imagery
+- **TIFF** - Standard raster images
+- **JPEG/PNG** - Common image formats
+- **Other formats** - Via Graphics library support
+
+## Supported Output Formats
+
+- **MBTiles** - SQLite-based tile storage
+- **File System** - Traditional tile directory structure
+- **GeoPackage** - OGC standard containers
+- **Custom Formats** - Via extensible format providers
+
+## Performance Features
+
+- **Parallel Processing**: Multi-threaded tile generation
+- **Memory Optimization**: Efficient memory usage for large datasets
+- **Progress Reporting**: Real-time progress updates
+- **Batch Processing**: Process multiple files efficiently
+
+## Command Structure
+
+```bash
+tiler <command> [options]
+
+Commands:
+  get         Retrieve and process geospatial data
+  process     Process input files to generate tiles
+  info        Display information about formats and capabilities
+  help        Display help information
+```
+
+## Dependencies
+
+- **.NET 9.0** - Target framework
+- **Wangkanai.Spatial** - Geospatial data handling
+- **Wangkanai.Graphics** - Image processing capabilities
+- **System.CommandLine** - Command-line interface framework
+
+## Testing
+
+Comprehensive testing coverage includes:
+- Unit tests for domain logic
+- Integration tests for processing workflows
+- Performance tests for large datasets
+- CLI command testing
