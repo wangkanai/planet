@@ -2,7 +2,14 @@
 
 **Namespace:** `Wangkanai.Graphics`
 
-A comprehensive graphics processing and image handling library designed for high-performance image manipulation with cross-platform support. Provides modular components for raster and vector graphics processing, with particular emphasis on TIFF format support and performance optimization.
+A comprehensive graphics processing and image handling library designed for high-performance image manipulation with cross-platform support.
+Provides modular components for raster and vector graphics processing, with particular emphasis on TIFF format support and performance optimization.
+
+- Clarifies that parallel CPU processing is currently implemented
+- Indicates GPU acceleration is planned for future releases
+- Emphasizes cross-platform compatibility
+- Provides more context about hardware resource utilization
+- Maintains consistency with the performance goals mentioned later in the document
 
 ## Features
 
@@ -37,7 +44,7 @@ Graphics.Vectors (Vector Implementation)
 - Foundation for all graphics operations
 - Platform-agnostic abstractions
 
-### Rasters  
+### Rasters
 - **TIFF Processing**: Complete TIFF format implementation
 - **Metadata Support**: Rich TIFF metadata handling and validation
 - **Performance Optimization**: Benchmarked and optimized operations
@@ -52,7 +59,7 @@ Graphics.Vectors (Vector Implementation)
 
 The library includes comprehensive benchmarking tools to ensure optimal performance:
 - Memory usage optimization
-- Processing speed benchmarks  
+- Processing speed benchmarks
 - Comparative performance analysis
 - Real-world scenario testing
 
