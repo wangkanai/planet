@@ -14,6 +14,7 @@ public static class JpegValidator
 
 		var result = new JpegValidationResult();
 
+		// TODO: Validate the Jpeg raster properties and the metadata in 2 separate methods.
 		jpeg.ValidateDimensions(result);
 		jpeg.ValidateQuality(result);
 		jpeg.ValidateColorModeAndSamples(result);
