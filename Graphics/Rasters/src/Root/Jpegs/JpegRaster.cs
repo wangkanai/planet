@@ -125,7 +125,8 @@ public class JpegRaster : IJpegRaster
 	/// <returns>The estimated file size.</returns>
 	public long GetEstimatedFileSize()
 	{
-		if (!IsValid()) return 0;
+		if (!IsValid())
+			return 0;
 
 		var uncompressedSize = (long)Width * Height * SamplesPerPixel * (BitsPerSample / 8);
 		return (long)(uncompressedSize / CompressionRatio);
