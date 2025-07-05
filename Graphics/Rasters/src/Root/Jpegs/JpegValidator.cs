@@ -8,30 +8,58 @@ public static class JpegValidator
 	/// <summary>Validates a JPEG raster image.</summary>
 	/// <param name="jpeg">The JPEG raster to validate.</param>
 	/// <returns>A validation result indicating if the image is valid and any errors.</returns>
-	public static JpegValidationResult Validate(IJpegRaster jpeg)
+	public static JpegValidationResult Validate(this IJpegRaster jpeg)
 	{
 		ArgumentNullException.ThrowIfNull(jpeg);
 
 		var result = new JpegValidationResult();
-		
-		// Validate dimensions
+
+		// TODO: Validate the Jpeg raster properties and the metadata in 2 separate methods.
+		jpeg.ValidateDimensions(result);
+		jpeg.ValidateQuality(result);
+		jpeg.ValidateColorModeAndSamples(result);
+		jpeg.ValidateBitsPerSample(result);
+		jpeg.ValidateCompressionRatio(result);
+		jpeg.ValidateEncodingConstraints(result);
+		jpeg.ValidateChromaSubsampling(result);
+
+		jpeg.Metadata.ValidateMetadata();
+
+		return result;
+	}
+
+	/// <summary>Validates the dimensions of a JPEG raster image.</summary>
+	/// <param name="jpeg">The JPEG raster to validate.</param>
+	/// <param name="result">The validation result to add errors to.</param>
+	private static void ValidateDimensions(this IJpegRaster jpeg, JpegValidationResult result)
+	{
 		if (jpeg.Width <= 0)
 			result.AddError($"Invalid width: {jpeg.Width}. Width must be greater than 0.");
-		
+
 		if (jpeg.Height <= 0)
 			result.AddError($"Invalid height: {jpeg.Height}. Height must be greater than 0.");
-		
+
 		if (jpeg.Width > JpegConstants.MaxDimension)
 			result.AddError($"Width exceeds maximum: {jpeg.Width} > {JpegConstants.MaxDimension}.");
-		
+
 		if (jpeg.Height > JpegConstants.MaxDimension)
 			result.AddError($"Height exceeds maximum: {jpeg.Height} > {JpegConstants.MaxDimension}.");
+	}
 
-		// Validate quality
+	/// <summary>Validates the quality setting of a JPEG raster image.</summary>
+	/// <param name="jpeg">The JPEG raster to validate.</param>
+	/// <param name="result">The validation result to add errors to.</param>
+	private static void ValidateQuality(this IJpegRaster jpeg, JpegValidationResult result)
+	{
 		if (jpeg.Quality < JpegConstants.MinQuality || jpeg.Quality > JpegConstants.MaxQuality)
 			result.AddError($"Invalid quality: {jpeg.Quality}. Quality must be between {JpegConstants.MinQuality} and {JpegConstants.MaxQuality}.");
+	}
 
-		// Validate color mode and samples per pixel
+	/// <summary>Validates the color mode and samples per pixel of a JPEG raster image.</summary>
+	/// <param name="jpeg">The JPEG raster to validate.</param>
+	/// <param name="result">The validation result to add errors to.</param>
+	private static void ValidateColorModeAndSamples(this IJpegRaster jpeg, JpegValidationResult result)
+	{
 		var expectedSamples = jpeg.ColorMode switch
 		{
 			JpegColorMode.Grayscale => 1,
@@ -45,24 +73,42 @@ public static class JpegValidator
 			result.AddError($"Invalid color mode: {jpeg.ColorMode}.");
 		else if (jpeg.SamplesPerPixel != expectedSamples)
 			result.AddError($"Invalid samples per pixel: {jpeg.SamplesPerPixel}. Expected {expectedSamples} for {jpeg.ColorMode} color mode.");
+	}
 
-		// Validate bits per sample
+	/// <summary>Validates the bits per sample of a JPEG raster image.</summary>
+	/// <param name="jpeg">The JPEG raster to validate.</param>
+	/// <param name="result">The validation result to add errors to.</param>
+	private static void ValidateBitsPerSample(this IJpegRaster jpeg, JpegValidationResult result)
+	{
 		if (jpeg.BitsPerSample != JpegConstants.BitsPerSample)
 			result.AddError($"Invalid bits per sample: {jpeg.BitsPerSample}. JPEG supports only {JpegConstants.BitsPerSample} bits per sample.");
+	}
 
-		// Validate compression ratio
+	/// <summary>Validates the compression ratio of a JPEG raster image.</summary>
+	/// <param name="jpeg">The JPEG raster to validate.</param>
+	/// <param name="result">The validation result to add errors to.</param>
+	private static void ValidateCompressionRatio(this IJpegRaster jpeg, JpegValidationResult result)
+	{
 		if (jpeg.CompressionRatio <= 0)
 			result.AddError($"Invalid compression ratio: {jpeg.CompressionRatio}. Compression ratio must be greater than 0.");
+	}
 
-		// Validate encoding-specific constraints
+	/// <summary>Validates the encoding constraints of a JPEG raster image.</summary>
+	/// <param name="jpeg">The JPEG raster to validate.</param>
+	/// <param name="result">The validation result to add errors to.</param>
+	private static void ValidateEncodingConstraints(this IJpegRaster jpeg, JpegValidationResult result)
+	{
 		if (jpeg.Encoding == JpegEncoding.Jpeg2000)
 			result.AddWarning("JPEG 2000 format has limited support in many applications.");
+	}
 
-		// Validate chroma subsampling for color modes
+	/// <summary>Validates the chroma subsampling of a JPEG raster image.</summary>
+	/// <param name="jpeg">The JPEG raster to validate.</param>
+	/// <param name="result">The validation result to add errors to.</param>
+	private static void ValidateChromaSubsampling(this IJpegRaster jpeg, JpegValidationResult result)
+	{
 		if (jpeg.ColorMode == JpegColorMode.Grayscale && jpeg.ChromaSubsampling != JpegChromaSubsampling.None)
 			result.AddWarning("Chroma subsampling is not applicable for grayscale images.");
-
-		return result;
 	}
 
 	/// <summary>Validates JPEG file signature.</summary>
@@ -71,7 +117,7 @@ public static class JpegValidator
 	public static bool IsValidJpegSignature(ReadOnlySpan<byte> data)
 	{
 		if (data.Length < 2) return false;
-		
+
 		// Check for SOI marker (Start of Image)
 		return data[0] == 0xFF && data[1] == 0xD8;
 	}
@@ -79,7 +125,7 @@ public static class JpegValidator
 	/// <summary>Validates JPEG metadata.</summary>
 	/// <param name="metadata">The metadata to validate.</param>
 	/// <returns>A validation result for the metadata.</returns>
-	public static JpegValidationResult ValidateMetadata(JpegMetadata metadata)
+	public static JpegValidationResult ValidateMetadata(this JpegMetadata metadata)
 	{
 		ArgumentNullException.ThrowIfNull(metadata);
 
@@ -116,53 +162,5 @@ public static class JpegValidator
 			result.AddError($"Invalid focal length: {metadata.FocalLength}. Focal length must be greater than 0.");
 
 		return result;
-	}
-}
-
-/// <summary>Represents the result of JPEG validation.</summary>
-public class JpegValidationResult
-{
-	/// <summary>Gets a value indicating whether the validation passed.</summary>
-	public bool IsValid => Errors.Count == 0;
-
-	/// <summary>Gets the list of validation errors.</summary>
-	public List<string> Errors { get; } = new();
-
-	/// <summary>Gets the list of validation warnings.</summary>
-	public List<string> Warnings { get; } = new();
-
-	/// <summary>Adds an error to the validation result.</summary>
-	/// <param name="error">The error message to add.</param>
-	public void AddError(string error)
-	{
-		Errors.Add(error);
-	}
-
-	/// <summary>Adds a warning to the validation result.</summary>
-	/// <param name="warning">The warning message to add.</param>
-	public void AddWarning(string warning)
-	{
-		Warnings.Add(warning);
-	}
-
-	/// <summary>Gets a summary of all validation issues.</summary>
-	/// <returns>A formatted string containing all errors and warnings.</returns>
-	public string GetSummary()
-	{
-		var summary = new List<string>();
-		
-		if (Errors.Count > 0)
-		{
-			summary.Add($"Errors ({Errors.Count}):");
-			summary.AddRange(Errors.Select(e => $"  - {e}"));
-		}
-		
-		if (Warnings.Count > 0)
-		{
-			summary.Add($"Warnings ({Warnings.Count}):");
-			summary.AddRange(Warnings.Select(w => $"  - {w}"));
-		}
-		
-		return summary.Count > 0 ? string.Join(Environment.NewLine, summary) : "No validation issues found.";
 	}
 }
