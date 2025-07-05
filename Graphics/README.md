@@ -26,17 +26,6 @@ Provides modular components for raster and vector graphics processing, with part
 - **[Graphics Rasters](Rasters)** - Raster image processing with comprehensive TIFF support
 - **[Graphics Vectors](Vectors)** - Vector graphics processing and manipulation
 
-## Architecture
-
-The library follows a layered architecture:
-
-```
-Graphics.Abstractions (Core Interfaces)
-    ↓
-Graphics.Rasters (TIFF Implementation)
-Graphics.Vectors (Vector Implementation)
-```
-
 ## Key Features by Component
 
 ### Abstractions
@@ -63,23 +52,6 @@ The library includes comprehensive benchmarking tools to ensure optimal performa
 - Comparative performance analysis
 - Real-world scenario testing
 
-## Usage
-
-```csharp
-using Wangkanai.Graphics.Abstractions;
-using Wangkanai.Graphics.Rasters;
-using Wangkanai.Graphics.Vectors;
-
-// Work with raster images
-var raster = new Raster();
-
-// Process TIFF images
-var tiffRaster = new TiffRaster();
-
-// Handle vector graphics
-var vector = new Vector();
-```
-
 ## Dependencies
 
 - **.NET 9.0** - Target framework
@@ -93,7 +65,6 @@ var vector = new Vector();
 - Cross-platform compatibility (Windows, macOS, Linux)
 - GPU acceleration support (future enhancement)
 - Memory-efficient operations for large image datasets
-
 
 ## References
 
