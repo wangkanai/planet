@@ -23,27 +23,27 @@
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
   </Folder>
-  <Folder Name="/Drawing/">
-    <Project Path="Drawing\Abstractions\src\Wangkanai.Planet.Drawing.Abstractions.csproj" Type="Classic C#" />
-    <File Path="Drawing\Directory.Build.props" />
-    <File Path="Drawing\README.md" />
+  <Folder Name="/Graphics/">
+    <Project Path="Graphics\Abstractions\src\Wangkanai.Graphics.Abstractions.csproj" Type="Classic C#" />
+    <File Path="Graphics\Directory.Build.props" />
+    <File Path="Graphics\README.md" />
   </Folder>
-  <Folder Name="/Drawing/Rasters/">
-    <Project Path="Drawing\Rasters\src\Root\Wangkanai.Planet.Drawing.Rasters.csproj" Type="Classic C#" />
-    <File Path="Drawing\Rasters\README.md" />
+  <Folder Name="/Graphics/Rasters/">
+    <Project Path="Graphics\Rasters\src\Root\Wangkanai.Graphics.Rasters.csproj" Type="Classic C#" />
+    <File Path="Graphics\Rasters\README.md" />
   </Folder>
-  <Folder Name="/Drawing/Rasters/benchmark/">
-    <Project Path="Drawing\Rasters\benchmark\Wangkanai.Planet.Drawing.Rasters.Benchmark.csproj" Type="Classic C#" />
+  <Folder Name="/Graphics/Rasters/benchmark/">
+    <Project Path="Graphics\Rasters\benchmark\Wangkanai.Graphics.Rasters.Benchmark.csproj" Type="Classic C#" />
   </Folder>
-  <Folder Name="/Drawing/Rasters/tests/">
-    <Project Path="Drawing\Rasters\tests\Unit\Wangkanai.Planet.Drawing.Rasters.UnitTests.csproj" Type="Classic C#" />
+  <Folder Name="/Graphics/Rasters/tests/">
+    <Project Path="Graphics\Rasters\tests\Unit\Wangkanai.Graphics.Rasters.UnitTests.csproj" Type="Classic C#" />
   </Folder>
-  <Folder Name="/Drawing/Vectors/">
-    <Project Path="Drawing\Vectors\src\Root\Wangkanai.Planet.Drawing.Vectors.csproj" Type="Classic C#" />
-    <File Path="Drawing\Vectors\README.md" />
+  <Folder Name="/Graphics/Vectors/">
+    <Project Path="Graphics\Vectors\src\Root\Wangkanai.Graphics.Vectors.csproj" Type="Classic C#" />
+    <File Path="Graphics\Vectors\README.md" />
   </Folder>
-  <Folder Name="/Drawing/Vectors/tests/">
-    <Project Path="Drawing\Vectors\tests\Unit\Wangkanai.Planet.Drawing.Vectors.UnitTests.csproj" Type="Classic C#" />
+  <Folder Name="/Graphics/Vectors/tests/">
+    <Project Path="Graphics\Vectors\tests\Unit\Wangkanai.Graphics.Vectors.UnitTests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Engine/">
     <Project Path="Engine\src\Console\Wangkanai.Planet.Engine.Console.csproj" Type="Classic C#" />

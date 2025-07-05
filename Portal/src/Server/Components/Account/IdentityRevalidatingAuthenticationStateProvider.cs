@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Wangkanai.Planet.Portal.Data;
+
+using Wangkanai.Planet.Portal.Identity;
 
 namespace Wangkanai.Planet.Portal.Components.Account;
 

@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
-using Wangkanai.Planet.Portal.Data;
+using Wangkanai.Planet.Portal.Identity;
 
 namespace Wangkanai.Planet.Portal.Components.Account;
 

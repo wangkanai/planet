@@ -1,7 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <ProjectReference Include="..\src\Root\Wangkanai.Planet.Drawing.Rasters.csproj" />
-  </ItemGroup>
-
-</Project>

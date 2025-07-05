@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Identity;
 
-namespace Wangkanai.Planet.Portal.Data;
+namespace Wangkanai.Planet.Portal.Identity;
 
 /// <summary>Represents a user in the system.</summary>
 public sealed class PlanetUser : IdentityUser<int>
