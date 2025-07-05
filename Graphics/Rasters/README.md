@@ -2,41 +2,41 @@
 
 **Namespace:** `Wangkanai.Graphics.Rasters`
 
-A **comprehensive generic bitmap rasterization library** designed to work with all raster image formats through a unified abstraction layer. The library provides universal bitmap processing capabilities including high-performance pixel manipulation, image processing, and metadata handling with extensive benchmarking and validation capabilities.
+A **comprehensive generic image rasterization library** designed to work with all raster image formats through a unified abstraction layer. The library provides universal image processing capabilities including high-performance pixel manipulation, image processing, and metadata handling with extensive benchmarking and validation capabilities.
 
-*This library addresses the need for format-agnostic high-performance raster manipulation to operate on large datasets of images across professional photography, document imaging, scientific imaging, geographic systems, and prepress workflows. While TIFF and JPEG are the current complete implementations, the architecture is designed to support any bitmap format through common abstractions.*
+*This library addresses the need for format-agnostic high-performance raster manipulation to operate on large datasets of images across professional photography, document imaging, scientific imaging, geographic systems, and prepress workflows. While TIFF and JPEG are the current complete implementations, the architecture is designed to support any image format through common abstractions.*
 
 > 📋 **GitHub Issue Reference**: [#50 - Raster image manipulation library](https://github.com/wangkanai/planet/issues/50)  
-> **Status**: ✅ **Implemented** - Universal bitmap rasterization library with complete TIFF and JPEG format implementations
+> **Status**: ✅ **Implemented** - Universal image rasterization library with complete TIFF and JPEG format implementations
 
-## Universal Bitmap Processing Capabilities
+## Universal Image Processing Capabilities
 
-The Raster component is built as a **generic library for all bitmap rasterization images**, providing a unified abstraction layer that works seamlessly across any raster image format. The architecture separates universal bitmap operations from format-specific implementations, enabling consistent processing regardless of the underlying image format.
+The Raster component is built as a **generic library for all image rasterization images**, providing a unified abstraction layer that works seamlessly across any raster image format. The architecture separates universal image operations from format-specific implementations, enabling consistent processing regardless of the underlying image format.
 
 ### Key Universal Features
-- **Format-Agnostic Operations**: All core bitmap operations (resize, crop, compress, metadata handling) work universally across formats
-- **Common Abstraction Layer**: The `IRaster` interface provides a consistent API for all bitmap formats
+- **Format-Agnostic Operations**: All core image operations (resize, crop, compress, metadata handling) work universally across formats
+- **Common Abstraction Layer**: The `IRaster` interface provides a consistent API for all image formats
 - **Universal Metadata System**: Standardized metadata handling that works across all supported formats
 - **Cross-Format Processing Pipeline**: Chain operations across different formats seamlessly
 - **Automatic Format Detection**: Intelligent format detection and appropriate processor selection
-- **Extensible Architecture**: Easy addition of new bitmap formats through interface implementation
+- **Extensible Architecture**: Easy addition of new image formats through interface implementation
 
 ### Current Format Implementations
 - **TIFF**: Complete implementation with full specification support
 - **JPEG**: Complete implementation with quality control and optimization
-- **Future Formats**: Architecture ready for PNG, BMP, GIF, WebP, and other bitmap formats
+- **Future Formats**: Architecture ready for PNG, BMP, GIF, WebP, and other image formats
 
 This universal approach means you can process images without worrying about format-specific details, while still having access to format-specific optimizations when needed.
 
 ## Features
 
-### ✅ Universal Bitmap Processing Capabilities
-- **Format-Agnostic Image Processing**: All operations work seamlessly across any supported bitmap format
+### ✅ Universal Image Processing Capabilities
+- **Format-Agnostic Image Processing**: All operations work seamlessly across any supported image format
 - **Universal Image Compression**: Apply compression algorithms across formats with automatic optimization
-- **Cross-Format Conversion**: Convert between different bitmap formats using the unified processing pipeline
-- **Universal Image Cropping**: Extract regions of interest from any bitmap format with precise rectangle selection
+- **Cross-Format Conversion**: Convert between different image formats using the unified processing pipeline
+- **Universal Image Cropping**: Extract regions of interest from any image format with precise rectangle selection
 - **Universal Image Resizing**: Scale images across formats with multiple algorithm options and quality preservation
-- **Universal Geo-tagging**: Add geographical information to any supported bitmap format
+- **Universal Geo-tagging**: Add geographical information to any supported image format
 - **Universal Grid Splitting**: Divide large images into smaller tiles regardless of format
 - **Universal Metadata Handling**: Rich metadata support that works across all formats including EXIF, IPTC/XMP, and custom tags
 
@@ -52,18 +52,18 @@ This universal approach means you can process images without worrying about form
 
 ## Core Components
 
-### Universal Bitmap Abstractions
-The library is built around format-agnostic abstractions that provide consistent functionality across all bitmap formats:
+### Universal Image Abstractions
+The library is built around format-agnostic abstractions that provide consistent functionality across all image formats:
 
-- **`IRaster`** - Base interface for all raster image types, providing universal bitmap operations
+- **`IRaster`** - Base interface for all raster image types, providing universal image operations
 - **`RasterProcessor`** - High-performance image processing engine that works across all formats
 - **`RasterValidator`** - Format-agnostic validation framework with universal compliance checking
-- **`RasterMetadata`** - Universal metadata management system supporting all bitmap formats
+- **`RasterMetadata`** - Universal metadata management system supporting all image formats
 - **`RasterFactory`** - Intelligent format detection and creation with automatic format selection
 - **`RasterProcessingPipeline`** - Flexible operation chaining that works across all formats
 
 ### Format-Specific Implementations
-The universal abstractions are implemented for specific bitmap formats, with each format extending the core capabilities:
+The universal abstractions are implemented for specific image formats, with each format extending the core capabilities:
 
 #### TIFF Implementation
 - **`ITiffRaster`** - TIFF-specific interface extending `IRaster`
@@ -84,7 +84,7 @@ The universal abstractions are implemented for specific bitmap formats, with eac
 
 ## Format-Specific Implementations
 
-The following sections detail the current complete implementations of the universal bitmap rasterization system. These format-specific implementations extend the core abstractions to provide specialized functionality while maintaining compatibility with the universal processing pipeline.
+The following sections detail the current complete implementations of the universal image rasterization system. These format-specific implementations extend the core abstractions to provide specialized functionality while maintaining compatibility with the universal processing pipeline.
 
 ### TIFF Specifications Support
 
@@ -176,7 +176,7 @@ The Tagged Image File Format (TIFF) is a versatile raster graphic format used fo
 
 ### JPEG Specifications Support
 
-The JPEG implementation demonstrates the extensibility of the universal bitmap rasterization system, providing full support for the Joint Photographic Experts Group format while maintaining compatibility with all universal operations.
+The JPEG implementation demonstrates the extensibility of the universal image rasterization system, providing full support for the Joint Photographic Experts Group format while maintaining compatibility with all universal operations.
 
 The Joint Photographic Experts Group (JPEG) format is a widely used lossy compression standard for digital images. It's optimized for photographs and continuous-tone images with excellent compression ratios.
 
@@ -270,19 +270,19 @@ var universalMetadata = tiffRaster.Metadata; // Works with universal interface
 
 ## Universal Image Processing Capabilities
 
-The library provides format-agnostic image processing operations that work seamlessly across all supported bitmap formats:
+The library provides format-agnostic image processing operations that work seamlessly across all supported image formats:
 
 - **Universal Metadata Extraction**: Extract and modify image metadata regardless of format
 - **Universal Compression**: Apply compression algorithms across all formats with automatic optimization
-- **Cross-Format Conversion**: Convert between different bitmap formats using the unified processing pipeline
-- **Universal Cropping**: Extract regions of interest from any bitmap format
+- **Cross-Format Conversion**: Convert between different image formats using the unified processing pipeline
+- **Universal Cropping**: Extract regions of interest from any image format
 - **Universal Resizing**: Scale images across formats with multiple algorithm options
-- **Universal Geo-tagging**: Add geographical information to any supported bitmap format
+- **Universal Geo-tagging**: Add geographical information to any supported image format
 - **Universal Grid Splitting**: Divide large images into smaller tiles regardless of format
 
 ## Universal Validation and Compliance
 
-The library provides comprehensive validation that works across all bitmap formats:
+The library provides comprehensive validation that works across all image formats:
 
 - **Universal Format Validation**: Unified validation framework that works across all supported formats
 - **Format-Agnostic Compliance**: Ensures images meet their respective format standards through common validation interface
@@ -303,7 +303,7 @@ Format-specific validation is available for detailed compliance checking:
 
 ## Fundamental Code Architecture
 
-The Raster component implements a sophisticated layered architecture that separates universal bitmap operations from format-specific implementations. This design enables the library to function as a **generic bitmap rasterization system** while maintaining optimal performance and extensibility.
+The Raster component implements a sophisticated layered architecture that separates universal image operations from format-specific implementations. This design enables the library to function as a **generic image rasterization system** while maintaining optimal performance and extensibility.
 
 ### Core Abstraction Layer
 
@@ -551,13 +551,13 @@ public static class ParallelRasterProcessor
 ```
 
 This architecture provides:
-- **Universal Bitmap Processing**: Core operations work seamlessly across all raster formats
-- **Extensibility**: Easy addition of new bitmap formats through interface implementation
+- **Universal Image Processing**: Core operations work seamlessly across all raster formats
+- **Extensibility**: Easy addition of new image formats through interface implementation
 - **Performance**: Memory-efficient processing with parallel operation support
 - **Maintainability**: Clear separation of concerns with format-specific implementations
 - **Testability**: Abstract base classes and interfaces enable comprehensive unit testing
 - **Flexibility**: Pipeline-based processing allows complex operation chaining across formats
-- **Format Independence**: Applications can work with any bitmap format using the same API
+- **Format Independence**: Applications can work with any image format using the same API
 
 ## Testing
 
