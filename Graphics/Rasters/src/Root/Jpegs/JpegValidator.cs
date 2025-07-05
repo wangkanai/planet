@@ -21,6 +21,7 @@ public static class JpegValidator
 		jpeg.ValidateCompressionRatio(result);
 		jpeg.ValidateEncodingConstraints(result);
 		jpeg.ValidateChromaSubsampling(result);
+		jpeg.Metadata.ValidateMetadata(result);
 
 		return result;
 	}
