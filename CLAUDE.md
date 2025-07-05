@@ -120,4 +120,4 @@ The Planet solution follows a modular architecture with these main components:
 
 ## Memories
 
-- Claude Code now has access to mcp
+- Claude Code now has access to MCP
