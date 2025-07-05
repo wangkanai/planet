@@ -117,3 +117,7 @@ The Planet solution follows a modular architecture with these main components:
 - **Protocols/src/Root**: Protocol abstractions and WMS implementations
 - **Providers/Bing**: Bing Maps service integration
 - **Providers/Google**: Google Maps service integration
+
+## Memories
+
+- Claude Code now has access to mcp
