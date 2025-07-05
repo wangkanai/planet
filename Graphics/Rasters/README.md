@@ -2,24 +2,41 @@
 
 **Namespace:** `Wangkanai.Graphics.Rasters`
 
-A comprehensive raster image processing library with specialized support for TIFF format specifications. Designed for high-performance pixel manipulation, image processing, and metadata handling with extensive benchmarking and validation capabilities.
+A comprehensive raster image processing library with specialized support for TIFF and JPEG format specifications. Designed for high-performance pixel manipulation, image processing, and metadata handling with extensive benchmarking and validation capabilities.
 
 ## Features
 
-- **TIFF Specialization**: Complete TIFF format implementation with full specification support
+- **Multi-Format Support**: Complete TIFF and JPEG format implementations with full specification support
+- **High-Performance Processing**: Optimized for parallel CPU processing with cross-platform support
 - **Image Processing**: Comprehensive pixel manipulation and transformation capabilities
-- **Metadata Management**: Rich metadata support including camera settings and custom tags
+- **Metadata Management**: Rich metadata support including EXIF, IPTC/XMP, camera settings, and custom tags
 - **Performance Optimization**: Benchmarked operations with performance analysis tools
-- **Format Validation**: Built-in validation for TIFF specification compliance
+- **Format Validation**: Built-in validation for TIFF and JPEG specification compliance
 - **Cross-Platform**: Works across Windows, macOS, and Linux environments
+- **Large Dataset Support**: Designed for high-performance raster manipulation on large image datasets
 
 ## Core Components
 
+### Core Abstractions
+- **`IRaster`** - Base interface for all raster image types
+- **`RasterProcessor`** - High-performance image processing engine
+- **`RasterValidator`** - Format-agnostic validation framework
+- **`RasterMetadata`** - Universal metadata management system
+
 ### TIFF Implementation
+- **`ITiffRaster`** - TIFF-specific interface extending `IRaster`
 - **`TiffRaster`** - Main TIFF processing class implementing `ITiffRaster`
 - **`TiffMetadata`** - Comprehensive TIFF metadata handling
 - **`TiffValidator`** - Format validation and compliance checking
 - **`TiffConstants`** - TIFF specification constants and definitions
+
+### JPEG Implementation
+- **`IJpegRaster`** - JPEG-specific interface extending `IRaster`
+- **`JpegRaster`** - Main JPEG processing class implementing `IJpegRaster`
+- **`JpegMetadata`** - EXIF, IPTC, and XMP metadata handling
+- **`JpegValidator`** - JPEG format validation and quality checking
+- **`JpegConstants`** - JPEG specification constants and markers
+- **`JpegExamples`** - Usage patterns and quality recommendations
 
 ### TIFF Specifications Support
 
@@ -109,6 +126,44 @@ The Tagged Image File Format (TIFF) is a versatile raster graphic format used fo
 - **Geographic systems** - GeoTIFF for spatial data
 - **Prepress workflows** - Printing and publishing industries
 
+## JPEG Specifications Support
+
+The Joint Photographic Experts Group (JPEG) format is a widely used lossy compression standard for digital images. It's optimized for photographs and continuous-tone images with excellent compression ratios.
+
+### JPEG Features
+
+#### Color Modes
+- **Grayscale (8-bit)** - Single-channel intensity
+- **RGB (24-bit)** - True color with 8 bits per channel
+- **CMYK (32-bit)** - Print color mode with 8 bits per channel
+- **YCbCr (24-bit)** - Luminance-chrominance color space (most common for JPEG)
+
+#### Encoding Types
+- **Baseline JPEG** - Standard format, most widely supported
+- **Progressive JPEG** - Loads in multiple passes from low to high quality
+- **JPEG 2000** - Newer standard with better compression (less common)
+
+#### Chroma Subsampling
+- **4:4:4 (None)** - No subsampling, highest quality, larger file size
+- **4:2:2 (Horizontal)** - Horizontal subsampling, good quality, moderate compression
+- **4:2:0 (Both)** - Both horizontal and vertical subsampling, standard compression
+
+#### Quality and Compression
+- **Quality Range**: 0-100 (0 = maximum compression, 100 = minimal compression)
+- **Recommended Settings**:
+  - 95-100: Excellent quality for professional photography
+  - 85: High quality, good balance for print
+  - 75: Good quality, standard for web
+  - 60: Medium quality, suitable for thumbnails
+  - 40 and below: Low quality, high compression
+
+#### JPEG Constants and Specifications
+- **Maximum Dimensions**: 65,535 × 65,535 pixels
+- **Bits Per Sample**: 8 bits per channel
+- **File Extensions**: .jpg, .jpeg, .jpe, .jfif
+- **MIME Types**: image/jpeg, image/jpg
+- **Standard Markers**: SOI (0xFFD8), EOI (0xFFD9), APP0-APP15, SOF, DHT, DQT
+
 ## Performance Benchmarking
 
 The library includes comprehensive benchmarking tools:
@@ -168,11 +223,268 @@ bool isValid = validator.ValidateFormat(tiffRaster);
 - **System.Drawing** - Basic graphics support
 - **BenchmarkDotNet** - Performance benchmarking (in benchmark projects)
 
+## Fundamental Code Architecture
+
+### Core Abstraction Layer
+
+The raster image library follows a layered architecture with format-agnostic abstractions at the core:
+
+```csharp
+// Base raster interface
+public interface IRaster : IDisposable
+{
+    int Width { get; }
+    int Height { get; }
+    IRasterMetadata Metadata { get; }
+    bool IsValid();
+    long GetEstimatedFileSize();
+    int GetColorDepth();
+}
+
+// Generic raster processor for common operations
+public abstract class RasterProcessor<T> where T : IRaster
+{
+    public abstract Task<T> ResizeAsync(T raster, int width, int height);
+    public abstract Task<T> CropAsync(T raster, Rectangle region);
+    public abstract Task<byte[]> CompressAsync(T raster);
+    public abstract Task<T> DecompressAsync(byte[] data);
+    public abstract ValidationResult Validate(T raster);
+}
+
+// Universal metadata management
+public interface IRasterMetadata
+{
+    string? Title { get; set; }
+    string? Description { get; set; }
+    string? Software { get; set; }
+    DateTime? Created { get; set; }
+    DateTime? Modified { get; set; }
+    Dictionary<string, object> CustomTags { get; }
+}
+```
+
+### Format-Specific Implementations
+
+Each supported format extends the core abstractions:
+
+```csharp
+// JPEG-specific interface
+public interface IJpegRaster : IRaster
+{
+    JpegColorMode ColorMode { get; set; }
+    int Quality { get; set; }
+    JpegEncoding Encoding { get; set; }
+    JpegMetadata Metadata { get; set; }
+    int SamplesPerPixel { get; set; }
+    int BitsPerSample { get; set; }
+    JpegChromaSubsampling ChromaSubsampling { get; set; }
+    bool IsProgressive { get; set; }
+    bool IsOptimized { get; set; }
+    double CompressionRatio { get; set; }
+}
+
+// TIFF-specific interface
+public interface ITiffRaster : IRaster
+{
+    TiffColorDepth ColorDepth { get; set; }
+    TiffCompression Compression { get; set; }
+    PhotometricInterpretation PhotometricInterpretation { get; set; }
+    TiffMetadata Metadata { get; set; }
+    // Additional TIFF-specific properties...
+}
+```
+
+### Processing Pipeline Architecture
+
+```csharp
+// High-performance processing pipeline
+public class RasterProcessingPipeline
+{
+    private readonly List<IRasterOperation> _operations = new();
+    
+    public RasterProcessingPipeline AddOperation(IRasterOperation operation)
+    {
+        _operations.Add(operation);
+        return this;
+    }
+    
+    public async Task<T> ProcessAsync<T>(T input) where T : IRaster
+    {
+        var result = input;
+        foreach (var operation in _operations)
+        {
+            result = await operation.ExecuteAsync(result);
+        }
+        return result;
+    }
+}
+
+// Operation interface for pipeline processing
+public interface IRasterOperation
+{
+    Task<IRaster> ExecuteAsync(IRaster input);
+    string Name { get; }
+    OperationPriority Priority { get; }
+}
+
+// Built-in operations
+public class ResizeOperation : IRasterOperation
+{
+    public int TargetWidth { get; }
+    public int TargetHeight { get; }
+    public ResizeAlgorithm Algorithm { get; }
+    
+    public async Task<IRaster> ExecuteAsync(IRaster input)
+    {
+        // Implementation for resize operation
+    }
+}
+```
+
+### Factory Pattern for Format Detection
+
+```csharp
+// Raster factory for automatic format detection
+public static class RasterFactory
+{
+    public static async Task<IRaster> CreateFromFileAsync(string filePath)
+    {
+        var data = await File.ReadAllBytesAsync(filePath);
+        return CreateFromData(data, Path.GetExtension(filePath));
+    }
+    
+    public static IRaster CreateFromData(ReadOnlySpan<byte> data, string? extension = null)
+    {
+        // Auto-detect format based on signature
+        if (JpegValidator.IsValidJpegSignature(data))
+            return CreateJpegFromData(data);
+        if (TiffValidator.IsValidTiffSignature(data))
+            return CreateTiffFromData(data);
+            
+        throw new UnsupportedFormatException("Unable to detect raster format");
+    }
+    
+    private static IJpegRaster CreateJpegFromData(ReadOnlySpan<byte> data)
+    {
+        // JPEG-specific creation logic
+    }
+    
+    private static ITiffRaster CreateTiffFromData(ReadOnlySpan<byte> data)
+    {
+        // TIFF-specific creation logic
+    }
+}
+```
+
+### Validation Framework
+
+```csharp
+// Generic validation framework
+public abstract class RasterValidator<T> where T : IRaster
+{
+    public abstract ValidationResult Validate(T raster);
+    
+    protected ValidationResult CreateResult() => new ValidationResult();
+    
+    protected void ValidateDimensions(T raster, ValidationResult result)
+    {
+        if (raster.Width <= 0)
+            result.AddError($"Invalid width: {raster.Width}");
+        if (raster.Height <= 0)
+            result.AddError($"Invalid height: {raster.Height}");
+    }
+}
+
+// Validation result with error aggregation
+public class ValidationResult
+{
+    public bool IsValid => Errors.Count == 0;
+    public List<string> Errors { get; } = new();
+    public List<string> Warnings { get; } = new();
+    
+    public void AddError(string error) => Errors.Add(error);
+    public void AddWarning(string warning) => Warnings.Add(warning);
+    
+    public string GetSummary()
+    {
+        var summary = new List<string>();
+        if (Errors.Count > 0)
+            summary.AddRange(Errors.Select(e => $"Error: {e}"));
+        if (Warnings.Count > 0)
+            summary.AddRange(Warnings.Select(w => $"Warning: {w}"));
+        return string.Join(Environment.NewLine, summary);
+    }
+}
+```
+
+### Performance-Optimized Components
+
+```csharp
+// Memory-efficient pixel processing
+public ref struct PixelSpan
+{
+    private readonly Span<byte> _data;
+    public int Width { get; }
+    public int Height { get; }
+    public int SamplesPerPixel { get; }
+    
+    public PixelSpan(Span<byte> data, int width, int height, int samplesPerPixel)
+    {
+        _data = data;
+        Width = width;
+        Height = height;
+        SamplesPerPixel = samplesPerPixel;
+    }
+    
+    public Span<byte> GetPixel(int x, int y)
+    {
+        var index = (y * Width + x) * SamplesPerPixel;
+        return _data.Slice(index, SamplesPerPixel);
+    }
+}
+
+// Parallel processing utilities
+public static class ParallelRasterProcessor
+{
+    public static async Task ProcessTilesAsync<T>(T raster, Func<Rectangle, Task> tileProcessor, int tileSize = 512) where T : IRaster
+    {
+        var tiles = GenerateTiles(raster.Width, raster.Height, tileSize);
+        await Parallel.ForEachAsync(tiles, async (tile, ct) =>
+        {
+            await tileProcessor(tile);
+        });
+    }
+    
+    private static IEnumerable<Rectangle> GenerateTiles(int width, int height, int tileSize)
+    {
+        for (int y = 0; y < height; y += tileSize)
+        {
+            for (int x = 0; x < width; x += tileSize)
+            {
+                yield return new Rectangle(x, y, 
+                    Math.Min(tileSize, width - x), 
+                    Math.Min(tileSize, height - y));
+            }
+        }
+    }
+}
+```
+
+This architecture provides:
+- **Extensibility**: Easy addition of new formats through interface implementation
+- **Performance**: Memory-efficient processing with parallel operation support
+- **Maintainability**: Clear separation of concerns with format-specific implementations
+- **Testability**: Abstract base classes and interfaces enable comprehensive unit testing
+- **Flexibility**: Pipeline-based processing allows complex operation chaining
+
 ## Testing
 
 Comprehensive unit tests are available covering:
 - TIFF format validation
+- JPEG format validation and processing
 - Metadata handling
 - Compression algorithms
 - Performance benchmarks
 - Format compliance
+- Pipeline operations
+- Parallel processing
