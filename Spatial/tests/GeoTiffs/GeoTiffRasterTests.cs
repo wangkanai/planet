@@ -2,7 +2,7 @@
 
 using Wangkanai.Graphics.Rasters.Tiffs;
 
-namespace Wangkanai.Planet.Spatial.GeoTiffs;
+namespace Wangkanai.Spatial.GeoTiffs;
 
 public class GeoTiffRasterTests
 {

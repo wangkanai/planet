@@ -6,6 +6,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - Always use a descriptive variable name
 
+## Claude Code
+
+- Claude Code local development has MCP access to extra resources like SonarCloud, GitHub issues, and discussions.
+
+## GitHub Repository
+
+- GitHub integration is enabled for this repository via MCP `github` command.
+- GitHub repo is at https://github.com/wangkanai/planet
+- Work item backlogs are in the GitHub issues https://github.com/wangkanai/planet/issues
+- Discussion board is at https://github.com/wangkanai/planet/discussions
+- Project planning is at https://github.com/wangkanai/planet/projects
+- CI/CD pipelines are configured in the GitHub Actions workflows https://github.com/wangkanai/planet/actions
+
+## Code Quality
+
+- SonarCube reposts are available via MCP `sonarqube` command.
+
 ## Commands
 
 ### Build Commands
@@ -44,7 +61,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Architecture
 
 ### Solution Structure
-The Planet solution follows a modular architecture with these main components:
+The Planet solution follows a modular architecture with these main components organized in separate libraries for clear separation of concerns:
 
 **Portal** - Blazor Server/WASM hybrid web application with ASP.NET Core Identity
 - Uses Clean Architecture patterns (Domain, Application, Infrastructure, Persistence layers)
@@ -56,23 +73,32 @@ The Planet solution follows a modular architecture with these main components:
 - Domain layer for core business logic
 - Console layer for CLI operations
 
-**Spatial** - Geospatial data handling library
+**Spatial** - Geospatial data handling library (namespace: `Wangkanai.Spatial`)
 - Root: Core coordinate systems (Geodetic, Mercator), map extent and tile calculations
 - MbTiles: MBTiles format support with SQLite-based tile storage
 - GeoPackages: GeoPackage format support for geospatial data containers
 - GeoTiffs: GeoTIFF format support for georeferenced raster imagery
+- ShapeFiles: Shapefile format support for vector geospatial data
+- MtPkgs: Map tile package format support
 
 **Providers** - External map service integrations
 - Bing Maps provider
 - Google Maps provider
 - Each provider has corresponding test projects
 
+**Graphics** - Graphics processing and image handling library (namespace: `Wangkanai.Graphics`)
+- Abstractions: Core image processing interfaces and contracts
+- Rasters: Raster image processing with TIFF format support, metadata handling, and performance optimizations
+- Vectors: Vector graphics processing and manipulation
+- Includes comprehensive benchmarking and validation tools
+
 **Protocols** - Map service protocol implementations
 - WMS (Web Map Service) protocol support
 - Root protocol abstractions and utilities
 - Protocol-specific implementations for serving map tiles
 
-**Extensions** - Extension methods and utilities for the Planet ecosystem (currently empty structure)
+**Extensions** - Extension methods and utilities for the Planet ecosystem
+- Datastore: Data storage extensions and utilities
 
 ### Key Technologies
 - .NET 9.0 with nullable reference types enabled
@@ -83,6 +109,8 @@ The Planet solution follows a modular architecture with these main components:
 - PowerShell scripts for automation
 - Sass/SCSS for styling with Tabler UI framework
 - NPM for frontend asset management
+- Graphics processing with TIFF format support and performance benchmarking
+- Geospatial data handling with multiple format support (MBTiles, GeoPackages, GeoTIFF, Shapefiles)
 
 ### Database Context
 - Portal uses `PlanetDbContext` with SQLite connection
@@ -110,14 +138,15 @@ The Planet solution follows a modular architecture with these main components:
 - **Portal/src/Persistence**: Entity Framework data access with SQLite
 - **Engine/src/Console**: Console application for tile processing operations
 - **Engine/src/Domain**: Engine domain logic
-- **Spatial/src/Root**: Core spatial data types and coordinate systems
+- **Graphics/Abstractions/src**: Core graphics interfaces and abstractions
+- **Graphics/Rasters/src/Root**: Raster image processing with TIFF support
+- **Graphics/Vectors/src/Root**: Vector graphics processing capabilities
+- **Spatial/src/Root**: Core spatial data types and coordinate systems (namespace: `Wangkanai.Spatial`)
 - **Spatial/src/MbTiles**: MBTiles format implementation
 - **Spatial/src/GeoPackages**: GeoPackage format support
-- **Spatial/src/GeoTiffs**: GeoTIFF format support
+- **Spatial/src/GeoTiffs**: GeoTIFF format support with Graphics.Rasters integration
+- **Spatial/src/ShapeFiles**: Shapefile format support
+- **Spatial/src/MtPkgs**: Map tile package format support
 - **Protocols/src/Root**: Protocol abstractions and WMS implementations
-- **Providers/Bing**: Bing Maps service integration
-- **Providers/Google**: Google Maps service integration
-
-## Memories
-
-- Claude Code now has access to MCP
+- **Providers/src/Root**: Map service provider implementations
+- **Extensions/Datastore/src**: Data storage extensions and utilities

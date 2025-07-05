@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\GeoTiffs\Wangkanai.Spatial.GeoTiffs.csproj" />
+    <ProjectReference Include="..\src\Root\Wangkanai.Spatial.csproj" />
+  </ItemGroup>
+
+</Project>

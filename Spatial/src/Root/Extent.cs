@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-namespace Wangkanai.Planet.Spatial;
+namespace Wangkanai.Spatial;
 
 /// <summary>Represents a rectangular extent with minimum and maximum X and Y coordinates.</summary>
 public readonly struct Extent
