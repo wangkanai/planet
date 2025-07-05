@@ -1,5 +1,7 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
+using System.Diagnostics;
+
 namespace Wangkanai.Spatial.Coordinates;
 
 public class MercatorTests
@@ -199,7 +201,9 @@ public class MercatorTests
 
 		// Act - Use reflection to test private Resolution method
 		var method = typeof(Mercator).GetMethod("Resolution", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-		var result = (double)method.Invoke(mercator, new object[] { zoom });
+		var methodResult = method?.Invoke(mercator, new object[] { zoom });
+		Assert.NotNull(methodResult);
+		var result = (double)methodResult!;
 
 		// Assert
 		var expected = baseResolution * expectedRatio;
