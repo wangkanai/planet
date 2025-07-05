@@ -8,24 +8,27 @@ public static class JpegValidator
 	/// <summary>Validates a JPEG raster image.</summary>
 	/// <param name="jpeg">The JPEG raster to validate.</param>
 	/// <returns>A validation result indicating if the image is valid and any errors.</returns>
-	public static JpegValidationResult Validate(IJpegRaster jpeg)
+	public static JpegValidationResult Validate(this IJpegRaster jpeg)
 	{
 		ArgumentNullException.ThrowIfNull(jpeg);
 
 		var result = new JpegValidationResult();
 
-		ValidateDimensions(jpeg, result);
-		ValidateQuality(jpeg, result);
-		ValidateColorModeAndSamples(jpeg, result);
-		ValidateBitsPerSample(jpeg, result);
-		ValidateCompressionRatio(jpeg, result);
-		ValidateEncodingConstraints(jpeg, result);
-		ValidateChromaSubsampling(jpeg, result);
+		jpeg.ValidateDimensions(result);
+		jpeg.ValidateQuality(result);
+		jpeg.ValidateColorModeAndSamples(result);
+		jpeg.ValidateBitsPerSample(result);
+		jpeg.ValidateCompressionRatio(result);
+		jpeg.ValidateEncodingConstraints(result);
+		jpeg.ValidateChromaSubsampling(result);
 
 		return result;
 	}
 
-	private static void ValidateDimensions(IJpegRaster jpeg, JpegValidationResult result)
+	/// <summary>Validates the dimensions of a JPEG raster image.</summary>
+	/// <param name="jpeg">The JPEG raster to validate.</param>
+	/// <param name="result">The validation result to add errors to.</param>
+	private static void ValidateDimensions(this IJpegRaster jpeg, JpegValidationResult result)
 	{
 		if (jpeg.Width <= 0)
 			result.AddError($"Invalid width: {jpeg.Width}. Width must be greater than 0.");
@@ -40,13 +43,19 @@ public static class JpegValidator
 			result.AddError($"Height exceeds maximum: {jpeg.Height} > {JpegConstants.MaxDimension}.");
 	}
 
-	private static void ValidateQuality(IJpegRaster jpeg, JpegValidationResult result)
+	/// <summary>Validates the quality setting of a JPEG raster image.</summary>
+	/// <param name="jpeg">The JPEG raster to validate.</param>
+	/// <param name="result">The validation result to add errors to.</param>
+	private static void ValidateQuality(this IJpegRaster jpeg, JpegValidationResult result)
 	{
 		if (jpeg.Quality < JpegConstants.MinQuality || jpeg.Quality > JpegConstants.MaxQuality)
 			result.AddError($"Invalid quality: {jpeg.Quality}. Quality must be between {JpegConstants.MinQuality} and {JpegConstants.MaxQuality}.");
 	}
 
-	private static void ValidateColorModeAndSamples(IJpegRaster jpeg, JpegValidationResult result)
+	/// <summary>Validates the color mode and samples per pixel of a JPEG raster image.</summary>
+	/// <param name="jpeg">The JPEG raster to validate.</param>
+	/// <param name="result">The validation result to add errors to.</param>
+	private static void ValidateColorModeAndSamples(this IJpegRaster jpeg, JpegValidationResult result)
 	{
 		var expectedSamples = jpeg.ColorMode switch
 		{
@@ -63,25 +72,37 @@ public static class JpegValidator
 			result.AddError($"Invalid samples per pixel: {jpeg.SamplesPerPixel}. Expected {expectedSamples} for {jpeg.ColorMode} color mode.");
 	}
 
-	private static void ValidateBitsPerSample(IJpegRaster jpeg, JpegValidationResult result)
+	/// <summary>Validates the bits per sample of a JPEG raster image.</summary>
+	/// <param name="jpeg">The JPEG raster to validate.</param>
+	/// <param name="result">The validation result to add errors to.</param>
+	private static void ValidateBitsPerSample(this IJpegRaster jpeg, JpegValidationResult result)
 	{
 		if (jpeg.BitsPerSample != JpegConstants.BitsPerSample)
 			result.AddError($"Invalid bits per sample: {jpeg.BitsPerSample}. JPEG supports only {JpegConstants.BitsPerSample} bits per sample.");
 	}
 
-	private static void ValidateCompressionRatio(IJpegRaster jpeg, JpegValidationResult result)
+	/// <summary>Validates the compression ratio of a JPEG raster image.</summary>
+	/// <param name="jpeg">The JPEG raster to validate.</param>
+	/// <param name="result">The validation result to add errors to.</param>
+	private static void ValidateCompressionRatio(this IJpegRaster jpeg, JpegValidationResult result)
 	{
 		if (jpeg.CompressionRatio <= 0)
 			result.AddError($"Invalid compression ratio: {jpeg.CompressionRatio}. Compression ratio must be greater than 0.");
 	}
 
-	private static void ValidateEncodingConstraints(IJpegRaster jpeg, JpegValidationResult result)
+	/// <summary>Validates the encoding constraints of a JPEG raster image.</summary>
+	/// <param name="jpeg">The JPEG raster to validate.</param>
+	/// <param name="result">The validation result to add errors to.</param>
+	private static void ValidateEncodingConstraints(this IJpegRaster jpeg, JpegValidationResult result)
 	{
 		if (jpeg.Encoding == JpegEncoding.Jpeg2000)
 			result.AddWarning("JPEG 2000 format has limited support in many applications.");
 	}
 
-	private static void ValidateChromaSubsampling(IJpegRaster jpeg, JpegValidationResult result)
+	/// <summary>Validates the chroma subsampling of a JPEG raster image.</summary>
+	/// <param name="jpeg">The JPEG raster to validate.</param>
+	/// <param name="result">The validation result to add errors to.</param>
+	private static void ValidateChromaSubsampling(this IJpegRaster jpeg, JpegValidationResult result)
 	{
 		if (jpeg.ColorMode == JpegColorMode.Grayscale && jpeg.ChromaSubsampling != JpegChromaSubsampling.None)
 			result.AddWarning("Chroma subsampling is not applicable for grayscale images.");
