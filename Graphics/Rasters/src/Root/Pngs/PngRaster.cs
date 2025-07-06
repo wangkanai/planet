@@ -8,12 +8,14 @@ public class PngRaster : IPngRaster
 	private PngColorType _colorType        = PngColorType.Truecolor;
 	private byte         _bitDepth         = 8;
 	private int          _compressionLevel = 6;
+	private int          _width            = 1;
+	private int          _height           = 1;
 
 	/// <summary>Initializes a new instance of the <see cref="PngRaster"/> class.</summary>
 	public PngRaster()
 	{
-		Width            = 1;
-		Height           = 1;
+		_width           = 1;
+		_height          = 1;
 		ColorType        = PngColorType.Truecolor;
 		BitDepth         = 8;
 		Compression      = PngCompression.Deflate;
@@ -25,36 +27,25 @@ public class PngRaster : IPngRaster
 	/// <summary>Initializes a new instance of the <see cref="PngRaster"/> class.</summary>
 	/// <param name="width">The width of the image in pixels.</param>
 	/// <param name="height">The height of the image in pixels.</param>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown when width or height exceeds PNG limits.</exception>
 	public PngRaster(int width, int height) : this()
 	{
-		// Clamp to valid range and check against PNG limits
-		var clampedWidth  = Math.Max((int)PngConstants.MinWidth, Math.Min(width, (int)PngConstants.MaxWidth));
-		var clampedHeight = Math.Max((int)PngConstants.MinHeight, Math.Min(height, (int)PngConstants.MaxHeight));
-		
-		// Validate against extremely large values that could cause memory issues
-		if (width != clampedWidth)
-			throw new ArgumentOutOfRangeException(nameof(width), width, $"Width must be between {PngConstants.MinWidth} and {PngConstants.MaxWidth}.");
-		
-		if (height != clampedHeight)
-			throw new ArgumentOutOfRangeException(nameof(height), height, $"Height must be between {PngConstants.MinHeight} and {PngConstants.MaxHeight}.");
-		
-		Width  = clampedWidth;
-		Height = clampedHeight;
+		// Silent clamping for constructor to maintain backward compatibility
+		_width  = Math.Clamp(width, (int)PngConstants.MinWidth, (int)PngConstants.MaxWidth);
+		_height = Math.Clamp(height, (int)PngConstants.MinHeight, (int)PngConstants.MaxHeight);
 	}
 
 	/// <summary>Gets or sets the width of the image in pixels.</summary>
 	public int Width
 	{
-		get;
-		set;
+		get => _width;
+		set => _width = Math.Clamp(value, (int)PngConstants.MinWidth, (int)PngConstants.MaxWidth);
 	}
 
 	/// <summary>Gets or sets the height of the image in pixels.</summary>
 	public int Height
 	{
-		get;
-		set;
+		get => _height;
+		set => _height = Math.Clamp(value, (int)PngConstants.MinHeight, (int)PngConstants.MaxHeight);
 	}
 
 	/// <summary>Gets or sets the PNG color type.</summary>
@@ -222,11 +213,11 @@ public class PngRaster : IPngRaster
 		{
 			BitDepth = ColorType switch
 			{
-				PngColorType.Grayscale          => 8,  // Default: 8-bit (supports 1,2,4,8,16)
-				PngColorType.Truecolor          => 8,  // Default: 8-bit per channel (supports 8,16)
-				PngColorType.IndexedColor       => 4,  // Default: 4-bit for 16 colors (supports 1,2,4,8)
-				PngColorType.GrayscaleWithAlpha => 8,  // Default: 8-bit per channel (supports 8,16)
-				PngColorType.TruecolorWithAlpha => 8,  // Default: 8-bit per channel (supports 8,16)
+				PngColorType.Grayscale          => 8,// Default: 8-bit (supports 1,2,4,8,16)
+				PngColorType.Truecolor          => 8,// Default: 8-bit per channel (supports 8,16)
+				PngColorType.IndexedColor       => 4,// Default: 4-bit for 16 colors (supports 1,2,4,8)
+				PngColorType.GrayscaleWithAlpha => 8,// Default: 8-bit per channel (supports 8,16)
+				PngColorType.TruecolorWithAlpha => 8,// Default: 8-bit per channel (supports 8,16)
 				_                               => 8
 			};
 		}
@@ -236,16 +227,18 @@ public class PngRaster : IPngRaster
 	/// <returns>True if the bit depth is valid for the color type, false otherwise.</returns>
 	private bool IsValidBitDepthForColorType()
 	{
-		var allowedBitDepths = ColorType switch
-		{
-			PngColorType.Grayscale          => PngConstants.BitDepths.Grayscale,
-			PngColorType.Truecolor          => PngConstants.BitDepths.Truecolor,
-			PngColorType.IndexedColor       => PngConstants.BitDepths.IndexedColor,
-			PngColorType.GrayscaleWithAlpha => PngConstants.BitDepths.GrayscaleWithAlpha,
-			PngColorType.TruecolorWithAlpha => PngConstants.BitDepths.TruecolorWithAlpha,
-			_                               => []
-		};
+		// Fast path for most common cases
+		if (BitDepth == 8) return true;// 8-bit is valid for all color types
 
-		return allowedBitDepths.Contains(BitDepth);
+		// Optimized validation using direct comparisons for better performance
+		return ColorType switch
+		{
+			PngColorType.Grayscale          => BitDepth is 1 or 2 or 4 or 8 or 16,
+			PngColorType.Truecolor          => BitDepth is 8 or 16,
+			PngColorType.IndexedColor       => BitDepth is 1 or 2 or 4 or 8,
+			PngColorType.GrayscaleWithAlpha => BitDepth is 8 or 16,
+			PngColorType.TruecolorWithAlpha => BitDepth is 8 or 16,
+			_                               => false
+		};
 	}
 }
