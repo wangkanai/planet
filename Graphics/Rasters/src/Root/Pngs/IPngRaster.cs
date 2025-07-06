@@ -6,91 +6,41 @@ namespace Wangkanai.Graphics.Rasters.Pngs;
 public interface IPngRaster : IRaster
 {
 	/// <summary>Gets or sets the PNG color type.</summary>
-	PngColorType ColorType
-	{
-		get;
-		set;
-	}
+	PngColorType ColorType { get; set; }
 
 	/// <summary>Gets or sets the bit depth per color component.</summary>
-	byte BitDepth
-	{
-		get;
-		set;
-	}
+	byte BitDepth { get; set; }
 
 	/// <summary>Gets or sets the compression method.</summary>
-	PngCompression Compression
-	{
-		get;
-		set;
-	}
+	PngCompression Compression { get; set; }
 
 	/// <summary>Gets or sets the filter method.</summary>
-	PngFilterMethod FilterMethod
-	{
-		get;
-		set;
-	}
+	PngFilterMethod FilterMethod { get; set; }
 
 	/// <summary>Gets or sets the interlace method.</summary>
-	PngInterlaceMethod InterlaceMethod
-	{
-		get;
-		set;
-	}
+	PngInterlaceMethod InterlaceMethod { get; set; }
 
 	/// <summary>Gets or sets a value indicating whether the image uses a palette.</summary>
-	bool UsesPalette
-	{
-		get;
-		set;
-	}
+	bool UsesPalette { get; set; }
 
 	/// <summary>Gets or sets a value indicating whether the image has transparency.</summary>
-	bool HasTransparency
-	{
-		get;
-		set;
-	}
+	bool HasTransparency { get; set; }
 
 	/// <summary>Gets or sets a value indicating whether the image has an alpha channel.</summary>
-	bool HasAlphaChannel
-	{
-		get;
-		set;
-	}
+	bool HasAlphaChannel { get; set; }
 
 	/// <summary>Gets the number of samples per pixel.</summary>
-	int SamplesPerPixel
-	{
-		get;
-	}
+	int SamplesPerPixel { get; }
 
-	/// <summary>Gets or sets the compression level (0-9, where 9 is maximum compression).</summary>
-	int CompressionLevel
-	{
-		get;
-		set;
-	}
+	/// <summary>Gets or sets the compression level (0-9, where 9 is the maximum compression).</summary>
+	int CompressionLevel { get; set; }
 
 	/// <summary>Gets the PNG metadata.</summary>
-	PngMetadata Metadata
-	{
-		get;
-	}
+	PngMetadata Metadata { get; }
 
 	/// <summary>Gets the palette data for indexed-color images.</summary>
-	byte[]? PaletteData
-	{
-		get;
-		set;
-	}
+	ReadOnlyMemory<byte> PaletteData { get; set; }
 
 	/// <summary>Gets or sets the transparency data.</summary>
-	byte[]? TransparencyData
-	{
-		get;
-		set;
-	}
+	ReadOnlyMemory<byte> TransparencyData { get; set; }
 }

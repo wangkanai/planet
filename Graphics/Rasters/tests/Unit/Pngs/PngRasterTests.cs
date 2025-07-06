@@ -242,11 +242,11 @@ public class PngRasterTests
 		var paletteData = new byte[] { 255, 0, 0, 0, 255, 0, 0, 0, 255 };// RGB triplets
 
 		// Act & Assert
-		png.PaletteData = null;
-		Assert.Null(png.PaletteData);
+		png.PaletteData = ReadOnlyMemory<byte>.Empty;
+		Assert.True(png.PaletteData.IsEmpty);
 
 		png.PaletteData = paletteData;
-		Assert.Equal(paletteData, png.PaletteData);
+		Assert.True(paletteData.AsSpan().SequenceEqual(png.PaletteData.Span));
 	}
 
 	[Fact]
@@ -257,11 +257,11 @@ public class PngRasterTests
 		var transparencyData = new byte[] { 255, 255 };// Grayscale transparency
 
 		// Act & Assert
-		png.TransparencyData = null;
-		Assert.Null(png.TransparencyData);
+		png.TransparencyData = ReadOnlyMemory<byte>.Empty;
+		Assert.True(png.TransparencyData.IsEmpty);
 
 		png.TransparencyData = transparencyData;
-		Assert.Equal(transparencyData, png.TransparencyData);
+		Assert.True(transparencyData.AsSpan().SequenceEqual(png.TransparencyData.Span));
 	}
 
 	[Fact]
@@ -277,8 +277,8 @@ public class PngRasterTests
 		png.Dispose();
 
 		// Assert
-		Assert.Null(png.PaletteData);
-		Assert.Null(png.TransparencyData);
+		Assert.True(png.PaletteData.IsEmpty);
+		Assert.True(png.TransparencyData.IsEmpty);
 		Assert.Empty(png.Metadata.CustomChunks);
 	}
 

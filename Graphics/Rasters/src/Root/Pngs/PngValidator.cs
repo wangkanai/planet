@@ -99,7 +99,7 @@ public static class PngValidator
 	{
 		if (png.ColorType == PngColorType.IndexedColor)
 		{
-			if (png.PaletteData == null || png.PaletteData.Length == 0)
+			if (png.PaletteData.IsEmpty)
 				result.AddError("Indexed-color images require palette data.");
 			else
 			{
@@ -116,7 +116,7 @@ public static class PngValidator
 					result.AddError($"Palette has too many entries: {paletteEntries}. Maximum allowed: 256.");
 			}
 		}
-		else if (png.PaletteData != null && png.PaletteData.Length > 0) result.AddWarning($"Palette data is present but not required for color type {png.ColorType}.");
+		else if (!png.PaletteData.IsEmpty) result.AddWarning($"Palette data is present but not required for color type {png.ColorType}.");
 	}
 
 	/// <summary>Validates the transparency data of a PNG raster image.</summary>
@@ -124,7 +124,7 @@ public static class PngValidator
 	/// <param name="result">The validation result to add errors to.</param>
 	public static void ValidateTransparencyData(this IPngRaster png, PngValidationResult result)
 	{
-		if (png.TransparencyData != null && png.TransparencyData.Length > 0)
+		if (!png.TransparencyData.IsEmpty)
 		{
 			switch (png.ColorType)
 			{
@@ -139,7 +139,7 @@ public static class PngValidator
 					break;
 
 				case PngColorType.IndexedColor:
-					if (png.PaletteData != null)
+					if (!png.PaletteData.IsEmpty)
 					{
 						var paletteEntries = png.PaletteData.Length / 3;
 						if (png.TransparencyData.Length > paletteEntries)
@@ -156,7 +156,7 @@ public static class PngValidator
 		}
 
 		// Validate HasTransparency flag consistency
-		var shouldHaveTransparency = png.TransparencyData != null && png.TransparencyData.Length > 0;
+		var shouldHaveTransparency = !png.TransparencyData.IsEmpty;
 		if (png.HasTransparency != shouldHaveTransparency)
 			result.AddWarning($"HasTransparency flag ({png.HasTransparency}) does not match actual transparency data presence ({shouldHaveTransparency}).");
 	}

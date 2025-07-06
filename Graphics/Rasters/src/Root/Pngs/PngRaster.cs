@@ -12,8 +12,6 @@ public class PngRaster : IPngRaster
 	/// <summary>Initializes a new instance of the <see cref="PngRaster"/> class.</summary>
 	public PngRaster()
 	{
-		Width            = 1;
-		Height           = 1;
 		ColorType        = PngColorType.Truecolor;
 		BitDepth         = 8;
 		Compression      = PngCompression.Deflate;
@@ -27,23 +25,15 @@ public class PngRaster : IPngRaster
 	/// <param name="height">The height of the image in pixels.</param>
 	public PngRaster(int width, int height) : this()
 	{
-		Width  = Math.Max(1, width);
-		Height = Math.Max(1, height);
+		Width  = Math.Clamp(width, (int)PngConstants.MinWidth, (int)PngConstants.MaxWidth);
+		Height = Math.Clamp(height, (int)PngConstants.MinHeight, (int)PngConstants.MaxHeight);
 	}
 
 	/// <summary>Gets or sets the width of the image in pixels.</summary>
-	public int Width
-	{
-		get;
-		set;
-	}
+	public int Width { get; set; } = 1;
 
 	/// <summary>Gets or sets the height of the image in pixels.</summary>
-	public int Height
-	{
-		get;
-		set;
-	}
+	public int Height { get; set; } = 1;
 
 	/// <summary>Gets or sets the PNG color type.</summary>
 	public PngColorType ColorType
@@ -64,46 +54,22 @@ public class PngRaster : IPngRaster
 	}
 
 	/// <summary>Gets or sets the compression method.</summary>
-	public PngCompression Compression
-	{
-		get;
-		set;
-	}
+	public PngCompression Compression { get; set; }
 
 	/// <summary>Gets or sets the filter method.</summary>
-	public PngFilterMethod FilterMethod
-	{
-		get;
-		set;
-	}
+	public PngFilterMethod FilterMethod { get; set; }
 
 	/// <summary>Gets or sets the interlace method.</summary>
-	public PngInterlaceMethod InterlaceMethod
-	{
-		get;
-		set;
-	}
+	public PngInterlaceMethod InterlaceMethod { get; set; }
 
 	/// <summary>Gets or sets a value indicating whether the image uses a palette.</summary>
-	public bool UsesPalette
-	{
-		get;
-		set;
-	}
+	public bool UsesPalette { get; set; }
 
 	/// <summary>Gets or sets a value indicating whether the image has transparency.</summary>
-	public bool HasTransparency
-	{
-		get;
-		set;
-	}
+	public bool HasTransparency { get; set; }
 
 	/// <summary>Gets or sets a value indicating whether the image has an alpha channel.</summary>
-	public bool HasAlphaChannel
-	{
-		get;
-		set;
-	}
+	public bool HasAlphaChannel { get; set; }
 
 	/// <summary>Gets the number of samples per pixel.</summary>
 	public int SamplesPerPixel => ColorType switch
@@ -116,7 +82,7 @@ public class PngRaster : IPngRaster
 		_                               => 1
 	};
 
-	/// <summary>Gets or sets the compression level (0-9, where 9 is maximum compression).</summary>
+	/// <summary>Gets or sets the compression level (0-9, where 9 is the maximum compression).</summary>
 	public int CompressionLevel
 	{
 		get => _compressionLevel;
@@ -124,34 +90,18 @@ public class PngRaster : IPngRaster
 	}
 
 	/// <summary>Gets the PNG metadata.</summary>
-	public PngMetadata Metadata
-	{
-		get;
-	} = new();
+	public PngMetadata Metadata { get; } = new();
 
 	/// <summary>Gets the palette data for indexed-color images.</summary>
-	public byte[]? PaletteData
-	{
-		get;
-		set;
-	}
+	public ReadOnlyMemory<byte> PaletteData { get; set; }
 
 	/// <summary>Gets or sets the transparency data.</summary>
-	public byte[]? TransparencyData
-	{
-		get;
-		set;
-	}
+	public ReadOnlyMemory<byte> TransparencyData { get; set; }
 
 	/// <summary>Validates the PNG raster image.</summary>
 	/// <returns>True if the image is valid, false otherwise.</returns>
 	public bool IsValid()
-	{
-		return Width > 0 && Width <= PngConstants.MaxWidth &&
-		       Height > 0 && Height <= PngConstants.MaxHeight &&
-		       IsValidBitDepthForColorType() &&
-		       CompressionLevel >= 0 && CompressionLevel <= 9;
-	}
+		=> Width > 0 && Height > 0 && IsValidBitDepthForColorType() && CompressionLevel is >= 0 and <= 9;
 
 	/// <summary>Gets the estimated file size in bytes.</summary>
 	/// <returns>The estimated file size.</returns>
@@ -160,24 +110,24 @@ public class PngRaster : IPngRaster
 		if (!IsValid())
 			return 0;
 
-		// Estimate based on uncompressed data with typical compression ratio
+		// Estimate based on uncompressed data with the typical compression ratio
 		var bytesPerPixel    = (SamplesPerPixel * BitDepth + 7) / 8;
 		var uncompressedSize = (long)Width * Height * bytesPerPixel;
 
 		// PNG typically achieves 30-70% compression ratio depending on content
 		var compressionRatio = CompressionLevel switch
 		{
-			0    => 1.0,// No compression
-			<= 3 => 0.7,// Low compression
-			<= 6 => 0.5,// Medium compression
-			_    => 0.3 // High compression
+			0    => 1.0, // No compression
+			<= 3 => 0.7, // Low compression
+			<= 6 => 0.5, // Medium compression
+			_    => 0.3  // High compression
 		};
 
 		var compressedDataSize = (long)(uncompressedSize * compressionRatio);
 
 		// Add overhead for PNG chunks and headers
 		var overhead = PngConstants.SignatureLength +
-		               100 +// IHDR, IEND and other critical chunks
+		               PngConstants.CriticalChunksOverhead +
 		               (Metadata.TextChunks.Count + Metadata.CompressedTextChunks.Count + Metadata.InternationalTextChunks.Count) * 50;
 
 		return compressedDataSize + overhead;
@@ -186,35 +136,24 @@ public class PngRaster : IPngRaster
 	/// <summary>Gets the color depth in bits per pixel.</summary>
 	/// <returns>The color depth.</returns>
 	public int GetColorDepth()
-	{
-		return SamplesPerPixel * BitDepth;
-	}
+		=> SamplesPerPixel * BitDepth;
 
-	/// <summary>Disposes of the PNG raster resources.</summary>
-	public void Dispose()
-	{
-		PaletteData      = null;
-		TransparencyData = null;
-		Metadata?.CustomChunks.Clear();
-		GC.SuppressFinalize(this);
-	}
-
-	/// <summary>Updates dependent properties when color type changes.</summary>
+	/// <summary>Updates dependent properties when the color type changes.</summary>
 	private void UpdateDependentProperties()
 	{
 		UsesPalette     = ColorType == PngColorType.IndexedColor;
 		HasAlphaChannel = ColorType is PngColorType.GrayscaleWithAlpha or PngColorType.TruecolorWithAlpha;
 
-		// Set appropriate bit depth for color type if current value is invalid
+		// Set the appropriate bit depth for the color type if the current value is invalid
 		if (!IsValidBitDepthForColorType())
 		{
 			BitDepth = ColorType switch
 			{
-				PngColorType.Grayscale          => 8,  // Default: 8-bit (supports 1,2,4,8,16)
-				PngColorType.Truecolor          => 8,  // Default: 8-bit per channel (supports 8,16)
-				PngColorType.IndexedColor       => 4,  // Default: 4-bit for 16 colors (supports 1,2,4,8)
-				PngColorType.GrayscaleWithAlpha => 8,  // Default: 8-bit per channel (supports 8,16)
-				PngColorType.TruecolorWithAlpha => 8,  // Default: 8-bit per channel (supports 8,16)
+				PngColorType.Grayscale          => 8, // Default: 8-bit (supports 1,2,4,8,16)
+				PngColorType.Truecolor          => 8, // Default: 8-bit per channel (supports 8,16)
+				PngColorType.IndexedColor       => 4, // Default: 4-bit for 16 colors (supports 1,2,4,8)
+				PngColorType.GrayscaleWithAlpha => 8, // Default: 8-bit per channel (supports 8,16)
+				PngColorType.TruecolorWithAlpha => 8, // Default: 8-bit per channel (supports 8,16)
 				_                               => 8
 			};
 		}
@@ -224,16 +163,28 @@ public class PngRaster : IPngRaster
 	/// <returns>True if the bit depth is valid for the color type, false otherwise.</returns>
 	private bool IsValidBitDepthForColorType()
 	{
-		var allowedBitDepths = ColorType switch
-		{
-			PngColorType.Grayscale          => PngConstants.BitDepths.Grayscale,
-			PngColorType.Truecolor          => PngConstants.BitDepths.Truecolor,
-			PngColorType.IndexedColor       => PngConstants.BitDepths.IndexedColor,
-			PngColorType.GrayscaleWithAlpha => PngConstants.BitDepths.GrayscaleWithAlpha,
-			PngColorType.TruecolorWithAlpha => PngConstants.BitDepths.TruecolorWithAlpha,
-			_                               => []
-		};
+		// Fast path for most common cases
+		if (BitDepth == 8)
+			return true; // 8-bit is valid for all color types
 
-		return allowedBitDepths.Contains(BitDepth);
+		// Optimized validation using direct comparisons for better performance
+		return ColorType switch
+		{
+			PngColorType.Grayscale          => BitDepth is 1 or 2 or 4 or 8 or 16, // Grayscale: 1=2 colors, 2=4 colors, 4=16 colors, 8=256 colors, 16=65536 colors
+			PngColorType.Truecolor          => BitDepth is 8 or 16,                // Truecolor RGB: 8=256 levels per channel, 16=65536 levels per channel
+			PngColorType.IndexedColor       => BitDepth is 1 or 2 or 4 or 8,       // Indexed color (palette): 1=2 entries, 2=4 entries, 4=16 entries, 8=256 entries
+			PngColorType.GrayscaleWithAlpha => BitDepth is 8 or 16,                // Grayscale + Alpha: 8=256 levels + alpha, 16=65536 levels + alpha
+			PngColorType.TruecolorWithAlpha => BitDepth is 8 or 16,                // Truecolor + Alpha: 8=256 levels per RGBA channel, 16=65536 levels per RGBA channel
+			_                               => false
+		};
+	}
+
+	/// <summary>Disposes of the PNG raster resources.</summary>
+	public void Dispose()
+	{
+		PaletteData      = ReadOnlyMemory<byte>.Empty;
+		TransparencyData = ReadOnlyMemory<byte>.Empty;
+		Metadata.CustomChunks.Clear();
+		GC.SuppressFinalize(this);
 	}
 }

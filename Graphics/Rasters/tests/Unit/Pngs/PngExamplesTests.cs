@@ -94,7 +94,7 @@ public class PngExamplesTests
 		Assert.Equal(PngColorType.IndexedColor, png.ColorType);
 		Assert.Equal(bitDepth, png.BitDepth);
 		Assert.True(png.UsesPalette);
-		Assert.NotNull(png.PaletteData);
+		Assert.False(png.PaletteData.IsEmpty);
 		Assert.Equal(6, png.CompressionLevel);
 		Assert.Equal(PngInterlaceMethod.None, png.InterlaceMethod);
 		Assert.True(png.IsValid());
@@ -126,8 +126,8 @@ public class PngExamplesTests
 		var expectedPaletteEntries = Math.Min(256, 1 << bitDepth);
 		var expectedPaletteSize    = expectedPaletteEntries * 3;// RGB triplets
 
-		Assert.NotNull(png.PaletteData);
-		Assert.Equal(expectedPaletteSize, png.PaletteData!.Length);
+		Assert.False(png.PaletteData.IsEmpty);
+		Assert.Equal(expectedPaletteSize, png.PaletteData.Length);
 	}
 
 	[Fact]
@@ -137,18 +137,19 @@ public class PngExamplesTests
 		var png = PngExamples.CreateIndexedColor(100, 100, 8);
 
 		// Assert
-		Assert.NotNull(png.PaletteData);
-		Assert.Equal(768, png.PaletteData!.Length);// 256 * 3
+		Assert.False(png.PaletteData.IsEmpty);
+		Assert.Equal(768, png.PaletteData.Length);// 256 * 3
 
+		var palette = png.PaletteData.Span;
 		// Check first entry (should be black: 0, 0, 0)
-		Assert.Equal(0, png.PaletteData[0]);
-		Assert.Equal(0, png.PaletteData[1]);
-		Assert.Equal(0, png.PaletteData[2]);
+		Assert.Equal(0, palette[0]);
+		Assert.Equal(0, palette[1]);
+		Assert.Equal(0, palette[2]);
 
 		// Check last entry (should be white: 255, 255, 255)
-		Assert.Equal(255, png.PaletteData[765]);
-		Assert.Equal(255, png.PaletteData[766]);
-		Assert.Equal(255, png.PaletteData[767]);
+		Assert.Equal(255, palette[765]);
+		Assert.Equal(255, palette[766]);
+		Assert.Equal(255, palette[767]);
 	}
 
 	[Theory]

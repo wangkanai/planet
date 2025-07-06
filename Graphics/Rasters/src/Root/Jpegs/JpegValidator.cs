@@ -63,10 +63,10 @@ public static class JpegValidator
 		var expectedSamples = jpeg.ColorMode switch
 		{
 			JpegColorMode.Grayscale => 1,
-			JpegColorMode.Rgb => 3,
-			JpegColorMode.YCbCr => 3,
-			JpegColorMode.Cmyk => 4,
-			_ => 0
+			JpegColorMode.Rgb       => 3,
+			JpegColorMode.YCbCr     => 3,
+			JpegColorMode.Cmyk      => 4,
+			_                       => 0
 		};
 
 		if (expectedSamples == 0)
