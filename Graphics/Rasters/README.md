@@ -22,8 +22,22 @@ The library supports multiple raster image formats through a unified abstraction
 
 *All formats work through the same unified API, providing consistent operations regardless of the underlying image format.*
 
-> 📋 **GitHub Issue Reference**: [#50 - Raster image manipulation library](https://github.com/wangkanai/planet/issues/50)  
-> **Status**: ✅ **Implemented** - Universal image rasterization library with complete TIFF and JPEG format implementations
+## Related GitHub Issues
+
+This universal raster image library addresses the following GitHub issues:
+
+> 📋 **Core Issues**
+> - [#49 - General raster image manipulation capabilities](https://github.com/wangkanai/planet/issues/49)
+> - [#50 - Raster image manipulation library](https://github.com/wangkanai/planet/issues/50)  
+> 
+> 📋 **Raster Image Format Support**
+> - [#53 - JPEG specifications and support](https://github.com/wangkanai/planet/issues/53)
+> - [#54 - TIFF specifications and support](https://github.com/wangkanai/planet/issues/54)
+> - [#58 - PNG specifications support](https://github.com/wangkanai/planet/issues/58)
+> - [#59 - WebP specifications support](https://github.com/wangkanai/planet/issues/59)
+> - [#60 - GeoTIFF specifications support](https://github.com/wangkanai/planet/issues/60)
+> 
+> **Status**: ✅ **Core Implementation Complete** - Universal raster library with complete TIFF and JPEG format implementations. Additional formats (PNG, WebP) are planned for future releases.
 
 ## Universal Image Processing Capabilities
 
