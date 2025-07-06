@@ -63,7 +63,7 @@ resharper_align_multiline_expression                                  =true
 resharper_align_multline_type_parameter_constrains                    =true
 resharper_align_multiline_array_and_object_initializer                =true
 resharper_enforce_line_ending_style                                   =true
-resharper_csharp_max_line_length                                      =300
+resharper_csharp_max_line_length                                      =500
 
 # ReSharper inspection severities
 resharper_arrange_redundant_parentheses_highlighting                  =hint
@@ -97,14 +97,17 @@ generated_code      =true
 ij_formatter_enabled=false
 
 [*.cs]
-dotnet_sort_system_directives_first                =true
-dotnet_separate_import_directive_groups            =true
-resharper_sort_system_directives_first             =true
-ij_any_align_multiline_array_initializer_expression=true
-resharper_csharp_space_before_trailing_comment     =false
+dotnet_sort_system_directives_first                          =true
+dotnet_separate_import_directive_groups                      =true
+resharper_sort_system_directives_first                       =true
+ij_any_align_multiline_array_initializer_expression          =true
+resharper_csharp_space_before_trailing_comment               =true
+resharper_csharp_place_simple_property_pattern_on_single_line=true
+resharper_csharp_place_property_on_single_line               =always
+resharper_place_expr_property_on_single_line                 =always
 
 [*.{cs, cpp, h}]
-file_header_template=Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
+file_header_template=Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.Apache License, Version 2.0
 
 [*.{html,cshtml,razor}]
 indent_size                                                           =3
