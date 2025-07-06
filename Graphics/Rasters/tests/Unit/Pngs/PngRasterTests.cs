@@ -246,7 +246,7 @@ public class PngRasterTests
 		Assert.True(png.PaletteData.IsEmpty);
 
 		png.PaletteData = paletteData;
-		Assert.Equal(paletteData, png.PaletteData);
+		Assert.True(paletteData.SequenceEqual(png.PaletteData.Span));
 	}
 
 	[Fact]
