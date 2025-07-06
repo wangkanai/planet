@@ -50,14 +50,22 @@ public class JpegRaster : IJpegRaster
 		get
 		{
 			var size = 0L;
-			if (!Metadata.ExifData.IsEmpty)
-				size += Metadata.ExifData.Length;
-			if (!Metadata.IccProfile.IsEmpty)
+			
+			// Add ICC profile size
+			if (Metadata.IccProfile != null)
 				size += Metadata.IccProfile.Length;
-			if (!Metadata.IptcData.IsEmpty)
-				size += Metadata.IptcData.Length;
-			if (!Metadata.XmpData.IsEmpty)
-				size += Metadata.XmpData.Length;
+			
+			// Add custom EXIF tags size
+			size += Metadata.CustomExifTags.Count * 16; // Estimate 16 bytes per tag
+			
+			// Add IPTC tags size
+			foreach (var tag in Metadata.IptcTags.Values)
+				size += System.Text.Encoding.UTF8.GetByteCount(tag);
+			
+			// Add XMP tags size
+			foreach (var tag in Metadata.XmpTags.Values)
+				size += System.Text.Encoding.UTF8.GetByteCount(tag);
+			
 			return size;
 		}
 	}
@@ -174,13 +182,13 @@ public class JpegRaster : IJpegRaster
 		{
 			// For large metadata, clear in stages
 			await Task.Yield();
-			Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
+			Metadata.IccProfile = null;
 			await Task.Yield();
-			Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
+			Metadata.CustomExifTags.Clear();
 			await Task.Yield();
-			Metadata.IptcData = ReadOnlyMemory<byte>.Empty;
+			Metadata.IptcTags.Clear();
 			await Task.Yield();
-			Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+			Metadata.XmpTags.Clear();
 		}
 		else
 		{
@@ -193,10 +201,10 @@ public class JpegRaster : IJpegRaster
 	{
 		if (disposing)
 		{
-			Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
-			Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
-			Metadata.IptcData = ReadOnlyMemory<byte>.Empty;
-			Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+			Metadata.IccProfile = null;
+			Metadata.CustomExifTags.Clear();
+			Metadata.IptcTags.Clear();
+			Metadata.XmpTags.Clear();
 		}
 	}
 }

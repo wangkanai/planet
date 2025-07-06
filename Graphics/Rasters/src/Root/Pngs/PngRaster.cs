@@ -124,7 +124,7 @@ public class PngRaster : IPngRaster
 				size += compressedTextChunk.Length;
 			
 			foreach (var internationalTextChunk in Metadata.InternationalTextChunks.Values)
-				size += System.Text.Encoding.UTF8.GetByteCount(internationalTextChunk);
+				size += System.Text.Encoding.UTF8.GetByteCount(internationalTextChunk.text);
 			
 			// Add custom chunk sizes
 			foreach (var customChunk in Metadata.CustomChunks.Values)

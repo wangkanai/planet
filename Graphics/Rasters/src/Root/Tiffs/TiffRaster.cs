@@ -54,22 +54,23 @@ public class TiffRaster : ITiffRaster
 		get
 		{
 			var size = 0L;
-			if (!Metadata.ExifData.IsEmpty)
-				size += Metadata.ExifData.Length;
-			if (!Metadata.IccProfile.IsEmpty)
-				size += Metadata.IccProfile.Length;
-			if (!Metadata.XmpData.IsEmpty)
-				size += Metadata.XmpData.Length;
-			if (!Metadata.GeoKeyDirectory.IsEmpty)
-				size += Metadata.GeoKeyDirectory.Length;
-			if (!Metadata.GeoDoubleParams.IsEmpty)
-				size += Metadata.GeoDoubleParams.Length;
-			if (!Metadata.GeoAsciiParams.IsEmpty)
-				size += Metadata.GeoAsciiParams.Length;
 			
-			// Add estimated size of image strips/tiles data if stored in metadata
-			foreach (var strip in Metadata.StripOffsets)
-				size += Metadata.StripByteCounts.ElementAtOrDefault(strip.Key);
+			// Add string metadata sizes
+			if (!string.IsNullOrEmpty(Metadata.ImageDescription))
+				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.ImageDescription);
+			if (!string.IsNullOrEmpty(Metadata.Make))
+				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Make);
+			if (!string.IsNullOrEmpty(Metadata.Model))
+				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Model);
+			if (!string.IsNullOrEmpty(Metadata.Software))
+				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Software);
+			if (!string.IsNullOrEmpty(Metadata.Copyright))
+				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Copyright);
+			if (!string.IsNullOrEmpty(Metadata.Artist))
+				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Artist);
+			
+			// Add custom tags size
+			size += Metadata.CustomTags.Count * 16; // Estimate 16 bytes per tag
 			
 			return size;
 		}
@@ -177,24 +178,23 @@ public class TiffRaster : ITiffRaster
 	{
 		if (HasLargeMetadata)
 		{
-			// For large TIFF metadata (common with GeoTIFF), clear in stages
+			// For large TIFF metadata, clear in stages
 			await Task.Yield();
-			Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
+			Metadata.ImageDescription = null;
 			await Task.Yield();
-			Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
+			Metadata.Make = null;
 			await Task.Yield();
-			Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+			Metadata.Model = null;
 			await Task.Yield();
-			Metadata.GeoKeyDirectory = ReadOnlyMemory<byte>.Empty;
+			Metadata.Software = null;
 			await Task.Yield();
-			Metadata.GeoDoubleParams = ReadOnlyMemory<byte>.Empty;
+			Metadata.Copyright = null;
 			await Task.Yield();
-			Metadata.GeoAsciiParams = ReadOnlyMemory<byte>.Empty;
+			Metadata.Artist = null;
 			await Task.Yield();
 			
-			// Clear strip data in batches for large TIFF files
-			Metadata.StripOffsets.Clear();
-			Metadata.StripByteCounts.Clear();
+			// Clear custom tags
+			Metadata.CustomTags.Clear();
 			_bitsPerSampleArray = null;
 			
 			// Suggest GC for very large TIFF metadata
@@ -218,14 +218,13 @@ public class TiffRaster : ITiffRaster
 		{
 			// Free managed resources if any
 			_bitsPerSampleArray = null;
-			Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
-			Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
-			Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
-			Metadata.GeoKeyDirectory = ReadOnlyMemory<byte>.Empty;
-			Metadata.GeoDoubleParams = ReadOnlyMemory<byte>.Empty;
-			Metadata.GeoAsciiParams = ReadOnlyMemory<byte>.Empty;
-			Metadata.StripOffsets.Clear();
-			Metadata.StripByteCounts.Clear();
+			Metadata.ImageDescription = null;
+			Metadata.Make = null;
+			Metadata.Model = null;
+			Metadata.Software = null;
+			Metadata.Copyright = null;
+			Metadata.Artist = null;
+			Metadata.CustomTags.Clear();
 		}
 
 		// Free unmanaged resources if any
