@@ -235,7 +235,7 @@ public static class WebPExamples
 	{
 		var webp = new WebPRaster(width, height);
 
-		// Choose format based on image size for optimal performance
+		// Choose a format based on image size for optimal performance
 		if (width * height > 4_000_000) // 4 megapixels
 		{
 			webp.ConfigureLossy(70);   // Lower quality for very large images
