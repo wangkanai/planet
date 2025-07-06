@@ -20,7 +20,6 @@ public class PngRaster : IPngRaster
 		FilterMethod = PngFilterMethod.Standard;
 		InterlaceMethod = PngInterlaceMethod.None;
 		CompressionLevel = 6;
-		Metadata = new PngMetadata();
 	}
 
 	/// <summary>Initializes a new instance of the <see cref="PngRaster"/> class.</summary>
@@ -92,15 +91,8 @@ public class PngRaster : IPngRaster
 		set => _compressionLevel = Math.Clamp(value, 0, 9);
 	}
 
-	/// <summary>Gets or sets the PNG metadata.</summary>
-	public PngMetadata Metadata { get; set; }
-
-	/// <summary>Gets or sets the PNG metadata (base interface implementation).</summary>
-	IRasterMetadata IRaster.Metadata
-	{
-		get => throw new NotImplementedException("Use PngMetadata property instead.");
-		set => throw new NotImplementedException("Use PngMetadata property instead.");
-	}
+	/// <summary>Gets the PNG metadata.</summary>
+	public PngMetadata Metadata { get; } = new();
 
 	/// <summary>Gets the palette data for indexed-color images.</summary>
 	public byte[]? PaletteData { get; set; }
