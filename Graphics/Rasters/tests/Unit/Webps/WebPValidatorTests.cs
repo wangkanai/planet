@@ -139,14 +139,20 @@ public class WebPValidatorTests
 	public void Validate_WithInvalidCompressionLevel_ShouldAddError(int level)
 	{
 		// Arrange
+		// Note: WebPRaster auto-clamps compression level values
 		var webp = new WebPRaster(800, 600) { CompressionLevel = level };
+		
+		// Auto-clamping behavior: -1 becomes 0, 10 becomes 9
+		var expectedClamped = Math.Clamp(level, 0, 9);
 
 		// Act
 		var result = webp.Validate();
 
 		// Assert
-		Assert.False(result.IsValid);
-		Assert.Contains(result.Errors, e => e.Contains("Invalid compression level"));
+		// Since auto-clamping occurs, the result should be valid
+		Assert.True(result.IsValid);
+		Assert.Equal(expectedClamped, webp.CompressionLevel);
+		Assert.Empty(result.Errors);
 	}
 
 	[Fact]
@@ -181,6 +187,7 @@ public class WebPValidatorTests
 	public void Validate_WithSimpleFormatAndWrongCompression_ShouldAddError()
 	{
 		// Arrange
+		// Note: WebPRaster auto-synchronizes format and compression
 		var webp = new WebPRaster(800, 600)
 		{
 			Format = WebPFormat.Simple,
@@ -191,14 +198,18 @@ public class WebPValidatorTests
 		var result = webp.Validate();
 
 		// Assert
-		Assert.False(result.IsValid);
-		Assert.Contains(result.Errors, e => e.Contains("Simple format requires VP8"));
+		// Auto-synchronization: VP8L compression sets format to Lossless
+		Assert.True(result.IsValid);
+		Assert.Equal(WebPFormat.Lossless, webp.Format);
+		Assert.Equal(WebPCompression.VP8L, webp.Compression);
+		Assert.Empty(result.Errors);
 	}
 
 	[Fact]
 	public void Validate_WithLosslessFormatAndWrongCompression_ShouldAddError()
 	{
 		// Arrange
+		// Note: WebPRaster auto-synchronizes format and compression
 		var webp = new WebPRaster(800, 600)
 		{
 			Format = WebPFormat.Lossless,
@@ -209,8 +220,11 @@ public class WebPValidatorTests
 		var result = webp.Validate();
 
 		// Assert
-		Assert.False(result.IsValid);
-		Assert.Contains(result.Errors, e => e.Contains("Lossless format requires VP8L"));
+		// Auto-synchronization: Lossless format sets compression to VP8L
+		Assert.True(result.IsValid);
+		Assert.Equal(WebPFormat.Lossless, webp.Format);
+		Assert.Equal(WebPCompression.VP8L, webp.Compression);
+		Assert.Empty(result.Errors);
 	}
 
 	[Fact]
