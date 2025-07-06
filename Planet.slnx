@@ -65,6 +65,9 @@
     <Project Path="Graphics\Vectors\src\Root\Wangkanai.Graphics.Vectors.csproj" Type="Classic C#" />
     <File Path="Graphics\Vectors\README.md" />
   </Folder>
+  <Folder Name="/Graphics/Vectors/benchmark/">
+    <Project Path="Graphics\Vectors\benchmark\Wangkanai.Graphics.Vectors.Benchmark.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Graphics/Vectors/tests/">
     <Project Path="Graphics\Vectors\tests\Unit\Wangkanai.Graphics.Vectors.UnitTests.csproj" Type="Classic C#" />
   </Folder>

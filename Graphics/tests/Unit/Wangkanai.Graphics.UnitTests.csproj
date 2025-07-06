@@ -1,8 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <Folder Include="Abstractions\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Abstractions\src\Wangkanai.Graphics.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Rasters\src\Root\Wangkanai.Graphics.Rasters.csproj" />
   </ItemGroup>
 </Project>
