@@ -2,5 +2,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Abstractions\src\Wangkanai.Graphics.Abstractions.csproj" />
     <ProjectReference Include="..\..\Rasters\src\Root\Wangkanai.Graphics.Rasters.csproj" />
+    <ProjectReference Include="..\..\Vectors\src\Root\Wangkanai.Graphics.Vectors.csproj" />
   </ItemGroup>
 </Project>
