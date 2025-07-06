@@ -9,10 +9,16 @@ public class PngValidationResult
 	public bool IsValid => Errors.Count == 0;
 
 	/// <summary>Gets the list of validation errors.</summary>
-	public List<string> Errors { get; } = [];
+	public List<string> Errors
+	{
+		get;
+	} = [];
 
 	/// <summary>Gets the list of validation warnings.</summary>
-	public List<string> Warnings { get; } = [];
+	public List<string> Warnings
+	{
+		get;
+	} = [];
 
 	/// <summary>Adds an error to the validation result.</summary>
 	/// <param name="error">The error message to add.</param>

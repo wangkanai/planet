@@ -124,8 +124,8 @@ public class PngExamplesTests
 
 		// Assert
 		var expectedPaletteEntries = Math.Min(256, 1 << bitDepth);
-		var expectedPaletteSize = expectedPaletteEntries * 3; // RGB triplets
-		
+		var expectedPaletteSize    = expectedPaletteEntries * 3;// RGB triplets
+
 		Assert.NotNull(png.PaletteData);
 		Assert.Equal(expectedPaletteSize, png.PaletteData!.Length);
 	}
@@ -138,7 +138,7 @@ public class PngExamplesTests
 
 		// Assert
 		Assert.NotNull(png.PaletteData);
-		Assert.Equal(768, png.PaletteData!.Length); // 256 * 3
+		Assert.Equal(768, png.PaletteData!.Length);// 256 * 3
 
 		// Check first entry (should be black: 0, 0, 0)
 		Assert.Equal(0, png.PaletteData[0]);
@@ -163,12 +163,12 @@ public class PngExamplesTests
 		Assert.Equal(width, png.Width);
 		Assert.Equal(height, png.Height);
 		Assert.Equal(PngColorType.TruecolorWithAlpha, png.ColorType);
-		Assert.Equal(16, png.BitDepth); // High quality
+		Assert.Equal(16, png.BitDepth);// High quality
 		Assert.True(png.HasAlphaChannel);
-		Assert.Equal(9, png.CompressionLevel); // Maximum compression
+		Assert.Equal(9, png.CompressionLevel);// Maximum compression
 		Assert.Equal(PngInterlaceMethod.None, png.InterlaceMethod);
 		Assert.True(png.IsValid());
-		
+
 		// Check metadata
 		Assert.Equal("Wangkanai Graphics Rasters", png.Metadata.Software);
 		Assert.NotNull(png.Metadata.Created);
@@ -186,7 +186,7 @@ public class PngExamplesTests
 		// Assert
 		Assert.Equal(width, png.Width);
 		Assert.Equal(height, png.Height);
-		
+
 		if (useAlpha)
 		{
 			Assert.Equal(PngColorType.TruecolorWithAlpha, png.ColorType);
@@ -197,15 +197,15 @@ public class PngExamplesTests
 			Assert.Equal(PngColorType.Truecolor, png.ColorType);
 			Assert.False(png.HasAlphaChannel);
 		}
-		
-		Assert.Equal(8, png.BitDepth); // Standard web bit depth
-		Assert.Equal(6, png.CompressionLevel); // Balanced compression
-		Assert.Equal(PngInterlaceMethod.Adam7, png.InterlaceMethod); // Progressive
+
+		Assert.Equal(8, png.BitDepth);                              // Standard web bit depth
+		Assert.Equal(6, png.CompressionLevel);                      // Balanced compression
+		Assert.Equal(PngInterlaceMethod.Adam7, png.InterlaceMethod);// Progressive
 		Assert.True(png.IsValid());
-		
+
 		// Check web-appropriate metadata
 		Assert.Equal("Wangkanai Graphics Rasters", png.Metadata.Software);
-		Assert.Equal((byte)0, png.Metadata.SrgbRenderingIntent); // Perceptual rendering
+		Assert.Equal((byte)0, png.Metadata.SrgbRenderingIntent);// Perceptual rendering
 	}
 
 	[Fact]
@@ -224,17 +224,17 @@ public class PngExamplesTests
 	{
 		// Arrange & Act
 		var examples = new List<PngRaster>
-		{
-			PngExamples.CreateBasicTruecolor(100, 100),
-			PngExamples.CreateTruecolorWithAlpha(100, 100),
-			PngExamples.CreateGrayscale(100, 100),
-			PngExamples.CreateGrayscale(100, 100, 16),
-			PngExamples.CreateIndexedColor(100, 100),
-			PngExamples.CreateIndexedColor(100, 100, 4),
-			PngExamples.CreateHighQuality(100, 100),
-			PngExamples.CreateWebOptimized(100, 100, true),
-			PngExamples.CreateWebOptimized(100, 100, false)
-		};
+		               {
+			               PngExamples.CreateBasicTruecolor(100, 100),
+			               PngExamples.CreateTruecolorWithAlpha(100, 100),
+			               PngExamples.CreateGrayscale(100, 100),
+			               PngExamples.CreateGrayscale(100, 100, 16),
+			               PngExamples.CreateIndexedColor(100, 100),
+			               PngExamples.CreateIndexedColor(100, 100, 4),
+			               PngExamples.CreateHighQuality(100, 100),
+			               PngExamples.CreateWebOptimized(100, 100, true),
+			               PngExamples.CreateWebOptimized(100, 100, false)
+		               };
 
 		// Assert
 		foreach (var example in examples)

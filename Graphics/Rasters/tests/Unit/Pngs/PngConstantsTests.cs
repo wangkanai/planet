@@ -15,13 +15,13 @@ public class PngConstantsTests
 		// Assert
 		Assert.Equal(8, signature.Length);
 		Assert.Equal(0x89, signature[0]);
-		Assert.Equal(0x50, signature[1]); // 'P'
-		Assert.Equal(0x4E, signature[2]); // 'N'
-		Assert.Equal(0x47, signature[3]); // 'G'
-		Assert.Equal(0x0D, signature[4]); // \r
-		Assert.Equal(0x0A, signature[5]); // \n
-		Assert.Equal(0x1A, signature[6]); // \x1A
-		Assert.Equal(0x0A, signature[7]); // \n
+		Assert.Equal(0x50, signature[1]);// 'P'
+		Assert.Equal(0x4E, signature[2]);// 'N'
+		Assert.Equal(0x47, signature[3]);// 'G'
+		Assert.Equal(0x0D, signature[4]);// \r
+		Assert.Equal(0x0A, signature[5]);// \n
+		Assert.Equal(0x1A, signature[6]);// \x1A
+		Assert.Equal(0x0A, signature[7]);// \n
 	}
 
 	[Fact]

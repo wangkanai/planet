@@ -11,13 +11,13 @@ public class PngValidatorTests
 	{
 		// Arrange
 		var png = new PngRaster(800, 600)
-		{
-			ColorType = PngColorType.Truecolor,
-			BitDepth = 8,
-			Compression = PngCompression.Deflate,
-			FilterMethod = PngFilterMethod.Standard,
-			CompressionLevel = 6
-		};
+		          {
+			          ColorType        = PngColorType.Truecolor,
+			          BitDepth         = 8,
+			          Compression      = PngCompression.Deflate,
+			          FilterMethod     = PngFilterMethod.Standard,
+			          CompressionLevel = 6
+		          };
 
 		// Act
 		var result = png.Validate();
@@ -44,7 +44,7 @@ public class PngValidatorTests
 	public void ValidateDimensions_WithInvalidWidth_ShouldAddError(int width)
 	{
 		// Arrange
-		var png = new PngRaster { Width = width, Height = 600 };
+		var png    = new PngRaster { Width = width, Height = 600 };
 		var result = new PngValidationResult();
 
 		// Act
@@ -62,7 +62,7 @@ public class PngValidatorTests
 	public void ValidateDimensions_WithInvalidHeight_ShouldAddError(int height)
 	{
 		// Arrange
-		var png = new PngRaster { Width = 800, Height = height };
+		var png    = new PngRaster { Width = 800, Height = height };
 		var result = new PngValidationResult();
 
 		// Act
@@ -77,7 +77,7 @@ public class PngValidatorTests
 	public void ValidateDimensions_WithExcessiveWidth_ShouldAddError()
 	{
 		// Arrange
-		var png = new PngRaster { Width = int.MaxValue, Height = 600 };
+		var png    = new PngRaster { Width = int.MaxValue, Height = 600 };
 		var result = new PngValidationResult();
 
 		// Act
@@ -85,14 +85,14 @@ public class PngValidatorTests
 
 		// Assert
 		// Since MaxWidth equals int.MaxValue, we test with IsValid validation instead
-		Assert.True(result.IsValid); // This should actually be valid
+		Assert.True(result.IsValid);// This should actually be valid
 	}
 
 	[Fact]
 	public void ValidateDimensions_WithExcessiveHeight_ShouldAddError()
 	{
 		// Arrange
-		var png = new PngRaster { Width = 800, Height = int.MaxValue };
+		var png    = new PngRaster { Width = 800, Height = int.MaxValue };
 		var result = new PngValidationResult();
 
 		// Act
@@ -100,7 +100,7 @@ public class PngValidatorTests
 
 		// Assert
 		// Since MaxHeight equals int.MaxValue, we test with IsValid validation instead
-		Assert.True(result.IsValid); // This should actually be valid
+		Assert.True(result.IsValid);// This should actually be valid
 	}
 
 	[Theory]
@@ -119,7 +119,7 @@ public class PngValidatorTests
 	public void ValidateColorTypeAndBitDepth_ShouldValidateCorrectly(PngColorType colorType, byte bitDepth, bool shouldBeValid)
 	{
 		// Arrange
-		var png = new PngRaster { ColorType = colorType, BitDepth = bitDepth };
+		var png    = new PngRaster { ColorType = colorType, BitDepth = bitDepth };
 		var result = new PngValidationResult();
 
 		// Act
@@ -127,9 +127,7 @@ public class PngValidatorTests
 
 		// Assert
 		if (shouldBeValid)
-		{
 			Assert.True(result.IsValid);
-		}
 		else
 		{
 			Assert.False(result.IsValid);
@@ -141,12 +139,12 @@ public class PngValidatorTests
 	public void ValidateColorTypeAndBitDepth_WithIndexedColorWithoutPalette_ShouldAddError()
 	{
 		// Arrange
-		var png = new PngRaster 
-		{ 
-			ColorType = PngColorType.IndexedColor, 
-			BitDepth = 8,
-			UsesPalette = false 
-		};
+		var png = new PngRaster
+		          {
+			          ColorType   = PngColorType.IndexedColor,
+			          BitDepth    = 8,
+			          UsesPalette = false
+		          };
 		var result = new PngValidationResult();
 
 		// Act
@@ -163,19 +161,19 @@ public class PngValidatorTests
 	public void ValidateColorTypeAndBitDepth_WithAlphaTypeWithoutAlphaFlag_ShouldAddWarning(PngColorType colorType, bool hasAlpha)
 	{
 		// Arrange
-		var png = new PngRaster 
-		{ 
-			ColorType = colorType, 
-			BitDepth = 8,
-			HasAlphaChannel = hasAlpha 
-		};
+		var png = new PngRaster
+		          {
+			          ColorType       = colorType,
+			          BitDepth        = 8,
+			          HasAlphaChannel = hasAlpha
+		          };
 		var result = new PngValidationResult();
 
 		// Act
 		png.ValidateColorTypeAndBitDepth(result);
 
 		// Assert
-		Assert.True(result.IsValid); // Warnings don't invalidate
+		Assert.True(result.IsValid);// Warnings don't invalidate
 		Assert.Contains(result.Warnings, w => w.Contains("should have alpha channel enabled"));
 	}
 
@@ -187,12 +185,12 @@ public class PngValidatorTests
 		// Arrange
 		var png = new PngRaster();
 		// Set level after construction to bypass automatic clamping
-		if (level != 6) // Skip if same as default
+		if (level != 6)// Skip if same as default
 		{
 			// For this test, we need to manually create the validation scenario
 			// since the setter clamps values automatically
 			var result = new PngValidationResult();
-			
+
 			// Manually validate the original invalid value
 			if (level < 0 || level > 9)
 				result.AddError($"Invalid compression level: {level}. Must be between 0 and 9.");
@@ -207,7 +205,7 @@ public class PngValidatorTests
 			png.CompressionLevel = level;
 			var result = new PngValidationResult();
 			png.ValidateCompressionSettings(result);
-			Assert.True(result.IsValid); // Should be valid due to clamping
+			Assert.True(result.IsValid);// Should be valid due to clamping
 		}
 	}
 
@@ -215,12 +213,12 @@ public class PngValidatorTests
 	public void ValidatePaletteRequirements_WithIndexedColorWithoutPalette_ShouldAddError()
 	{
 		// Arrange
-		var png = new PngRaster 
-		{ 
-			ColorType = PngColorType.IndexedColor,
-			BitDepth = 8,
-			PaletteData = null 
-		};
+		var png = new PngRaster
+		          {
+			          ColorType   = PngColorType.IndexedColor,
+			          BitDepth    = 8,
+			          PaletteData = null
+		          };
 		var result = new PngValidationResult();
 
 		// Act
@@ -235,12 +233,12 @@ public class PngValidatorTests
 	public void ValidatePaletteRequirements_WithIndexedColorWithEmptyPalette_ShouldAddError()
 	{
 		// Arrange
-		var png = new PngRaster 
-		{ 
-			ColorType = PngColorType.IndexedColor,
-			BitDepth = 8,
-			PaletteData = []
-		};
+		var png = new PngRaster
+		          {
+			          ColorType   = PngColorType.IndexedColor,
+			          BitDepth    = 8,
+			          PaletteData = []
+		          };
 		var result = new PngValidationResult();
 
 		// Act
@@ -255,12 +253,12 @@ public class PngValidatorTests
 	public void ValidatePaletteRequirements_WithInvalidPaletteLength_ShouldAddError()
 	{
 		// Arrange
-		var png = new PngRaster 
-		{ 
-			ColorType = PngColorType.IndexedColor,
-			BitDepth = 8,
-			PaletteData = new byte[] { 255, 0 } // Not multiple of 3
-		};
+		var png = new PngRaster
+		          {
+			          ColorType   = PngColorType.IndexedColor,
+			          BitDepth    = 8,
+			          PaletteData = new byte[] { 255, 0 }// Not multiple of 3
+		          };
 		var result = new PngValidationResult();
 
 		// Act
@@ -275,12 +273,12 @@ public class PngValidatorTests
 	public void ValidatePaletteRequirements_WithTooManyPaletteEntries_ShouldAddError()
 	{
 		// Arrange
-		var png = new PngRaster 
-		{ 
-			ColorType = PngColorType.IndexedColor,
-			BitDepth = 1, // Max 2 palette entries (2^1)
-			PaletteData = new byte[9] // 3 entries (9/3)
-		};
+		var png = new PngRaster
+		          {
+			          ColorType   = PngColorType.IndexedColor,
+			          BitDepth    = 1,         // Max 2 palette entries (2^1)
+			          PaletteData = new byte[9]// 3 entries (9/3)
+		          };
 		var result = new PngValidationResult();
 
 		// Act
@@ -295,34 +293,34 @@ public class PngValidatorTests
 	public void ValidatePaletteRequirements_WithPaletteForNonIndexedColor_ShouldAddWarning()
 	{
 		// Arrange
-		var png = new PngRaster 
-		{ 
-			ColorType = PngColorType.Truecolor,
-			PaletteData = new byte[] { 255, 0, 0, 0, 255, 0 }
-		};
+		var png = new PngRaster
+		          {
+			          ColorType   = PngColorType.Truecolor,
+			          PaletteData = new byte[] { 255, 0, 0, 0, 255, 0 }
+		          };
 		var result = new PngValidationResult();
 
 		// Act
 		png.ValidatePaletteRequirements(result);
 
 		// Assert
-		Assert.True(result.IsValid); // Warnings don't invalidate
+		Assert.True(result.IsValid);// Warnings don't invalidate
 		Assert.Contains(result.Warnings, w => w.Contains("not required"));
 	}
 
 	[Theory]
 	[InlineData(PngColorType.Grayscale, new byte[] { 255, 255 }, true)]
-	[InlineData(PngColorType.Grayscale, new byte[] { 255 }, false)] // Too short
+	[InlineData(PngColorType.Grayscale, new byte[] { 255 }, false)]// Too short
 	[InlineData(PngColorType.Truecolor, new byte[] { 255, 0, 0, 255, 255, 255 }, true)]
-	[InlineData(PngColorType.Truecolor, new byte[] { 255, 0, 0 }, false)] // Too short
+	[InlineData(PngColorType.Truecolor, new byte[] { 255, 0, 0 }, false)]// Too short
 	public void ValidateTransparencyData_ShouldValidateCorrectLength(PngColorType colorType, byte[] transparencyData, bool shouldBeValid)
 	{
 		// Arrange
-		var png = new PngRaster 
-		{ 
-			ColorType = colorType,
-			TransparencyData = transparencyData 
-		};
+		var png = new PngRaster
+		          {
+			          ColorType        = colorType,
+			          TransparencyData = transparencyData
+		          };
 		var result = new PngValidationResult();
 
 		// Act
@@ -330,9 +328,7 @@ public class PngValidatorTests
 
 		// Assert
 		if (shouldBeValid)
-		{
 			Assert.True(result.IsValid);
-		}
 		else
 		{
 			Assert.False(result.IsValid);
@@ -346,18 +342,18 @@ public class PngValidatorTests
 	public void ValidateTransparencyData_WithAlphaChannelTypes_ShouldAddWarning(PngColorType colorType)
 	{
 		// Arrange
-		var png = new PngRaster 
-		{ 
-			ColorType = colorType,
-			TransparencyData = new byte[] { 255, 255 }
-		};
+		var png = new PngRaster
+		          {
+			          ColorType        = colorType,
+			          TransparencyData = new byte[] { 255, 255 }
+		          };
 		var result = new PngValidationResult();
 
 		// Act
 		png.ValidateTransparencyData(result);
 
 		// Assert
-		Assert.True(result.IsValid); // Warnings don't invalidate
+		Assert.True(result.IsValid);// Warnings don't invalidate
 		Assert.Contains(result.Warnings, w => w.Contains("not recommended"));
 	}
 
@@ -378,7 +374,7 @@ public class PngValidatorTests
 	public void IsValidPngSignature_WithInvalidSignature_ShouldReturnFalse()
 	{
 		// Arrange
-		var invalidSignature = new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0B }; // Wrong last byte
+		var invalidSignature = new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0B };// Wrong last byte
 
 		// Act
 		var isValid = PngValidator.IsValidPngSignature(invalidSignature);

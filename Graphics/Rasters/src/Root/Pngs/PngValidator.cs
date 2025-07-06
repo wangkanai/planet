@@ -49,12 +49,12 @@ public static class PngValidator
 	{
 		var allowedBitDepths = png.ColorType switch
 		{
-			PngColorType.Grayscale => PngConstants.BitDepths.Grayscale,
-			PngColorType.Truecolor => PngConstants.BitDepths.Truecolor,
-			PngColorType.IndexedColor => PngConstants.BitDepths.IndexedColor,
+			PngColorType.Grayscale          => PngConstants.BitDepths.Grayscale,
+			PngColorType.Truecolor          => PngConstants.BitDepths.Truecolor,
+			PngColorType.IndexedColor       => PngConstants.BitDepths.IndexedColor,
 			PngColorType.GrayscaleWithAlpha => PngConstants.BitDepths.GrayscaleWithAlpha,
 			PngColorType.TruecolorWithAlpha => PngConstants.BitDepths.TruecolorWithAlpha,
-			_ => []
+			_                               => []
 		};
 
 		if (allowedBitDepths.Length == 0)
@@ -104,7 +104,7 @@ public static class PngValidator
 			else
 			{
 				var maxPaletteEntries = 1 << png.BitDepth;
-				var paletteEntries = png.PaletteData.Length / 3; // RGB triplets
+				var paletteEntries    = png.PaletteData.Length / 3;// RGB triplets
 
 				if (png.PaletteData.Length % 3 != 0)
 					result.AddError("Palette data length must be a multiple of 3 (RGB triplets).");
@@ -116,10 +116,7 @@ public static class PngValidator
 					result.AddError($"Palette has too many entries: {paletteEntries}. Maximum allowed: 256.");
 			}
 		}
-		else if (png.PaletteData != null && png.PaletteData.Length > 0)
-		{
-			result.AddWarning($"Palette data is present but not required for color type {png.ColorType}.");
-		}
+		else if (png.PaletteData != null && png.PaletteData.Length > 0) result.AddWarning($"Palette data is present but not required for color type {png.ColorType}.");
 	}
 
 	/// <summary>Validates the transparency data of a PNG raster image.</summary>
@@ -148,6 +145,7 @@ public static class PngValidator
 						if (png.TransparencyData.Length > paletteEntries)
 							result.AddError($"Transparency data has more entries ({png.TransparencyData.Length}) than palette ({paletteEntries}).");
 					}
+
 					break;
 
 				case PngColorType.GrayscaleWithAlpha:
@@ -169,10 +167,10 @@ public static class PngValidator
 	public static void ValidateMetadata(this IPngRaster png, PngValidationResult result)
 	{
 		var metadataResult = png.Metadata.ValidateMetadata();
-		
+
 		foreach (var error in metadataResult.Errors)
 			result.AddError(error);
-		
+
 		foreach (var warning in metadataResult.Warnings)
 			result.AddWarning(warning);
 	}

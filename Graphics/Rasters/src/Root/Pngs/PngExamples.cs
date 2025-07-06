@@ -12,12 +12,12 @@ public static class PngExamples
 	public static PngRaster CreateBasicTruecolor(int width, int height)
 	{
 		return new PngRaster(width, height)
-		{
-			ColorType = PngColorType.Truecolor,
-			BitDepth = 8,
-			CompressionLevel = 6,
-			InterlaceMethod = PngInterlaceMethod.None
-		};
+		       {
+			       ColorType        = PngColorType.Truecolor,
+			       BitDepth         = 8,
+			       CompressionLevel = 6,
+			       InterlaceMethod  = PngInterlaceMethod.None
+		       };
 	}
 
 	/// <summary>Creates a truecolor PNG with alpha channel.</summary>
@@ -27,13 +27,13 @@ public static class PngExamples
 	public static PngRaster CreateTruecolorWithAlpha(int width, int height)
 	{
 		return new PngRaster(width, height)
-		{
-			ColorType = PngColorType.TruecolorWithAlpha,
-			BitDepth = 8,
-			HasAlphaChannel = true,
-			CompressionLevel = 6,
-			InterlaceMethod = PngInterlaceMethod.None
-		};
+		       {
+			       ColorType        = PngColorType.TruecolorWithAlpha,
+			       BitDepth         = 8,
+			       HasAlphaChannel  = true,
+			       CompressionLevel = 6,
+			       InterlaceMethod  = PngInterlaceMethod.None
+		       };
 	}
 
 	/// <summary>Creates a grayscale PNG raster.</summary>
@@ -44,12 +44,12 @@ public static class PngExamples
 	public static PngRaster CreateGrayscale(int width, int height, byte bitDepth = 8)
 	{
 		return new PngRaster(width, height)
-		{
-			ColorType = PngColorType.Grayscale,
-			BitDepth = bitDepth,
-			CompressionLevel = 6,
-			InterlaceMethod = PngInterlaceMethod.None
-		};
+		       {
+			       ColorType        = PngColorType.Grayscale,
+			       BitDepth         = bitDepth,
+			       CompressionLevel = 6,
+			       InterlaceMethod  = PngInterlaceMethod.None
+		       };
 	}
 
 	/// <summary>Creates an indexed-color PNG raster.</summary>
@@ -60,25 +60,25 @@ public static class PngExamples
 	public static PngRaster CreateIndexedColor(int width, int height, byte bitDepth = 8)
 	{
 		var png = new PngRaster(width, height)
-		{
-			ColorType = PngColorType.IndexedColor,
-			BitDepth = bitDepth,
-			UsesPalette = true,
-			CompressionLevel = 6,
-			InterlaceMethod = PngInterlaceMethod.None
-		};
+		          {
+			          ColorType        = PngColorType.IndexedColor,
+			          BitDepth         = bitDepth,
+			          UsesPalette      = true,
+			          CompressionLevel = 6,
+			          InterlaceMethod  = PngInterlaceMethod.None
+		          };
 
 		// Create a basic palette (RGB triplets)
 		var paletteSize = Math.Min(256, 1 << bitDepth);
 		png.PaletteData = new byte[paletteSize * 3];
-		
+
 		// Fill with a simple gradient palette
-		for (int i = 0; i < paletteSize; i++)
+		for (var i = 0; i < paletteSize; i++)
 		{
 			var intensity = (byte)(i * 255 / (paletteSize - 1));
-			png.PaletteData[i * 3] = intensity;     // Red
-			png.PaletteData[i * 3 + 1] = intensity; // Green
-			png.PaletteData[i * 3 + 2] = intensity; // Blue
+			png.PaletteData[i * 3]     = intensity;// Red
+			png.PaletteData[i * 3 + 1] = intensity;// Green
+			png.PaletteData[i * 3 + 2] = intensity;// Blue
 		}
 
 		return png;
@@ -91,17 +91,17 @@ public static class PngExamples
 	public static PngRaster CreateHighQuality(int width, int height)
 	{
 		var png = new PngRaster(width, height)
-		{
-			ColorType = PngColorType.TruecolorWithAlpha,
-			BitDepth = 16, // High bit depth for quality
-			HasAlphaChannel = true,
-			CompressionLevel = 9, // Maximum compression
-			InterlaceMethod = PngInterlaceMethod.None
-		};
+		          {
+			          ColorType        = PngColorType.TruecolorWithAlpha,
+			          BitDepth         = 16,// High bit depth for quality
+			          HasAlphaChannel  = true,
+			          CompressionLevel = 9,// Maximum compression
+			          InterlaceMethod  = PngInterlaceMethod.None
+		          };
 
 		// Set metadata for high-quality images
 		png.Metadata.Software = "Wangkanai Graphics Rasters";
-		png.Metadata.Created = DateTime.UtcNow;
+		png.Metadata.Created  = DateTime.UtcNow;
 
 		return png;
 	}
@@ -114,17 +114,17 @@ public static class PngExamples
 	public static PngRaster CreateWebOptimized(int width, int height, bool useAlpha = true)
 	{
 		var png = new PngRaster(width, height)
-		{
-			ColorType = useAlpha ? PngColorType.TruecolorWithAlpha : PngColorType.Truecolor,
-			BitDepth = 8, // Standard web bit depth
-			HasAlphaChannel = useAlpha,
-			CompressionLevel = 6, // Balanced compression for web
-			InterlaceMethod = PngInterlaceMethod.Adam7 // Progressive loading
-		};
+		          {
+			          ColorType        = useAlpha ? PngColorType.TruecolorWithAlpha : PngColorType.Truecolor,
+			          BitDepth         = 8,// Standard web bit depth
+			          HasAlphaChannel  = useAlpha,
+			          CompressionLevel = 6,                      // Balanced compression for web
+			          InterlaceMethod  = PngInterlaceMethod.Adam7// Progressive loading
+		          };
 
 		// Set web-appropriate metadata
-		png.Metadata.Software = "Wangkanai Graphics Rasters";
-		png.Metadata.SrgbRenderingIntent = 0; // Perceptual rendering
+		png.Metadata.Software            = "Wangkanai Graphics Rasters";
+		png.Metadata.SrgbRenderingIntent = 0;// Perceptual rendering
 
 		return png;
 	}

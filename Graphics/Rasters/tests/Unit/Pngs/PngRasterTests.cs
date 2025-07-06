@@ -90,8 +90,8 @@ public class PngRasterTests
 	[InlineData(0, 0)]
 	[InlineData(5, 5)]
 	[InlineData(9, 9)]
-	[InlineData(10, 9)] // Should clamp to max
-	[InlineData(-1, 0)] // Should clamp to min
+	[InlineData(10, 9)]// Should clamp to max
+	[InlineData(-1, 0)]// Should clamp to min
 	public void CompressionLevel_ShouldClampToValidRange(int level, int expected)
 	{
 		// Arrange
@@ -108,8 +108,8 @@ public class PngRasterTests
 	[InlineData(1, 1)]
 	[InlineData(8, 8)]
 	[InlineData(16, 16)]
-	[InlineData(0, 1)] // Should clamp to min
-	[InlineData(32, 16)] // Should clamp to max
+	[InlineData(0, 1)]  // Should clamp to min
+	[InlineData(32, 16)]// Should clamp to max
 	public void BitDepth_ShouldClampToValidRange(byte depth, byte expected)
 	{
 		// Arrange
@@ -127,11 +127,11 @@ public class PngRasterTests
 	{
 		// Arrange
 		var png = new PngRaster(800, 600)
-		{
-			ColorType = PngColorType.Truecolor,
-			BitDepth = 8,
-			CompressionLevel = 6
-		};
+		          {
+			          ColorType        = PngColorType.Truecolor,
+			          BitDepth         = 8,
+			          CompressionLevel = 6
+		          };
 
 		// Act & Assert
 		Assert.True(png.IsValid());
@@ -168,10 +168,10 @@ public class PngRasterTests
 	}
 
 	[Theory]
-	[InlineData(PngColorType.Grayscale, 8, 8)] // 1 * 8
-	[InlineData(PngColorType.Truecolor, 8, 24)] // 3 * 8
-	[InlineData(PngColorType.TruecolorWithAlpha, 8, 32)] // 4 * 8
-	[InlineData(PngColorType.Truecolor, 16, 48)] // 3 * 16
+	[InlineData(PngColorType.Grayscale, 8, 8)]          // 1 * 8
+	[InlineData(PngColorType.Truecolor, 8, 24)]         // 3 * 8
+	[InlineData(PngColorType.TruecolorWithAlpha, 8, 32)]// 4 * 8
+	[InlineData(PngColorType.Truecolor, 16, 48)]        // 3 * 16
 	public void GetColorDepth_ShouldReturnCorrectValue(PngColorType colorType, byte bitDepth, int expectedColorDepth)
 	{
 		// Arrange
@@ -186,11 +186,11 @@ public class PngRasterTests
 	{
 		// Arrange
 		var png = new PngRaster(100, 100)
-		{
-			ColorType = PngColorType.Truecolor,
-			BitDepth = 8,
-			CompressionLevel = 6
-		};
+		          {
+			          ColorType        = PngColorType.Truecolor,
+			          BitDepth         = 8,
+			          CompressionLevel = 6
+		          };
 
 		// Act
 		var fileSize = png.GetEstimatedFileSize();
@@ -213,15 +213,15 @@ public class PngRasterTests
 	}
 
 	[Theory]
-	[InlineData(0)] // No compression
-	[InlineData(3)] // Low compression
-	[InlineData(6)] // Medium compression
-	[InlineData(9)] // High compression
+	[InlineData(0)]// No compression
+	[InlineData(3)]// Low compression
+	[InlineData(6)]// Medium compression
+	[InlineData(9)]// High compression
 	public void GetEstimatedFileSize_ShouldVaryWithCompressionLevel(int compressionLevel)
 	{
 		// Arrange
 		var png1 = new PngRaster(100, 100) { CompressionLevel = compressionLevel };
-		var png2 = new PngRaster(100, 100) { CompressionLevel = 0 }; // No compression
+		var png2 = new PngRaster(100, 100) { CompressionLevel = 0 };// No compression
 
 		// Act
 		var size1 = png1.GetEstimatedFileSize();
@@ -229,21 +229,17 @@ public class PngRasterTests
 
 		// Assert
 		if (compressionLevel == 0)
-		{
-			Assert.True(size1 >= size2 * 0.9); // Account for overhead
-		}
+			Assert.True(size1 >= size2 * 0.9);// Account for overhead
 		else
-		{
-			Assert.True(size1 < size2); // Compressed should be smaller
-		}
+			Assert.True(size1 < size2);// Compressed should be smaller
 	}
 
 	[Fact]
 	public void PaletteData_ShouldAcceptNullAndValidData()
 	{
 		// Arrange
-		var png = new PngRaster();
-		var paletteData = new byte[] { 255, 0, 0, 0, 255, 0, 0, 0, 255 }; // RGB triplets
+		var png         = new PngRaster();
+		var paletteData = new byte[] { 255, 0, 0, 0, 255, 0, 0, 0, 255 };// RGB triplets
 
 		// Act & Assert
 		png.PaletteData = null;
@@ -257,8 +253,8 @@ public class PngRasterTests
 	public void TransparencyData_ShouldAcceptNullAndValidData()
 	{
 		// Arrange
-		var png = new PngRaster();
-		var transparencyData = new byte[] { 255, 255 }; // Grayscale transparency
+		var png              = new PngRaster();
+		var transparencyData = new byte[] { 255, 255 };// Grayscale transparency
 
 		// Act & Assert
 		png.TransparencyData = null;
@@ -273,8 +269,8 @@ public class PngRasterTests
 	{
 		// Arrange
 		var png = new PngRaster();
-		png.PaletteData = new byte[] { 1, 2, 3 };
-		png.TransparencyData = new byte[] { 4, 5 };
+		png.PaletteData                   = new byte[] { 1, 2, 3 };
+		png.TransparencyData              = new byte[] { 4, 5 };
 		png.Metadata.CustomChunks["test"] = new byte[] { 6, 7, 8 };
 
 		// Act
@@ -292,23 +288,23 @@ public class PngRasterTests
 	[InlineData(PngColorType.Grayscale, 4, true)]
 	[InlineData(PngColorType.Grayscale, 8, true)]
 	[InlineData(PngColorType.Grayscale, 16, true)]
-	[InlineData(PngColorType.Grayscale, 3, false)] // Invalid
+	[InlineData(PngColorType.Grayscale, 3, false)]// Invalid
 	[InlineData(PngColorType.Truecolor, 8, true)]
 	[InlineData(PngColorType.Truecolor, 16, true)]
-	[InlineData(PngColorType.Truecolor, 4, false)] // Invalid
+	[InlineData(PngColorType.Truecolor, 4, false)]// Invalid
 	[InlineData(PngColorType.IndexedColor, 1, true)]
 	[InlineData(PngColorType.IndexedColor, 2, true)]
 	[InlineData(PngColorType.IndexedColor, 4, true)]
 	[InlineData(PngColorType.IndexedColor, 8, true)]
-	[InlineData(PngColorType.IndexedColor, 16, false)] // Invalid
+	[InlineData(PngColorType.IndexedColor, 16, false)]// Invalid
 	public void IsValid_ShouldValidateBitDepthForColorType(PngColorType colorType, byte bitDepth, bool expectedValid)
 	{
 		// Arrange
 		var png = new PngRaster(100, 100)
-		{
-			ColorType = colorType,
-			BitDepth = bitDepth
-		};
+		          {
+			          ColorType = colorType,
+			          BitDepth  = bitDepth
+		          };
 
 		// Act & Assert
 		Assert.Equal(expectedValid, png.IsValid());

@@ -6,78 +6,166 @@ namespace Wangkanai.Graphics.Rasters.Pngs;
 public class PngMetadata
 {
 	/// <summary>Gets or sets the image title.</summary>
-	public string? Title { get; set; }
+	public string? Title
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the image description.</summary>
-	public string? Description { get; set; }
+	public string? Description
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the software used to create the image.</summary>
-	public string? Software { get; set; }
+	public string? Software
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the creation timestamp.</summary>
-	public DateTime? Created { get; set; }
+	public DateTime? Created
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the last modification timestamp.</summary>
-	public DateTime? Modified { get; set; }
+	public DateTime? Modified
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the image author.</summary>
-	public string? Author { get; set; }
+	public string? Author
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the image copyright information.</summary>
-	public string? Copyright { get; set; }
+	public string? Copyright
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the image comment.</summary>
-	public string? Comment { get; set; }
+	public string? Comment
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the gamma value for color correction.</summary>
-	public double? Gamma { get; set; }
+	public double? Gamma
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the horizontal resolution in pixels per unit.</summary>
-	public uint? XResolution { get; set; }
+	public uint? XResolution
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the vertical resolution in pixels per unit.</summary>
-	public uint? YResolution { get; set; }
+	public uint? YResolution
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the resolution unit (0 = unknown, 1 = meter).</summary>
-	public byte? ResolutionUnit { get; set; }
+	public byte? ResolutionUnit
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the background color.</summary>
-	public uint? BackgroundColor { get; set; }
+	public uint? BackgroundColor
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the white point chromaticity coordinates.</summary>
-	public (uint x, uint y)? WhitePoint { get; set; }
+	public (uint x, uint y)? WhitePoint
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the red primary chromaticity coordinates.</summary>
-	public (uint x, uint y)? RedPrimary { get; set; }
+	public (uint x, uint y)? RedPrimary
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the green primary chromaticity coordinates.</summary>
-	public (uint x, uint y)? GreenPrimary { get; set; }
+	public (uint x, uint y)? GreenPrimary
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the blue primary chromaticity coordinates.</summary>
-	public (uint x, uint y)? BluePrimary { get; set; }
+	public (uint x, uint y)? BluePrimary
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets or sets the standard RGB color space rendering intent.</summary>
 	/// <remarks>0 = Perceptual, 1 = Relative colorimetric, 2 = Saturation, 3 = Absolute colorimetric</remarks>
-	public byte? SrgbRenderingIntent { get; set; }
+	public byte? SrgbRenderingIntent
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Gets the collection of custom text chunks.</summary>
 	/// <remarks>Key is the chunk keyword, value is the text content.</remarks>
-	public Dictionary<string, string> TextChunks { get; } = new();
+	public Dictionary<string, string> TextChunks
+	{
+		get;
+	} = new();
 
 	/// <summary>Gets the collection of compressed text chunks.</summary>
 	/// <remarks>Key is the chunk keyword, value is the text content.</remarks>
-	public Dictionary<string, string> CompressedTextChunks { get; } = new();
+	public Dictionary<string, string> CompressedTextChunks
+	{
+		get;
+	} = new();
 
 	/// <summary>Gets the collection of international text chunks.</summary>
 	/// <remarks>Key is the chunk keyword, value contains language tag and text content.</remarks>
-	public Dictionary<string, (string? languageTag, string? translatedKeyword, string text)> InternationalTextChunks { get; } = new();
+	public Dictionary<string, (string? languageTag, string? translatedKeyword, string text)> InternationalTextChunks
+	{
+		get;
+	} = new();
 
 	/// <summary>Gets the collection of custom chunks not defined in the PNG specification.</summary>
 	/// <remarks>Key is the chunk type, value is the raw chunk data.</remarks>
-	public Dictionary<string, byte[]> CustomChunks { get; } = new();
+	public Dictionary<string, byte[]> CustomChunks
+	{
+		get;
+	} = new();
 
 	/// <summary>Gets or sets the transparency information for the image.</summary>
-	public byte[]? TransparencyData { get; set; }
+	public byte[]? TransparencyData
+	{
+		get;
+		set;
+	}
 
 	/// <summary>Validates the PNG metadata.</summary>
 	/// <returns>A validation result indicating if the metadata is valid.</returns>
@@ -106,14 +194,12 @@ public class PngMetadata
 
 		// Validate text chunk keywords
 		foreach (var keyword in TextChunks.Keys.Concat(CompressedTextChunks.Keys).Concat(InternationalTextChunks.Keys))
-		{
 			if (string.IsNullOrEmpty(keyword))
 				result.AddError("Text chunk keyword cannot be null or empty.");
 			else if (keyword.Length > 79)
 				result.AddError($"Text chunk keyword '{keyword}' exceeds maximum length of 79 characters.");
 			else if (!IsValidKeyword(keyword))
 				result.AddError($"Text chunk keyword '{keyword}' contains invalid characters. Only Latin-1 printable characters and spaces are allowed.");
-		}
 
 		return result;
 	}
@@ -125,14 +211,12 @@ public class PngMetadata
 	{
 		if (string.IsNullOrEmpty(keyword)) return false;
 		if (keyword.StartsWith(' ') || keyword.EndsWith(' ')) return false;
-		if (keyword.Contains("  ")) return false; // No consecutive spaces
+		if (keyword.Contains("  ")) return false;// No consecutive spaces
 
-		foreach (char c in keyword)
-		{
+		foreach (var c in keyword)
 			// Latin-1 printable characters (32-126 and 161-255)
-			if (c is < (char)32 or (> (char)126 and < (char)161))
+			if (c is < (char)32 or > (char)126 and < (char)161)
 				return false;
-		}
 
 		return true;
 	}

@@ -30,13 +30,13 @@ public class PngMetadataTests
 		var metadata = new PngMetadata();
 
 		// Act & Assert
-		metadata.Title = null;
+		metadata.Title       = null;
 		metadata.Description = null;
-		metadata.Software = null;
-		metadata.Author = null;
-		metadata.Copyright = null;
-		metadata.Comment = null;
-		
+		metadata.Software    = null;
+		metadata.Author      = null;
+		metadata.Copyright   = null;
+		metadata.Comment     = null;
+
 		Assert.Null(metadata.Title);
 		Assert.Null(metadata.Description);
 		Assert.Null(metadata.Software);
@@ -50,22 +50,22 @@ public class PngMetadataTests
 	{
 		// Arrange
 		var metadata = new PngMetadata();
-		var now = DateTime.UtcNow;
+		var now      = DateTime.UtcNow;
 
 		// Act
-		metadata.Title = "Test Image";
-		metadata.Description = "A test PNG image";
-		metadata.Software = "Test Software";
-		metadata.Author = "Test Author";
-		metadata.Copyright = "Test Copyright";
-		metadata.Comment = "Test Comment";
-		metadata.Created = now;
-		metadata.Modified = now;
-		metadata.Gamma = 2.2;
-		metadata.XResolution = 300;
-		metadata.YResolution = 300;
-		metadata.ResolutionUnit = 1;
-		metadata.BackgroundColor = 0xFFFFFF;
+		metadata.Title               = "Test Image";
+		metadata.Description         = "A test PNG image";
+		metadata.Software            = "Test Software";
+		metadata.Author              = "Test Author";
+		metadata.Copyright           = "Test Copyright";
+		metadata.Comment             = "Test Comment";
+		metadata.Created             = now;
+		metadata.Modified            = now;
+		metadata.Gamma               = 2.2;
+		metadata.XResolution         = 300;
+		metadata.YResolution         = 300;
+		metadata.ResolutionUnit      = 1;
+		metadata.BackgroundColor     = 0xFFFFFF;
 		metadata.SrgbRenderingIntent = 0;
 
 		// Assert
@@ -90,15 +90,15 @@ public class PngMetadataTests
 	{
 		// Arrange
 		var metadata = new PngMetadata
-		{
-			Gamma = 2.2,
-			XResolution = 300,
-			YResolution = 300,
-			ResolutionUnit = 1,
-			SrgbRenderingIntent = 0
-		};
+		               {
+			               Gamma               = 2.2,
+			               XResolution         = 300,
+			               YResolution         = 300,
+			               ResolutionUnit      = 1,
+			               SrgbRenderingIntent = 0
+		               };
 
-		metadata.TextChunks["Title"] = "Test Image";
+		metadata.TextChunks["Title"]                 = "Test Image";
 		metadata.CompressedTextChunks["Description"] = "Test Description";
 
 		// Act
@@ -130,11 +130,11 @@ public class PngMetadataTests
 	public void ValidateMetadata_WithZeroResolution_ShouldAddError()
 	{
 		// Arrange
-		var metadata = new PngMetadata 
-		{ 
-			XResolution = 0,
-			YResolution = 0
-		};
+		var metadata = new PngMetadata
+		               {
+			               XResolution = 0,
+			               YResolution = 0
+		               };
 
 		// Act
 		var result = metadata.ValidateMetadata();
@@ -196,8 +196,8 @@ public class PngMetadataTests
 	public void ValidateMetadata_WithTooLongKeyword_ShouldAddError()
 	{
 		// Arrange
-		var metadata = new PngMetadata();
-		var longKeyword = new string('A', 80); // Exceeds 79 character limit
+		var metadata    = new PngMetadata();
+		var longKeyword = new string('A', 80);// Exceeds 79 character limit
 		metadata.TextChunks[longKeyword] = "Some text";
 
 		// Act
@@ -209,10 +209,10 @@ public class PngMetadataTests
 	}
 
 	[Theory]
-	[InlineData(" Invalid")] // Leading space
-	[InlineData("Invalid ")] // Trailing space
-	[InlineData("Invalid  Keyword")] // Consecutive spaces
-	[InlineData("Invalid\tKeyword")] // Control character
+	[InlineData(" Invalid")]        // Leading space
+	[InlineData("Invalid ")]        // Trailing space
+	[InlineData("Invalid  Keyword")]// Consecutive spaces
+	[InlineData("Invalid\tKeyword")]// Control character
 	public void ValidateMetadata_WithInvalidKeywordCharacters_ShouldAddError(string keyword)
 	{
 		// Arrange
@@ -254,10 +254,10 @@ public class PngMetadataTests
 		var metadata = new PngMetadata();
 
 		// Act
-		metadata.TextChunks["Title"] = "Test Title";
-		metadata.TextChunks["Author"] = "Test Author";
+		metadata.TextChunks["Title"]                 = "Test Title";
+		metadata.TextChunks["Author"]                = "Test Author";
 		metadata.CompressedTextChunks["Description"] = "Test Description";
-		metadata.InternationalTextChunks["Comment"] = ("en", "Comment", "Test Comment");
+		metadata.InternationalTextChunks["Comment"]  = ("en", "Comment", "Test Comment");
 
 		// Assert
 		Assert.Equal(2, metadata.TextChunks.Count);
@@ -273,7 +273,7 @@ public class PngMetadataTests
 	public void CustomChunks_ShouldAllowArbitraryData()
 	{
 		// Arrange
-		var metadata = new PngMetadata();
+		var metadata   = new PngMetadata();
 		var customData = new byte[] { 0x01, 0x02, 0x03, 0x04 };
 
 		// Act
