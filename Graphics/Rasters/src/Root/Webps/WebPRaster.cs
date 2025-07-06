@@ -220,23 +220,19 @@ public class WebPRaster : IWebPRaster
 		try
 		{
 			// Ensure format and compression are properly synchronized
-			// Handle compression-driven format updates first
-			if (Compression == WebPCompression.VP8L && Format != WebPFormat.Lossless)
+			// Handle format-driven compression updates
+			if (Format == WebPFormat.Lossless && Compression != WebPCompression.VP8L)
+			{
+				_compression = WebPCompression.VP8L;
+			}
+			// Handle compression-driven format updates  
+			else if (Compression == WebPCompression.VP8L && Format != WebPFormat.Lossless)
 			{
 				_format = WebPFormat.Lossless;
 			}
 			else if (Compression == WebPCompression.VP8 && Format == WebPFormat.Lossless)
 			{
 				_format = WebPFormat.Simple;
-			}
-			// Handle format-driven compression updates
-			else if (Format == WebPFormat.Lossless && Compression != WebPCompression.VP8L)
-			{
-				_compression = WebPCompression.VP8L;
-			}
-			else if (Format == WebPFormat.Simple && Compression != WebPCompression.VP8)
-			{
-				_compression = WebPCompression.VP8;
 			}
 
 			// Update metadata flags
