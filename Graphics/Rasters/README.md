@@ -6,6 +6,22 @@ A **comprehensive raster image rasterization library** designed to work with all
 
 *This library addresses the need for format-agnostic high-performance raster manipulation to operate on large datasets of images across professional photography, document imaging, scientific imaging, geographic systems, and prepress workflows. While TIFF and JPEG are the current complete implementations, the architecture is designed to support any image format through common abstractions.*
 
+## Supported Image Formats
+
+The library supports multiple raster image formats through a unified abstraction layer:
+
+### ✅ **Currently Implemented**
+- **TIFF** (.tiff, .tif) - Complete implementation with full specification support
+- **JPEG** (.jpg, .jpeg, .jpe, .jfif) - Complete implementation with quality control and optimization
+
+### 🔄 **Architecture Ready** 
+- **PNG** (.png) - Portable Network Graphics format
+- **WebP** (.webp) - Modern web-optimized format
+- **BMP** (.bmp) - Windows Bitmap format
+- **GIF** (.gif) - Graphics Interchange Format
+
+*All formats work through the same unified API, providing consistent operations regardless of the underlying image format.*
+
 ## Related GitHub Issues
 
 This universal raster image library addresses the following GitHub issues:
@@ -22,22 +38,6 @@ This universal raster image library addresses the following GitHub issues:
 > - [#60 - GeoTIFF specifications support](https://github.com/wangkanai/planet/issues/60)
 > 
 > **Status**: ✅ **Core Implementation Complete** - Universal raster library with complete TIFF and JPEG format implementations. Additional formats (PNG, WebP) are planned for future releases.
-
-## Supported Image Formats
-
-The library supports multiple raster image formats through a unified abstraction layer:
-
-### ✅ **Currently Implemented**
-- **TIFF** (.tiff, .tif) - Complete implementation with full specification support
-- **JPEG** (.jpg, .jpeg, .jpe, .jfif) - Complete implementation with quality control and optimization
-
-### 🔄 **Architecture Ready** 
-- **PNG** (.png) - Portable Network Graphics format
-- **WebP** (.webp) - Modern web-optimized format
-- **BMP** (.bmp) - Windows Bitmap format
-- **GIF** (.gif) - Graphics Interchange Format
-
-*All formats work through the same unified API, providing consistent operations regardless of the underlying image format.*
 
 ## Universal Image Processing Capabilities
 
