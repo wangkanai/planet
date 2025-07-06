@@ -32,7 +32,7 @@ public interface IPngRaster : IRaster
 	/// <summary>Gets the number of samples per pixel.</summary>
 	int SamplesPerPixel { get; }
 
-	/// <summary>Gets or sets the compression level (0-9, where 9 is maximum compression).</summary>
+	/// <summary>Gets or sets the compression level (0-9, where 9 is the maximum compression).</summary>
 	int CompressionLevel { get; set; }
 
 	/// <summary>Gets the PNG metadata.</summary>
