@@ -42,6 +42,9 @@ public static class PngConstants
 	/// <summary>Minimum chunk size (without data).</summary>
 	public const int MinChunkSize = ChunkLengthSize + ChunkTypeSize + ChunkCrcSize;
 
+	/// <summary>Estimated overhead for critical PNG chunks (IHDR, IEND, etc.).</summary>
+	public const int CriticalChunksOverhead = 100;
+
 	/// <summary>Critical chunk types.</summary>
 	public static class ChunkTypes
 	{

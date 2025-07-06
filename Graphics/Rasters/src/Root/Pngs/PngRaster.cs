@@ -130,14 +130,14 @@ public class PngRaster : IPngRaster
 	} = new();
 
 	/// <summary>Gets the palette data for indexed-color images.</summary>
-	public byte[]? PaletteData
+	public ReadOnlyMemory<byte> PaletteData
 	{
 		get;
 		set;
 	}
 
 	/// <summary>Gets or sets the transparency data.</summary>
-	public byte[]? TransparencyData
+	public ReadOnlyMemory<byte> TransparencyData
 	{
 		get;
 		set;
@@ -177,7 +177,7 @@ public class PngRaster : IPngRaster
 
 		// Add overhead for PNG chunks and headers
 		var overhead = PngConstants.SignatureLength +
-		               100 +// IHDR, IEND and other critical chunks
+		               PngConstants.CriticalChunksOverhead +
 		               (Metadata.TextChunks.Count + Metadata.CompressedTextChunks.Count + Metadata.InternationalTextChunks.Count) * 50;
 
 		return compressedDataSize + overhead;
@@ -193,9 +193,9 @@ public class PngRaster : IPngRaster
 	/// <summary>Disposes of the PNG raster resources.</summary>
 	public void Dispose()
 	{
-		PaletteData      = null;
-		TransparencyData = null;
-		Metadata?.CustomChunks.Clear();
+		PaletteData      = ReadOnlyMemory<byte>.Empty;
+		TransparencyData = ReadOnlyMemory<byte>.Empty;
+		Metadata.CustomChunks.Clear();
 		GC.SuppressFinalize(this);
 	}
 
