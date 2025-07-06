@@ -424,4 +424,163 @@ public class WebPRasterTests
 		Assert.Empty(webp.Metadata.CustomChunks);
 		Assert.Empty(webp.Metadata.AnimationFrames);
 	}
+
+	[Fact]
+	public async Task DisposeAsync_ShouldClearMetadata()
+	{
+		// Arrange
+		var webp = new WebPRaster();
+		webp.Metadata.IccProfile = new byte[100];
+		webp.Metadata.ExifData = new byte[100];
+		webp.Metadata.XmpData = new byte[100];
+		webp.Metadata.CustomChunks.Add("TEST", new byte[50]);
+		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame());
+
+		// Act
+		await webp.DisposeAsync();
+
+		// Assert
+		Assert.True(webp.Metadata.IccProfile.IsEmpty);
+		Assert.True(webp.Metadata.ExifData.IsEmpty);
+		Assert.True(webp.Metadata.XmpData.IsEmpty);
+		Assert.Empty(webp.Metadata.CustomChunks);
+		Assert.Empty(webp.Metadata.AnimationFrames);
+	}
+
+	[Fact]
+	public void HasLargeMetadata_WithSmallMetadata_ShouldReturnFalse()
+	{
+		// Arrange
+		var webp = new WebPRaster();
+		webp.Metadata.IccProfile = new byte[1000]; // 1KB
+		webp.Metadata.ExifData = new byte[500];    // 500 bytes
+
+		// Act & Assert
+		Assert.False(webp.HasLargeMetadata);
+	}
+
+	[Fact]
+	public void HasLargeMetadata_WithLargeMetadata_ShouldReturnTrue()
+	{
+		// Arrange
+		var webp = new WebPRaster();
+		webp.Metadata.IccProfile = new byte[2_000_000]; // 2MB
+
+		// Act & Assert
+		Assert.True(webp.HasLargeMetadata);
+	}
+
+	[Fact]
+	public void EstimatedMetadataSize_ShouldCalculateCorrectly()
+	{
+		// Arrange
+		var webp = new WebPRaster();
+		webp.Metadata.IccProfile = new byte[1000];
+		webp.Metadata.ExifData = new byte[500];
+		webp.Metadata.XmpData = new byte[300];
+		webp.Metadata.CustomChunks.Add("TEST1", new byte[200]);
+		webp.Metadata.CustomChunks.Add("TEST2", new byte[100]);
+
+		// Act
+		var size = webp.EstimatedMetadataSize;
+
+		// Assert
+		Assert.Equal(2100, size); // 1000 + 500 + 300 + 200 + 100
+	}
+
+	[Fact]
+	public void EstimatedMetadataSize_WithAnimationFrames_ShouldIncludeFrameData()
+	{
+		// Arrange
+		var webp = new WebPRaster();
+		webp.Metadata.HasAnimation = true;
+		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame { Data = new byte[500] });
+		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame { Data = new byte[300] });
+
+		// Act
+		var size = webp.EstimatedMetadataSize;
+
+		// Assert
+		Assert.Equal(800, size); // 500 + 300
+	}
+
+	[Fact]
+	public async Task DisposeAsync_WithLargeMetadata_ShouldUseBatchedCleanup()
+	{
+		// Arrange
+		var webp = new WebPRaster();
+		webp.Metadata.IccProfile = new byte[2_000_000]; // 2MB to trigger large metadata path
+		
+		// Add many animation frames to test batched cleanup
+		for (int i = 0; i < 150; i++)
+		{
+			webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame { Data = new byte[1000] });
+		}
+		webp.Metadata.HasAnimation = true;
+
+		// Verify we have large metadata
+		Assert.True(webp.HasLargeMetadata);
+		Assert.True(webp.EstimatedMetadataSize > 1_000_000);
+
+		// Act
+		await webp.DisposeAsync();
+
+		// Assert
+		Assert.True(webp.Metadata.IccProfile.IsEmpty);
+		Assert.Empty(webp.Metadata.AnimationFrames);
+	}
+
+	[Fact]
+	public async Task DisposeAsync_WithSmallMetadata_ShouldUseRegularCleanup()
+	{
+		// Arrange
+		var webp = new WebPRaster();
+		webp.Metadata.IccProfile = new byte[1000]; // Small metadata
+		webp.Metadata.ExifData = new byte[500];
+
+		// Verify we have small metadata
+		Assert.False(webp.HasLargeMetadata);
+
+		// Act
+		await webp.DisposeAsync();
+
+		// Assert
+		Assert.True(webp.Metadata.IccProfile.IsEmpty);
+		Assert.True(webp.Metadata.ExifData.IsEmpty);
+	}
+
+	[Fact]
+	public void EstimatedMetadataSize_WithEmptyMetadata_ShouldReturnZero()
+	{
+		// Arrange
+		var webp = new WebPRaster();
+
+		// Act & Assert
+		Assert.Equal(0, webp.EstimatedMetadataSize);
+		Assert.False(webp.HasLargeMetadata);
+	}
+
+	[Fact]
+	public async Task DisposeAsync_CalledMultipleTimes_ShouldNotThrow()
+	{
+		// Arrange
+		var webp = new WebPRaster();
+		webp.Metadata.IccProfile = new byte[100];
+
+		// Act & Assert - Should not throw
+		await webp.DisposeAsync();
+		await webp.DisposeAsync(); // Second call should be safe
+	}
+
+	[Fact]
+	public void Dispose_CalledMultipleTimes_ShouldNotThrow()
+	{
+		// Arrange
+		var webp = new WebPRaster();
+		webp.Metadata.IccProfile = new byte[100];
+
+		// Act & Assert - Should not throw
+		webp.Dispose();
+		webp.Dispose(); // Second call should be safe
+	}
 }

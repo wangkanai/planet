@@ -134,6 +134,39 @@ public class WebPRaster : IWebPRaster
 		set => _compressionRatio = Math.Max(1.0, value);
 	}
 
+	/// <inheritdoc />
+	public bool HasLargeMetadata => EstimatedMetadataSize > 1_000_000; // 1MB threshold
+
+	/// <inheritdoc />
+	public long EstimatedMetadataSize
+	{
+		get
+		{
+			var size = 0L;
+			
+			// Add size of metadata components
+			if (!Metadata.IccProfile.IsEmpty)
+				size += Metadata.IccProfile.Length;
+			if (!Metadata.ExifData.IsEmpty)
+				size += Metadata.ExifData.Length;
+			if (!Metadata.XmpData.IsEmpty)
+				size += Metadata.XmpData.Length;
+			
+			// Add size of custom chunks
+			foreach (var chunk in Metadata.CustomChunks.Values)
+				size += chunk.Length;
+			
+			// Add estimated size of animation frames
+			if (IsAnimated)
+			{
+				foreach (var frame in Metadata.AnimationFrames)
+					size += frame.Data.Length;
+			}
+			
+			return size;
+		}
+	}
+
 	/// <summary>Sets the color mode and updates related properties for performance.</summary>
 	/// <param name="colorMode">The color mode to set.</param>
 	public void SetColorMode(WebPColorMode colorMode)
@@ -299,11 +332,85 @@ public class WebPRaster : IWebPRaster
 	/// <summary>Disposes of the WebP raster resources.</summary>
 	public void Dispose()
 	{
+		DisposeCore();
+		GC.SuppressFinalize(this);
+	}
+
+	/// <summary>Asynchronously disposes of the WebP raster resources.</summary>
+	public async ValueTask DisposeAsync()
+	{
+		await DisposeAsyncCore().ConfigureAwait(false);
+		GC.SuppressFinalize(this);
+	}
+
+	/// <summary>Core disposal logic for synchronous disposal.</summary>
+	private void DisposeCore()
+	{
 		Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
 		Metadata.ExifData   = ReadOnlyMemory<byte>.Empty;
 		Metadata.XmpData    = ReadOnlyMemory<byte>.Empty;
 		Metadata.CustomChunks.Clear();
 		Metadata.AnimationFrames.Clear();
-		GC.SuppressFinalize(this);
+	}
+
+	/// <summary>Core disposal logic for asynchronous disposal.</summary>
+	private async ValueTask DisposeAsyncCore()
+	{
+		// For large metadata, perform disposal operations asynchronously to avoid blocking
+		if (HasLargeMetadata)
+		{
+			// Clear large metadata components with yielding for responsiveness
+			if (!Metadata.IccProfile.IsEmpty)
+			{
+				Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
+				// Allow other tasks to execute
+				await Task.Yield();
+			}
+
+			if (!Metadata.ExifData.IsEmpty)
+			{
+				Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
+				await Task.Yield();
+			}
+
+			if (!Metadata.XmpData.IsEmpty)
+			{
+				Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+				await Task.Yield();
+			}
+
+			// Clear animation frames in batches for large collections
+			if (Metadata.AnimationFrames.Count > 100)
+			{
+				var batchSize = 50;
+				for (var i = 0; i < Metadata.AnimationFrames.Count; i += batchSize)
+				{
+					var endIndex = Math.Min(i + batchSize, Metadata.AnimationFrames.Count);
+					for (var j = i; j < endIndex; j++)
+					{
+						Metadata.AnimationFrames[j].Data = ReadOnlyMemory<byte>.Empty;
+					}
+					// Yield control after each batch
+					await Task.Yield();
+				}
+			}
+
+			// Clear collections
+			Metadata.AnimationFrames.Clear();
+			Metadata.CustomChunks.Clear();
+
+			// Suggest garbage collection for large metadata cleanup
+			if (EstimatedMetadataSize > 10_000_000) // 10MB threshold
+			{
+				GC.Collect();
+				GC.WaitForPendingFinalizers();
+				GC.Collect();
+			}
+		}
+		else
+		{
+			// For small metadata, use synchronous disposal
+			DisposeCore();
+		}
 	}
 }

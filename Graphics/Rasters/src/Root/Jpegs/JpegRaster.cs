@@ -41,6 +41,27 @@ public class JpegRaster : IJpegRaster
 	/// <inheritdoc />
 	public double CompressionRatio { get; set; }
 
+	/// <inheritdoc />
+	public bool HasLargeMetadata => EstimatedMetadataSize > 1_000_000; // 1MB threshold
+
+	/// <inheritdoc />
+	public long EstimatedMetadataSize
+	{
+		get
+		{
+			var size = 0L;
+			if (!Metadata.ExifData.IsEmpty)
+				size += Metadata.ExifData.Length;
+			if (!Metadata.IccProfile.IsEmpty)
+				size += Metadata.IccProfile.Length;
+			if (!Metadata.IptcData.IsEmpty)
+				size += Metadata.IptcData.Length;
+			if (!Metadata.XmpData.IsEmpty)
+				size += Metadata.XmpData.Length;
+			return size;
+		}
+	}
+
 	/// <summary>Initializes a new instance of the <see cref="JpegRaster"/> class.</summary>
 	public JpegRaster()
 	{
@@ -146,9 +167,36 @@ public class JpegRaster : IJpegRaster
 		GC.SuppressFinalize(this);
 	}
 
+	/// <inheritdoc />
+	public async ValueTask DisposeAsync()
+	{
+		if (HasLargeMetadata)
+		{
+			// For large metadata, clear in stages
+			await Task.Yield();
+			Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
+			await Task.Yield();
+			Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
+			await Task.Yield();
+			Metadata.IptcData = ReadOnlyMemory<byte>.Empty;
+			await Task.Yield();
+			Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+		}
+		else
+		{
+			Dispose(true);
+		}
+		GC.SuppressFinalize(this);
+	}
+
 	protected virtual void Dispose(bool disposing)
 	{
 		if (disposing)
-			Metadata = null!;
+		{
+			Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
+			Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
+			Metadata.IptcData = ReadOnlyMemory<byte>.Empty;
+			Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+		}
 	}
 }

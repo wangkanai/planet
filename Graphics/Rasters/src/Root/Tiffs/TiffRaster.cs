@@ -45,6 +45,36 @@ public class TiffRaster : ITiffRaster
 	/// <inheritdoc />
 	public int PlanarConfiguration { get; set; } = 1;
 
+	/// <inheritdoc />
+	public bool HasLargeMetadata => EstimatedMetadataSize > 1_000_000; // 1MB threshold
+
+	/// <inheritdoc />
+	public long EstimatedMetadataSize
+	{
+		get
+		{
+			var size = 0L;
+			if (!Metadata.ExifData.IsEmpty)
+				size += Metadata.ExifData.Length;
+			if (!Metadata.IccProfile.IsEmpty)
+				size += Metadata.IccProfile.Length;
+			if (!Metadata.XmpData.IsEmpty)
+				size += Metadata.XmpData.Length;
+			if (!Metadata.GeoKeyDirectory.IsEmpty)
+				size += Metadata.GeoKeyDirectory.Length;
+			if (!Metadata.GeoDoubleParams.IsEmpty)
+				size += Metadata.GeoDoubleParams.Length;
+			if (!Metadata.GeoAsciiParams.IsEmpty)
+				size += Metadata.GeoAsciiParams.Length;
+			
+			// Add estimated size of image strips/tiles data if stored in metadata
+			foreach (var strip in Metadata.StripOffsets)
+				size += Metadata.StripByteCounts.ElementAtOrDefault(strip.Key);
+			
+			return size;
+		}
+	}
+
 	private static readonly int[] Int32Array = [8, 8, 8];
 
 	/// <summary>Initializes a new instance of the <see cref="TiffRaster"/> class.</summary>
@@ -142,13 +172,60 @@ public class TiffRaster : ITiffRaster
 		GC.SuppressFinalize(this);
 	}
 
+	/// <inheritdoc />
+	public async ValueTask DisposeAsync()
+	{
+		if (HasLargeMetadata)
+		{
+			// For large TIFF metadata (common with GeoTIFF), clear in stages
+			await Task.Yield();
+			Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
+			await Task.Yield();
+			Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
+			await Task.Yield();
+			Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+			await Task.Yield();
+			Metadata.GeoKeyDirectory = ReadOnlyMemory<byte>.Empty;
+			await Task.Yield();
+			Metadata.GeoDoubleParams = ReadOnlyMemory<byte>.Empty;
+			await Task.Yield();
+			Metadata.GeoAsciiParams = ReadOnlyMemory<byte>.Empty;
+			await Task.Yield();
+			
+			// Clear strip data in batches for large TIFF files
+			Metadata.StripOffsets.Clear();
+			Metadata.StripByteCounts.Clear();
+			_bitsPerSampleArray = null;
+			
+			// Suggest GC for very large TIFF metadata
+			if (EstimatedMetadataSize > 10_000_000) // 10MB
+			{
+				GC.Collect();
+				GC.WaitForPendingFinalizers();
+				GC.Collect();
+			}
+		}
+		else
+		{
+			Dispose(true);
+		}
+		GC.SuppressFinalize(this);
+	}
+
 	protected virtual void Dispose(bool disposing)
 	{
 		if (disposing)
 		{
 			// Free managed resources if any
 			_bitsPerSampleArray = null;
-			Metadata            = null!;
+			Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
+			Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
+			Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+			Metadata.GeoKeyDirectory = ReadOnlyMemory<byte>.Empty;
+			Metadata.GeoDoubleParams = ReadOnlyMemory<byte>.Empty;
+			Metadata.GeoAsciiParams = ReadOnlyMemory<byte>.Empty;
+			Metadata.StripOffsets.Clear();
+			Metadata.StripByteCounts.Clear();
 		}
 
 		// Free unmanaged resources if any
