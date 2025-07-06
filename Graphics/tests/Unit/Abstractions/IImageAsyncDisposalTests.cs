@@ -5,6 +5,7 @@ using Wangkanai.Graphics.Rasters.WebPs;
 using Wangkanai.Graphics.Rasters.Jpegs;
 using Wangkanai.Graphics.Rasters.Tiffs;
 using Wangkanai.Graphics.Rasters.Pngs;
+using Wangkanai.Graphics.Vectors;
 
 namespace Wangkanai.Graphics.UnitTests.Abstractions;
 
@@ -164,13 +165,14 @@ public class IImageAsyncDisposalTests
 	[InlineData(typeof(JpegRaster))]
 	[InlineData(typeof(TiffRaster))]
 	[InlineData(typeof(PngRaster))]
-	public async Task AllRasterTypes_SupportAsyncDisposal(Type rasterType)
+	[InlineData(typeof(Vector))]
+	public async Task AllImageTypes_SupportAsyncDisposal(Type imageType)
 	{
 		// Arrange
-		var raster = (IImage)Activator.CreateInstance(rasterType)!;
+		var image = (IImage)Activator.CreateInstance(imageType)!;
 		
 		// Act & Assert - Should not throw
-		await raster.DisposeAsync();
+		await image.DisposeAsync();
 	}
 
 	[Fact]
@@ -212,5 +214,31 @@ public class IImageAsyncDisposalTests
 		
 		// Verify size is now much smaller (should be 0 or minimal)
 		Assert.True(webp.EstimatedMetadataSize < 100);
+	}
+
+	[Fact]
+	public async Task Vector_AsyncDisposal_ShouldComplete()
+	{
+		// Arrange
+		var vector = new Vector { Width = 800, Height = 600 };
+		
+		// Vector base class has no metadata, so should have small estimated size
+		Assert.False(vector.HasLargeMetadata);
+		Assert.Equal(0, vector.EstimatedMetadataSize);
+		
+		// Act & Assert - Should not throw
+		await vector.DisposeAsync();
+	}
+
+	[Fact]
+	public void Vector_ImplementsIImageInterface()
+	{
+		// Arrange & Act
+		IImage vector = new Vector();
+		
+		// Assert
+		Assert.NotNull(vector);
+		Assert.False(vector.HasLargeMetadata);
+		Assert.Equal(0, vector.EstimatedMetadataSize);
 	}
 }
