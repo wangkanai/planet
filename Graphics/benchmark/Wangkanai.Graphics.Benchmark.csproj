@@ -1,0 +1,5 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Abstractions\src\Wangkanai.Graphics.Abstractions.csproj" />
+  </ItemGroup>
+</Project>
