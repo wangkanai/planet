@@ -217,7 +217,7 @@ public class PngValidatorTests
 		          {
 			          ColorType   = PngColorType.IndexedColor,
 			          BitDepth    = 8,
-			          PaletteData = null
+			          PaletteData = ReadOnlyMemory<byte>.Empty
 		          };
 		var result = new PngValidationResult();
 
@@ -237,7 +237,7 @@ public class PngValidatorTests
 		          {
 			          ColorType   = PngColorType.IndexedColor,
 			          BitDepth    = 8,
-			          PaletteData = []
+			          PaletteData = ReadOnlyMemory<byte>.Empty
 		          };
 		var result = new PngValidationResult();
 
@@ -257,7 +257,7 @@ public class PngValidatorTests
 		          {
 			          ColorType   = PngColorType.IndexedColor,
 			          BitDepth    = 8,
-			          PaletteData = new byte[] { 255, 0 }// Not multiple of 3
+			          PaletteData = new ReadOnlyMemory<byte>(new byte[] { 255, 0 })// Not multiple of 3
 		          };
 		var result = new PngValidationResult();
 
@@ -277,7 +277,7 @@ public class PngValidatorTests
 		          {
 			          ColorType   = PngColorType.IndexedColor,
 			          BitDepth    = 1,         // Max 2 palette entries (2^1)
-			          PaletteData = new byte[9]// 3 entries (9/3)
+			          PaletteData = new ReadOnlyMemory<byte>(new byte[9])// 3 entries (9/3)
 		          };
 		var result = new PngValidationResult();
 
@@ -296,7 +296,7 @@ public class PngValidatorTests
 		var png = new PngRaster
 		          {
 			          ColorType   = PngColorType.Truecolor,
-			          PaletteData = new byte[] { 255, 0, 0, 0, 255, 0 }
+			          PaletteData = new ReadOnlyMemory<byte>(new byte[] { 255, 0, 0, 0, 255, 0 })
 		          };
 		var result = new PngValidationResult();
 
@@ -319,7 +319,7 @@ public class PngValidatorTests
 		var png = new PngRaster
 		          {
 			          ColorType        = colorType,
-			          TransparencyData = transparencyData
+			          TransparencyData = new ReadOnlyMemory<byte>(transparencyData)
 		          };
 		var result = new PngValidationResult();
 
@@ -345,7 +345,7 @@ public class PngValidatorTests
 		var png = new PngRaster
 		          {
 			          ColorType        = colorType,
-			          TransparencyData = new byte[] { 255, 255 }
+			          TransparencyData = new ReadOnlyMemory<byte>(new byte[] { 255, 255 })
 		          };
 		var result = new PngValidationResult();
 

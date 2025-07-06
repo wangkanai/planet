@@ -70,16 +70,18 @@ public static class PngExamples
 
 		// Create a basic palette (RGB triplets)
 		var paletteSize = Math.Min(256, 1 << bitDepth);
-		png.PaletteData = new byte[paletteSize * 3];
+		var paletteBytes = new byte[paletteSize * 3];
 
 		// Fill with a simple gradient palette
 		for (var i = 0; i < paletteSize; i++)
 		{
 			var intensity = (byte)(i * 255 / (paletteSize - 1));
-			png.PaletteData[i * 3]     = intensity;// Red
-			png.PaletteData[i * 3 + 1] = intensity;// Green
-			png.PaletteData[i * 3 + 2] = intensity;// Blue
+			paletteBytes[i * 3]     = intensity;// Red
+			paletteBytes[i * 3 + 1] = intensity;// Green
+			paletteBytes[i * 3 + 2] = intensity;// Blue
 		}
+
+		png.PaletteData = new ReadOnlyMemory<byte>(paletteBytes);
 
 		return png;
 	}

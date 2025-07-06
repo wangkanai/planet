@@ -161,7 +161,7 @@ public class PngMetadata
 	} = new();
 
 	/// <summary>Gets or sets the transparency information for the image.</summary>
-	public byte[]? TransparencyData
+	public ReadOnlyMemory<byte> TransparencyData
 	{
 		get;
 		set;

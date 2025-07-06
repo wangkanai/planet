@@ -81,14 +81,14 @@ public interface IPngRaster : IRaster
 	}
 
 	/// <summary>Gets the palette data for indexed-color images.</summary>
-	byte[]? PaletteData
+	ReadOnlyMemory<byte> PaletteData
 	{
 		get;
 		set;
 	}
 
 	/// <summary>Gets or sets the transparency data.</summary>
-	byte[]? TransparencyData
+	ReadOnlyMemory<byte> TransparencyData
 	{
 		get;
 		set;
