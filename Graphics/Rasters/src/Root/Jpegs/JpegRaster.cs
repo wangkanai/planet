@@ -3,13 +3,13 @@
 namespace Wangkanai.Graphics.Rasters.Jpegs;
 
 /// <summary>Represents a JPEG raster image with format-specific properties.</summary>
-public class JpegRaster : IJpegRaster
+public class JpegRaster : Raster, IJpegRaster
 {
 	/// <inheritdoc />
-	public int Width { get; set; }
+	public override int Width { get; set; }
 
 	/// <inheritdoc />
-	public int Height { get; set; }
+	public override int Height { get; set; }
 
 	/// <inheritdoc />
 	public JpegColorMode ColorMode { get; set; }
@@ -42,10 +42,10 @@ public class JpegRaster : IJpegRaster
 	public double CompressionRatio { get; set; }
 
 	/// <inheritdoc />
-	public bool HasLargeMetadata => EstimatedMetadataSize > 1_000_000; // 1MB threshold
+	public override bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
 
 	/// <inheritdoc />
-	public long EstimatedMetadataSize
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
@@ -169,42 +169,43 @@ public class JpegRaster : IJpegRaster
 	}
 
 	/// <inheritdoc />
-	public void Dispose()
-	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
-	}
-
-	/// <inheritdoc />
-	public async ValueTask DisposeAsync()
+	protected override async ValueTask DisposeAsyncCore()
 	{
 		if (HasLargeMetadata)
 		{
-			// For large metadata, clear in stages
+			// For large metadata, clear in stages with yielding
 			await Task.Yield();
 			Metadata.IccProfile = null;
+			
 			await Task.Yield();
 			Metadata.CustomExifTags.Clear();
+			
 			await Task.Yield();
 			Metadata.IptcTags.Clear();
+			
 			await Task.Yield();
 			Metadata.XmpTags.Clear();
 		}
 		else
 		{
+			// For small metadata, use synchronous disposal
 			Dispose(true);
 		}
-		GC.SuppressFinalize(this);
 	}
 
-	protected virtual void Dispose(bool disposing)
+	/// <inheritdoc />
+	protected override void Dispose(bool disposing)
 	{
 		if (disposing)
 		{
+			// Clear JPEG-specific managed resources
 			Metadata.IccProfile = null;
 			Metadata.CustomExifTags.Clear();
 			Metadata.IptcTags.Clear();
 			Metadata.XmpTags.Clear();
 		}
+
+		// Call base class disposal
+		base.Dispose(disposing);
 	}
 }

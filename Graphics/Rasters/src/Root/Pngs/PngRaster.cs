@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Rasters.Pngs;
 
 /// <summary>Represents a PNG raster image implementation.</summary>
-public class PngRaster : IPngRaster
+public class PngRaster : Raster, IPngRaster
 {
 	private PngColorType _colorType        = PngColorType.Truecolor;
 	private byte         _bitDepth         = 8;
@@ -30,10 +30,10 @@ public class PngRaster : IPngRaster
 	}
 
 	/// <summary>Gets or sets the width of the image in pixels.</summary>
-	public int Width { get; set; } = 1;
+	public override int Width { get; set; } = 1;
 
 	/// <summary>Gets or sets the height of the image in pixels.</summary>
-	public int Height { get; set; } = 1;
+	public override int Height { get; set; } = 1;
 
 	/// <summary>Gets or sets the PNG color type.</summary>
 	public PngColorType ColorType
@@ -99,10 +99,10 @@ public class PngRaster : IPngRaster
 	public ReadOnlyMemory<byte> TransparencyData { get; set; }
 
 	/// <inheritdoc />
-	public bool HasLargeMetadata => EstimatedMetadataSize > 1_000_000; // 1MB threshold
+	public override bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
 
 	/// <inheritdoc />
-	public long EstimatedMetadataSize
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
@@ -215,43 +215,52 @@ public class PngRaster : IPngRaster
 		};
 	}
 
-	/// <summary>Disposes of the PNG raster resources.</summary>
-	public void Dispose()
-	{
-		PaletteData      = ReadOnlyMemory<byte>.Empty;
-		TransparencyData = ReadOnlyMemory<byte>.Empty;
-		Metadata.TextChunks.Clear();
-		Metadata.CompressedTextChunks.Clear();
-		Metadata.InternationalTextChunks.Clear();
-		Metadata.CustomChunks.Clear();
-		GC.SuppressFinalize(this);
-	}
-
 	/// <inheritdoc />
-	public async ValueTask DisposeAsync()
+	protected override async ValueTask DisposeAsyncCore()
 	{
 		if (HasLargeMetadata)
 		{
-			// For large PNG metadata, clear in stages
+			// For large PNG metadata, clear in stages with yielding
 			await Task.Yield();
 			PaletteData = ReadOnlyMemory<byte>.Empty;
+			
 			await Task.Yield();
 			TransparencyData = ReadOnlyMemory<byte>.Empty;
-			await Task.Yield();
 			
-			// Clear text chunks in batches
+			await Task.Yield();
 			Metadata.TextChunks.Clear();
+			
 			await Task.Yield();
 			Metadata.CompressedTextChunks.Clear();
+			
 			await Task.Yield();
 			Metadata.InternationalTextChunks.Clear();
+			
 			await Task.Yield();
 			Metadata.CustomChunks.Clear();
 		}
 		else
 		{
-			Dispose();
+			// For small metadata, use synchronous disposal
+			Dispose(true);
 		}
-		GC.SuppressFinalize(this);
+	}
+
+	/// <inheritdoc />
+	protected override void Dispose(bool disposing)
+	{
+		if (disposing)
+		{
+			// Clear PNG-specific managed resources
+			PaletteData = ReadOnlyMemory<byte>.Empty;
+			TransparencyData = ReadOnlyMemory<byte>.Empty;
+			Metadata.TextChunks.Clear();
+			Metadata.CompressedTextChunks.Clear();
+			Metadata.InternationalTextChunks.Clear();
+			Metadata.CustomChunks.Clear();
+		}
+
+		// Call base class disposal
+		base.Dispose(disposing);
 	}
 }

@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 namespace Wangkanai.Graphics.Rasters.Tiffs;
 
 /// <summary>Represents a TIFF raster image with format-specific properties.</summary>
-public class TiffRaster : ITiffRaster
+public class TiffRaster : Raster, ITiffRaster
 {
 	/// <inheritdoc />
-	public int Width { get; set; }
+	public override int Width { get; set; }
 
 	/// <inheritdoc />
-	public int Height { get; set; }
+	public override int Height { get; set; }
 
 	/// <inheritdoc />
 	public TiffColorDepth ColorDepth { get; set; }
@@ -46,10 +46,10 @@ public class TiffRaster : ITiffRaster
 	public int PlanarConfiguration { get; set; } = 1;
 
 	/// <inheritdoc />
-	public bool HasLargeMetadata => EstimatedMetadataSize > 1_000_000; // 1MB threshold
+	public override bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
 
 	/// <inheritdoc />
-	public long EstimatedMetadataSize
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
@@ -166,39 +166,37 @@ public class TiffRaster : ITiffRaster
 	}
 
 	/// <inheritdoc />
-	public void Dispose()
-	{
-		// Implementation for resource cleanup
-		Dispose(true);
-		GC.SuppressFinalize(this);
-	}
-
-	/// <inheritdoc />
-	public async ValueTask DisposeAsync()
+	protected override async ValueTask DisposeAsyncCore()
 	{
 		if (HasLargeMetadata)
 		{
-			// For large TIFF metadata, clear in stages
+			// For large TIFF metadata, clear in stages with yielding
 			await Task.Yield();
 			Metadata.ImageDescription = null;
+			
 			await Task.Yield();
 			Metadata.Make = null;
+			
 			await Task.Yield();
 			Metadata.Model = null;
+			
 			await Task.Yield();
 			Metadata.Software = null;
+			
 			await Task.Yield();
 			Metadata.Copyright = null;
+			
 			await Task.Yield();
 			Metadata.Artist = null;
-			await Task.Yield();
 			
-			// Clear custom tags
+			await Task.Yield();
 			Metadata.CustomTags.Clear();
+			
+			await Task.Yield();
 			_bitsPerSampleArray = null;
 			
 			// Suggest GC for very large TIFF metadata
-			if (EstimatedMetadataSize > 10_000_000) // 10MB
+			if (EstimatedMetadataSize > ImageConstants.VeryLargeMetadataThreshold)
 			{
 				GC.Collect();
 				GC.WaitForPendingFinalizers();
@@ -207,16 +205,17 @@ public class TiffRaster : ITiffRaster
 		}
 		else
 		{
+			// For small metadata, use synchronous disposal
 			Dispose(true);
 		}
-		GC.SuppressFinalize(this);
 	}
 
-	protected virtual void Dispose(bool disposing)
+	/// <inheritdoc />
+	protected override void Dispose(bool disposing)
 	{
 		if (disposing)
 		{
-			// Free managed resources if any
+			// Clear TIFF-specific managed resources
 			_bitsPerSampleArray = null;
 			Metadata.ImageDescription = null;
 			Metadata.Make = null;
@@ -227,6 +226,7 @@ public class TiffRaster : ITiffRaster
 			Metadata.CustomTags.Clear();
 		}
 
-		// Free unmanaged resources if any
+		// Call base class disposal
+		base.Dispose(disposing);
 	}
 }

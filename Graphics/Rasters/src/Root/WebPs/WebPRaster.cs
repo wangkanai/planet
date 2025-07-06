@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Rasters.WebPs;
 
 /// <summary>Represents a WebP raster image implementation with high-performance optimizations.</summary>
-public class WebPRaster : IWebPRaster
+public class WebPRaster : Raster, IWebPRaster
 {
 	private WebPFormat      _format               = WebPFormat.Simple;
 	private WebPCompression _compression          = WebPCompression.VP8;
@@ -45,10 +45,10 @@ public class WebPRaster : IWebPRaster
 	}
 
 	/// <inheritdoc />
-	public int Width { get; set; } = 1;
+	public override int Width { get; set; } = 1;
 
 	/// <inheritdoc />
-	public int Height { get; set; } = 1;
+	public override int Height { get; set; } = 1;
 
 	/// <inheritdoc />
 	public WebPFormat Format
@@ -135,10 +135,10 @@ public class WebPRaster : IWebPRaster
 	}
 
 	/// <inheritdoc />
-	public bool HasLargeMetadata => EstimatedMetadataSize > 1_000_000; // 1MB threshold
+	public override bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
 
 	/// <inheritdoc />
-	public long EstimatedMetadataSize
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
@@ -329,58 +329,32 @@ public class WebPRaster : IWebPRaster
 		return 2.0 + levelFactor;
 	}
 
-	/// <summary>Disposes of the WebP raster resources.</summary>
-	public void Dispose()
+	/// <inheritdoc />
+	protected override async ValueTask DisposeAsyncCore()
 	{
-		DisposeCore();
-		GC.SuppressFinalize(this);
-	}
-
-	/// <summary>Asynchronously disposes of the WebP raster resources.</summary>
-	public async ValueTask DisposeAsync()
-	{
-		await DisposeAsyncCore().ConfigureAwait(false);
-		GC.SuppressFinalize(this);
-	}
-
-	/// <summary>Core disposal logic for synchronous disposal.</summary>
-	private void DisposeCore()
-	{
-		Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
-		Metadata.ExifData   = ReadOnlyMemory<byte>.Empty;
-		Metadata.XmpData    = ReadOnlyMemory<byte>.Empty;
-		Metadata.CustomChunks.Clear();
-		Metadata.AnimationFrames.Clear();
-	}
-
-	/// <summary>Core disposal logic for asynchronous disposal.</summary>
-	private async ValueTask DisposeAsyncCore()
-	{
-		// For large metadata, perform disposal operations asynchronously to avoid blocking
 		if (HasLargeMetadata)
 		{
-			// Clear large metadata components with yielding for responsiveness
+			// For large WebP metadata, clear in stages with yielding
 			if (!Metadata.IccProfile.IsEmpty)
 			{
-				Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
-				// Allow other tasks to execute
 				await Task.Yield();
+				Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
 			}
 
 			if (!Metadata.ExifData.IsEmpty)
 			{
-				Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
 				await Task.Yield();
+				Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
 			}
 
 			if (!Metadata.XmpData.IsEmpty)
 			{
-				Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
 				await Task.Yield();
+				Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
 			}
 
 			// Clear animation frames in batches for large collections
-			if (Metadata.AnimationFrames.Count > 100)
+			if (Metadata.AnimationFrames.Count > ImageConstants.DisposalBatchSize)
 			{
 				var batchSize = 50;
 				for (var i = 0; i < Metadata.AnimationFrames.Count; i += batchSize)
@@ -395,12 +369,14 @@ public class WebPRaster : IWebPRaster
 				}
 			}
 
-			// Clear collections
+			await Task.Yield();
 			Metadata.AnimationFrames.Clear();
+			
+			await Task.Yield();
 			Metadata.CustomChunks.Clear();
 
 			// Suggest garbage collection for large metadata cleanup
-			if (EstimatedMetadataSize > 10_000_000) // 10MB threshold
+			if (EstimatedMetadataSize > ImageConstants.VeryLargeMetadataThreshold)
 			{
 				GC.Collect();
 				GC.WaitForPendingFinalizers();
@@ -410,7 +386,24 @@ public class WebPRaster : IWebPRaster
 		else
 		{
 			// For small metadata, use synchronous disposal
-			DisposeCore();
+			Dispose(true);
 		}
+	}
+
+	/// <inheritdoc />
+	protected override void Dispose(bool disposing)
+	{
+		if (disposing)
+		{
+			// Clear WebP-specific managed resources
+			Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
+			Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
+			Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+			Metadata.CustomChunks.Clear();
+			Metadata.AnimationFrames.Clear();
+		}
+
+		// Call base class disposal
+		base.Dispose(disposing);
 	}
 }
