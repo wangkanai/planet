@@ -130,7 +130,7 @@ public class PngMetadata
 		foreach (char c in keyword)
 		{
 			// Latin-1 printable characters (32-126 and 161-255)
-			if (c is < 32 or (> 126 and < 161))
+			if (c is < (char)32 or (> (char)126 and < (char)161))
 				return false;
 		}
 
