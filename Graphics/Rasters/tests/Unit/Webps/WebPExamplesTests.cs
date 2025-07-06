@@ -101,7 +101,9 @@ public class WebPExamplesTests
 		Assert.Equal(WebPPreset.Drawing, webp.Preset);
 		Assert.True(webp.IsLossless);
 		Assert.Equal(WebPColorMode.Rgba, webp.ColorMode);
-		Assert.Equal(WebPFormat.Extended, webp.Format);
+		// Note: ConfigureLossless() in the Drawing preset overrides EnableExtendedFeatures()
+		// Auto-synchronization sets format to Lossless when VP8L compression is used
+		Assert.Equal(WebPFormat.Lossless, webp.Format);
 		Assert.Equal("Vector graphics or drawing", webp.Metadata.Description);
 		Assert.True(webp.IsValid());
 	}
@@ -124,7 +126,9 @@ public class WebPExamplesTests
 		Assert.Equal(WebPPreset.Icon, webp.Preset);
 		Assert.True(webp.IsLossless);
 		Assert.Equal(WebPColorMode.Rgba, webp.ColorMode);
-		Assert.Equal(WebPFormat.Extended, webp.Format);
+		// Note: ConfigureLossless() in the Icon preset overrides EnableExtendedFeatures()
+		// Auto-synchronization sets format to Lossless when VP8L compression is used
+		Assert.Equal(WebPFormat.Lossless, webp.Format);
 		Assert.Equal($"Icon {size}x{size}", webp.Metadata.Description);
 		Assert.Equal("Application Icon", webp.Metadata.Title);
 		Assert.True(webp.IsValid());
