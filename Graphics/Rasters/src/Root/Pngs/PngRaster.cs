@@ -149,12 +149,12 @@ public class PngRaster : IPngRaster
 	/// <summary>Validates the PNG raster image.</summary>
 	/// <returns>True if the image is valid, false otherwise.</returns>
 	public bool IsValid()
-	{
-		return Width > 0 && Width <= PngConstants.MaxWidth &&
-		       Height > 0 && Height <= PngConstants.MaxHeight &&
-		       IsValidBitDepthForColorType() &&
-		       CompressionLevel >= 0 && CompressionLevel <= 9;
-	}
+		=> Width > 0 &&
+		   Width <= PngConstants.MaxWidth &&
+		   Height > 0 &&
+		   Height <= PngConstants.MaxHeight &&
+		   IsValidBitDepthForColorType() &&
+		   CompressionLevel is >= 0 and <= 9;
 
 	/// <summary>Gets the estimated file size in bytes.</summary>
 	/// <returns>The estimated file size.</returns>
@@ -163,7 +163,7 @@ public class PngRaster : IPngRaster
 		if (!IsValid())
 			return 0;
 
-		// Estimate based on uncompressed data with typical compression ratio
+		// Estimate based on uncompressed data with the typical compression ratio
 		var bytesPerPixel    = (SamplesPerPixel * BitDepth + 7) / 8;
 		var uncompressedSize = (long)Width * Height * bytesPerPixel;
 
@@ -202,13 +202,13 @@ public class PngRaster : IPngRaster
 		GC.SuppressFinalize(this);
 	}
 
-	/// <summary>Updates dependent properties when color type changes.</summary>
+	/// <summary>Updates dependent properties when the color type changes.</summary>
 	private void UpdateDependentProperties()
 	{
 		UsesPalette     = ColorType == PngColorType.IndexedColor;
 		HasAlphaChannel = ColorType is PngColorType.GrayscaleWithAlpha or PngColorType.TruecolorWithAlpha;
 
-		// Set appropriate bit depth for color type if current value is invalid
+		// Set the appropriate bit depth for the color type if the current value is invalid
 		if (!IsValidBitDepthForColorType())
 		{
 			BitDepth = ColorType switch
@@ -228,16 +228,17 @@ public class PngRaster : IPngRaster
 	private bool IsValidBitDepthForColorType()
 	{
 		// Fast path for most common cases
-		if (BitDepth == 8) return true;// 8-bit is valid for all color types
+		if (BitDepth == 8)
+			return true;// 8-bit is valid for all color types
 
 		// Optimized validation using direct comparisons for better performance
 		return ColorType switch
 		{
-			PngColorType.Grayscale          => BitDepth is 1 or 2 or 4 or 8 or 16,
-			PngColorType.Truecolor          => BitDepth is 8 or 16,
-			PngColorType.IndexedColor       => BitDepth is 1 or 2 or 4 or 8,
-			PngColorType.GrayscaleWithAlpha => BitDepth is 8 or 16,
-			PngColorType.TruecolorWithAlpha => BitDepth is 8 or 16,
+			PngColorType.Grayscale          => BitDepth is 1 or 2 or 4 or 8 or 16,// Grayscale: 1=2 colors, 2=4 colors, 4=16 colors, 8=256 colors, 16=65536 colors
+			PngColorType.Truecolor          => BitDepth is 8 or 16,               // Truecolor RGB: 8=256 levels per channel, 16=65536 levels per channel
+			PngColorType.IndexedColor       => BitDepth is 1 or 2 or 4 or 8,      // Indexed color (palette): 1=2 entries, 2=4 entries, 4=16 entries, 8=256 entries
+			PngColorType.GrayscaleWithAlpha => BitDepth is 8 or 16,               // Grayscale + Alpha: 8=256 levels + alpha, 16=65536 levels + alpha
+			PngColorType.TruecolorWithAlpha => BitDepth is 8 or 16,               // Truecolor + Alpha: 8=256 levels per RGBA channel, 16=65536 levels per RGBA channel
 			_                               => false
 		};
 	}
