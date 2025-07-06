@@ -25,10 +25,22 @@ public class PngRaster : IPngRaster
 	/// <summary>Initializes a new instance of the <see cref="PngRaster"/> class.</summary>
 	/// <param name="width">The width of the image in pixels.</param>
 	/// <param name="height">The height of the image in pixels.</param>
+	/// <exception cref="ArgumentOutOfRangeException">Thrown when width or height exceeds PNG limits.</exception>
 	public PngRaster(int width, int height) : this()
 	{
-		Width  = Math.Max(1, width);
-		Height = Math.Max(1, height);
+		// Clamp to valid range and check against PNG limits
+		var clampedWidth  = Math.Max((int)PngConstants.MinWidth, Math.Min(width, (int)PngConstants.MaxWidth));
+		var clampedHeight = Math.Max((int)PngConstants.MinHeight, Math.Min(height, (int)PngConstants.MaxHeight));
+		
+		// Validate against extremely large values that could cause memory issues
+		if (width != clampedWidth)
+			throw new ArgumentOutOfRangeException(nameof(width), width, $"Width must be between {PngConstants.MinWidth} and {PngConstants.MaxWidth}.");
+		
+		if (height != clampedHeight)
+			throw new ArgumentOutOfRangeException(nameof(height), height, $"Height must be between {PngConstants.MinHeight} and {PngConstants.MaxHeight}.");
+		
+		Width  = clampedWidth;
+		Height = clampedHeight;
 	}
 
 	/// <summary>Gets or sets the width of the image in pixels.</summary>
@@ -195,7 +207,7 @@ public class PngRaster : IPngRaster
 	{
 		PaletteData      = ReadOnlyMemory<byte>.Empty;
 		TransparencyData = ReadOnlyMemory<byte>.Empty;
-		Metadata.CustomChunks.Clear();
+		Metadata?.CustomChunks.Clear();
 		GC.SuppressFinalize(this);
 	}
 
