@@ -210,11 +210,11 @@ public class PngRaster : IPngRaster
 		{
 			BitDepth = ColorType switch
 			{
-				PngColorType.Grayscale          => 8,
-				PngColorType.Truecolor          => 8,
-				PngColorType.IndexedColor       => 8,
-				PngColorType.GrayscaleWithAlpha => 8,
-				PngColorType.TruecolorWithAlpha => 8,
+				PngColorType.Grayscale          => 8,  // Default: 8-bit (supports 1,2,4,8,16)
+				PngColorType.Truecolor          => 8,  // Default: 8-bit per channel (supports 8,16)
+				PngColorType.IndexedColor       => 4,  // Default: 4-bit for 16 colors (supports 1,2,4,8)
+				PngColorType.GrayscaleWithAlpha => 8,  // Default: 8-bit per channel (supports 8,16)
+				PngColorType.TruecolorWithAlpha => 8,  // Default: 8-bit per channel (supports 8,16)
 				_                               => 8
 			};
 		}
