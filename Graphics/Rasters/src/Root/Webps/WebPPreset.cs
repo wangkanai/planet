@@ -8,7 +8,7 @@ public enum WebPPreset : byte
 	/// <summary>Default preset with balanced quality and size.</summary>
 	Default = 0,
 
-	/// <summary>Optimized for pictures with lots of detail.</summary>
+	/// <summary>Optimized for pictures with lots of details.</summary>
 	Picture = 1,
 
 	/// <summary>Optimized for photographic images.</summary>
