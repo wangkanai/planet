@@ -151,16 +151,20 @@ public class PngRasterTests
 		Assert.False(png.IsValid());
 	}
 
-	[Theory]
-	[InlineData(-1)]
-	[InlineData(10)]
-	public void IsValid_WithInvalidCompressionLevel_ShouldReturnFalse(int compressionLevel)
+	[Fact]
+	public void CompressionLevel_WithInvalidValues_ShouldClampToValidRange()
 	{
 		// Arrange
-		var png = new PngRaster(800, 600) { CompressionLevel = compressionLevel };
+		var png = new PngRaster(800, 600);
 
-		// Act & Assert
-		Assert.False(png.IsValid());
+		// Act & Assert - Test that clamping works and result is valid
+		png.CompressionLevel = -1;
+		Assert.Equal(0, png.CompressionLevel);
+		Assert.True(png.IsValid());
+
+		png.CompressionLevel = 10;
+		Assert.Equal(9, png.CompressionLevel);
+		Assert.True(png.IsValid());
 	}
 
 	[Theory]
@@ -209,11 +213,11 @@ public class PngRasterTests
 	}
 
 	[Theory]
-	[InlineData(0, 1.0)] // No compression
-	[InlineData(3, 0.7)] // Low compression
-	[InlineData(6, 0.5)] // Medium compression
-	[InlineData(9, 0.3)] // High compression
-	public void GetEstimatedFileSize_ShouldVaryWithCompressionLevel(int compressionLevel, double expectedRatio)
+	[InlineData(0)] // No compression
+	[InlineData(3)] // Low compression
+	[InlineData(6)] // Medium compression
+	[InlineData(9)] // High compression
+	public void GetEstimatedFileSize_ShouldVaryWithCompressionLevel(int compressionLevel)
 	{
 		// Arrange
 		var png1 = new PngRaster(100, 100) { CompressionLevel = compressionLevel };

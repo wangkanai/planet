@@ -52,7 +52,7 @@ public class PngConstantsTests
 	public void SignatureLength_ShouldMatchActualSignature()
 	{
 		// Assert
-		Assert.Equal(PngConstants.Signature.Length, PngConstants.SignatureLength);
+		Assert.Equal(PngConstants.SignatureLength, PngConstants.Signature.Length);
 	}
 
 	[Fact]
