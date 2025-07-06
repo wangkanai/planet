@@ -2,56 +2,105 @@
 
 **Namespace:** `Wangkanai.Graphics.Rasters`
 
-A comprehensive raster image processing library with specialized support for TIFF and JPEG format specifications. Designed for high-performance pixel manipulation, image processing, and metadata handling with extensive benchmarking and validation capabilities.
+A **comprehensive raster image rasterization library** designed to work with all raster image formats through a unified abstraction layer. The library provides universal image processing capabilities including high-performance pixel manipulation, image processing, and metadata handling with extensive benchmarking and validation capabilities.
 
-*This library addresses the need for high-performance raster manipulation to operate on large datasets of images across professional photography, document imaging, scientific imaging, geographic systems, and prepress workflows.*
+*This library addresses the need for format-agnostic high-performance raster manipulation to operate on large datasets of images across professional photography, document imaging, scientific imaging, geographic systems, and prepress workflows. While TIFF and JPEG are the current complete implementations, the architecture is designed to support any image format through common abstractions.*
+
+## Supported Image Formats
+
+The library supports multiple raster image formats through a unified abstraction layer:
+
+### ✅ **Currently Implemented**
+- **TIFF** (.tiff, .tif) - Complete implementation with full specification support
+- **JPEG** (.jpg, .jpeg, .jpe, .jfif) - Complete implementation with quality control and optimization
+
+### 🔄 **Architecture Ready** 
+- **PNG** (.png) - Portable Network Graphics format
+- **WebP** (.webp) - Modern web-optimized format
+- **BMP** (.bmp) - Windows Bitmap format
+- **GIF** (.gif) - Graphics Interchange Format
+
+*All formats work through the same unified API, providing consistent operations regardless of the underlying image format.*
 
 > 📋 **GitHub Issue Reference**: [#50 - Raster image manipulation library](https://github.com/wangkanai/planet/issues/50)  
-> **Status**: ✅ **Implemented** - Complete TIFF and JPEG format support with high-performance processing capabilities
+> **Status**: ✅ **Implemented** - Universal image rasterization library with complete TIFF and JPEG format implementations
+
+## Universal Image Processing Capabilities
+
+The Raster component is built as a **generic library for all rasterized images**, providing a unified abstraction layer that works seamlessly across any raster image format. The architecture separates universal image operations from format-specific implementations, enabling consistent processing regardless of the underlying image format.
+
+### Key Universal Features
+- **Format-Agnostic Operations**: All core image operations (resize, crop, compress, metadata handling) work universally across formats
+- **Common Abstraction Layer**: The `IRaster` interface provides a consistent API for all image formats
+- **Universal Metadata System**: Standardized metadata handling that works across all supported formats
+- **Cross-Format Processing Pipeline**: Chain operations across different formats seamlessly
+- **Automatic Format Detection**: Intelligent format detection and appropriate processor selection
+- **Extensible Architecture**: Easy addition of new image formats through interface implementation
+
+### Current Format Implementations
+- **TIFF**: Complete implementation with full specification support
+- **JPEG**: Complete implementation with quality control and optimization
+- **Future Formats**: Architecture ready for PNG, BMP, GIF, WebP, and other image formats
+
+This universal approach means you can process images without worrying about format-specific details, while still having access to format-specific optimizations when needed.
 
 ## Features
 
-### ✅ Core Image Processing Capabilities
-- **Image Compression**: Multiple TIFF compression algorithms (LZW, JPEG, PackBits, Deflate, etc.) and JPEG quality control
-- **Image Conversion**: Format conversion between different image formats (TIFF, JPEG)
-- **Image Cropping**: Extract regions of interest from images with precise rectangle selection
-- **Image Resizing**: Scale images with multiple algorithm options and quality preservation
-- **Image Geo-tagging**: Add geographical information to images (GeoTIFF support)
-- **Image Grid Splitting**: Divide large images into smaller tiles for efficient processing
-- **Image Metadata**: Rich metadata support including EXIF, IPTC/XMP, camera settings, and custom tags
+### ✅ Universal Image Processing Capabilities
+- **Format-Agnostic Image Processing**: All operations work seamlessly across any supported image format
+- **Universal Image Compression**: Apply compression algorithms across formats with automatic optimization
+- **Cross-Format Conversion**: Convert between different image formats using the unified processing pipeline
+- **Universal Image Cropping**: Extract regions of interest from any image format with precise rectangle selection
+- **Universal Image Resizing**: Scale images across formats with multiple algorithm options and quality preservation
+- **Universal Geo-tagging**: Add geographical information to any supported image format
+- **Universal Grid Splitting**: Divide large images into smaller tiles regardless of format
+- **Universal Metadata Handling**: Rich metadata support that works across all formats including EXIF, IPTC/XMP, and custom tags
 
 ### 🚀 Performance & Technical Features
-- **Multi-Format Support**: Complete TIFF and JPEG format implementations with full specification support
+- **Multi-Format Support**: Unified processing engine with complete TIFF and JPEG implementations (more formats coming)
 - **High-Performance Processing**: Optimized for parallel CPU processing with cross-platform support
-- **Memory-Efficient Operations**: Span-based pixel processing for large datasets
+- **Memory-Efficient Operations**: Span-based pixel processing for large datasets across all formats
 - **Performance Optimization**: Benchmarked operations with comprehensive performance analysis tools
-- **Format Validation**: Built-in validation for TIFF and JPEG specification compliance
+- **Universal Format Validation**: Built-in validation framework that works across all supported formats
 - **Cross-Platform**: Works across Windows, macOS, and Linux environments
-- **Large Dataset Support**: Designed for high-performance raster manipulation on large image datasets
-- **Pipeline Architecture**: Flexible operation chaining for complex image processing workflows
+- **Large Dataset Support**: Designed for high-performance raster manipulation on large image datasets of any format
+- **Pipeline Architecture**: Flexible operation chaining for complex image processing workflows across formats
 
 ## Core Components
 
-### Core Abstractions
-- **`IRaster`** - Base interface for all raster image types
-- **`RasterProcessor`** - High-performance image processing engine
-- **`RasterValidator`** - Format-agnostic validation framework
-- **`RasterMetadata`** - Universal metadata management system
+### Universal Image Abstractions
+The library is built around format-agnostic abstractions that provide consistent functionality across all image formats:
 
-### TIFF Implementation
+- **`IRaster`** - Base interface for all raster image types, providing universal image operations
+- **`RasterProcessor`** - High-performance image processing engine that works across all formats
+- **`RasterValidator`** - Format-agnostic validation framework with universal compliance checking
+- **`RasterMetadata`** - Universal metadata management system supporting all image formats
+- **`RasterFactory`** - Intelligent format detection and creation with automatic format selection
+- **`RasterProcessingPipeline`** - Flexible operation chaining that works across all formats
+
+### Format-Specific Implementations
+The universal abstractions are implemented for specific image formats, with each format extending the core capabilities:
+
+#### TIFF Implementation
 - **`ITiffRaster`** - TIFF-specific interface extending `IRaster`
 - **`TiffRaster`** - Main TIFF processing class implementing `ITiffRaster`
 - **`TiffMetadata`** - Comprehensive TIFF metadata handling
 - **`TiffValidator`** - Format validation and compliance checking
 - **`TiffConstants`** - TIFF specification constants and definitions
 
-### JPEG Implementation
+#### JPEG Implementation
 - **`IJpegRaster`** - JPEG-specific interface extending `IRaster`
 - **`JpegRaster`** - Main JPEG processing class implementing `IJpegRaster`
 - **`JpegMetadata`** - EXIF, IPTC, and XMP metadata handling
 - **`JpegValidator`** - JPEG format validation and quality checking
 - **`JpegConstants`** - JPEG specification constants and markers
 - **`JpegExamples`** - Usage patterns and quality recommendations
+
+> 💡 **For detailed technical architecture**: See the [Fundamental Code Architecture](#fundamental-code-architecture) section below for comprehensive implementation details and code examples.
+
+## Format-Specific Implementations
+
+The following sections detail the current complete implementations of the universal image rasterization system. These format-specific implementations extend the core abstractions to provide specialized functionality while maintaining compatibility with the universal processing pipeline.
 
 ### TIFF Specifications Support
 
@@ -141,7 +190,9 @@ The Tagged Image File Format (TIFF) is a versatile raster graphic format used fo
 - **Geographic Systems** - GeoTIFF for spatial data and mapping applications
 - **Prepress Workflows** - Printing and publishing industries with CMYK support
 
-## JPEG Specifications Support
+### JPEG Specifications Support
+
+The JPEG implementation demonstrates the extensibility of the universal image rasterization system, providing full support for the Joint Photographic Experts Group format while maintaining compatibility with all universal operations.
 
 The Joint Photographic Experts Group (JPEG) format is a widely used lossy compression standard for digital images. It's optimized for photographs and continuous-tone images with excellent compression ratios.
 
@@ -193,43 +244,71 @@ Performance analysis is available in `BENCHMARK_RESULTS.md` and `PERFORMANCE_ANA
 
 ## Usage
 
+The library provides both generic operations that work across all formats and format-specific operations for specialized needs:
+
+### Universal Operations (Format-Agnostic)
 ```csharp
 using Wangkanai.Graphics.Rasters;
+
+// Generic raster processing - works with any format
+IRaster raster = await RasterFactory.CreateFromFileAsync("image.jpg"); // or .tiff, .png, etc.
+
+// Universal operations work regardless of format
+var resized = await raster.ResizeAsync(800, 600);
+var cropped = await raster.CropAsync(new Rectangle(0, 0, 400, 300));
+var metadata = raster.Metadata;
+
+// Universal validation
+var validator = new RasterValidator();
+bool isValid = validator.Validate(raster);
+```
+
+### Format-Specific Operations
+```csharp
 using Wangkanai.Graphics.Rasters.Tiffs;
+using Wangkanai.Graphics.Rasters.Jpegs;
 
-// Create a TIFF raster
+// TIFF-specific operations
 var tiffRaster = new TiffRaster();
-
-// Set TIFF properties
 tiffRaster.ColorDepth = TiffColorDepth.TrueColor24Bit;
 tiffRaster.Compression = TiffCompression.LZW;
 tiffRaster.PhotometricInterpretation = PhotometricInterpretation.RGB;
 
-// Add metadata
-tiffRaster.Metadata.Description = "Processed imagery";
-tiffRaster.Metadata.Software = "Wangkanai Graphics";
+// JPEG-specific operations  
+var jpegRaster = new JpegRaster();
+jpegRaster.Quality = 85;
+jpegRaster.ColorMode = JpegColorMode.RGB;
+jpegRaster.IsProgressive = true;
 
-// Validate TIFF compliance
-var validator = new TiffValidator();
-bool isValid = validator.ValidateFormat(tiffRaster);
+// All format-specific instances also support universal operations
+var universalMetadata = tiffRaster.Metadata; // Works with universal interface
 ```
 
-## Image Processing Capabilities
+## Universal Image Processing Capabilities
 
-- **Metadata Extraction**: Extract and modify image metadata
-- **Compression**: Apply various compression algorithms
-- **Format Conversion**: Convert between different image formats
-- **Cropping**: Extract regions of interest from images
-- **Resizing**: Scale images with multiple algorithm options
-- **Geo-tagging**: Add geographical information to images
-- **Grid Splitting**: Divide large images into smaller tiles
+The library provides format-agnostic image processing operations that work seamlessly across all supported image formats:
 
-## Validation and Compliance
+- **Universal Metadata Extraction**: Extract and modify image metadata regardless of format
+- **Universal Compression**: Apply compression algorithms across all formats with automatic optimization
+- **Cross-Format Conversion**: Convert between different image formats using the unified processing pipeline
+- **Universal Cropping**: Extract regions of interest from any image format
+- **Universal Resizing**: Scale images across formats with multiple algorithm options
+- **Universal Geo-tagging**: Add geographical information to any supported image format
+- **Universal Grid Splitting**: Divide large images into smaller tiles regardless of format
 
-- **Specification Compliance**: Ensures TIFF files meet format standards
-- **Metadata Validation**: Validates metadata structure and content
-- **Format Verification**: Checks file integrity and format compliance
-- **Error Handling**: Comprehensive error reporting for format issues
+## Universal Validation and Compliance
+
+The library provides comprehensive validation that works across all image formats:
+
+- **Universal Format Validation**: Unified validation framework that works across all supported formats
+- **Format-Agnostic Compliance**: Ensures images meet their respective format standards through common validation interface
+- **Universal Metadata Validation**: Validates metadata structure and content across all formats
+- **Cross-Format Verification**: Checks file integrity and format compliance using unified validation system
+- **Universal Error Handling**: Comprehensive error reporting that works consistently across all formats
+
+Format-specific validation is available for detailed compliance checking:
+- **TIFF Specification Compliance**: Detailed TIFF format standard validation
+- **JPEG Specification Compliance**: Comprehensive JPEG format validation
 
 ## Dependencies
 
@@ -239,6 +318,8 @@ bool isValid = validator.ValidateFormat(tiffRaster);
 - **BenchmarkDotNet** - Performance benchmarking (in benchmark projects)
 
 ## Fundamental Code Architecture
+
+The Raster component implements a sophisticated layered architecture that separates universal image operations from format-specific implementations. This design enables the library to function as a **generic image rasterization system** while maintaining optimal performance and extensibility.
 
 ### Core Abstraction Layer
 
@@ -486,20 +567,28 @@ public static class ParallelRasterProcessor
 ```
 
 This architecture provides:
-- **Extensibility**: Easy addition of new formats through interface implementation
+- **Universal Image Processing**: Core operations work seamlessly across all raster formats
+- **Extensibility**: Easy addition of new image formats through interface implementation
 - **Performance**: Memory-efficient processing with parallel operation support
 - **Maintainability**: Clear separation of concerns with format-specific implementations
 - **Testability**: Abstract base classes and interfaces enable comprehensive unit testing
-- **Flexibility**: Pipeline-based processing allows complex operation chaining
+- **Flexibility**: Pipeline-based processing allows complex operation chaining across formats
+- **Format Independence**: Applications can work with any image format using the same API
 
 ## Testing
 
-Comprehensive unit tests are available covering:
-- TIFF format validation
+Comprehensive unit tests are available covering both universal operations and format-specific implementations:
+
+### Universal Testing
+- Format-agnostic validation framework
+- Universal metadata handling across formats
+- Cross-format processing pipeline operations
+- Universal performance benchmarks
+- Generic abstraction layer functionality
+
+### Format-Specific Testing
+- TIFF format validation and processing
 - JPEG format validation and processing
-- Metadata handling
-- Compression algorithms
-- Performance benchmarks
-- Format compliance
-- Pipeline operations
-- Parallel processing
+- Format-specific compression algorithms
+- Format compliance testing
+- Parallel processing across formats
