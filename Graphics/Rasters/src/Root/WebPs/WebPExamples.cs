@@ -18,7 +18,7 @@ public static class WebPExamples
 		webp.Preset = WebPPreset.Default;
 
 		// Set web-optimized metadata
-		webp.Metadata.Software = "Wangkanai.Graphics.Rasters";
+		webp.Metadata.Software         = "Wangkanai.Graphics.Rasters";
 		webp.Metadata.CreationDateTime = DateTime.UtcNow;
 
 		return webp;
@@ -38,7 +38,7 @@ public static class WebPExamples
 		webp.Preset = WebPPreset.Default;
 
 		// Set metadata
-		webp.Metadata.Software = "Wangkanai.Graphics.Rasters";
+		webp.Metadata.Software         = "Wangkanai.Graphics.Rasters";
 		webp.Metadata.CreationDateTime = DateTime.UtcNow;
 
 		return webp;
@@ -57,9 +57,9 @@ public static class WebPExamples
 		webp.Preset = WebPPreset.Picture;
 
 		// Set metadata for alpha channel
-		webp.Metadata.Software = "Wangkanai.Graphics.Rasters";
+		webp.Metadata.Software         = "Wangkanai.Graphics.Rasters";
 		webp.Metadata.CreationDateTime = DateTime.UtcNow;
-		webp.Metadata.HasAlpha = true;
+		webp.Metadata.HasAlpha         = true;
 
 		return webp;
 	}
@@ -75,9 +75,9 @@ public static class WebPExamples
 		webp.SetColorMode(WebPColorMode.Rgb);
 
 		// Photography-specific metadata
-		webp.Metadata.Software = "Wangkanai.Graphics.Rasters";
+		webp.Metadata.Software         = "Wangkanai.Graphics.Rasters";
 		webp.Metadata.CreationDateTime = DateTime.UtcNow;
-		webp.Metadata.Description = "High-quality photographic image";
+		webp.Metadata.Description      = "High-quality photographic image";
 
 		return webp;
 	}
@@ -90,14 +90,14 @@ public static class WebPExamples
 	{
 		var webp = new WebPRaster(width, height);
 		webp.Preset = WebPPreset.Drawing;
-		webp.ConfigureLossless(); // Better for graphics
+		webp.ConfigureLossless();              // Better for graphics
 		webp.SetColorMode(WebPColorMode.Rgba); // Support transparency
 		webp.EnableExtendedFeatures();
 
 		// Drawing-specific metadata
-		webp.Metadata.Software = "Wangkanai.Graphics.Rasters";
+		webp.Metadata.Software         = "Wangkanai.Graphics.Rasters";
 		webp.Metadata.CreationDateTime = DateTime.UtcNow;
-		webp.Metadata.Description = "Vector graphics or drawing";
+		webp.Metadata.Description      = "Vector graphics or drawing";
 
 		return webp;
 	}
@@ -113,10 +113,10 @@ public static class WebPExamples
 		webp.EnableExtendedFeatures();
 
 		// Icon-specific metadata
-		webp.Metadata.Software = "Wangkanai.Graphics.Rasters";
+		webp.Metadata.Software         = "Wangkanai.Graphics.Rasters";
 		webp.Metadata.CreationDateTime = DateTime.UtcNow;
-		webp.Metadata.Description = $"Icon {size}x{size}";
-		webp.Metadata.Title = "Application Icon";
+		webp.Metadata.Description      = $"Icon {size}x{size}";
+		webp.Metadata.Title            = "Application Icon";
 
 		return webp;
 	}
@@ -132,9 +132,9 @@ public static class WebPExamples
 		webp.SetColorMode(WebPColorMode.Rgb);
 
 		// Text-specific metadata
-		webp.Metadata.Software = "Wangkanai.Graphics.Rasters";
+		webp.Metadata.Software         = "Wangkanai.Graphics.Rasters";
 		webp.Metadata.CreationDateTime = DateTime.UtcNow;
-		webp.Metadata.Description = "Text-based image content";
+		webp.Metadata.Description      = "Text-based image content";
 
 		return webp;
 	}
@@ -151,14 +151,14 @@ public static class WebPExamples
 		webp.SetColorMode(WebPColorMode.Rgba);
 
 		// Configure animation
-		webp.Metadata.HasAnimation = true;
-		webp.Metadata.AnimationLoops = loops;
+		webp.Metadata.HasAnimation    = true;
+		webp.Metadata.AnimationLoops  = loops;
 		webp.Metadata.BackgroundColor = 0x00000000; // Transparent
 
 		// Animation metadata
-		webp.Metadata.Software = "Wangkanai.Graphics.Rasters";
+		webp.Metadata.Software         = "Wangkanai.Graphics.Rasters";
 		webp.Metadata.CreationDateTime = DateTime.UtcNow;
-		webp.Metadata.Description = "Animated WebP image";
+		webp.Metadata.Description      = "Animated WebP image";
 
 		return webp;
 	}
@@ -175,16 +175,16 @@ public static class WebPExamples
 		webp.Preset = WebPPreset.Photo;
 
 		// Comprehensive metadata
-		webp.Metadata.Software = "Wangkanai.Graphics.Rasters";
+		webp.Metadata.Software         = "Wangkanai.Graphics.Rasters";
 		webp.Metadata.CreationDateTime = DateTime.UtcNow;
-		webp.Metadata.Artist = "Sample Artist";
-		webp.Metadata.Copyright = "Copyright 2025";
-		webp.Metadata.Title = "Sample WebP Image";
-		webp.Metadata.Description = "Sample image with comprehensive metadata";
+		webp.Metadata.Artist           = "Sample Artist";
+		webp.Metadata.Copyright        = "Copyright 2025";
+		webp.Metadata.Title            = "Sample WebP Image";
+		webp.Metadata.Description      = "Sample image with comprehensive metadata";
 
 		// Add flags for features
-		webp.Metadata.HasExif = true;
-		webp.Metadata.HasXmp = true;
+		webp.Metadata.HasExif       = true;
+		webp.Metadata.HasXmp        = true;
 		webp.Metadata.HasIccProfile = true;
 
 		return webp;
@@ -234,11 +234,11 @@ public static class WebPExamples
 	public static WebPRaster CreatePerformanceOptimized(int width, int height)
 	{
 		var webp = new WebPRaster(width, height);
-		
+
 		// Choose format based on image size for optimal performance
 		if (width * height > 4_000_000) // 4 megapixels
 		{
-			webp.ConfigureLossy(70); // Lower quality for very large images
+			webp.ConfigureLossy(70);   // Lower quality for very large images
 			webp.CompressionLevel = 3; // Faster encoding
 		}
 		else

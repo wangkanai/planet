@@ -5,27 +5,25 @@ namespace Wangkanai.Graphics.Rasters.WebPs;
 /// <summary>Represents a WebP raster image implementation with high-performance optimizations.</summary>
 public class WebPRaster : IWebPRaster
 {
-	private WebPFormat _format = WebPFormat.Simple;
-	private WebPCompression _compression = WebPCompression.VP8;
-	private WebPColorMode _colorMode = WebPColorMode.Rgb;
-	private WebPPreset _preset = WebPPreset.Default;
-	private int _quality = WebPConstants.DefaultQuality;
-	private int _compressionLevel = WebPConstants.DefaultCompressionLevel;
-	private double _compressionRatio = 4.0;
-	private bool _isUpdatingProperties = false;
+	private WebPFormat      _format               = WebPFormat.Simple;
+	private WebPCompression _compression          = WebPCompression.VP8;
+	private WebPColorMode   _colorMode            = WebPColorMode.Rgb;
+	private WebPPreset      _preset               = WebPPreset.Default;
+	private int             _quality              = WebPConstants.DefaultQuality;
+	private int             _compressionLevel     = WebPConstants.DefaultCompressionLevel;
+	private double          _compressionRatio     = 4.0;
+	private bool            _isUpdatingProperties = false;
 
 	/// <summary>Initializes a new instance of the <see cref="WebPRaster"/> class.</summary>
 	public WebPRaster()
 	{
-		Width = 1;
-		Height = 1;
-		Metadata = new WebPMetadata();
-		Format = WebPFormat.Simple;
-		Compression = WebPCompression.VP8;
-		ColorMode = WebPColorMode.Rgb;
-		Quality = WebPConstants.DefaultQuality;
+		Metadata         = new WebPMetadata();
+		Format           = WebPFormat.Simple;
+		Compression      = WebPCompression.VP8;
+		ColorMode        = WebPColorMode.Rgb;
+		Quality          = WebPConstants.DefaultQuality;
 		CompressionLevel = WebPConstants.DefaultCompressionLevel;
-		Preset = WebPPreset.Default;
+		Preset           = WebPPreset.Default;
 	}
 
 	/// <summary>Initializes a new instance of the <see cref="WebPRaster"/> class with specified dimensions.</summary>
@@ -33,7 +31,7 @@ public class WebPRaster : IWebPRaster
 	/// <param name="height">The height of the image in pixels.</param>
 	public WebPRaster(int width, int height) : this()
 	{
-		Width = Math.Clamp(width, (int)WebPConstants.MinWidth, (int)WebPConstants.MaxWidth);
+		Width  = Math.Clamp(width, (int)WebPConstants.MinWidth, (int)WebPConstants.MaxWidth);
 		Height = Math.Clamp(height, (int)WebPConstants.MinHeight, (int)WebPConstants.MaxHeight);
 	}
 
@@ -114,16 +112,20 @@ public class WebPRaster : IWebPRaster
 	public WebPMetadata Metadata { get; set; }
 
 	/// <inheritdoc />
-	public int Channels => ColorMode == WebPColorMode.Rgba ? WebPConstants.RgbaChannels : WebPConstants.RgbChannels;
+	public int Channels
+		=> ColorMode == WebPColorMode.Rgba ? WebPConstants.RgbaChannels : WebPConstants.RgbChannels;
 
 	/// <inheritdoc />
-	public bool HasAlpha => ColorMode == WebPColorMode.Rgba || Metadata.HasAlpha;
+	public bool HasAlpha
+		=> ColorMode == WebPColorMode.Rgba || Metadata.HasAlpha;
 
 	/// <inheritdoc />
-	public bool IsLossless => Compression == WebPCompression.VP8L;
+	public bool IsLossless
+		=> Compression == WebPCompression.VP8L;
 
 	/// <inheritdoc />
-	public bool IsAnimated => Metadata.HasAnimation && Metadata.AnimationFrames.Count > 0;
+	public bool IsAnimated
+		=> Metadata is { HasAnimation: true, AnimationFrames.Count: > 0 };
 
 	/// <inheritdoc />
 	public double CompressionRatio
@@ -136,7 +138,7 @@ public class WebPRaster : IWebPRaster
 	/// <param name="colorMode">The color mode to set.</param>
 	public void SetColorMode(WebPColorMode colorMode)
 	{
-		_colorMode = colorMode;
+		_colorMode        = colorMode;
 		Metadata.HasAlpha = colorMode == WebPColorMode.Rgba;
 		UpdateDependentProperties();
 	}
@@ -144,9 +146,9 @@ public class WebPRaster : IWebPRaster
 	/// <summary>Configures the WebP for lossless compression with optimal settings.</summary>
 	public void ConfigureLossless()
 	{
-		Compression = WebPCompression.VP8L;
-		Format = WebPFormat.Lossless;
-		CompressionLevel = WebPConstants.DefaultCompressionLevel;
+		Compression       = WebPCompression.VP8L;
+		Format            = WebPFormat.Lossless;
+		CompressionLevel  = WebPConstants.DefaultCompressionLevel;
 		_compressionRatio = 2.5; // Typical lossless ratio
 	}
 
@@ -154,25 +156,25 @@ public class WebPRaster : IWebPRaster
 	/// <param name="quality">The quality level (0-100).</param>
 	public void ConfigureLossy(int quality = WebPConstants.DefaultQuality)
 	{
-		Compression = WebPCompression.VP8;
-		Format = WebPFormat.Simple;
-		Quality = quality;
+		Compression       = WebPCompression.VP8;
+		Format            = WebPFormat.Simple;
+		Quality           = quality;
 		_compressionRatio = CalculateLossyCompressionRatio(quality);
 	}
 
 	/// <summary>Enables extended features and sets the format to Extended.</summary>
 	public void EnableExtendedFeatures()
 	{
-		Format = WebPFormat.Extended;
+		Format              = WebPFormat.Extended;
 		Metadata.IsExtended = true;
 	}
 
 	/// <inheritdoc />
 	public bool IsValid()
-		=> Width > 0 && Height > 0 
-		   && Width <= WebPConstants.MaxWidth && Height <= WebPConstants.MaxHeight
-		   && Quality is >= WebPConstants.MinQuality and <= WebPConstants.MaxQuality
-		   && CompressionLevel is >= WebPConstants.MinCompressionLevel and <= WebPConstants.MaxCompressionLevel;
+		=> Width > 0 && Height > 0
+		             && Width <= WebPConstants.MaxWidth && Height <= WebPConstants.MaxHeight
+		             && Quality is >= WebPConstants.MinQuality and <= WebPConstants.MaxQuality
+		             && CompressionLevel is >= WebPConstants.MinCompressionLevel and <= WebPConstants.MaxCompressionLevel;
 
 	/// <inheritdoc />
 	public long GetEstimatedFileSize()
@@ -181,11 +183,11 @@ public class WebPRaster : IWebPRaster
 			return 0;
 
 		// Calculate base size
-		var pixelCount = (long)Width * Height;
-		var bytesPerPixel = Channels;
+		var pixelCount       = (long)Width * Height;
+		var bytesPerPixel    = Channels;
 		var uncompressedSize = pixelCount * bytesPerPixel;
 
-		// Apply compression ratio
+		// Apply a compression ratio
 		var compressedDataSize = (long)(uncompressedSize / CompressionRatio);
 
 		// Add WebP container overhead
@@ -225,7 +227,7 @@ public class WebPRaster : IWebPRaster
 			{
 				_compression = WebPCompression.VP8L;
 			}
-			// Handle compression-driven format updates  
+			// Handle compression-driven format updates
 			else if (Compression == WebPCompression.VP8L && Format != WebPFormat.Lossless)
 			{
 				_format = WebPFormat.Lossless;
@@ -236,13 +238,13 @@ public class WebPRaster : IWebPRaster
 			}
 
 			// Update metadata flags
-			Metadata.HasAlpha = HasAlpha;
+			Metadata.HasAlpha   = HasAlpha;
 			Metadata.IsExtended = Format == WebPFormat.Extended;
 
 			// Update compression ratio based on settings
-			_compressionRatio = IsLossless 
-				? CalculateLosslessCompressionRatio() 
-				: CalculateLossyCompressionRatio(Quality);
+			_compressionRatio = IsLossless
+				                    ? CalculateLosslessCompressionRatio()
+				                    : CalculateLossyCompressionRatio(Quality);
 		}
 		finally
 		{
@@ -272,6 +274,10 @@ public class WebPRaster : IWebPRaster
 				ConfigureLossless();
 				CompressionLevel = 9; // Maximum compression for text
 				break;
+			case WebPPreset.Default:
+				break;
+			default:
+				throw new ArgumentOutOfRangeException();
 		}
 	}
 
@@ -300,8 +306,8 @@ public class WebPRaster : IWebPRaster
 	public void Dispose()
 	{
 		Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
-		Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
-		Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+		Metadata.ExifData   = ReadOnlyMemory<byte>.Empty;
+		Metadata.XmpData    = ReadOnlyMemory<byte>.Empty;
 		Metadata.CustomChunks.Clear();
 		Metadata.AnimationFrames.Clear();
 		GC.SuppressFinalize(this);
