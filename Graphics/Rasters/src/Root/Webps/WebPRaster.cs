@@ -12,19 +12,20 @@ public class WebPRaster : IWebPRaster
 	private int _quality = WebPConstants.DefaultQuality;
 	private int _compressionLevel = WebPConstants.DefaultCompressionLevel;
 	private double _compressionRatio = 4.0;
+	private bool _isUpdatingProperties = false;
 
 	/// <summary>Initializes a new instance of the <see cref="WebPRaster"/> class.</summary>
 	public WebPRaster()
 	{
 		Width = 1;
 		Height = 1;
+		Metadata = new WebPMetadata();
 		Format = WebPFormat.Simple;
 		Compression = WebPCompression.VP8;
 		ColorMode = WebPColorMode.Rgb;
 		Quality = WebPConstants.DefaultQuality;
 		CompressionLevel = WebPConstants.DefaultCompressionLevel;
 		Preset = WebPPreset.Default;
-		Metadata = new WebPMetadata();
 	}
 
 	/// <summary>Initializes a new instance of the <see cref="WebPRaster"/> class with specified dimensions.</summary>
@@ -42,7 +43,7 @@ public class WebPRaster : IWebPRaster
 	/// <param name="quality">The quality level (0-100) for lossy compression.</param>
 	public WebPRaster(int width, int height, int quality) : this(width, height)
 	{
-		Quality = Math.Clamp(quality, WebPConstants.MinQuality, WebPConstants.MaxQuality);
+		Quality = quality;
 	}
 
 	/// <inheritdoc />
@@ -211,26 +212,46 @@ public class WebPRaster : IWebPRaster
 	/// <summary>Updates dependent properties when format or compression changes.</summary>
 	private void UpdateDependentProperties()
 	{
-		// Sync format and compression
-		switch (Compression)
+		// Prevent infinite recursion
+		if (_isUpdatingProperties)
+			return;
+
+		_isUpdatingProperties = true;
+		try
 		{
-			case WebPCompression.VP8:
-				if (Format == WebPFormat.Lossless)
-					Format = WebPFormat.Simple;
-				break;
-			case WebPCompression.VP8L:
-				Format = WebPFormat.Lossless;
-				break;
+			// Ensure format and compression are properly synchronized
+			// Handle compression-driven format updates first
+			if (Compression == WebPCompression.VP8L && Format != WebPFormat.Lossless)
+			{
+				_format = WebPFormat.Lossless;
+			}
+			else if (Compression == WebPCompression.VP8 && Format == WebPFormat.Lossless)
+			{
+				_format = WebPFormat.Simple;
+			}
+			// Handle format-driven compression updates
+			else if (Format == WebPFormat.Lossless && Compression != WebPCompression.VP8L)
+			{
+				_compression = WebPCompression.VP8L;
+			}
+			else if (Format == WebPFormat.Simple && Compression != WebPCompression.VP8)
+			{
+				_compression = WebPCompression.VP8;
+			}
+
+			// Update metadata flags
+			Metadata.HasAlpha = HasAlpha;
+			Metadata.IsExtended = Format == WebPFormat.Extended;
+
+			// Update compression ratio based on settings
+			_compressionRatio = IsLossless 
+				? CalculateLosslessCompressionRatio() 
+				: CalculateLossyCompressionRatio(Quality);
 		}
-
-		// Update metadata flags
-		Metadata.HasAlpha = HasAlpha;
-		Metadata.IsExtended = Format == WebPFormat.Extended;
-
-		// Update compression ratio based on settings
-		_compressionRatio = IsLossless 
-			? CalculateLosslessCompressionRatio() 
-			: CalculateLossyCompressionRatio(Quality);
+		finally
+		{
+			_isUpdatingProperties = false;
+		}
 	}
 
 	/// <summary>Applies optimizations based on the selected preset.</summary>

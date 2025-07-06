@@ -56,15 +56,20 @@ public class WebPConstantsTests
 		Assert.Equal([0x56, 0x50, 0x38, 0x58], chunkId); // "VP8X"
 	}
 
-	[Theory]
-	[InlineData(WebPConstants.MinWidth, 1)]
-	[InlineData(WebPConstants.MaxWidth, 16383)]
-	[InlineData(WebPConstants.MinHeight, 1)]
-	[InlineData(WebPConstants.MaxHeight, 16383)]
-	public void DimensionConstants_ShouldHaveCorrectValues(uint actual, uint expected)
+	[Fact]
+	public void WidthConstants_ShouldHaveCorrectValues()
 	{
 		// Assert
-		Assert.Equal(expected, actual);
+		Assert.Equal(1u, WebPConstants.MinWidth);
+		Assert.Equal(16383u, WebPConstants.MaxWidth);
+	}
+
+	[Fact]
+	public void HeightConstants_ShouldHaveCorrectValues()
+	{
+		// Assert
+		Assert.Equal(1u, WebPConstants.MinHeight);
+		Assert.Equal(16383u, WebPConstants.MaxHeight);
 	}
 
 	[Theory]

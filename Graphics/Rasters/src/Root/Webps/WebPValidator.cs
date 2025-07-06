@@ -120,13 +120,18 @@ public static class WebPValidator
 	/// <param name="result">The validation result to add errors to.</param>
 	private static void ValidateAnimationProperties(this IWebPRaster webp, WebPValidationResult result)
 	{
-		if (webp.IsAnimated)
+		// Check for animation flags and frame consistency
+		if (webp.Metadata.HasAnimation)
 		{
 			if (webp.Format != WebPFormat.Extended)
 				result.AddError("Animated WebP requires Extended format.");
 
 			if (webp.Metadata.AnimationFrames.Count == 0)
 				result.AddError("IsAnimated is true but no animation frames are defined.");
+		}
+
+		if (webp.IsAnimated)
+		{
 
 			// Validate each frame
 			for (var i = 0; i < webp.Metadata.AnimationFrames.Count; i++)
