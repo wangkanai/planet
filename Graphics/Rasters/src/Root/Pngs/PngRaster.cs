@@ -98,6 +98,42 @@ public class PngRaster : IPngRaster
 	/// <summary>Gets or sets the transparency data.</summary>
 	public ReadOnlyMemory<byte> TransparencyData { get; set; }
 
+	/// <inheritdoc />
+	public bool HasLargeMetadata => EstimatedMetadataSize > 1_000_000; // 1MB threshold
+
+	/// <inheritdoc />
+	public long EstimatedMetadataSize
+	{
+		get
+		{
+			var size = 0L;
+			
+			// Add palette data size
+			if (!PaletteData.IsEmpty)
+				size += PaletteData.Length;
+			
+			// Add transparency data size
+			if (!TransparencyData.IsEmpty)
+				size += TransparencyData.Length;
+			
+			// Add text chunk sizes
+			foreach (var textChunk in Metadata.TextChunks.Values)
+				size += System.Text.Encoding.UTF8.GetByteCount(textChunk);
+			
+			foreach (var compressedTextChunk in Metadata.CompressedTextChunks.Values)
+				size += compressedTextChunk.Length;
+			
+			foreach (var internationalTextChunk in Metadata.InternationalTextChunks.Values)
+				size += System.Text.Encoding.UTF8.GetByteCount(internationalTextChunk);
+			
+			// Add custom chunk sizes
+			foreach (var customChunk in Metadata.CustomChunks.Values)
+				size += customChunk.Length;
+			
+			return size;
+		}
+	}
+
 	/// <summary>Validates the PNG raster image.</summary>
 	/// <returns>True if the image is valid, false otherwise.</returns>
 	public bool IsValid()
@@ -184,7 +220,38 @@ public class PngRaster : IPngRaster
 	{
 		PaletteData      = ReadOnlyMemory<byte>.Empty;
 		TransparencyData = ReadOnlyMemory<byte>.Empty;
+		Metadata.TextChunks.Clear();
+		Metadata.CompressedTextChunks.Clear();
+		Metadata.InternationalTextChunks.Clear();
 		Metadata.CustomChunks.Clear();
+		GC.SuppressFinalize(this);
+	}
+
+	/// <inheritdoc />
+	public async ValueTask DisposeAsync()
+	{
+		if (HasLargeMetadata)
+		{
+			// For large PNG metadata, clear in stages
+			await Task.Yield();
+			PaletteData = ReadOnlyMemory<byte>.Empty;
+			await Task.Yield();
+			TransparencyData = ReadOnlyMemory<byte>.Empty;
+			await Task.Yield();
+			
+			// Clear text chunks in batches
+			Metadata.TextChunks.Clear();
+			await Task.Yield();
+			Metadata.CompressedTextChunks.Clear();
+			await Task.Yield();
+			Metadata.InternationalTextChunks.Clear();
+			await Task.Yield();
+			Metadata.CustomChunks.Clear();
+		}
+		else
+		{
+			Dispose();
+		}
 		GC.SuppressFinalize(this);
 	}
 }
