@@ -224,18 +224,12 @@ public class WebPRaster : IWebPRaster
 			// Ensure format and compression are properly synchronized
 			// Handle format-driven compression updates
 			if (Format == WebPFormat.Lossless && Compression != WebPCompression.VP8L)
-			{
 				_compression = WebPCompression.VP8L;
-			}
 			// Handle compression-driven format updates
 			else if (Compression == WebPCompression.VP8L && Format != WebPFormat.Lossless)
-			{
 				_format = WebPFormat.Lossless;
-			}
 			else if (Compression == WebPCompression.VP8 && Format == WebPFormat.Lossless)
-			{
 				_format = WebPFormat.Simple;
-			}
 
 			// Update metadata flags
 			Metadata.HasAlpha   = HasAlpha;
