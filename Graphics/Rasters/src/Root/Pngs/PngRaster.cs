@@ -8,8 +8,6 @@ public class PngRaster : IPngRaster
 	private PngColorType _colorType        = PngColorType.Truecolor;
 	private byte         _bitDepth         = 8;
 	private int          _compressionLevel = 6;
-	private int          _width            = 1;
-	private int          _height           = 1;
 
 	/// <summary>Initializes a new instance of the <see cref="PngRaster"/> class.</summary>
 	public PngRaster()
@@ -27,23 +25,15 @@ public class PngRaster : IPngRaster
 	/// <param name="height">The height of the image in pixels.</param>
 	public PngRaster(int width, int height) : this()
 	{
-		_width  = Math.Clamp(width, (int)PngConstants.MinWidth, (int)PngConstants.MaxWidth);
-		_height = Math.Clamp(height, (int)PngConstants.MinHeight, (int)PngConstants.MaxHeight);
+		Width  = Math.Clamp(width, (int)PngConstants.MinWidth, (int)PngConstants.MaxWidth);
+		Height = Math.Clamp(height, (int)PngConstants.MinHeight, (int)PngConstants.MaxHeight);
 	}
 
 	/// <summary>Gets or sets the width of the image in pixels.</summary>
-	public int Width
-	{
-		get => _width;
-		set => _width = value;
-	}
+	public int Width { get; set; } = 1;
 
 	/// <summary>Gets or sets the height of the image in pixels.</summary>
-	public int Height
-	{
-		get => _height;
-		set => _height = value;
-	}
+	public int Height { get; set; } = 1;
 
 	/// <summary>Gets or sets the PNG color type.</summary>
 	public PngColorType ColorType
