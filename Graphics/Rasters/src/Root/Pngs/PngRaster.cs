@@ -149,12 +149,7 @@ public class PngRaster : IPngRaster
 	/// <summary>Validates the PNG raster image.</summary>
 	/// <returns>True if the image is valid, false otherwise.</returns>
 	public bool IsValid()
-		=> Width > 0 &&
-		   Width <= PngConstants.MaxWidth &&
-		   Height > 0 &&
-		   Height <= PngConstants.MaxHeight &&
-		   IsValidBitDepthForColorType() &&
-		   CompressionLevel is >= 0 and <= 9;
+		=> IsValidBitDepthForColorType() && CompressionLevel is >= 0 and <= 9;
 
 	/// <summary>Gets the estimated file size in bytes.</summary>
 	/// <returns>The estimated file size.</returns>
