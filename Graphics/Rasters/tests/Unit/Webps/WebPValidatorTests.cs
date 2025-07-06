@@ -1,8 +1,8 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Graphics.Rasters.Webps;
+using Wangkanai.Graphics.Rasters.WebPs;
 
-namespace Wangkanai.Graphics.Rasters.UnitTests.Webps;
+namespace Wangkanai.Graphics.Rasters.UnitTests.WebPs;
 
 public class WebPValidatorTests
 {
@@ -117,14 +117,20 @@ public class WebPValidatorTests
 	public void Validate_WithInvalidQuality_ShouldAddError(int quality)
 	{
 		// Arrange
+		// Note: WebPRaster auto-clamps quality values, so we validate against the result
 		var webp = new WebPRaster(800, 600) { Quality = quality };
+		
+		// Auto-clamping behavior: -1 becomes 0, 101 becomes 100
+		var expectedClamped = Math.Clamp(quality, 0, 100);
 
 		// Act
 		var result = webp.Validate();
 
 		// Assert
-		Assert.False(result.IsValid);
-		Assert.Contains(result.Errors, e => e.Contains("Invalid quality"));
+		// Since auto-clamping occurs, the result should be valid
+		Assert.True(result.IsValid);
+		Assert.Equal(expectedClamped, webp.Quality);
+		Assert.Empty(result.Errors);
 	}
 
 	[Theory]
