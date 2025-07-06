@@ -184,7 +184,7 @@ public class PngRaster : IPngRaster
 	{
 		PaletteData      = ReadOnlyMemory<byte>.Empty;
 		TransparencyData = ReadOnlyMemory<byte>.Empty;
-		Metadata?.CustomChunks.Clear();
+		Metadata.CustomChunks.Clear();
 		GC.SuppressFinalize(this);
 	}
 }
