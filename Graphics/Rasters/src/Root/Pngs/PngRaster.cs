@@ -107,7 +107,7 @@ public class PngRaster : IPngRaster
 	/// <returns>The estimated file size.</returns>
 	public long GetEstimatedFileSize()
 	{
-		if (!IsValid() || Width <= 0 || Height <= 0)
+		if (!IsValid())
 			return 0;
 
 		// Estimate based on uncompressed data with the typical compression ratio
