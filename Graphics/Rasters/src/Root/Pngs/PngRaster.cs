@@ -188,15 +188,6 @@ public class PngRaster : IPngRaster
 		return SamplesPerPixel * BitDepth;
 	}
 
-	/// <summary>Disposes of the PNG raster resources.</summary>
-	public void Dispose()
-	{
-		PaletteData      = ReadOnlyMemory<byte>.Empty;
-		TransparencyData = ReadOnlyMemory<byte>.Empty;
-		Metadata?.CustomChunks.Clear();
-		GC.SuppressFinalize(this);
-	}
-
 	/// <summary>Updates dependent properties when the color type changes.</summary>
 	private void UpdateDependentProperties()
 	{
@@ -236,5 +227,14 @@ public class PngRaster : IPngRaster
 			PngColorType.TruecolorWithAlpha => BitDepth is 8 or 16,               // Truecolor + Alpha: 8=256 levels per RGBA channel, 16=65536 levels per RGBA channel
 			_                               => false
 		};
+	}
+
+	/// <summary>Disposes of the PNG raster resources.</summary>
+	public void Dispose()
+	{
+		PaletteData      = ReadOnlyMemory<byte>.Empty;
+		TransparencyData = ReadOnlyMemory<byte>.Empty;
+		Metadata?.CustomChunks.Clear();
+		GC.SuppressFinalize(this);
 	}
 }
