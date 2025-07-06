@@ -14,8 +14,6 @@ public class PngRaster : IPngRaster
 	/// <summary>Initializes a new instance of the <see cref="PngRaster"/> class.</summary>
 	public PngRaster()
 	{
-		_width           = 1;
-		_height          = 1;
 		ColorType        = PngColorType.Truecolor;
 		BitDepth         = 8;
 		Compression      = PngCompression.Deflate;
@@ -29,7 +27,6 @@ public class PngRaster : IPngRaster
 	/// <param name="height">The height of the image in pixels.</param>
 	public PngRaster(int width, int height) : this()
 	{
-		// Silent clamping for constructor to maintain backward compatibility
 		_width  = Math.Clamp(width, (int)PngConstants.MinWidth, (int)PngConstants.MaxWidth);
 		_height = Math.Clamp(height, (int)PngConstants.MinHeight, (int)PngConstants.MaxHeight);
 	}
@@ -38,14 +35,14 @@ public class PngRaster : IPngRaster
 	public int Width
 	{
 		get => _width;
-		set => _width = Math.Clamp(value, (int)PngConstants.MinWidth, (int)PngConstants.MaxWidth);
+		set => _width = value;
 	}
 
 	/// <summary>Gets or sets the height of the image in pixels.</summary>
 	public int Height
 	{
 		get => _height;
-		set => _height = Math.Clamp(value, (int)PngConstants.MinHeight, (int)PngConstants.MaxHeight);
+		set => _height = value;
 	}
 
 	/// <summary>Gets or sets the PNG color type.</summary>
@@ -114,13 +111,13 @@ public class PngRaster : IPngRaster
 	/// <summary>Validates the PNG raster image.</summary>
 	/// <returns>True if the image is valid, false otherwise.</returns>
 	public bool IsValid()
-		=> IsValidBitDepthForColorType() && CompressionLevel is >= 0 and <= 9;
+		=> Width > 0 && Height > 0 && IsValidBitDepthForColorType() && CompressionLevel is >= 0 and <= 9;
 
 	/// <summary>Gets the estimated file size in bytes.</summary>
 	/// <returns>The estimated file size.</returns>
 	public long GetEstimatedFileSize()
 	{
-		if (!IsValid())
+		if (!IsValid() || Width <= 0 || Height <= 0)
 			return 0;
 
 		// Estimate based on uncompressed data with the typical compression ratio
