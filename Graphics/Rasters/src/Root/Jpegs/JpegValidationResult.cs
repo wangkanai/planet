@@ -33,19 +33,21 @@ public class JpegValidationResult
 	public string GetSummary()
 	{
 		var summary = new List<string>();
-		
+
 		if (Errors.Count > 0)
 		{
 			summary.Add($"Errors ({Errors.Count}):");
 			summary.AddRange(Errors.Select(e => $"  - {e}"));
 		}
-		
+
 		if (Warnings.Count > 0)
 		{
 			summary.Add($"Warnings ({Warnings.Count}):");
 			summary.AddRange(Warnings.Select(w => $"  - {w}"));
 		}
-		
-		return summary.Count > 0 ? string.Join(Environment.NewLine, summary) : "No validation issues found.";
+
+		return summary.Count > 0
+			       ? string.Join(Environment.NewLine, summary)
+			       : "No validation issues found.";
 	}
 }

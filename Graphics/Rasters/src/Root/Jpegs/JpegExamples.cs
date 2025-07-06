@@ -15,16 +15,16 @@ public static class JpegExamples
 		var jpeg = new JpegRaster(width, height, quality);
 		jpeg.SetColorMode(JpegColorMode.Rgb);
 		jpeg.ChromaSubsampling = JpegChromaSubsampling.Both; // 4:2:0 for better compression
-		jpeg.Encoding = JpegEncoding.Baseline;
-		jpeg.IsOptimized = true;
-		
+		jpeg.Encoding          = JpegEncoding.Baseline;
+		jpeg.IsOptimized       = true;
+
 		// Set common metadata
-		jpeg.Metadata.Software = "Wangkanai.Graphics.Rasters";
+		jpeg.Metadata.Software        = "Wangkanai.Graphics.Rasters";
 		jpeg.Metadata.CaptureDateTime = DateTime.Now;
-		jpeg.Metadata.ResolutionUnit = 2; // Inches
-		jpeg.Metadata.XResolution = 72.0;
-		jpeg.Metadata.YResolution = 72.0;
-		
+		jpeg.Metadata.ResolutionUnit  = 2; // Inches
+		jpeg.Metadata.XResolution     = 72.0;
+		jpeg.Metadata.YResolution     = 72.0;
+
 		return jpeg;
 	}
 
@@ -38,15 +38,15 @@ public static class JpegExamples
 		var jpeg = new JpegRaster(width, height, quality);
 		jpeg.SetColorMode(JpegColorMode.Grayscale);
 		jpeg.ChromaSubsampling = JpegChromaSubsampling.None; // No chroma subsampling for grayscale
-		jpeg.Encoding = JpegEncoding.Baseline;
-		
+		jpeg.Encoding          = JpegEncoding.Baseline;
+
 		// Set metadata
-		jpeg.Metadata.Software = "Wangkanai.Graphics.Rasters";
+		jpeg.Metadata.Software        = "Wangkanai.Graphics.Rasters";
 		jpeg.Metadata.CaptureDateTime = DateTime.Now;
-		jpeg.Metadata.ResolutionUnit = 2; // Inches
-		jpeg.Metadata.XResolution = 300.0; // High resolution for grayscale
-		jpeg.Metadata.YResolution = 300.0;
-		
+		jpeg.Metadata.ResolutionUnit  = 2;     // Inches
+		jpeg.Metadata.XResolution     = 300.0; // High resolution for grayscale
+		jpeg.Metadata.YResolution     = 300.0;
+
 		return jpeg;
 	}
 
@@ -60,17 +60,17 @@ public static class JpegExamples
 		var jpeg = new JpegRaster(width, height, quality);
 		jpeg.SetColorMode(JpegColorMode.Rgb);
 		jpeg.ChromaSubsampling = JpegChromaSubsampling.Both; // 4:2:0 for web optimization
-		jpeg.Encoding = JpegEncoding.Progressive;
-		jpeg.IsProgressive = true;
-		jpeg.IsOptimized = true;
-		
+		jpeg.Encoding          = JpegEncoding.Progressive;
+		jpeg.IsProgressive     = true;
+		jpeg.IsOptimized       = true;
+
 		// Web-optimized metadata
-		jpeg.Metadata.Software = "Wangkanai.Graphics.Rasters";
+		jpeg.Metadata.Software        = "Wangkanai.Graphics.Rasters";
 		jpeg.Metadata.CaptureDateTime = DateTime.Now;
-		jpeg.Metadata.ResolutionUnit = 2; // Inches
-		jpeg.Metadata.XResolution = 72.0; // Web standard
-		jpeg.Metadata.YResolution = 72.0;
-		
+		jpeg.Metadata.ResolutionUnit  = 2;    // Inches
+		jpeg.Metadata.XResolution     = 72.0; // Web standard
+		jpeg.Metadata.YResolution     = 72.0;
+
 		return jpeg;
 	}
 
@@ -83,18 +83,18 @@ public static class JpegExamples
 		var jpeg = new JpegRaster(width, height, 95); // High quality
 		jpeg.SetColorMode(JpegColorMode.Rgb);
 		jpeg.ChromaSubsampling = JpegChromaSubsampling.None; // 4:4:4 for maximum quality
-		jpeg.Encoding = JpegEncoding.Baseline;
-		jpeg.IsOptimized = true;
-		
+		jpeg.Encoding          = JpegEncoding.Baseline;
+		jpeg.IsOptimized       = true;
+
 		// Photography metadata
-		jpeg.Metadata.Software = "Wangkanai.Graphics.Rasters";
+		jpeg.Metadata.Software        = "Wangkanai.Graphics.Rasters";
 		jpeg.Metadata.CaptureDateTime = DateTime.Now;
-		jpeg.Metadata.ResolutionUnit = 2; // Inches
-		jpeg.Metadata.XResolution = 300.0; // Print quality
-		jpeg.Metadata.YResolution = 300.0;
-		jpeg.Metadata.Artist = "Photographer";
-		jpeg.Metadata.ColorSpace = 1; // sRGB
-		
+		jpeg.Metadata.ResolutionUnit  = 2;     // Inches
+		jpeg.Metadata.XResolution     = 300.0; // Print quality
+		jpeg.Metadata.YResolution     = 300.0;
+		jpeg.Metadata.Artist          = "Photographer";
+		jpeg.Metadata.ColorSpace      = 1; // sRGB
+
 		return jpeg;
 	}
 
@@ -107,17 +107,17 @@ public static class JpegExamples
 		var jpeg = new JpegRaster(width, height, 90); // High quality for print
 		jpeg.SetColorMode(JpegColorMode.Cmyk);
 		jpeg.ChromaSubsampling = JpegChromaSubsampling.None; // No subsampling for CMYK
-		jpeg.Encoding = JpegEncoding.Baseline;
-		jpeg.IsOptimized = true;
-		
+		jpeg.Encoding          = JpegEncoding.Baseline;
+		jpeg.IsOptimized       = true;
+
 		// Print metadata
-		jpeg.Metadata.Software = "Wangkanai.Graphics.Rasters";
+		jpeg.Metadata.Software        = "Wangkanai.Graphics.Rasters";
 		jpeg.Metadata.CaptureDateTime = DateTime.Now;
-		jpeg.Metadata.ResolutionUnit = 2; // Inches
-		jpeg.Metadata.XResolution = 300.0; // Print resolution
-		jpeg.Metadata.YResolution = 300.0;
-		jpeg.Metadata.ColorSpace = 65535; // Uncalibrated/CMYK
-		
+		jpeg.Metadata.ResolutionUnit  = 2;     // Inches
+		jpeg.Metadata.XResolution     = 300.0; // Print resolution
+		jpeg.Metadata.YResolution     = 300.0;
+		jpeg.Metadata.ColorSpace      = 65535; // Uncalibrated/CMYK
+
 		return jpeg;
 	}
 
@@ -130,17 +130,17 @@ public static class JpegExamples
 		var jpeg = new JpegRaster(width, height, 60); // Lower quality for small size
 		jpeg.SetColorMode(JpegColorMode.Rgb);
 		jpeg.ChromaSubsampling = JpegChromaSubsampling.Both; // Maximum compression
-		jpeg.Encoding = JpegEncoding.Baseline;
-		jpeg.IsOptimized = true;
-		
+		jpeg.Encoding          = JpegEncoding.Baseline;
+		jpeg.IsOptimized       = true;
+
 		// Thumbnail metadata
-		jpeg.Metadata.Software = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.CaptureDateTime = DateTime.Now;
-		jpeg.Metadata.ResolutionUnit = 2; // Inches
-		jpeg.Metadata.XResolution = 72.0; // Screen resolution
-		jpeg.Metadata.YResolution = 72.0;
+		jpeg.Metadata.Software         = "Wangkanai.Graphics.Rasters";
+		jpeg.Metadata.CaptureDateTime  = DateTime.Now;
+		jpeg.Metadata.ResolutionUnit   = 2;    // Inches
+		jpeg.Metadata.XResolution      = 72.0; // Screen resolution
+		jpeg.Metadata.YResolution      = 72.0;
 		jpeg.Metadata.ImageDescription = "Thumbnail";
-		
+
 		return jpeg;
 	}
 
@@ -153,63 +153,59 @@ public static class JpegExamples
 		var jpeg = new JpegRaster(width, height, 85);
 		jpeg.SetColorMode(JpegColorMode.Rgb);
 		jpeg.ChromaSubsampling = JpegChromaSubsampling.Both;
-		jpeg.Encoding = JpegEncoding.Baseline;
-		
+		jpeg.Encoding          = JpegEncoding.Baseline;
+
 		// Comprehensive EXIF metadata
-		jpeg.Metadata.Make = "Canon";
-		jpeg.Metadata.Model = "EOS R5";
-		jpeg.Metadata.Software = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.CaptureDateTime = DateTime.Now;
-		jpeg.Metadata.Artist = "John Doe";
-		jpeg.Metadata.Copyright = "Copyright 2025";
+		jpeg.Metadata.Make             = "Canon";
+		jpeg.Metadata.Model            = "EOS R5";
+		jpeg.Metadata.Software         = "Wangkanai.Graphics.Rasters";
+		jpeg.Metadata.CaptureDateTime  = DateTime.Now;
+		jpeg.Metadata.Artist           = "John Doe";
+		jpeg.Metadata.Copyright        = "Copyright 2025";
 		jpeg.Metadata.ImageDescription = "Sample image with EXIF data";
-		
+
 		// Camera settings
-		jpeg.Metadata.ExposureTime = 1.0 / 125.0; // 1/125 second
-		jpeg.Metadata.FNumber = 5.6;
+		jpeg.Metadata.ExposureTime   = 1.0 / 125.0; // 1/125 second
+		jpeg.Metadata.FNumber        = 5.6;
 		jpeg.Metadata.IsoSpeedRating = 400;
-		jpeg.Metadata.FocalLength = 85.0; // 85mm
-		jpeg.Metadata.WhiteBalance = 0; // Auto
-		
+		jpeg.Metadata.FocalLength    = 85.0; // 85mm
+		jpeg.Metadata.WhiteBalance   = 0;    // Auto
+
 		// GPS coordinates (example: Tokyo, Japan)
-		jpeg.Metadata.GpsLatitude = 35.6762;
+		jpeg.Metadata.GpsLatitude  = 35.6762;
 		jpeg.Metadata.GpsLongitude = 139.6503;
-		
+
 		// Resolution
 		jpeg.Metadata.ResolutionUnit = 2; // Inches
-		jpeg.Metadata.XResolution = 300.0;
-		jpeg.Metadata.YResolution = 300.0;
-		jpeg.Metadata.ColorSpace = 1; // sRGB
-		jpeg.Metadata.Orientation = 1; // Normal
-		
+		jpeg.Metadata.XResolution    = 300.0;
+		jpeg.Metadata.YResolution    = 300.0;
+		jpeg.Metadata.ColorSpace     = 1; // sRGB
+		jpeg.Metadata.Orientation    = 1; // Normal
+
 		return jpeg;
 	}
 
 	/// <summary>Demonstrates common quality settings and their use cases.</summary>
 	/// <returns>A dictionary of quality settings with descriptions.</returns>
 	public static Dictionary<int, string> GetQualityRecommendations()
-	{
-		return new Dictionary<int, string>
-		{
-			{ 100, "Lossless quality - largest file size, perfect for archival" },
-			{ 95, "Excellent quality - minimal compression, suitable for professional photography" },
-			{ 85, "High quality - good balance of quality and file size, suitable for print" },
-			{ 75, "Good quality - standard web quality, good for most web applications" },
-			{ 60, "Medium quality - noticeable compression, suitable for thumbnails" },
-			{ 40, "Low quality - high compression, suitable for previews or low-bandwidth" },
-			{ 20, "Very low quality - maximum compression, suitable for placeholders" }
-		};
-	}
+		=> new()
+		   {
+			   { 100, "Lossless quality - largest file size, perfect for archival" },
+			   { 95, "Excellent quality - minimal compression, suitable for professional photography" },
+			   { 85, "High quality - good balance of quality and file size, suitable for print" },
+			   { 75, "Good quality - standard web quality, good for most web applications" },
+			   { 60, "Medium quality - noticeable compression, suitable for thumbnails" },
+			   { 40, "Low quality - high compression, suitable for previews or low-bandwidth" },
+			   { 20, "Very low quality - maximum compression, suitable for placeholders" }
+		   };
 
 	/// <summary>Demonstrates chroma subsampling options and their effects.</summary>
 	/// <returns>A dictionary of chroma subsampling modes with descriptions.</returns>
 	public static Dictionary<JpegChromaSubsampling, string> GetChromaSubsamplingGuide()
-	{
-		return new Dictionary<JpegChromaSubsampling, string>
-		{
-			{ JpegChromaSubsampling.None, "4:4:4 - No subsampling, highest quality, larger file size" },
-			{ JpegChromaSubsampling.Horizontal, "4:2:2 - Horizontal subsampling, good quality, moderate compression" },
-			{ JpegChromaSubsampling.Both, "4:2:0 - Both horizontal and vertical subsampling, standard compression" }
-		};
-	}
+		=> new()
+		   {
+			   { JpegChromaSubsampling.None, "4:4:4 - No subsampling, highest quality, larger file size" },
+			   { JpegChromaSubsampling.Horizontal, "4:2:2 - Horizontal subsampling, good quality, moderate compression" },
+			   { JpegChromaSubsampling.Both, "4:2:0 - Both horizontal and vertical subsampling, standard compression" }
+		   };
 }
