@@ -17,6 +17,10 @@ else if (args.Length > 0 && args[0] == "--async-demo")
 {
 	await AsyncDisposalDemo.RunDemo();
 }
+else if (args.Length > 0 && args[0] == "--webp-demo")
+{
+	WebPConstantsPerformanceDemo.RunDemo();
+}
 else if (args.Length > 0 && args[0] == "--async")
 {
 	BenchmarkRunner.Run<AsyncDisposalBenchmark>();
