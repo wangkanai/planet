@@ -130,7 +130,10 @@ public static class Jpeg2000Validator
 	private static void ValidateTilingSettings(IJpeg2000Raster jpeg2000, Jpeg2000ValidationResult result)
 	{
 		if (jpeg2000.TileWidth <= 0 || jpeg2000.TileHeight <= 0)
+		{
 			result.AddError($"Invalid tile dimensions: {jpeg2000.TileWidth}x{jpeg2000.TileHeight}. Must be positive.");
+			return; // Skip further tile validation if dimensions are invalid
+		}
 
 		if (jpeg2000.TileWidth > jpeg2000.Width || jpeg2000.TileHeight > jpeg2000.Height)
 			result.AddError("Tile dimensions cannot exceed image dimensions.");
@@ -150,9 +153,16 @@ public static class Jpeg2000Validator
 			if (!IsPowerOfTwo(jpeg2000.TileWidth) || !IsPowerOfTwo(jpeg2000.TileHeight))
 				result.AddWarning("Non-power-of-2 tile sizes may be less efficient for wavelet transform.");
 
-			// Validate total tile count
-			if (jpeg2000.TotalTiles > 10000)
-				result.AddWarning($"Large number of tiles ({jpeg2000.TotalTiles}) may impact performance.");
+			// Validate total tile count (only if tile dimensions are valid)
+			try
+			{
+				if (jpeg2000.TotalTiles > 10000)
+					result.AddWarning($"Large number of tiles ({jpeg2000.TotalTiles}) may impact performance.");
+			}
+			catch (DivideByZeroException)
+			{
+				// Already handled by the tile dimension check above
+			}
 		}
 		else if ((long)jpeg2000.Width * jpeg2000.Height > 100_000_000) // 100 megapixels
 		{
