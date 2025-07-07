@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Rasters;
 
 /// <summary>Represents a raster image</summary>
-public class Raster : IRaster
+public abstract class Raster : IRaster
 {
 	private bool _disposed;
 
@@ -11,16 +11,31 @@ public class Raster : IRaster
 	public virtual int Height { get; set; }
 
 	/// <inheritdoc />
-	public virtual bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
+	public virtual bool HasLargeMetadata
+		=> EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
 
 	/// <inheritdoc />
-	public virtual long EstimatedMetadataSize => 0; // Base class has no metadata
+	public virtual long EstimatedMetadataSize
+		=> 0; // Base class has no metadata
 
 	/// <inheritdoc />
 	public void Dispose()
 	{
 		Dispose(true);
 		GC.SuppressFinalize(this);
+	}
+
+	/// <summary>Releases the managed and unmanaged resources used by the raster image.</summary>
+	/// <param name="disposing">
+	/// true to release both managed and unmanaged resources;
+	/// false to release only unmanaged resources.
+	/// </param>
+	protected virtual void Dispose(bool disposing)
+	{
+		if (_disposed)
+			return;
+
+		_disposed = true;
 	}
 
 	/// <inheritdoc />
@@ -38,34 +53,5 @@ public class Raster : IRaster
 		// Derived classes should override this method for custom async disposal logic
 		Dispose(true);
 		return ValueTask.CompletedTask;
-	}
-
-	/// <summary>Releases the managed and unmanaged resources used by the raster image.</summary>
-	/// <param name="disposing">
-	/// true to release both managed and unmanaged resources; 
-	/// false to release only unmanaged resources.
-	/// </param>
-	protected virtual void Dispose(bool disposing)
-	{
-		if (!_disposed)
-		{
-			if (disposing)
-			{
-				// Dispose managed resources here
-				// Derived classes should override this method to dispose their specific resources
-			}
-
-			// Dispose unmanaged resources here if any
-			// This should be done regardless of the disposing parameter
-
-			_disposed = true;
-		}
-	}
-
-	/// <summary>Throws an ObjectDisposedException if the object has been disposed.</summary>
-	protected void ThrowIfDisposed()
-	{
-		if (_disposed)
-			throw new ObjectDisposedException(GetType().Name);
 	}
 }
