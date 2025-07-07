@@ -9,7 +9,7 @@ namespace Wangkanai.Graphics.Rasters.Jpeg2000s;
 /// Provides comprehensive JPEG2000 support including lossless/lossy compression, multi-resolution pyramids,
 /// progressive transmission, region-of-interest encoding, tiling, and geospatial metadata (GeoJP2).
 /// </remarks>
-public class Jpeg2000Raster : Raster, IJpeg2000Raster
+public sealed class Jpeg2000Raster : Raster, IJpeg2000Raster
 {
 	private byte[]? _encodedData;
 	private bool    _disposed;
