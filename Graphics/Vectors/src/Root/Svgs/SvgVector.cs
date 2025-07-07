@@ -9,14 +9,41 @@ public class SvgVector : ISvgVector
 	public bool HasLargeMetadata      { get; }
 	public long EstimatedMetadataSize { get; }
 
+	private bool _disposed = false;
+
 	public void Dispose()
 	{
-		// TODO release managed resources here
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
+	protected virtual void Dispose(bool disposing)
+	{
+		if (!_disposed)
+		{
+			if (disposing)
+			{
+				// Release managed resources here
+			}
+
+			// Release unmanaged resources here
+			_disposed = true;
+		}
 	}
 
 	public async ValueTask DisposeAsync()
 	{
-		// TODO release managed resources here
+		if (!_disposed)
+		{
+			// Release managed resources asynchronously here
+			_disposed = true;
+		}
+		GC.SuppressFinalize(this);
+	}
+
+	~SvgVector()
+	{
+		Dispose(false);
 	}
 }
 
