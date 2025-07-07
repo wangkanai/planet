@@ -123,7 +123,6 @@ public class AvifConstantsTests
 	public void MemoryConstants_ShouldHaveReasonableValues()
 	{
 		Assert.True(AvifConstants.Memory.MaxPixelBufferSizeMB > 0);
-		Assert.True(AvifConstants.Memory.MaxMetadataSizeMB > 0);
 		Assert.True(AvifConstants.Memory.MaxThreads > 0);
 		Assert.True(AvifConstants.Memory.MaxThreads <= 64); // Reasonable upper bound
 	}

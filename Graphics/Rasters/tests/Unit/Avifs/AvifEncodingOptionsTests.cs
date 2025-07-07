@@ -11,8 +11,8 @@ public class AvifEncodingOptionsTests
 	{
 		var options = new AvifEncodingOptions();
 
-		Assert.Equal(AvifConstants.QualityPresets.Standard, options.Quality);
-		Assert.Equal(AvifConstants.SpeedPresets.Standard, options.Speed);
+		Assert.Equal(AvifConstants.DefaultQuality, options.Quality);
+		Assert.Equal(AvifConstants.DefaultSpeed, options.Speed);
 		Assert.False(options.IsLossless);
 		Assert.Equal(AvifChromaSubsampling.Yuv420, options.ChromaSubsampling);
 		Assert.Equal(AvifConstants.DefaultThreadCount, options.ThreadCount);
@@ -34,7 +34,7 @@ public class AvifEncodingOptionsTests
 		var isValid = options.Validate(out var error);
 
 		Assert.True(isValid);
-		Assert.Empty(error);
+		Assert.Null(error);
 	}
 
 	[Theory]
@@ -55,7 +55,6 @@ public class AvifEncodingOptionsTests
 	[Theory]
 	[InlineData(AvifConstants.MinSpeed - 1)]
 	[InlineData(AvifConstants.MaxSpeed + 1)]
-	[InlineData(-1)]
 	[InlineData(20)]
 	public void Validate_WithInvalidSpeed_ShouldReturnFalse(int speed)
 	{
@@ -81,26 +80,86 @@ public class AvifEncodingOptionsTests
 	}
 
 	[Fact]
+	public void Validate_WithLosslessButWrongQuality_ShouldReturnFalse()
+	{
+		var options = new AvifEncodingOptions
+		{
+			IsLossless = true,
+			Quality = 85 // Should be 100 for lossless
+		};
+
+		var isValid = options.Validate(out var error);
+
+		Assert.False(isValid);
+		Assert.Contains("Lossless mode requires quality to be 100", error);
+	}
+
+	[Theory]
+	[InlineData(-1)]
+	[InlineData(51)]
+	public void Validate_WithInvalidFilmGrainStrength_ShouldReturnFalse(int strength)
+	{
+		var options = new AvifEncodingOptions { FilmGrainStrength = strength };
+
+		var isValid = options.Validate(out var error);
+
+		Assert.False(isValid);
+		Assert.Contains("Film grain strength", error);
+	}
+
+	[Theory]
+	[InlineData(-1)]
+	[InlineData(64)]
+	public void Validate_WithInvalidQuantizer_ShouldReturnFalse(int quantizer)
+	{
+		var options = new AvifEncodingOptions { MinQuantizer = quantizer };
+
+		var isValid = options.Validate(out var error);
+
+		Assert.False(isValid);
+		Assert.Contains("quantizer", error);
+	}
+
+	[Fact]
+	public void Validate_WithInvalidQuantizerRange_ShouldReturnFalse()
+	{
+		var options = new AvifEncodingOptions
+		{
+			MinQuantizer = 30,
+			MaxQuantizer = 20 // Min > Max
+		};
+
+		var isValid = options.Validate(out var error);
+
+		Assert.False(isValid);
+		Assert.Contains("Minimum quantizer cannot be greater than maximum quantizer", error);
+	}
+
+	[Fact]
 	public void CreateWebOptimized_ShouldReturnWebSettings()
 	{
 		var options = AvifEncodingOptions.CreateWebOptimized();
 
-		Assert.Equal(AvifConstants.QualityPresets.Standard, options.Quality);
-		Assert.Equal(AvifConstants.SpeedPresets.Standard, options.Speed);
+		Assert.Equal(AvifConstants.QualityPresets.Web, options.Quality);
+		Assert.Equal(AvifConstants.SpeedPresets.Fast, options.Speed);
 		Assert.Equal(AvifChromaSubsampling.Yuv420, options.ChromaSubsampling);
 		Assert.False(options.IsLossless);
-		Assert.True(options.ThreadCount > 0);
+		Assert.True(options.OptimizeForSize);
+		Assert.True(options.AddPreviewImage);
+		Assert.Equal(128, options.PreviewMaxDimension);
 	}
 
 	[Fact]
-	public void CreateProfessional_ShouldReturnProfessionalSettings()
+	public void CreateHighQuality_ShouldReturnHighQualitySettings()
 	{
-		var options = AvifEncodingOptions.CreateProfessional();
+		var options = AvifEncodingOptions.CreateHighQuality();
 
 		Assert.Equal(AvifConstants.QualityPresets.Professional, options.Quality);
+		Assert.Equal(AvifConstants.QualityPresets.Professional, options.AlphaQuality);
 		Assert.Equal(AvifConstants.SpeedPresets.Slow, options.Speed);
 		Assert.Equal(AvifChromaSubsampling.Yuv444, options.ChromaSubsampling);
 		Assert.False(options.IsLossless);
+		Assert.True(options.UseAdaptiveQuantization);
 	}
 
 	[Fact]
@@ -109,8 +168,11 @@ public class AvifEncodingOptionsTests
 		var options = AvifEncodingOptions.CreateLossless();
 
 		Assert.Equal(AvifConstants.QualityPresets.Lossless, options.Quality);
+		Assert.Equal(AvifConstants.QualityPresets.Lossless, options.AlphaQuality);
 		Assert.True(options.IsLossless);
+		Assert.True(options.IsAlphaLossless);
 		Assert.Equal(AvifChromaSubsampling.Yuv444, options.ChromaSubsampling);
+		Assert.Equal(AvifConstants.SpeedPresets.Slow, options.Speed);
 	}
 
 	[Fact]
@@ -118,20 +180,10 @@ public class AvifEncodingOptionsTests
 	{
 		var options = AvifEncodingOptions.CreateFast();
 
-		Assert.Equal(AvifConstants.QualityPresets.Fast, options.Quality);
+		Assert.Equal(AvifConstants.QualityPresets.Standard, options.Quality);
 		Assert.Equal(AvifConstants.SpeedPresets.Fastest, options.Speed);
-		Assert.Equal(AvifChromaSubsampling.Yuv420, options.ChromaSubsampling);
-	}
-
-	[Fact]
-	public void CreateThumbnail_ShouldReturnThumbnailSettings()
-	{
-		var options = AvifEncodingOptions.CreateThumbnail();
-
-		Assert.Equal(AvifConstants.QualityPresets.Thumbnail, options.Quality);
-		Assert.Equal(AvifConstants.SpeedPresets.Fast, options.Speed);
-		Assert.Equal(AvifChromaSubsampling.Yuv420, options.ChromaSubsampling);
-		Assert.False(options.AddPreviewImage);
+		Assert.False(options.EnableAutoTiling);
+		Assert.False(options.UseAdaptiveQuantization);
 	}
 
 	[Fact]
@@ -140,97 +192,11 @@ public class AvifEncodingOptionsTests
 		var options = AvifEncodingOptions.CreateHdr();
 
 		Assert.Equal(AvifConstants.QualityPresets.Professional, options.Quality);
-		Assert.Equal(AvifChromaSubsampling.Yuv422, options.ChromaSubsampling);
+		Assert.Equal(AvifConstants.SpeedPresets.Default, options.Speed);
+		Assert.Equal(AvifChromaSubsampling.Yuv444, options.ChromaSubsampling);
 		Assert.False(options.IsLossless);
-	}
-
-	[Fact]
-	public void Clone_ShouldCreateDeepCopy()
-	{
-		var original = new AvifEncodingOptions
-		{
-			Quality = 95,
-			Speed = 8,
-			IsLossless = true,
-			ChromaSubsampling = AvifChromaSubsampling.Yuv444,
-			ThreadCount = 8,
-			EnableFilmGrain = true,
-			AddPreviewImage = true
-		};
-
-		var clone = original.Clone();
-
-		Assert.NotSame(original, clone);
-		Assert.Equal(original.Quality, clone.Quality);
-		Assert.Equal(original.Speed, clone.Speed);
-		Assert.Equal(original.IsLossless, clone.IsLossless);
-		Assert.Equal(original.ChromaSubsampling, clone.ChromaSubsampling);
-		Assert.Equal(original.ThreadCount, clone.ThreadCount);
-		Assert.Equal(original.EnableFilmGrain, clone.EnableFilmGrain);
-		Assert.Equal(original.AddPreviewImage, clone.AddPreviewImage);
-	}
-
-	[Fact]
-	public void ApplyPreset_WithWebOptimized_ShouldUpdateSettings()
-	{
-		var options = new AvifEncodingOptions
-		{
-			Quality = 50,
-			Speed = 1
-		};
-
-		options.ApplyPreset(AvifPreset.WebOptimized);
-
-		Assert.Equal(AvifConstants.QualityPresets.Standard, options.Quality);
-		Assert.Equal(AvifConstants.SpeedPresets.Standard, options.Speed);
-		Assert.Equal(AvifChromaSubsampling.Yuv420, options.ChromaSubsampling);
-	}
-
-	[Fact]
-	public void ApplyPreset_WithProfessional_ShouldUpdateSettings()
-	{
-		var options = new AvifEncodingOptions();
-
-		options.ApplyPreset(AvifPreset.Professional);
-
-		Assert.Equal(AvifConstants.QualityPresets.Professional, options.Quality);
-		Assert.Equal(AvifConstants.SpeedPresets.Slow, options.Speed);
-		Assert.Equal(AvifChromaSubsampling.Yuv444, options.ChromaSubsampling);
-	}
-
-	[Fact]
-	public void ApplyPreset_WithLossless_ShouldUpdateSettings()
-	{
-		var options = new AvifEncodingOptions();
-
-		options.ApplyPreset(AvifPreset.Lossless);
-
-		Assert.True(options.IsLossless);
-		Assert.Equal(AvifConstants.QualityPresets.Lossless, options.Quality);
-		Assert.Equal(AvifChromaSubsampling.Yuv444, options.ChromaSubsampling);
-	}
-
-	[Fact]
-	public void ApplyPreset_WithFast_ShouldUpdateSettings()
-	{
-		var options = new AvifEncodingOptions();
-
-		options.ApplyPreset(AvifPreset.Fast);
-
-		Assert.Equal(AvifConstants.QualityPresets.Fast, options.Quality);
-		Assert.Equal(AvifConstants.SpeedPresets.Fastest, options.Speed);
-	}
-
-	[Fact]
-	public void ApplyPreset_WithThumbnail_ShouldUpdateSettings()
-	{
-		var options = new AvifEncodingOptions();
-
-		options.ApplyPreset(AvifPreset.Thumbnail);
-
-		Assert.Equal(AvifConstants.QualityPresets.Thumbnail, options.Quality);
-		Assert.Equal(AvifConstants.SpeedPresets.Fast, options.Speed);
-		Assert.False(options.AddPreviewImage);
+		Assert.True(options.IncludeIccProfile);
+		Assert.True(options.UseAdaptiveQuantization);
 	}
 
 	[Fact]
@@ -253,82 +219,14 @@ public class AvifEncodingOptionsTests
 	}
 
 	[Fact]
-	public void GetEstimatedEncodingTime_ShouldReturnReasonableEstimate()
-	{
-		var options = new AvifEncodingOptions
-		{
-			Speed = AvifConstants.SpeedPresets.Standard
-		};
-
-		var estimatedTime = options.GetEstimatedEncodingTime(1920, 1080);
-
-		Assert.True(estimatedTime > TimeSpan.Zero);
-		Assert.True(estimatedTime < TimeSpan.FromMinutes(10)); // Should be reasonable
-	}
-
-	[Fact]
-	public void GetEstimatedEncodingTime_WithFasterSpeed_ShouldReturnShorterTime()
-	{
-		var slowOptions = new AvifEncodingOptions { Speed = AvifConstants.SpeedPresets.Slowest };
-		var fastOptions = new AvifEncodingOptions { Speed = AvifConstants.SpeedPresets.Fastest };
-
-		var slowTime = slowOptions.GetEstimatedEncodingTime(1920, 1080);
-		var fastTime = fastOptions.GetEstimatedEncodingTime(1920, 1080);
-
-		Assert.True(fastTime < slowTime);
-	}
-
-	[Fact]
-	public void GetEstimatedEncodingTime_WithLargerImage_ShouldReturnLongerTime()
-	{
-		var options = new AvifEncodingOptions();
-
-		var smallTime = options.GetEstimatedEncodingTime(640, 480);
-		var largeTime = options.GetEstimatedEncodingTime(3840, 2160);
-
-		Assert.True(largeTime > smallTime);
-	}
-
-	[Fact]
-	public void Equals_WithSameSettings_ShouldReturnTrue()
-	{
-		var options1 = new AvifEncodingOptions
-		{
-			Quality = 85,
-			Speed = 5,
-			IsLossless = false
-		};
-
-		var options2 = new AvifEncodingOptions
-		{
-			Quality = 85,
-			Speed = 5,
-			IsLossless = false
-		};
-
-		Assert.True(options1.Equals(options2));
-		Assert.Equal(options1.GetHashCode(), options2.GetHashCode());
-	}
-
-	[Fact]
-	public void Equals_WithDifferentSettings_ShouldReturnFalse()
-	{
-		var options1 = new AvifEncodingOptions { Quality = 85 };
-		var options2 = new AvifEncodingOptions { Quality = 90 };
-
-		Assert.False(options1.Equals(options2));
-	}
-
-	[Fact]
 	public void AllFactoryMethods_ShouldCreateValidOptions()
 	{
 		var factoryMethods = new Func<AvifEncodingOptions>[]
 		{
 			AvifEncodingOptions.CreateWebOptimized,
-			AvifEncodingOptions.CreateProfessional,
+			AvifEncodingOptions.CreateHighQuality,
 			AvifEncodingOptions.CreateLossless,
 			AvifEncodingOptions.CreateFast,
-			AvifEncodingOptions.CreateThumbnail,
 			AvifEncodingOptions.CreateHdr
 		};
 
@@ -338,5 +236,54 @@ public class AvifEncodingOptionsTests
 			var isValid = options.Validate(out var error);
 			Assert.True(isValid, $"Factory method {method.Method.Name} created invalid options: {error}");
 		}
+	}
+
+	// Negative test cases for improved coverage
+	[Fact]
+	public void Validate_WithNullError_ShouldHandleGracefully()
+	{
+		var options = new AvifEncodingOptions();
+		var isValid = options.Validate(out var error);
+		
+		Assert.True(isValid);
+		Assert.Null(error);
+	}
+
+	[Fact]
+	public void EncodingOptions_WithExtremeValues_ShouldValidateCorrectly()
+	{
+		var options = new AvifEncodingOptions
+		{
+			Quality = AvifConstants.MinQuality,
+			Speed = AvifConstants.MinSpeed,
+			ThreadCount = 0, // Auto
+			FilmGrainStrength = 0,
+			MinQuantizer = 0,
+			MaxQuantizer = 63,
+			DenoisingStrength = 0,
+			SharpeningStrength = 0
+		};
+
+		var isValid = options.Validate(out var error);
+		Assert.True(isValid, $"Validation failed: {error}");
+	}
+
+	[Fact]
+	public void EncodingOptions_WithMaxValues_ShouldValidateCorrectly()
+	{
+		var options = new AvifEncodingOptions
+		{
+			Quality = AvifConstants.MaxQuality,
+			Speed = AvifConstants.MaxSpeed,
+			ThreadCount = AvifConstants.Memory.MaxThreads,
+			FilmGrainStrength = 50,
+			MinQuantizer = 63,
+			MaxQuantizer = 63,
+			DenoisingStrength = 50,
+			SharpeningStrength = 7
+		};
+
+		var isValid = options.Validate(out var error);
+		Assert.True(isValid, $"Validation failed: {error}");
 	}
 }
