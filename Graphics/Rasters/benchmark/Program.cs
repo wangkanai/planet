@@ -13,6 +13,20 @@ else if (args.Length > 0 && args[0] == "--realistic")
 {
 	RealisticPerformanceDemo.RunDemo();
 }
+else if (args.Length > 0 && args[0] == "--async-demo")
+{
+	await AsyncDisposalDemo.RunDemo();
+}
+else if (args.Length > 0 && args[0] == "--async")
+{
+	BenchmarkRunner.Run<AsyncDisposalBenchmark>();
+}
+else if (args.Length > 0 && args[0] == "--all")
+{
+	// Run all benchmark suites
+	BenchmarkRunner.Run<TiffRasterBenchmark>();
+	BenchmarkRunner.Run<AsyncDisposalBenchmark>();
+}
 else
 {
 	BenchmarkRunner.Run<TiffRasterBenchmark>();

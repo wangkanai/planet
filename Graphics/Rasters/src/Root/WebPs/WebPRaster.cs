@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Rasters.WebPs;
 
 /// <summary>Represents a WebP raster image implementation with high-performance optimizations.</summary>
-public class WebPRaster : IWebPRaster
+public class WebPRaster : Raster, IWebPRaster
 {
 	private WebPFormat      _format               = WebPFormat.Simple;
 	private WebPCompression _compression          = WebPCompression.VP8;
@@ -45,10 +45,10 @@ public class WebPRaster : IWebPRaster
 	}
 
 	/// <inheritdoc />
-	public int Width { get; set; } = 1;
+	public override int Width { get; set; } = 1;
 
 	/// <inheritdoc />
-	public int Height { get; set; } = 1;
+	public override int Height { get; set; } = 1;
 
 	/// <inheritdoc />
 	public WebPFormat Format
@@ -132,6 +132,39 @@ public class WebPRaster : IWebPRaster
 	{
 		get => _compressionRatio;
 		set => _compressionRatio = Math.Max(1.0, value);
+	}
+
+	/// <inheritdoc />
+	public override bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
+
+	/// <inheritdoc />
+	public override long EstimatedMetadataSize
+	{
+		get
+		{
+			var size = 0L;
+			
+			// Add size of metadata components
+			if (!Metadata.IccProfile.IsEmpty)
+				size += Metadata.IccProfile.Length;
+			if (!Metadata.ExifData.IsEmpty)
+				size += Metadata.ExifData.Length;
+			if (!Metadata.XmpData.IsEmpty)
+				size += Metadata.XmpData.Length;
+			
+			// Add size of custom chunks
+			foreach (var chunk in Metadata.CustomChunks.Values)
+				size += chunk.Length;
+			
+			// Add estimated size of animation frames
+			if (Metadata.HasAnimation)
+			{
+				foreach (var frame in Metadata.AnimationFrames)
+					size += frame.Data.Length;
+			}
+			
+			return size;
+		}
 	}
 
 	/// <summary>Sets the color mode and updates related properties for performance.</summary>
@@ -296,14 +329,75 @@ public class WebPRaster : IWebPRaster
 		return 2.0 + levelFactor;
 	}
 
-	/// <summary>Disposes of the WebP raster resources.</summary>
-	public void Dispose()
+	/// <inheritdoc />
+	protected override async ValueTask DisposeAsyncCore()
 	{
-		Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
-		Metadata.ExifData   = ReadOnlyMemory<byte>.Empty;
-		Metadata.XmpData    = ReadOnlyMemory<byte>.Empty;
-		Metadata.CustomChunks.Clear();
-		Metadata.AnimationFrames.Clear();
-		GC.SuppressFinalize(this);
+		if (HasLargeMetadata)
+		{
+			// For large WebP metadata, clear in stages with yielding
+			if (!Metadata.IccProfile.IsEmpty)
+			{
+				await Task.Yield();
+				Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
+			}
+
+			if (!Metadata.ExifData.IsEmpty)
+			{
+				await Task.Yield();
+				Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
+			}
+
+			if (!Metadata.XmpData.IsEmpty)
+			{
+				await Task.Yield();
+				Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+			}
+
+			// Clear animation frames in batches for large collections
+			if (Metadata.AnimationFrames.Count > ImageConstants.DisposalBatchSize)
+			{
+				var batchSize = 50;
+				for (var i = 0; i < Metadata.AnimationFrames.Count; i += batchSize)
+				{
+					var endIndex = Math.Min(i + batchSize, Metadata.AnimationFrames.Count);
+					for (var j = i; j < endIndex; j++)
+					{
+						Metadata.AnimationFrames[j].Data = ReadOnlyMemory<byte>.Empty;
+					}
+					// Yield control after each batch
+					await Task.Yield();
+				}
+			}
+
+			await Task.Yield();
+			Metadata.AnimationFrames.Clear();
+			
+			await Task.Yield();
+			Metadata.CustomChunks.Clear();
+
+			// Let the runtime handle garbage collection automatically
+		}
+		else
+		{
+			// For small metadata, use synchronous disposal
+			Dispose(true);
+		}
+	}
+
+	/// <inheritdoc />
+	protected override void Dispose(bool disposing)
+	{
+		if (disposing)
+		{
+			// Clear WebP-specific managed resources
+			Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
+			Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
+			Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+			Metadata.CustomChunks.Clear();
+			Metadata.AnimationFrames.Clear();
+		}
+
+		// Call base class disposal
+		base.Dispose(disposing);
 	}
 }

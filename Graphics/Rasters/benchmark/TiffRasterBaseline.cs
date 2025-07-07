@@ -54,6 +54,38 @@ public class TiffRasterBaseline : ITiffRaster
 	/// <inheritdoc />
 	public int PlanarConfiguration { get; set; } = 1;
 
+	/// <inheritdoc />
+	public bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
+
+	/// <inheritdoc />
+	public long EstimatedMetadataSize
+	{
+		get
+		{
+			// Baseline implementation - simple metadata size estimation
+			var size = 0L;
+			
+			// Add string metadata sizes (baseline approach)
+			if (!string.IsNullOrEmpty(Metadata.ImageDescription))
+				size += Metadata.ImageDescription.Length * 2; // Rough Unicode estimate
+			if (!string.IsNullOrEmpty(Metadata.Make))
+				size += Metadata.Make.Length * 2;
+			if (!string.IsNullOrEmpty(Metadata.Model))
+				size += Metadata.Model.Length * 2;
+			if (!string.IsNullOrEmpty(Metadata.Software))
+				size += Metadata.Software.Length * 2;
+			if (!string.IsNullOrEmpty(Metadata.Copyright))
+				size += Metadata.Copyright.Length * 2;
+			if (!string.IsNullOrEmpty(Metadata.Artist))
+				size += Metadata.Artist.Length * 2;
+			
+			// Add custom tags size (baseline approach)
+			size += Metadata.CustomTags.Count * 20; // Rough estimate per tag
+			
+			return size;
+		}
+	}
+
 	/// <summary>Initializes a new instance of the <see cref="TiffRasterBaseline"/> class.</summary>
 	public TiffRasterBaseline()
 	{
@@ -76,6 +108,20 @@ public class TiffRasterBaseline : ITiffRaster
 	/// <inheritdoc />
 	public void Dispose()
 	{
+		GC.SuppressFinalize(this);
+	}
+
+	/// <inheritdoc />
+	public async ValueTask DisposeAsync()
+	{
+		// Baseline implementation - simple async disposal
+		if (HasLargeMetadata)
+		{
+			// For baseline, just yield once for large metadata
+			await Task.Yield();
+		}
+		
+		Dispose();
 		GC.SuppressFinalize(this);
 	}
 }

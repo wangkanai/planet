@@ -196,7 +196,7 @@ public static class WebPValidator
 
 		// Performance warning for large metadata
 		var totalMetadataSize = metadata.IccProfile.Length + metadata.ExifData.Length + metadata.XmpData.Length;
-		if (totalMetadataSize > 1_000_000) // 1MB
+		if (totalMetadataSize > ImageConstants.LargeMetadataThreshold)
 			result.AddWarning($"Large metadata size ({totalMetadataSize:N0} bytes) may impact performance.");
 	}
 

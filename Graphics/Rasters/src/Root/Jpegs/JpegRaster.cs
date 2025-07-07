@@ -3,13 +3,13 @@
 namespace Wangkanai.Graphics.Rasters.Jpegs;
 
 /// <summary>Represents a JPEG raster image with format-specific properties.</summary>
-public class JpegRaster : IJpegRaster
+public class JpegRaster : Raster, IJpegRaster
 {
 	/// <inheritdoc />
-	public int Width { get; set; }
+	public override int Width { get; set; }
 
 	/// <inheritdoc />
-	public int Height { get; set; }
+	public override int Height { get; set; }
 
 	/// <inheritdoc />
 	public JpegColorMode ColorMode { get; set; }
@@ -40,6 +40,35 @@ public class JpegRaster : IJpegRaster
 
 	/// <inheritdoc />
 	public double CompressionRatio { get; set; }
+
+	/// <inheritdoc />
+	public override bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
+
+	/// <inheritdoc />
+	public override long EstimatedMetadataSize
+	{
+		get
+		{
+			var size = 0L;
+
+			// Add ICC profile size
+			if (Metadata.IccProfile != null)
+				size += Metadata.IccProfile.Length;
+
+			// Add custom EXIF tags size
+			size += Metadata.CustomExifTags.Count * 16; // Estimate 16 bytes per tag
+
+			// Add IPTC tags size
+			foreach (var tag in Metadata.IptcTags.Values)
+				size += System.Text.Encoding.UTF8.GetByteCount(tag);
+
+			// Add XMP tags size
+			foreach (var tag in Metadata.XmpTags.Values)
+				size += System.Text.Encoding.UTF8.GetByteCount(tag);
+
+			return size;
+		}
+	}
 
 	/// <summary>Initializes a new instance of the <see cref="JpegRaster"/> class.</summary>
 	public JpegRaster()
@@ -140,15 +169,43 @@ public class JpegRaster : IJpegRaster
 	}
 
 	/// <inheritdoc />
-	public void Dispose()
+	protected override async ValueTask DisposeAsyncCore()
 	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
+		if (HasLargeMetadata)
+		{
+			// For large metadata, clear in stages with yielding
+			await Task.Yield();
+			Metadata.IccProfile = [];
+
+			await Task.Yield();
+			Metadata.CustomExifTags.Clear();
+
+			await Task.Yield();
+			Metadata.IptcTags.Clear();
+
+			await Task.Yield();
+			Metadata.XmpTags.Clear();
+		}
+		else
+		{
+			// For small metadata, use synchronous disposal
+			Dispose(true);
+		}
 	}
 
-	protected virtual void Dispose(bool disposing)
+	/// <inheritdoc />
+	protected override void Dispose(bool disposing)
 	{
 		if (disposing)
-			Metadata = null!;
+		{
+			// Clear JPEG-specific managed resources
+			Metadata.IccProfile = null;
+			Metadata.CustomExifTags.Clear();
+			Metadata.IptcTags.Clear();
+			Metadata.XmpTags.Clear();
+		}
+
+		// Call base class disposal
+		base.Dispose(disposing);
 	}
 }

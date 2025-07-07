@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Rasters.Pngs;
 
 /// <summary>Represents a PNG raster image implementation.</summary>
-public class PngRaster : IPngRaster
+public class PngRaster : Raster, IPngRaster
 {
 	private PngColorType _colorType        = PngColorType.Truecolor;
 	private byte         _bitDepth         = 8;
@@ -30,10 +30,10 @@ public class PngRaster : IPngRaster
 	}
 
 	/// <summary>Gets or sets the width of the image in pixels.</summary>
-	public int Width { get; set; } = 1;
+	public override int Width { get; set; } = 1;
 
 	/// <summary>Gets or sets the height of the image in pixels.</summary>
-	public int Height { get; set; } = 1;
+	public override int Height { get; set; } = 1;
 
 	/// <summary>Gets or sets the PNG color type.</summary>
 	public PngColorType ColorType
@@ -97,6 +97,42 @@ public class PngRaster : IPngRaster
 
 	/// <summary>Gets or sets the transparency data.</summary>
 	public ReadOnlyMemory<byte> TransparencyData { get; set; }
+
+	/// <inheritdoc />
+	public override bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
+
+	/// <inheritdoc />
+	public override long EstimatedMetadataSize
+	{
+		get
+		{
+			var size = 0L;
+			
+			// Add palette data size
+			if (!PaletteData.IsEmpty)
+				size += PaletteData.Length;
+			
+			// Add transparency data size
+			if (!TransparencyData.IsEmpty)
+				size += TransparencyData.Length;
+			
+			// Add text chunk sizes
+			foreach (var textChunk in Metadata.TextChunks.Values)
+				size += System.Text.Encoding.UTF8.GetByteCount(textChunk);
+			
+			foreach (var compressedTextChunk in Metadata.CompressedTextChunks.Values)
+				size += compressedTextChunk.Length;
+			
+			foreach (var internationalTextChunk in Metadata.InternationalTextChunks.Values)
+				size += System.Text.Encoding.UTF8.GetByteCount(internationalTextChunk.text);
+			
+			// Add custom chunk sizes
+			foreach (var customChunk in Metadata.CustomChunks.Values)
+				size += customChunk.Length;
+			
+			return size;
+		}
+	}
 
 	/// <summary>Validates the PNG raster image.</summary>
 	/// <returns>True if the image is valid, false otherwise.</returns>
@@ -179,12 +215,52 @@ public class PngRaster : IPngRaster
 		};
 	}
 
-	/// <summary>Disposes of the PNG raster resources.</summary>
-	public void Dispose()
+	/// <inheritdoc />
+	protected override async ValueTask DisposeAsyncCore()
 	{
-		PaletteData      = ReadOnlyMemory<byte>.Empty;
-		TransparencyData = ReadOnlyMemory<byte>.Empty;
-		Metadata.CustomChunks.Clear();
-		GC.SuppressFinalize(this);
+		if (HasLargeMetadata)
+		{
+			// For large PNG metadata, clear in stages with yielding
+			await Task.Yield();
+			PaletteData = ReadOnlyMemory<byte>.Empty;
+			
+			await Task.Yield();
+			TransparencyData = ReadOnlyMemory<byte>.Empty;
+			
+			await Task.Yield();
+			Metadata.TextChunks.Clear();
+			
+			await Task.Yield();
+			Metadata.CompressedTextChunks.Clear();
+			
+			await Task.Yield();
+			Metadata.InternationalTextChunks.Clear();
+			
+			await Task.Yield();
+			Metadata.CustomChunks.Clear();
+		}
+		else
+		{
+			// For small metadata, use synchronous disposal
+			Dispose(true);
+		}
+	}
+
+	/// <inheritdoc />
+	protected override void Dispose(bool disposing)
+	{
+		if (disposing)
+		{
+			// Clear PNG-specific managed resources
+			PaletteData = ReadOnlyMemory<byte>.Empty;
+			TransparencyData = ReadOnlyMemory<byte>.Empty;
+			Metadata.TextChunks.Clear();
+			Metadata.CompressedTextChunks.Clear();
+			Metadata.InternationalTextChunks.Clear();
+			Metadata.CustomChunks.Clear();
+		}
+
+		// Call base class disposal
+		base.Dispose(disposing);
 	}
 }
