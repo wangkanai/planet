@@ -15,15 +15,14 @@ public class Jpeg2000RasterTests
 
 		// Assert
 		Assert.NotNull(jpeg2000.Metadata);
-		Assert.Equal(ImageFormat.Unknown, jpeg2000.Format);
 	}
 
 	[Theory]
-	[InlineData(800, 600, 1, ImageFormat.Gray)]
-	[InlineData(800, 600, 3, ImageFormat.Rgb)]
-	[InlineData(800, 600, 4, ImageFormat.Rgba)]
-	[InlineData(800, 600, 2, ImageFormat.Unknown)]
-	public void Constructor_WithDimensions_ShouldInitializeCorrectly(int width, int height, int components, ImageFormat expectedFormat)
+	[InlineData(800, 600, 1)]
+	[InlineData(800, 600, 3)]
+	[InlineData(800, 600, 4)]
+	[InlineData(800, 600, 2)]
+	public void Constructor_WithDimensions_ShouldInitializeCorrectly(int width, int height, int components)
 	{
 		// Act
 		var jpeg2000 = new Jpeg2000Raster(width, height, components);
@@ -34,7 +33,6 @@ public class Jpeg2000RasterTests
 		Assert.Equal(width, jpeg2000.Metadata.Width);
 		Assert.Equal(height, jpeg2000.Metadata.Height);
 		Assert.Equal(components, jpeg2000.Metadata.Components);
-		Assert.Equal(expectedFormat, jpeg2000.Format);
 	}
 
 	[Theory]
@@ -589,7 +587,7 @@ public class Jpeg2000RasterTests
 	}
 
 	[Theory]
-	[InlineData(0, 0, 0, 0, 400, 300)]
+	[InlineData(0, 0, 0, 400, 300)]
 	[InlineData(1, 400, 0, 400, 300)]
 	[InlineData(2, 0, 300, 400, 300)]
 	[InlineData(3, 400, 300, 400, 300)]

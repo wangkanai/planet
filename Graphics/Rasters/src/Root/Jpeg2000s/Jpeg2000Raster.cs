@@ -19,7 +19,6 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	public Jpeg2000Raster()
 	{
 		Metadata = new Jpeg2000Metadata();
-		Format = ImageFormat.Unknown; // Will be set based on encoding
 		InitializeDefaults();
 	}
 
@@ -42,14 +41,6 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 			Width = width,
 			Height = height,
 			Components = components
-		};
-
-		Format = components switch
-		{
-			1 => ImageFormat.Gray,
-			3 => ImageFormat.Rgb,
-			4 => ImageFormat.Rgba,
-			_ => ImageFormat.Unknown
 		};
 
 		InitializeDefaults();
@@ -364,9 +355,10 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	}
 
 	/// <summary>Validates JPEG2000 format compliance and settings.</summary>
-	public override bool IsValid()
+	public bool IsValid()
 	{
-		return base.IsValid() && Metadata.IsValid();
+		var validation = Jpeg2000Validator.Validate(this);
+		return validation.IsValid;
 	}
 
 	/// <summary>Applies geospatial metadata for GeoJP2 support.</summary>
@@ -546,7 +538,7 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	}
 
 	/// <summary>Throws ObjectDisposedException if the raster has been disposed.</summary>
-	private void ThrowIfDisposed()
+	private new void ThrowIfDisposed()
 	{
 		if (_disposed)
 			throw new ObjectDisposedException(nameof(Jpeg2000Raster));

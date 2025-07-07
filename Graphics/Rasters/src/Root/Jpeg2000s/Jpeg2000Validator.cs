@@ -65,18 +65,24 @@ public static class Jpeg2000Validator
 		if (jpeg2000.Metadata.BitDepth <= 0 || jpeg2000.Metadata.BitDepth > Jpeg2000Constants.MaxBitDepth)
 			result.AddError($"Invalid bit depth: {jpeg2000.Metadata.BitDepth}. Must be between 1 and {Jpeg2000Constants.MaxBitDepth}.");
 
-		// Validate component count against format
-		switch (jpeg2000.Format)
+		// Validate reasonable component count
+		if (jpeg2000.Metadata.Components == 1)
 		{
-			case ImageFormat.Gray when jpeg2000.Metadata.Components != 1:
-				result.AddError("Grayscale format requires exactly 1 component.");
-				break;
-			case ImageFormat.Rgb when jpeg2000.Metadata.Components != 3:
-				result.AddError("RGB format requires exactly 3 components.");
-				break;
-			case ImageFormat.Rgba when jpeg2000.Metadata.Components != 4:
-				result.AddError("RGBA format requires exactly 4 components.");
-				break;
+			// Grayscale - valid
+		}
+		else if (jpeg2000.Metadata.Components == 3)
+		{
+			// RGB - valid
+		}
+		else if (jpeg2000.Metadata.Components == 4)
+		{
+			// RGBA - valid
+		}
+		else if (jpeg2000.Metadata.Components > 4)
+		{
+			// Multi-spectral or hyperspectral data - valid but warn if many components
+			if (jpeg2000.Metadata.Components > 16)
+				result.AddWarning($"Large number of components ({jpeg2000.Metadata.Components}) may impact performance.");
 		}
 
 		// Validate bit depth for common use cases

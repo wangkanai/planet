@@ -357,11 +357,11 @@ public class Jpeg2000ValidatorTests
 	}
 
 	[Theory]
-	[InlineData(0, 100, 200, 200)]
-	[InlineData(-10, 100, 200, 200)]
-	[InlineData(100, 0, 200, 200)]
-	[InlineData(100, -10, 200, 200)]
-	public void Validate_InvalidRoiDimensions_ShouldReturnError(int width, int height, int roiWidth, int roiHeight)
+	[InlineData(0, 100)]
+	[InlineData(-10, 100)]
+	[InlineData(100, 0)]
+	[InlineData(100, -10)]
+	public void Validate_InvalidRoiDimensions_ShouldReturnError(int width, int height)
 	{
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
