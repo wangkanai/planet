@@ -174,7 +174,7 @@ public static class Jpeg2000Validator
 		if (!Enum.IsDefined(typeof(Jpeg2000Progression), jpeg2000.ProgressionOrder))
 			result.AddError($"Invalid progression order: {jpeg2000.ProgressionOrder}.");
 
-		// Validate progression order against use case
+		// Validate progression order against a use case
 		if (jpeg2000.SupportsTiling && !jpeg2000.ProgressionOrder.SupportsEfficientSpatialAccess())
 			result.AddWarning($"Progression order {jpeg2000.ProgressionOrder} may not be optimal for tiled images. Consider RPCL or PCRL.");
 
@@ -194,7 +194,7 @@ public static class Jpeg2000Validator
 		if (jpeg2000.QualityLayers > Jpeg2000Constants.QualityLayers.MaxLayers)
 			result.AddError($"Too many quality layers: {jpeg2000.QualityLayers} > {Jpeg2000Constants.QualityLayers.MaxLayers}.");
 
-		if (jpeg2000.IsLossless && jpeg2000.QualityLayers > 1)
+		if (jpeg2000 is { IsLossless: true, QualityLayers: > 1 })
 			result.AddWarning("Multiple quality layers have limited benefit for lossless compression.");
 
 		if (jpeg2000.QualityLayers > 20)
@@ -289,7 +289,9 @@ public static class Jpeg2000Validator
 			else
 			{
 				var gt = metadata.GeoTransform;
-				if (gt[1] == 0 && gt[5] == 0)
+				// Use epsilon comparison for floating-point values
+				const double epsilon = 1e-10;
+				if (Math.Abs(gt[1]) < epsilon && Math.Abs(gt[5]) < epsilon)
 					result.AddError("Invalid GeoTransform: Both X and Y pixel sizes are zero.");
 
 				if (Math.Abs(gt[2]) > Math.Abs(gt[1]) || Math.Abs(gt[4]) > Math.Abs(gt[5]))
