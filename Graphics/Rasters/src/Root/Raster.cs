@@ -11,16 +11,31 @@ public abstract class Raster : IRaster
 	public virtual int Height { get; set; }
 
 	/// <inheritdoc />
-	public virtual bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
+	public virtual bool HasLargeMetadata
+		=> EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
 
 	/// <inheritdoc />
-	public virtual long EstimatedMetadataSize => 0; // Base class has no metadata
+	public virtual long EstimatedMetadataSize
+		=> 0; // Base class has no metadata
 
 	/// <inheritdoc />
 	public void Dispose()
 	{
 		Dispose(true);
 		GC.SuppressFinalize(this);
+	}
+
+	/// <summary>Releases the managed and unmanaged resources used by the raster image.</summary>
+	/// <param name="disposing">
+	/// true to release both managed and unmanaged resources;
+	/// false to release only unmanaged resources.
+	/// </param>
+	protected virtual void Dispose(bool disposing)
+	{
+		if (_disposed)
+			return;
+
+		_disposed = true;
 	}
 
 	/// <inheritdoc />
@@ -38,18 +53,5 @@ public abstract class Raster : IRaster
 		// Derived classes should override this method for custom async disposal logic
 		Dispose(true);
 		return ValueTask.CompletedTask;
-	}
-
-	/// <summary>Releases the managed and unmanaged resources used by the raster image.</summary>
-	/// <param name="disposing">
-	/// true to release both managed and unmanaged resources;
-	/// false to release only unmanaged resources.
-	/// </param>
-	protected virtual void Dispose(bool disposing)
-	{
-		if (_disposed)
-			return;
-
-		_disposed = true;
 	}
 }
