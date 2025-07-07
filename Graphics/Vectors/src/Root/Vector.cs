@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Vectors;
 
 /// <summary>Represents a vector image</summary>
-public class Vector : IVector
+public abstract class Vector : IVector
 {
 	private bool _disposed;
 
@@ -42,7 +42,7 @@ public class Vector : IVector
 
 	/// <summary>Releases the managed and unmanaged resources used by the vector image.</summary>
 	/// <param name="disposing">
-	/// true to release both managed and unmanaged resources; 
+	/// true to release both managed and unmanaged resources;
 	/// false to release only unmanaged resources.
 	/// </param>
 	protected virtual void Dispose(bool disposing)
