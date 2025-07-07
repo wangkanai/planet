@@ -10,6 +10,7 @@ namespace Wangkanai.Graphics.Rasters.Benchmark;
 [MemoryDiagnoser]
 [Orderer(SummaryOrderPolicy.FastestToSlowest)]
 [RankColumn]
+[GroupBenchmarksBy(BenchmarkDotNet.Configs.BenchmarkLogicalGroupRule.ByCategory)]
 public class WebPConstantsBenchmark
 {
 	private static readonly byte[] _testData = new byte[] { 0x52, 0x49, 0x46, 0x46, 0x00, 0x00, 0x10, 0x00, 0x57, 0x45, 0x42, 0x50, 0x56, 0x50, 0x38, 0x20 };
@@ -57,7 +58,7 @@ public class WebPConstantsBenchmark
 	}
 
 	[Benchmark(Baseline = true)]
-	[BenchmarkCategory("Length")]
+	[BenchmarkCategory("PropertyAccess")]
 	public int Length_ByteArray()
 	{
 		return WebPConstantsBaseline.Signature.Length + 
@@ -66,7 +67,7 @@ public class WebPConstantsBenchmark
 	}
 
 	[Benchmark]
-	[BenchmarkCategory("Length")]
+	[BenchmarkCategory("PropertyAccess")]
 	public int Length_ImmutableArray()
 	{
 		return WebPConstants.Signature.Length + 
@@ -74,64 +75,22 @@ public class WebPConstantsBenchmark
 		       WebPConstants.VP8ChunkId.Length;
 	}
 
-	[Benchmark(Baseline = true)]
-	[BenchmarkCategory("Access")]
+	[Benchmark]
+	[BenchmarkCategory("PropertyAccess")]
 	public byte Access_ByteArray()
 	{
 		return WebPConstantsBaseline.Signature[0];
 	}
 
 	[Benchmark]
-	[BenchmarkCategory("Access")]
+	[BenchmarkCategory("PropertyAccess")]
 	public byte Access_ImmutableArray()
 	{
 		return WebPConstants.Signature[0];
 	}
 
 	[Benchmark(Baseline = true)]
-	[BenchmarkCategory("AsSpan")]
-	public ReadOnlySpan<byte> AsSpan_ByteArray()
-	{
-		return WebPConstantsBaseline.Signature.AsSpan();
-	}
-
-	[Benchmark]
-	[BenchmarkCategory("AsSpan")]
-	public ReadOnlySpan<byte> AsSpan_ImmutableArray()
-	{
-		return WebPConstants.Signature.AsSpan();
-	}
-
-	[Benchmark(Baseline = true)]
-	[BenchmarkCategory("Memory")]
-	public long MemoryFootprint_ByteArray()
-	{
-		// Simulate memory footprint calculation
-		long totalSize = 0;
-		totalSize += WebPConstantsBaseline.Signature.Length;
-		totalSize += WebPConstantsBaseline.FormatId.Length;
-		totalSize += WebPConstantsBaseline.VP8ChunkId.Length;
-		totalSize += WebPConstantsBaseline.VP8LChunkId.Length;
-		totalSize += WebPConstantsBaseline.VP8XChunkId.Length;
-		return totalSize;
-	}
-
-	[Benchmark]
-	[BenchmarkCategory("Memory")]
-	public long MemoryFootprint_ImmutableArray()
-	{
-		// Simulate memory footprint calculation
-		long totalSize = 0;
-		totalSize += WebPConstants.Signature.Length;
-		totalSize += WebPConstants.FormatId.Length;
-		totalSize += WebPConstants.VP8ChunkId.Length;
-		totalSize += WebPConstants.VP8LChunkId.Length;
-		totalSize += WebPConstants.VP8XChunkId.Length;
-		return totalSize;
-	}
-
-	[Benchmark(Baseline = true)]
-	[BenchmarkCategory("Validation")]
+	[BenchmarkCategory("RealWorldUsage")]
 	public bool ValidateWebPSignature_ByteArray()
 	{
 		var data = _testData.AsSpan();
@@ -145,7 +104,7 @@ public class WebPConstantsBenchmark
 	}
 
 	[Benchmark]
-	[BenchmarkCategory("Validation")]
+	[BenchmarkCategory("RealWorldUsage")]
 	public bool ValidateWebPSignature_ImmutableArray()
 	{
 		var data = _testData.AsSpan();
@@ -158,8 +117,8 @@ public class WebPConstantsBenchmark
 		return data.Slice(8, 4).SequenceEqual(WebPConstants.FormatId.AsSpan());
 	}
 
-	[Benchmark(Baseline = true)]
-	[BenchmarkCategory("FormatDetection")]
+	[Benchmark]
+	[BenchmarkCategory("RealWorldUsage")]
 	public int DetectFormat_ByteArray()
 	{
 		var data = _testData.AsSpan();
@@ -176,7 +135,7 @@ public class WebPConstantsBenchmark
 	}
 
 	[Benchmark]
-	[BenchmarkCategory("FormatDetection")]
+	[BenchmarkCategory("RealWorldUsage")]
 	public int DetectFormat_ImmutableArray()
 	{
 		var data = _testData.AsSpan();
