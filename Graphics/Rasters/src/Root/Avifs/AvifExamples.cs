@@ -134,7 +134,7 @@ public static class AvifExamples
 	{
 		var avif = new AvifRaster(width, height, false)
 		{
-			Quality = AvifConstants.QualityPresets.Web,
+			Quality = AvifConstants.QualityPresets.Standard,
 			Speed = AvifConstants.SpeedPresets.Fastest,
 			ChromaSubsampling = AvifChromaSubsampling.Yuv420,
 			ColorSpace = AvifColorSpace.Srgb,
