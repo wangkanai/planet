@@ -46,6 +46,36 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		InitializeDefaults();
 	}
 
+	/// <summary>Gets or sets the width of the image.</summary>
+	public override int Width 
+	{ 
+		get 
+		{ 
+			ThrowIfDisposed(); 
+			return base.Width; 
+		} 
+		set 
+		{ 
+			ThrowIfDisposed(); 
+			base.Width = value; 
+		} 
+	}
+
+	/// <summary>Gets or sets the height of the image.</summary>
+	public override int Height 
+	{ 
+		get 
+		{ 
+			ThrowIfDisposed(); 
+			return base.Height; 
+		} 
+		set 
+		{ 
+			ThrowIfDisposed(); 
+			base.Height = value; 
+		} 
+	}
+
 	/// <summary>Comprehensive JPEG2000 metadata including JP2 boxes and codestream parameters.</summary>
 	public Jpeg2000Metadata Metadata { get; set; }
 
@@ -187,10 +217,18 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 
 		// Calculate optimal decomposition levels based on image size
 		var minDimension = Math.Min(Width, Height);
-		DecompositionLevels = Math.Min(
-			Jpeg2000Constants.DefaultDecompositionLevels,
-			(int)Math.Floor(Math.Log2(minDimension / 32.0)) // Ensure reasonable tile sizes
-		);
+		if (minDimension > 0)
+		{
+			var maxLevels = (int)Math.Floor(Math.Log2(minDimension / 32.0));
+			DecompositionLevels = Math.Min(
+				Jpeg2000Constants.DefaultDecompositionLevels,
+				Math.Max(0, maxLevels) // Ensure non-negative
+			);
+		}
+		else
+		{
+			DecompositionLevels = Jpeg2000Constants.DefaultDecompositionLevels;
+		}
 
 		// Set tile size based on image dimensions
 		if (Width > 2048 || Height > 2048)
@@ -244,8 +282,8 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		if (data == null || data.Length == 0)
 			throw new ArgumentException("JPEG2000 data cannot be null or empty.", nameof(data));
 
-		if (resolutionLevel < 0 || resolutionLevel > AvailableResolutionLevels)
-			throw new ArgumentException($"Resolution level must be between 0 and {AvailableResolutionLevels}.", nameof(resolutionLevel));
+		if (resolutionLevel < 0 || resolutionLevel >= AvailableResolutionLevels)
+			throw new ArgumentException($"Resolution level must be between 0 and {AvailableResolutionLevels - 1}.", nameof(resolutionLevel));
 
 		// For now, simulate decoding
 		await Task.Yield();
@@ -283,8 +321,8 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	{
 		ThrowIfDisposed();
 
-		if (resolutionLevel < 0 || resolutionLevel > AvailableResolutionLevels)
-			throw new ArgumentException($"Resolution level must be between 0 and {AvailableResolutionLevels}.");
+		if (resolutionLevel < 0 || resolutionLevel >= AvailableResolutionLevels)
+			throw new ArgumentException($"Resolution level must be between 0 and {AvailableResolutionLevels - 1}.");
 
 		await Task.Yield();
 
@@ -328,8 +366,8 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	{
 		ThrowIfDisposed();
 
-		if (resolutionLevel < 0 || resolutionLevel > AvailableResolutionLevels)
-			throw new ArgumentException($"Resolution level must be between 0 and {AvailableResolutionLevels}.");
+		if (resolutionLevel < 0 || resolutionLevel >= AvailableResolutionLevels)
+			throw new ArgumentException($"Resolution level must be between 0 and {AvailableResolutionLevels - 1}.");
 
 		var scaleFactor = 1 << resolutionLevel;
 		return (Width / scaleFactor, Height / scaleFactor);

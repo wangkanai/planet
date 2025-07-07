@@ -342,8 +342,8 @@ public static class Jpeg2000Validator
 		if (data.Length < 12) // Minimum size for signature box
 			return false;
 
-		// Check signature box size (should be 12)
-		var boxSize = BitConverter.ToUInt32(data[..4]);
+		// Check signature box size (should be 12) - JPEG2000 uses big-endian
+		var boxSize = (uint)((data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]);
 		if (boxSize != 12)
 			return false;
 

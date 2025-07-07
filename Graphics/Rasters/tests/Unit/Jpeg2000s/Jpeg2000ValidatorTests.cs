@@ -501,7 +501,8 @@ public class Jpeg2000ValidatorTests
 	{
 		// Arrange
 		var data = new byte[12];
-		BitConverter.GetBytes((uint)12).CopyTo(data, 0); // Box size
+		// JPEG2000 uses big-endian byte order
+		data[0] = 0x00; data[1] = 0x00; data[2] = 0x00; data[3] = 0x0C; // Box size (12)
 		"jP  "u8.ToArray().CopyTo(data, 4); // Box type
 		new byte[] { 0x0D, 0x0A, 0x87, 0x0A }.CopyTo(data, 8); // Signature data
 
@@ -543,10 +544,11 @@ public class Jpeg2000ValidatorTests
 	{
 		// Arrange
 		var data = new byte[32];
-		BitConverter.GetBytes((uint)12).CopyTo(data, 0); // Signature box size
+		// JPEG2000 uses big-endian byte order
+		data[0] = 0x00; data[1] = 0x00; data[2] = 0x00; data[3] = 0x0C; // Signature box size (12)
 		"jP  "u8.ToArray().CopyTo(data, 4); // Signature box type
 		new byte[] { 0x0D, 0x0A, 0x87, 0x0A }.CopyTo(data, 8); // Signature data
-		BitConverter.GetBytes((uint)20).CopyTo(data, 12); // File type box size
+		data[12] = 0x00; data[13] = 0x00; data[14] = 0x00; data[15] = 0x14; // File type box size (20)
 		"ftyp"u8.ToArray().CopyTo(data, 16); // File type box type
 		"jp2 "u8.ToArray().CopyTo(data, 20); // JP2 brand
 
