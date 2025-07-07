@@ -174,7 +174,7 @@ public static class HeifConstants
 		public const int MediumFast = 6;
 
 		/// <summary>Fast speed, acceptable quality.</summary>
-		public const int Fast = 7,
+		public const int Fast = 7;
 
 		/// <summary>Very fast speed, lower quality.</summary>
 		public const int VeryFast = 8;
