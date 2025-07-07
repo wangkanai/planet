@@ -209,6 +209,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	/// <inheritdoc />
 	public bool IsValid()
 	{
+		ThrowIfDisposed();
 		return Width > 0 
 		       && Height > 0 
 		       && Width <= HeifConstants.MaxDimension 
