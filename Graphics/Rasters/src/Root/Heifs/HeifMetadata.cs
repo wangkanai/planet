@@ -107,6 +107,8 @@ public sealed class HeifMetadata : RasterMetadataBase
 	/// <returns>A new metadata instance with copied values.</returns>
 	public override IRasterMetadata Clone()
 	{
+		ThrowIfDisposed();
+		
 		var clone = new HeifMetadata();
 		CopyBaseTo(clone);
 		
