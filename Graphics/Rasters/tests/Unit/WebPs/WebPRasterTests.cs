@@ -454,7 +454,7 @@ public class WebPRasterTests
 		webp.Metadata.ExifData = new byte[500];    // 500 bytes
 
 		// Act & Assert
-		Assert.False(webp.HasLargeMetadata);
+		Assert.False(webp.Metadata.HasLargeMetadata);
 	}
 
 	[Fact]
@@ -465,7 +465,7 @@ public class WebPRasterTests
 		webp.Metadata.IccProfile = new byte[2_000_000]; // 2MB
 
 		// Act & Assert
-		Assert.True(webp.HasLargeMetadata);
+		Assert.True(webp.Metadata.HasLargeMetadata);
 	}
 
 	[Fact]
@@ -480,7 +480,7 @@ public class WebPRasterTests
 		webp.Metadata.CustomChunks.Add("TEST2", new byte[100]);
 
 		// Act
-		var size = webp.EstimatedMetadataSize;
+		var size = webp.Metadata.EstimatedMetadataSize;
 
 		// Assert
 		Assert.Equal(2100, size); // 1000 + 500 + 300 + 200 + 100
@@ -496,7 +496,7 @@ public class WebPRasterTests
 		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame { Data = new byte[300] });
 
 		// Act
-		var size = webp.EstimatedMetadataSize;
+		var size = webp.Metadata.EstimatedMetadataSize;
 
 		// Assert
 		Assert.Equal(800, size); // 500 + 300
@@ -517,8 +517,8 @@ public class WebPRasterTests
 		webp.Metadata.HasAnimation = true;
 
 		// Verify we have large metadata
-		Assert.True(webp.HasLargeMetadata);
-		Assert.True(webp.EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold);
+		Assert.True(webp.Metadata.HasLargeMetadata);
+		Assert.True(webp.Metadata.EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold);
 
 		// Act
 		await webp.DisposeAsync();
@@ -537,7 +537,7 @@ public class WebPRasterTests
 		webp.Metadata.ExifData = new byte[500];
 
 		// Verify we have small metadata
-		Assert.False(webp.HasLargeMetadata);
+		Assert.False(webp.Metadata.HasLargeMetadata);
 
 		// Act
 		await webp.DisposeAsync();
@@ -554,8 +554,8 @@ public class WebPRasterTests
 		var webp = new WebPRaster();
 
 		// Act & Assert
-		Assert.Equal(0, webp.EstimatedMetadataSize);
-		Assert.False(webp.HasLargeMetadata);
+		Assert.Equal(0, webp.Metadata.EstimatedMetadataSize);
+		Assert.False(webp.Metadata.HasLargeMetadata);
 	}
 
 	[Fact]
