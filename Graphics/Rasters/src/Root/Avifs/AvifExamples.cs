@@ -18,8 +18,8 @@ public static class AvifExamples
 	{
 		var avif = new AvifRaster(width, height, hasAlpha)
 		{
-			Quality = AvifConstants.QualityPresets.Standard,
-			Speed = AvifConstants.SpeedPresets.Default,
+			Quality = AvifConstants.QualityPresets.Web,
+			Speed = AvifConstants.SpeedPresets.Fast,
 			ChromaSubsampling = AvifChromaSubsampling.Yuv420,
 			ColorSpace = AvifColorSpace.Srgb,
 			BitDepth = 8
