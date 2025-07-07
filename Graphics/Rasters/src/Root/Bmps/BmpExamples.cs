@@ -193,6 +193,92 @@ public static class BmpExamples
 		return bmp;
 	}
 
+	/// <summary>Creates a 4-bit indexed color BMP with 16-color palette.</summary>
+	/// <param name="width">The width of the image.</param>
+	/// <param name="height">The height of the image.</param>
+	/// <returns>A configured BMP raster with 16-color palette.</returns>
+	public static BmpRaster Create16Color(int width, int height)
+	{
+		var bmp = new BmpRaster(width, height, BmpColorDepth.FourBit);
+
+		// Create standard 16-color palette (VGA colors)
+		var palette = new byte[16 * BmpConstants.PaletteEntrySize];
+		var colors = new[]
+		{
+			(0, 0, 0),       // Black
+			(128, 0, 0),     // Dark Red
+			(0, 128, 0),     // Dark Green
+			(128, 128, 0),   // Dark Yellow
+			(0, 0, 128),     // Dark Blue
+			(128, 0, 128),   // Dark Magenta
+			(0, 128, 128),   // Dark Cyan
+			(192, 192, 192), // Light Gray
+			(128, 128, 128), // Dark Gray
+			(255, 0, 0),     // Red
+			(0, 255, 0),     // Green
+			(255, 255, 0),   // Yellow
+			(0, 0, 255),     // Blue
+			(255, 0, 255),   // Magenta
+			(0, 255, 255),   // Cyan
+			(255, 255, 255)  // White
+		};
+
+		for (var i = 0; i < 16; i++)
+		{
+			var offset = i * BmpConstants.PaletteEntrySize;
+			palette[offset]     = (byte)colors[i].Item3; // Blue
+			palette[offset + 1] = (byte)colors[i].Item2; // Green
+			palette[offset + 2] = (byte)colors[i].Item1; // Red
+			palette[offset + 3] = 0;                     // Reserved
+		}
+
+		bmp.ApplyPalette(palette);
+		return bmp;
+	}
+
+	/// <summary>Creates a BMP with custom bit masks for 16-bit format.</summary>
+	/// <param name="width">The width of the image.</param>
+	/// <param name="height">The height of the image.</param>
+	/// <param name="redMask">Red component bit mask.</param>
+	/// <param name="greenMask">Green component bit mask.</param>
+	/// <param name="blueMask">Blue component bit mask.</param>
+	/// <param name="alphaMask">Alpha component bit mask (optional).</param>
+	/// <returns>A configured BMP raster with custom bit masks.</returns>
+	public static BmpRaster CreateWithCustomMasks(int width, int height, uint redMask, uint greenMask, uint blueMask, uint alphaMask = 0)
+	{
+		var bmp = new BmpRaster(width, height, BmpColorDepth.SixteenBit);
+		bmp.SetBitMasks(redMask, greenMask, blueMask, alphaMask);
+		return bmp;
+	}
+
+	/// <summary>Creates a minimal BMP with the smallest possible configuration.</summary>
+	/// <returns>A 1x1 pixel monochrome BMP.</returns>
+	public static BmpRaster CreateMinimal()
+	{
+		return CreateMonochrome(1, 1);
+	}
+
+	/// <summary>Creates a BMP configured for web usage (sRGB color space).</summary>
+	/// <param name="width">The width of the image.</param>
+	/// <param name="height">The height of the image.</param>
+	/// <returns>A configured BMP raster optimized for web usage.</returns>
+	public static BmpRaster CreateForWeb(int width, int height)
+	{
+		var bmp = CreateRgb24(width, height);
+		
+		// Configure for sRGB and standard web resolution (96 DPI)
+		bmp.Metadata.HeaderSize = BmpConstants.BitmapV4HeaderSize;
+		bmp.Metadata.ColorSpaceType = BmpConstants.ColorSpace.LCS_sRGB;
+		
+		// Set standard web resolution (96 DPI)
+		bmp.HorizontalResolution = BmpConstants.DefaultHorizontalResolution;
+		bmp.VerticalResolution = BmpConstants.DefaultVerticalResolution;
+		bmp.Metadata.XPixelsPerMeter = BmpConstants.DefaultHorizontalResolution;
+		bmp.Metadata.YPixelsPerMeter = BmpConstants.DefaultVerticalResolution;
+
+		return bmp;
+	}
+
 	/// <summary>Demonstrates validation of a BMP image.</summary>
 	/// <param name="bmp">The BMP raster to validate.</param>
 	/// <returns>The validation result with any errors or warnings.</returns>
