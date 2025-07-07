@@ -209,11 +209,11 @@ public static class WebPValidator
 			return false;
 
 		// Check RIFF header
-		if (!data[..4].SequenceEqual(WebPConstants.Signature))
+		if (!data[..4].SequenceEqual(WebPConstants.Signature.AsSpan()))
 			return false;
 
 		// Check WEBP format identifier
-		return data.Slice(8, 4).SequenceEqual(WebPConstants.FormatId);
+		return data.Slice(8, 4).SequenceEqual(WebPConstants.FormatId.AsSpan());
 	}
 
 	/// <summary>Gets the WebP format type from file data.</summary>
@@ -229,13 +229,13 @@ public static class WebPValidator
 
 		var chunkId = data.Slice(WebPConstants.RiffHeaderSize, 4);
 
-		if (chunkId.SequenceEqual(WebPConstants.VP8ChunkId))
+		if (chunkId.SequenceEqual(WebPConstants.VP8ChunkId.AsSpan()))
 			return WebPFormat.Simple;
 
-		if (chunkId.SequenceEqual(WebPConstants.VP8LChunkId))
+		if (chunkId.SequenceEqual(WebPConstants.VP8LChunkId.AsSpan()))
 			return WebPFormat.Lossless;
 
-		if (chunkId.SequenceEqual(WebPConstants.VP8XChunkId))
+		if (chunkId.SequenceEqual(WebPConstants.VP8XChunkId.AsSpan()))
 			return WebPFormat.Extended;
 
 		return WebPFormat.Simple;
