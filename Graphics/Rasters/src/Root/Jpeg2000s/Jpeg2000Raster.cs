@@ -665,15 +665,17 @@ public sealed class Jpeg2000Raster : Raster, IJpeg2000Raster
 		var estimatedPixels    = data.Length * (IsLossless ? 3 : (int)CompressionRatio);
 		var estimatedDimension = (int)Math.Sqrt(estimatedPixels / GetBytesPerPixel());
 
-		if (Width == 0) Width   = estimatedDimension;
-		if (Height == 0) Height = estimatedDimension;
+		if (Width == 0)
+			Width   = estimatedDimension;
+		if (Height == 0)
+			Height = estimatedDimension;
 
 		Metadata.Width  = Width;
 		Metadata.Height = Height;
 	}
 
 	/// <summary>Throws ObjectDisposedException if the raster has been disposed.</summary>
-	private new void ThrowIfDisposed()
+	private void ThrowIfDisposed()
 	{
 		if (_disposed)
 			throw new ObjectDisposedException(nameof(Jpeg2000Raster));
@@ -694,7 +696,8 @@ public sealed class Jpeg2000Raster : Raster, IJpeg2000Raster
 	/// <summary>Async dispose implementation for large metadata.</summary>
 	protected override async ValueTask DisposeAsyncCore()
 	{
-		if (Metadata.HasLargeMetadata) await Metadata.DisposeAsync().ConfigureAwait(false);
+		if (Metadata.HasLargeMetadata)
+			await Metadata.DisposeAsync().ConfigureAwait(false);
 
 		await base.DisposeAsyncCore().ConfigureAwait(false);
 	}
