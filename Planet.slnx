@@ -49,7 +49,7 @@
     <Project Path="Extensions\Datastore\tests\Wangkanai.Planet.Extensions.Datastore.Tests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Graphics/">
-    <Project Path="Graphics\Abstractions\src\Wangkanai.Graphics.Abstractions.csproj" Type="Classic C#" />
+    <Project Path="Graphics\src\Wangkanai.Graphics.csproj" Type="Classic C#" />
     <Project Path="Graphics\benchmark\Wangkanai.Graphics.Benchmark.csproj" Type="Classic C#" />
     <Project Path="Graphics\tests\Unit\Wangkanai.Graphics.UnitTests.csproj" Type="Classic C#" />
     <File Path="Graphics\Directory.Build.props" />

@@ -1,11 +1,11 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-namespace Wangkanai.Graphics.Rasters.Metadatas;
+namespace Wangkanai.Graphics.Rasters;
 
 /// <summary>
 /// Defines the contract for raster image metadata across all image formats.
 /// </summary>
-public interface IRasterMetadata : IDisposable, IAsyncDisposable
+public interface IRasterMetadata : IMetadata
 {
 	/// <summary>Gets or sets the image width in pixels.</summary>
 	int Width { get; set; }

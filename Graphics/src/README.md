@@ -1,12 +1,14 @@
-## Wangkanai Graphics Abstractions
+## Wangkanai Graphics
 
 **Namespace:** `Wangkanai.Graphics`
 
-The core abstractions and interfaces for the Wangkanai Graphics library, providing fundamental contracts for image processing operations across all graphics components. This foundational layer establishes the common interfaces and base types that enable consistent and extensible image manipulation capabilities throughout the graphics ecosystem.
+The core abstractions and interfaces for the Wangkanai Graphics library, providing fundamental contracts for image processing operations across all graphics components.
+This foundational layer establishes the common interfaces and base types that enable consistent and extensible image manipulation capabilities throughout the graphics ecosystem.
 
 ## Project Overview
 
-Graphics Abstractions serves as the foundational layer for the entire graphics processing system, defining the core interfaces and contracts that all graphics components must implement. This ensures consistency, interoperability, and extensibility across raster, vector, and other image processing operations.
+Graphics serves as the foundational layer for the entire graphics processing system, defining the core interfaces and contracts that all graphics components must implement.
+This ensures consistency, interoperability, and extensibility across raster, vector, and other image processing operations.
 
 ## Technical Specifications
 
@@ -67,14 +69,14 @@ using Wangkanai.Graphics;
 public void ProcessImage(IImage image)
 {
     Console.WriteLine($"Processing image: {image.Width}x{image.Height}");
-    
+
     // Perform operations common to all image types
     if (image.Width > 1920 || image.Height > 1080)
     {
         // Handle large images
         Console.WriteLine("Large image detected");
     }
-    
+
     // Always dispose properly
     using (image)
     {
@@ -92,15 +94,15 @@ public class CustomImage : IImage
 {
     public int Width { get; set; }
     public int Height { get; set; }
-    
+
     private bool _disposed = false;
-    
+
     public void Dispose()
     {
         Dispose(true);
         GC.SuppressFinalize(this);
     }
-    
+
     protected virtual void Dispose(bool disposing)
     {
         if (!_disposed)
@@ -109,7 +111,7 @@ public class CustomImage : IImage
             {
                 // Dispose managed resources
             }
-            
+
             // Dispose unmanaged resources
             _disposed = true;
         }
