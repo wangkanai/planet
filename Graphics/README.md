@@ -18,28 +18,31 @@ Provides modular components for raster and vector graphics processing, with emph
 ## Components
 
 ### Core Components
-- **[Graphics Abstractions](Abstractions)** - Core image processing interfaces and contracts ([📖 Read more](Abstractions/README.md))
-- **[Graphics Rasters](Rasters)** - Raster image processing with comprehensive TIFF support ([📖 Read more](Rasters/README.md))
+- **[Graphics Core](src)** - Core image processing interfaces and contracts ([📖 Read more](src/README.md))
+- **[Graphics Rasters](Rasters)** - Raster image processing with comprehensive format support ([📖 Read more](Rasters/README.md))
 - **[Graphics Vectors](Vectors)** - Vector graphics processing and manipulation ([📖 Read more](Vectors/README.md))
 
 ## Key Features by Component
 
-### Abstractions
+### Core (Wangkanai.Graphics)
 - Core `IImage` interface with `IAsyncDisposable` support for image processing contracts
+- `IMetadata` base interface for all metadata implementations with disposable patterns
 - `ImageConstants` for standardized thresholds and disposal configuration
 - Foundation for all graphics operations with async disposal patterns
 - Platform-agnostic abstractions
 
-### Rasters
-- **Multi-Format Support**: Complete implementation for JPEG, PNG, TIFF, and WebP formats
-- **Metadata Management**: Rich metadata handling with size estimation and intelligent disposal
+### Rasters (Wangkanai.Graphics.Rasters)
+- **Multi-Format Support**: Complete implementation for JPEG, PNG, TIFF, WebP, AVIF, HEIF, and JPEG 2000 formats
+- **Metadata Management**: Rich metadata handling with `IRasterMetadata` interface extending `IMetadata`
 - **Async Disposal**: Optimized disposal patterns for large metadata (>1MB) with batched operations
 - **Performance Optimization**: Benchmarked operations with disposal performance analysis
 - **Format Validation**: Built-in compliance checking for all supported formats
 - **Inheritance Hierarchy**: Standardized base `Raster` class with virtual disposal methods
+- **Modern Format Support**: Including next-generation formats like AVIF and HEIF
 
-### Vectors
+### Vectors (Wangkanai.Graphics.Vectors)
 - **Vector Graphics**: Scalable vector shape processing with async disposal support
+- **Metadata Interface**: `IVectorMetadata` for vector-specific metadata requirements
 - **Mathematical Operations**: Vector mathematics and transformations
 - **Rendering Support**: Vector-to-raster conversion capabilities
 - **Resource Management**: Efficient disposal patterns for vector-specific resources
@@ -54,12 +57,22 @@ The library includes comprehensive benchmarking tools to ensure optimal performa
 - **Large Metadata Handling**: Specialized handling for metadata >1MB with yielding patterns
 - **Garbage Collection**: Intelligent GC suggestions for very large metadata (>10MB)
 
+## Architecture
+
+### Project Structure
+- `Graphics/src/` - Core abstractions and interfaces (Wangkanai.Graphics)
+- `Graphics/Rasters/src/Root/` - Raster image implementations
+- `Graphics/Vectors/src/Root/` - Vector graphics implementations
+- `Graphics/benchmark/` - Performance benchmarking tools
+- `Graphics/tests/Unit/` - Unit tests for all components
+
 ## Async Disposal & Resource Management
 
 The Graphics library implements modern async disposal patterns to efficiently handle large image metadata:
 
 ### Key Features
-- **IAsyncDisposable Implementation**: All image classes implement `IAsyncDisposable` for non-blocking resource cleanup
+- **IAsyncDisposable Implementation**: All image classes and metadata implement `IAsyncDisposable` for non-blocking resource cleanup
+- **Interface Hierarchy**: `IMetadata` base interface provides disposable patterns for all metadata types
 - **Intelligent Thresholds**: Automatic detection of large metadata (>1MB) for optimized disposal strategies
 - **Batched Operations**: Large metadata collections are cleared in batches with `Task.Yield()` for responsiveness
 - **Standardized Constants**: Centralized configuration through `ImageConstants` class
@@ -69,11 +82,25 @@ The Graphics library implements modern async disposal patterns to efficiently ha
 - **Large Metadata (>1MB)**: Asynchronous disposal with yielding to avoid blocking
 - **Very Large Metadata (>10MB)**: Includes explicit garbage collection suggestions
 
-### Usage Example
+### Usage Examples
+
+#### Basic Image Processing
 ```csharp
 await using var image = new TiffRaster(width, height);
 // Large metadata operations...
 // Automatic async disposal when exiting scope
+```
+
+#### Working with Metadata
+```csharp
+// Raster metadata
+IRasterMetadata rasterMeta = image.Metadata;
+rasterMeta.Width = 1920;
+rasterMeta.Height = 1080;
+
+// Vector metadata (custom implementations)
+IVectorMetadata vectorMeta = vectorGraphic.Metadata;
+// Vector-specific metadata operations
 ```
 
 ## Dependencies
