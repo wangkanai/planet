@@ -136,39 +136,6 @@ public sealed class WebPRaster : Raster, IWebPRaster
 		set => _compressionRatio = Math.Max(1.0, value);
 	}
 
-	/// <inheritdoc />
-	public bool HasLargeMetadata
-		=> EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
-
-	/// <inheritdoc />
-	public long EstimatedMetadataSize
-	{
-		get
-		{
-			var size = 0L;
-
-			// Add size of metadata components
-			if (!Metadata.IccProfile.IsEmpty)
-				size += Metadata.IccProfile.Length;
-			if (!Metadata.ExifData.IsEmpty)
-				size += Metadata.ExifData.Length;
-			if (!Metadata.XmpData.IsEmpty)
-				size += Metadata.XmpData.Length;
-
-			// Add size of custom chunks
-			foreach (var chunk in Metadata.CustomChunks.Values)
-				size += chunk.Length;
-
-			// Add estimated size of animation frames
-			if (!Metadata.HasAnimation)
-				return size;
-
-			foreach (var frame in Metadata.AnimationFrames)
-				size += frame.Data.Length;
-
-			return size;
-		}
-	}
 
 	/// <summary>Sets the color mode and updates related properties for performance.</summary>
 	/// <param name="colorMode">The color mode to set.</param>
@@ -337,7 +304,7 @@ public sealed class WebPRaster : Raster, IWebPRaster
 	/// <inheritdoc />
 	protected override async ValueTask DisposeAsyncCore()
 	{
-		if (HasLargeMetadata)
+		if (Metadata.HasLargeMetadata)
 		{
 			// For large WebP metadata, clear in stages with yielding
 			if (!Metadata.IccProfile.IsEmpty)

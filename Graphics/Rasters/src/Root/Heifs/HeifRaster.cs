@@ -101,23 +101,6 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	/// <inheritdoc />
 	public bool GenerateThumbnails { get; set; }
 
-	/// <inheritdoc />
-	public override long EstimatedMetadataSize
-	{
-		get
-		{
-			var size = 0L;
-			if (Metadata.ExifData?.Length > 0)
-				size += Metadata.ExifData.Length;
-			if (Metadata.XmpData?.Length > 0)
-				size += Metadata.XmpData.Length;
-			if (Metadata.IccProfile?.Length > 0)
-				size += Metadata.IccProfile.Length;
-			if (Metadata.HdrMetadata != null)
-				size += 1024; // Estimated HDR metadata size
-			return size;
-		}
-	}
 
 	/// <inheritdoc />
 	public async Task<byte[]> EncodeAsync(HeifEncodingOptions? options = null)
@@ -201,7 +184,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 		var compressedSize = (long)(baseSize * compressionRatio);
 
 		// Add overhead for container and metadata
-		var overhead = 8192 + EstimatedMetadataSize;
+		var overhead = 8192 + Metadata.EstimatedMemoryUsage;
 
 		return compressedSize + overhead;
 	}
@@ -368,7 +351,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 			return;
 
 		_encodedData = null;
-		if (Metadata != null)
+		if (Metadata?.HasLargeData == true)
 			await Metadata.DisposeAsync();
 
 		_disposed = true;

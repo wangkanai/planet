@@ -282,15 +282,6 @@ public sealed class Jpeg2000Raster : Raster, IJpeg2000Raster
 		}
 	}
 
-	/// <summary>Indicates if metadata should be disposed asynchronously.</summary>
-	public override bool HasLargeMetadata
-	{
-		get
-		{
-			ThrowIfDisposed();
-			return Metadata.HasLargeMetadata;
-		}
-	}
 
 	/// <summary>Initializes default settings for the raster.</summary>
 	private void InitializeDefaults()

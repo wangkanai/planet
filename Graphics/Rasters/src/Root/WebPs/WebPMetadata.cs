@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Rasters.WebPs;
 
 /// <summary>Represents metadata information for WebP images.</summary>
-public class WebPMetadata
+public class WebPMetadata : IMetadata
 {
 	/// <summary>Gets or sets the ICC color profile data.</summary>
 	public ReadOnlyMemory<byte> IccProfile { get; set; }
@@ -61,6 +61,113 @@ public class WebPMetadata
 
 	/// <summary>Gets or sets a value indicating whether the image has XMP data.</summary>
 	public bool HasXmp { get; set; }
+
+	/// <inheritdoc />
+	public bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
+
+	/// <inheritdoc />
+	public long EstimatedMetadataSize
+	{
+		get
+		{
+			var size = 0L;
+
+			// Add size of metadata components
+			if (!IccProfile.IsEmpty)
+				size += IccProfile.Length;
+			if (!ExifData.IsEmpty)
+				size += ExifData.Length;
+			if (!XmpData.IsEmpty)
+				size += XmpData.Length;
+
+			// Add size of custom chunks
+			foreach (var chunk in CustomChunks.Values)
+				size += chunk.Length;
+
+			// Add estimated size of animation frames
+			if (!HasAnimation)
+				return size;
+
+			foreach (var frame in AnimationFrames)
+				size += frame.Data.Length;
+
+			return size;
+		}
+	}
+
+	/// <inheritdoc />
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
+	/// <inheritdoc />
+	public async ValueTask DisposeAsync()
+	{
+		if (HasLargeMetadata)
+		{
+			// For large WebP metadata, clear in stages with yielding
+			if (!IccProfile.IsEmpty)
+			{
+				await Task.Yield();
+				IccProfile = ReadOnlyMemory<byte>.Empty;
+			}
+
+			if (!ExifData.IsEmpty)
+			{
+				await Task.Yield();
+				ExifData = ReadOnlyMemory<byte>.Empty;
+			}
+
+			if (!XmpData.IsEmpty)
+			{
+				await Task.Yield();
+				XmpData = ReadOnlyMemory<byte>.Empty;
+			}
+
+			// Clear animation frames in batches for large collections
+			if (AnimationFrames.Count > ImageConstants.DisposalBatchSize)
+			{
+				var batchSize = 50;
+				for (var i = 0; i < AnimationFrames.Count; i += batchSize)
+				{
+					var endIndex = Math.Min(i + batchSize, AnimationFrames.Count);
+
+					for (var j = i; j < endIndex; j++) AnimationFrames[j].Data = ReadOnlyMemory<byte>.Empty;
+					// Yield control after each batch
+					await Task.Yield();
+				}
+			}
+
+			await Task.Yield();
+			AnimationFrames.Clear();
+
+			await Task.Yield();
+			CustomChunks.Clear();
+		}
+		else
+		{
+			// For small metadata, use synchronous disposal
+			Dispose(true);
+		}
+		GC.SuppressFinalize(this);
+	}
+
+	/// <summary>Releases unmanaged and - optionally - managed resources.</summary>
+	/// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+	protected virtual void Dispose(bool disposing)
+	{
+		if (disposing)
+		{
+			// Clear WebP-specific managed resources
+			IccProfile = ReadOnlyMemory<byte>.Empty;
+			ExifData   = ReadOnlyMemory<byte>.Empty;
+			XmpData    = ReadOnlyMemory<byte>.Empty;
+			CustomChunks.Clear();
+			AnimationFrames.Clear();
+		}
+	}
 }
 
 /// <summary>Represents an animation frame in a WebP image.</summary>

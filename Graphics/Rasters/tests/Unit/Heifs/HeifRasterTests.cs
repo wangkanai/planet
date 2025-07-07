@@ -407,7 +407,7 @@ public class HeifRasterTests
 		var heif = new HeifRaster(1920, 1080);
 
 		// Act
-		var size = heif.EstimatedMetadataSize;
+		var size = heif.Metadata.EstimatedMetadataSize;
 
 		// Assert
 		Assert.Equal(0, size);
@@ -423,7 +423,7 @@ public class HeifRasterTests
 		heif.SetHdrMetadata(new HdrMetadata());
 
 		// Act
-		var size = heif.EstimatedMetadataSize;
+		var size = heif.Metadata.EstimatedMetadataSize;
 
 		// Assert
 		Assert.True(size >= 1024); // Just check it's reasonable

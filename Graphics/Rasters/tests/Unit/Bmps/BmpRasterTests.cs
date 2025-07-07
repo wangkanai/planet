@@ -364,7 +364,7 @@ public class BmpRasterTests
 		var bmp = new BmpRaster(100, 100);
 
 		// Act
-		var hasLargeMetadata = bmp.HasLargeMetadata;
+		var hasLargeMetadata = bmp.Metadata.HasLargeMetadata;
 
 		// Assert
 		Assert.False(hasLargeMetadata);
@@ -380,7 +380,7 @@ public class BmpRasterTests
 		bmp.Metadata.CustomFields["test"] = "test value";
 
 		// Act
-		var metadataSize = bmp.EstimatedMetadataSize;
+		var metadataSize = bmp.Metadata.EstimatedMetadataSize;
 
 		// Assert
 		Assert.True(metadataSize > 0);

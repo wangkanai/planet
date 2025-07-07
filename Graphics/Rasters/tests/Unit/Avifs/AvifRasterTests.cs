@@ -413,7 +413,7 @@ public class AvifRasterTests
 		// Need actual large metadata content to trigger large metadata threshold
 		avif.Metadata.ExifData = new byte[2 * 1024 * 1024]; // 2MB of EXIF data
 
-		Assert.True(avif.HasLargeMetadata);
+		Assert.True(avif.Metadata.HasLargeMetadata);
 	}
 
 	[Fact]
@@ -421,7 +421,7 @@ public class AvifRasterTests
 	{
 		using var avif = new AvifRaster(100, 100);
 
-		Assert.False(avif.HasLargeMetadata);
+		Assert.False(avif.Metadata.HasLargeMetadata);
 	}
 
 	[Fact]
@@ -429,7 +429,7 @@ public class AvifRasterTests
 	{
 		using var avif = new AvifRaster(1920, 1080);
 
-		var estimatedSize = avif.EstimatedMetadataSize;
+		var estimatedSize = avif.Metadata.EstimatedMetadataSize;
 
 		Assert.True(estimatedSize > 0);
 		Assert.True(estimatedSize >= avif.Metadata.EstimatedMemoryUsage);

@@ -194,11 +194,6 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		}
 	}
 
-	/// <inheritdoc />
-	public override bool HasLargeMetadata => Metadata.HasLargeMetadata || base.HasLargeMetadata;
-
-	/// <inheritdoc />
-	public override long EstimatedMetadataSize => Metadata.EstimatedMemoryUsage + base.EstimatedMetadataSize;
 
 	/// <summary>Initializes default settings for the AVIF raster.</summary>
 	private void InitializeDefaults()
@@ -529,7 +524,7 @@ public sealed class AvifRaster : Raster, IAvifRaster
 	/// <inheritdoc />
 	protected override async ValueTask DisposeAsyncCore()
 	{
-		if (HasLargeMetadata && Metadata != null)
+		if (Metadata?.HasLargeMetadata == true)
 		{
 			await Metadata.DisposeAsync().ConfigureAwait(false);
 		}
