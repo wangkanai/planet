@@ -139,9 +139,10 @@ public class AvifConstantsTests
 	[Fact]
 	public void SpeedPresets_ShouldBeInAscendingOrder()
 	{
-		Assert.True(AvifConstants.SpeedPresets.Slowest < AvifConstants.SpeedPresets.Slow);
-		Assert.True(AvifConstants.SpeedPresets.Slow < AvifConstants.SpeedPresets.Standard);
-		Assert.True(AvifConstants.SpeedPresets.Standard < AvifConstants.SpeedPresets.Fast);
+		Assert.True(AvifConstants.SpeedPresets.Slowest < AvifConstants.SpeedPresets.VerySlow);
+		Assert.True(AvifConstants.SpeedPresets.VerySlow < AvifConstants.SpeedPresets.Slow);
+		Assert.True(AvifConstants.SpeedPresets.Slow < AvifConstants.SpeedPresets.Default);
+		Assert.True(AvifConstants.SpeedPresets.Default < AvifConstants.SpeedPresets.Fast);
 		Assert.True(AvifConstants.SpeedPresets.Fast < AvifConstants.SpeedPresets.Fastest);
 	}
 
