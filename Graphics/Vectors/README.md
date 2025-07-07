@@ -12,15 +12,24 @@ A comprehensive vector graphics processing library designed for scalable shape m
 - **Rendering Support**: Vector-to-raster conversion capabilities
 - **Metadata Management**: Rich metadata support for vector graphics
 - **Format Support**: Multiple vector format handling and conversion
+- **SVG Support**: Full SVG 1.1/2.0 specification compliance with geospatial integration
+- **Coordinate Systems**: Geographic coordinate transformations (WGS84, Web Mercator)
 - **Performance Optimization**: Efficient algorithms for vector operations
 
 ## Core Components
 
 ### Vector Processing
 - **`Vector`** - Main vector graphics class implementing `IVector`
+- **`SvgVector`** - SVG implementation with full SVG 1.1/2.0 compliance and geospatial features
 - **Shape Primitives** - Basic geometric shapes and operations
 - **Transformation Engine** - Matrix-based transformations (translate, rotate, scale)
 - **Path Operations** - Complex path creation and manipulation
+
+### SVG Processing
+- **`SvgMetadata`** - Comprehensive SVG metadata management with performance tracking
+- **`GeographicBounds`** - Geographic bounding box operations for spatial data
+- **Coordinate Transformations** - Geographic to SVG coordinate space conversions
+- **Compression Support** - SVGZ (compressed SVG) format support
 
 ## Vector Operations
 
@@ -46,6 +55,8 @@ A comprehensive vector graphics processing library designed for scalable shape m
 
 ## Usage
 
+### Basic Vector Operations
+
 ```csharp
 using Wangkanai.Graphics.Vectors;
 
@@ -61,6 +72,34 @@ var result = point1 + point2;
 var transformed = vector.Rotate(45).Scale(2.0).Translate(100, 100);
 ```
 
+### SVG Vector Graphics
+
+```csharp
+using Wangkanai.Graphics.Vectors.Svgs;
+using Wangkanai.Spatial.Coordinates;
+
+// Create an SVG vector with dimensions
+using var svg = new SvgVector(800, 600);
+
+// Load from file (supports both SVG and compressed SVGZ)
+using var svgFromFile = new SvgVector("/path/to/map.svg", true);
+
+// Set coordinate reference system
+svg.SetCoordinateReferenceSystem("EPSG:4326");
+
+// Transform geographic coordinates to SVG space
+var geodetic = new Geodetic(45.0, -122.0); // Portland, OR
+var bounds = new GeographicBounds(44.0, 46.0, -123.0, -121.0);
+var svgCoordinate = svg.TransformToSvgSpace(geodetic, bounds);
+
+// Transform coordinate systems
+svg.TransformCoordinateSystem("EPSG:4326", "EPSG:3857", bounds);
+
+// Optimize and save
+svg.Optimize();
+await svg.SaveToFileAsync("/path/to/output.svg", compressed: true);
+```
+
 ## Vector Graphics Capabilities
 
 - **Metadata Management**: Extract and modify vector metadata
@@ -72,10 +111,19 @@ var transformed = vector.Rotate(45).Scale(2.0).Translate(100, 100);
 
 ## Supported Formats
 
-- **SVG** - Scalable Vector Graphics (planned)
-- **PDF Vector** - Portable Document Format vector elements (planned)
-- **PostScript** - PostScript vector format (planned)
-- **WMF/EMF** - Windows Metafile formats (planned)
+### Implemented
+- **SVG 1.1/2.0** - Scalable Vector Graphics with full specification compliance
+- **SVGZ** - Compressed SVG format using GZip compression
+
+### Geospatial Features
+- **Coordinate Reference Systems**: EPSG:4326 (WGS84), EPSG:3857 (Web Mercator)
+- **Geographic Bounds**: Bounding box operations for spatial data
+- **Coordinate Transformations**: Bidirectional geographic ↔ SVG coordinate conversion
+
+### Planned
+- **PDF Vector** - Portable Document Format vector elements
+- **PostScript** - PostScript vector format
+- **WMF/EMF** - Windows Metafile formats
 
 ## Performance Features
 
@@ -87,9 +135,11 @@ var transformed = vector.Rotate(45).Scale(2.0).Translate(100, 100);
 ## Dependencies
 
 - **Wangkanai.Graphics.Abstractions** - Core graphics interfaces
+- **Wangkanai.Spatial** - Geospatial coordinate systems and transformations
 - **.NET 9.0** - Target framework
 - **System.Numerics** - Vector mathematics and SIMD operations
 - **System.Drawing** - Basic graphics support
+- **System.IO.Compression** - SVGZ compression support
 
 ## Integration
 
@@ -104,5 +154,9 @@ Comprehensive unit tests covering:
 - Vector mathematical operations
 - Geometric transformations
 - Shape manipulations
+- SVG parsing and serialization
+- Coordinate system transformations
+- Geographic bounds operations
 - Performance benchmarks
 - Format conversions
+- Error handling and disposal patterns

@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Wangkanai.Graphics.csproj" />
+    <ProjectReference Include="..\..\..\..\Spatial\src\Root\Wangkanai.Spatial.csproj" />
   </ItemGroup>
 </Project>
