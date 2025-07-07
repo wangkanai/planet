@@ -25,17 +25,9 @@ public class HeifMetadataTests
 		Assert.Null(metadata.Description);
 		Assert.Null(metadata.Copyright);
 		Assert.Null(metadata.Author);
-		Assert.Null(metadata.CameraMake);
-		Assert.Null(metadata.CameraModel);
-		Assert.Null(metadata.LensMake);
-		Assert.Null(metadata.LensModel);
-		Assert.Null(metadata.FocalLength);
-		Assert.Null(metadata.Aperture);
-		Assert.Null(metadata.ExposureTime);
-		Assert.Null(metadata.IsoSensitivity);
+		Assert.Null(metadata.CameraMetadata);
 		Assert.Null(metadata.GpsCoordinates);
 		Assert.Equal(ImageOrientation.Normal, metadata.Orientation);
-		Assert.Null(metadata.PixelDensity);
 		Assert.Null(metadata.ColorSpaceInfo);
 		Assert.Null(metadata.WhiteBalance);
 		Assert.Null(metadata.CodecParameters);
