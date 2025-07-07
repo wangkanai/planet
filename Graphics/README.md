@@ -3,20 +3,16 @@
 **Namespace:** `Wangkanai.Graphics`
 
 A comprehensive graphics processing and image handling library designed for high-performance image manipulation with cross-platform support.
-Provides modular components for raster and vector graphics processing, with particular emphasis on TIFF format support and performance optimization.
-
-- Clarifies that parallel CPU processing is currently implemented
-- Indicates GPU acceleration is planned for future releases
-- Emphasizes cross-platform compatibility
-- Provides more context about hardware resource utilization
-- Maintains consistency with the performance goals mentioned later in the document
+Provides modular components for raster and vector graphics processing, with emphasis on TIFF format support, performance optimization, and modern async disposal patterns for large metadata handling.
 
 ## Features
 
 - **High Performance**: Optimized for parallel CPU processing with cross-platform support
+- **Async Disposal**: Modern IAsyncDisposable implementation for handling large metadata efficiently
 - **Modular Architecture**: Clear separation between abstractions, raster, and vector components
-- **TIFF Specialization**: Comprehensive TIFF format support with metadata handling
-- **Performance Benchmarking**: Built-in benchmarking tools for performance analysis
+- **Multi-Format Support**: Comprehensive support for JPEG, PNG, TIFF, and WebP formats
+- **Metadata Management**: Intelligent metadata size estimation and optimized disposal patterns
+- **Performance Benchmarking**: Built-in benchmarking tools for performance and disposal analysis
 - **Extensible Design**: Interface-based architecture for easy extension and customization
 
 ## Components
@@ -29,28 +25,56 @@ Provides modular components for raster and vector graphics processing, with part
 ## Key Features by Component
 
 ### Abstractions
-- Core `IImage` interface for image processing contracts
-- Foundation for all graphics operations
+- Core `IImage` interface with `IAsyncDisposable` support for image processing contracts
+- `ImageConstants` for standardized thresholds and disposal configuration
+- Foundation for all graphics operations with async disposal patterns
 - Platform-agnostic abstractions
 
 ### Rasters
-- **TIFF Processing**: Complete TIFF format implementation
-- **Metadata Support**: Rich TIFF metadata handling and validation
-- **Performance Optimization**: Benchmarked and optimized operations
-- **Format Validation**: Built-in TIFF compliance checking
+- **Multi-Format Support**: Complete implementation for JPEG, PNG, TIFF, and WebP formats
+- **Metadata Management**: Rich metadata handling with size estimation and intelligent disposal
+- **Async Disposal**: Optimized disposal patterns for large metadata (>1MB) with batched operations
+- **Performance Optimization**: Benchmarked operations with disposal performance analysis
+- **Format Validation**: Built-in compliance checking for all supported formats
+- **Inheritance Hierarchy**: Standardized base `Raster` class with virtual disposal methods
 
 ### Vectors
-- **Vector Graphics**: Scalable vector shape processing
+- **Vector Graphics**: Scalable vector shape processing with async disposal support
 - **Mathematical Operations**: Vector mathematics and transformations
 - **Rendering Support**: Vector-to-raster conversion capabilities
+- **Resource Management**: Efficient disposal patterns for vector-specific resources
 
 ## Performance
 
 The library includes comprehensive benchmarking tools to ensure optimal performance:
-- Memory usage optimization
-- Processing speed benchmarks
-- Comparative performance analysis
-- Real-world scenario testing
+- **Memory Management**: Optimized disposal patterns with async batching for large metadata
+- **Processing Speed**: Benchmarked image operations across all supported formats
+- **Disposal Performance**: Dedicated async disposal benchmarks and real-world demos
+- **Comparative Analysis**: Performance comparison between sync and async disposal methods
+- **Large Metadata Handling**: Specialized handling for metadata >1MB with yielding patterns
+- **Garbage Collection**: Intelligent GC suggestions for very large metadata (>10MB)
+
+## Async Disposal & Resource Management
+
+The Graphics library implements modern async disposal patterns to efficiently handle large image metadata:
+
+### Key Features
+- **IAsyncDisposable Implementation**: All image classes implement `IAsyncDisposable` for non-blocking resource cleanup
+- **Intelligent Thresholds**: Automatic detection of large metadata (>1MB) for optimized disposal strategies
+- **Batched Operations**: Large metadata collections are cleared in batches with `Task.Yield()` for responsiveness
+- **Standardized Constants**: Centralized configuration through `ImageConstants` class
+
+### Disposal Strategies
+- **Small Metadata (<1MB)**: Synchronous disposal for optimal performance
+- **Large Metadata (>1MB)**: Asynchronous disposal with yielding to avoid blocking
+- **Very Large Metadata (>10MB)**: Includes explicit garbage collection suggestions
+
+### Usage Example
+```csharp
+await using var image = new TiffRaster(width, height);
+// Large metadata operations...
+// Automatic async disposal when exiting scope
+```
 
 ## Dependencies
 
@@ -61,10 +85,12 @@ The library includes comprehensive benchmarking tools to ensure optimal performa
 
 ## Development Goals
 
-- High-performance image manipulation utilizing parallel processing
-- Cross-platform compatibility (Windows, macOS, Linux)
-- GPU acceleration support (future enhancement)
-- Memory-efficient operations for large image datasets
+- **High-Performance Operations**: Image manipulation utilizing parallel processing and optimized async disposal
+- **Cross-Platform Compatibility**: Full support for Windows, macOS, and Linux environments
+- **Memory Efficiency**: Advanced memory management with intelligent disposal patterns for large datasets
+- **Modern .NET Patterns**: Implementation of latest .NET async disposal and resource management practices
+- **GPU Acceleration**: Planned future enhancement for compute-intensive operations
+- **Scalable Architecture**: Designed to handle large-scale image processing workflows efficiently
 
 ## References
 
