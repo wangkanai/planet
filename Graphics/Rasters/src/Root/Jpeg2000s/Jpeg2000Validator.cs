@@ -389,9 +389,7 @@ public static class Jpeg2000Validator
 
 	/// <summary>Checks if a number is a power of two.</summary>
 	private static bool IsPowerOfTwo(int value)
-	{
-		return value > 0 && (value & (value - 1)) == 0;
-	}
+		=> value > 0 && (value & (value - 1)) == 0;
 }
 
 /// <summary>Represents the result of JPEG2000 format validation.</summary>
