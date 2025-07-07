@@ -184,8 +184,8 @@ public static class BmpExamples
 		{
 			var offset = i * BmpConstants.PaletteEntrySize;
 			palette[offset]     = (byte)(i & 0xFF);         // Blue
-			palette[offset + 1] = (byte)((i >> 8) & 0xFF);  // Green
-			palette[offset + 2] = (byte)((i >> 16) & 0xFF); // Red
+			palette[offset + 1] = (byte)(i & 0xFF);         // Green
+			palette[offset + 2] = (byte)(i & 0xFF);         // Red
 			palette[offset + 3] = 0;                        // Reserved
 		}
 
