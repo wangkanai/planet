@@ -52,7 +52,7 @@ public class JpegRaster : Raster, IJpegRaster
 			var size = 0L;
 			
 			// Add ICC profile size
-			if (Metadata.IccProfile != null)
+			if (!Metadata.IccProfile.IsEmpty)
 				size += Metadata.IccProfile.Length;
 			
 			// Add custom EXIF tags size
