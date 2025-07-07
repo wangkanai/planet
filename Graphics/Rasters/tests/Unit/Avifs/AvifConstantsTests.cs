@@ -62,20 +62,20 @@ public class AvifConstantsTests
 
 	[Theory]
 	[InlineData(nameof(AvifConstants.QualityPresets.Thumbnail))]
-	[InlineData(nameof(AvifConstants.QualityPresets.Fast))]
+	[InlineData(nameof(AvifConstants.QualityPresets.Web))]
 	[InlineData(nameof(AvifConstants.QualityPresets.Standard))]
 	[InlineData(nameof(AvifConstants.QualityPresets.Professional))]
-	[InlineData(nameof(AvifConstants.QualityPresets.Archival))]
+	[InlineData(nameof(AvifConstants.QualityPresets.NearLossless))]
 	[InlineData(nameof(AvifConstants.QualityPresets.Lossless))]
 	public void QualityPresets_ShouldBeInValidRange(string presetName)
 	{
 		var qualityValue = presetName switch
 		{
 			nameof(AvifConstants.QualityPresets.Thumbnail) => AvifConstants.QualityPresets.Thumbnail,
-			nameof(AvifConstants.QualityPresets.Fast) => AvifConstants.QualityPresets.Fast,
+			nameof(AvifConstants.QualityPresets.Web) => AvifConstants.QualityPresets.Web,
 			nameof(AvifConstants.QualityPresets.Standard) => AvifConstants.QualityPresets.Standard,
 			nameof(AvifConstants.QualityPresets.Professional) => AvifConstants.QualityPresets.Professional,
-			nameof(AvifConstants.QualityPresets.Archival) => AvifConstants.QualityPresets.Archival,
+			nameof(AvifConstants.QualityPresets.NearLossless) => AvifConstants.QualityPresets.NearLossless,
 			nameof(AvifConstants.QualityPresets.Lossless) => AvifConstants.QualityPresets.Lossless,
 			_ => throw new ArgumentException($"Unknown preset: {presetName}")
 		};
@@ -85,8 +85,9 @@ public class AvifConstantsTests
 
 	[Theory]
 	[InlineData(nameof(AvifConstants.SpeedPresets.Slowest))]
+	[InlineData(nameof(AvifConstants.SpeedPresets.VerySlow))]
 	[InlineData(nameof(AvifConstants.SpeedPresets.Slow))]
-	[InlineData(nameof(AvifConstants.SpeedPresets.Standard))]
+	[InlineData(nameof(AvifConstants.SpeedPresets.Default))]
 	[InlineData(nameof(AvifConstants.SpeedPresets.Fast))]
 	[InlineData(nameof(AvifConstants.SpeedPresets.Fastest))]
 	public void SpeedPresets_ShouldBeInValidRange(string presetName)
@@ -94,8 +95,9 @@ public class AvifConstantsTests
 		var speedValue = presetName switch
 		{
 			nameof(AvifConstants.SpeedPresets.Slowest) => AvifConstants.SpeedPresets.Slowest,
+			nameof(AvifConstants.SpeedPresets.VerySlow) => AvifConstants.SpeedPresets.VerySlow,
 			nameof(AvifConstants.SpeedPresets.Slow) => AvifConstants.SpeedPresets.Slow,
-			nameof(AvifConstants.SpeedPresets.Standard) => AvifConstants.SpeedPresets.Standard,
+			nameof(AvifConstants.SpeedPresets.Default) => AvifConstants.SpeedPresets.Default,
 			nameof(AvifConstants.SpeedPresets.Fast) => AvifConstants.SpeedPresets.Fast,
 			nameof(AvifConstants.SpeedPresets.Fastest) => AvifConstants.SpeedPresets.Fastest,
 			_ => throw new ArgumentException($"Unknown preset: {presetName}")
@@ -126,11 +128,12 @@ public class AvifConstantsTests
 	[Fact]
 	public void QualityPresets_ShouldBeInAscendingOrder()
 	{
-		Assert.True(AvifConstants.QualityPresets.Thumbnail < AvifConstants.QualityPresets.Fast);
-		Assert.True(AvifConstants.QualityPresets.Fast < AvifConstants.QualityPresets.Standard);
+		Assert.True(AvifConstants.QualityPresets.Preview < AvifConstants.QualityPresets.Thumbnail);
+		Assert.True(AvifConstants.QualityPresets.Thumbnail < AvifConstants.QualityPresets.Web);
+		Assert.True(AvifConstants.QualityPresets.Web < AvifConstants.QualityPresets.Standard);
 		Assert.True(AvifConstants.QualityPresets.Standard < AvifConstants.QualityPresets.Professional);
-		Assert.True(AvifConstants.QualityPresets.Professional < AvifConstants.QualityPresets.Archival);
-		Assert.True(AvifConstants.QualityPresets.Archival <= AvifConstants.QualityPresets.Lossless);
+		Assert.True(AvifConstants.QualityPresets.Professional < AvifConstants.QualityPresets.NearLossless);
+		Assert.True(AvifConstants.QualityPresets.NearLossless <= AvifConstants.QualityPresets.Lossless);
 	}
 
 	[Fact]
