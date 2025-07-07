@@ -50,22 +50,22 @@ public class JpegRaster : Raster, IJpegRaster
 		get
 		{
 			var size = 0L;
-			
+
 			// Add ICC profile size
-			if (!Metadata.IccProfile.IsEmpty)
+			if (Metadata.IccProfile != null)
 				size += Metadata.IccProfile.Length;
-			
+
 			// Add custom EXIF tags size
 			size += Metadata.CustomExifTags.Count * 16; // Estimate 16 bytes per tag
-			
+
 			// Add IPTC tags size
 			foreach (var tag in Metadata.IptcTags.Values)
 				size += System.Text.Encoding.UTF8.GetByteCount(tag);
-			
+
 			// Add XMP tags size
 			foreach (var tag in Metadata.XmpTags.Values)
 				size += System.Text.Encoding.UTF8.GetByteCount(tag);
-			
+
 			return size;
 		}
 	}
@@ -175,14 +175,14 @@ public class JpegRaster : Raster, IJpegRaster
 		{
 			// For large metadata, clear in stages with yielding
 			await Task.Yield();
-			Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
-			
+			Metadata.IccProfile = [];
+
 			await Task.Yield();
 			Metadata.CustomExifTags.Clear();
-			
+
 			await Task.Yield();
 			Metadata.IptcTags.Clear();
-			
+
 			await Task.Yield();
 			Metadata.XmpTags.Clear();
 		}
