@@ -55,7 +55,7 @@ public class TiffRasterBaseline : ITiffRaster
 	public int PlanarConfiguration { get; set; } = 1;
 
 	/// <inheritdoc />
-	public bool HasLargeMetadata => EstimatedMetadataSize > 1_000_000; // 1MB threshold
+	public bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
 
 	/// <inheritdoc />
 	public long EstimatedMetadataSize

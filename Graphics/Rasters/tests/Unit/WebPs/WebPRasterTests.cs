@@ -520,7 +520,7 @@ public class WebPRasterTests
 
 		// Verify we have large metadata
 		Assert.True(webp.HasLargeMetadata);
-		Assert.True(webp.EstimatedMetadataSize > 1_000_000);
+		Assert.True(webp.EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold);
 
 		// Act
 		await webp.DisposeAsync();

@@ -46,7 +46,7 @@ public class IImageAsyncDisposalTests
 		
 		// Act & Assert
 		Assert.True(webp.HasLargeMetadata);
-		Assert.True(webp.EstimatedMetadataSize > 1_000_000);
+		Assert.True(webp.EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold);
 	}
 
 	[Fact]

@@ -86,7 +86,7 @@ public class VectorAsyncDisposalTests
 		
 		// Act & Assert
 		Assert.False(vector.HasLargeMetadata);
-		Assert.True(vector.EstimatedMetadataSize < 1_000_000); // Under 1MB threshold
+		Assert.True(vector.EstimatedMetadataSize < ImageConstants.LargeMetadataThreshold);
 	}
 
 	[Theory]
