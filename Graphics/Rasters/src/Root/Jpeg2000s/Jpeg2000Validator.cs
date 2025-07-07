@@ -332,7 +332,7 @@ public static class Jpeg2000Validator
 			result.AddWarning($"Very large estimated file size ({estimatedFileSize / (1024 * 1024):N0} MB). Consider using tiling or higher compression.");
 
 		// Validate tile cache implications
-		if (jpeg2000.SupportsTiling)
+		if (jpeg2000.SupportsTiling && jpeg2000.TileWidth > 0 && jpeg2000.TileHeight > 0)
 		{
 			var bytesPerTile = jpeg2000.TileWidth * jpeg2000.TileHeight * jpeg2000.Metadata.Components * 
 			                  ((jpeg2000.Metadata.BitDepth + 7) / 8);
