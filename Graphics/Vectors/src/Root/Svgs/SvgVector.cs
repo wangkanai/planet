@@ -56,7 +56,7 @@ public class SvgVector : Vector, ISvgVector
 	public SvgVector(string filePath, bool isFilePath)
 	{
 		if (!isFilePath) throw new ArgumentException("Use other constructor for SVG content", nameof(isFilePath));
-		
+
 		_metadata = new SvgMetadata();
 		_sourceFilePath = filePath;
 		LoadFromFile(filePath);
@@ -402,7 +402,7 @@ public class SvgVector : Vector, ISvgVector
 	{
 		if (_metadata != null)
 			await _metadata.DisposeAsync().ConfigureAwait(false);
-		
+
 		_document = null;
 		_rawData = null;
 		_disposed = true;
@@ -416,29 +416,4 @@ public class SvgVector : Vector, ISvgVector
 		if (_disposed)
 			throw new ObjectDisposedException(nameof(SvgVector));
 	}
-}
-
-/// <summary>Defines the contract for SVG vector graphics.</summary>
-public interface ISvgVector : IVector
-{
-	/// <summary>Gets the SVG metadata.</summary>
-	ISvgMetadata Metadata { get; }
-
-	/// <summary>Gets whether the SVG is compressed.</summary>
-	bool IsCompressed { get; }
-
-	/// <summary>Gets the SVG content as XML string.</summary>
-	string ToXmlString();
-
-	/// <summary>Saves the SVG to a file.</summary>
-	Task SaveToFileAsync(string filePath, bool compressed = false);
-
-	/// <summary>Loads SVG content from a file.</summary>
-	Task LoadFromFileAsync(string filePath);
-
-	/// <summary>Optimizes the SVG for performance.</summary>
-	void Optimize();
-
-	/// <summary>Validates the SVG document.</summary>
-	bool ValidateDocument();
 }
