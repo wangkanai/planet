@@ -244,9 +244,9 @@ public static class BmpValidator
 				result.AddWarning($"Very large estimated file size: {estimatedSize:N0} bytes. This may cause issues with some applications.");
 
 			// Validate pixel data offset would be reasonable
-			var minOffset = BmpConstants.FileHeaderSize + bmp.Metadata.HeaderSize;
+			var minOffset = (uint)(BmpConstants.FileHeaderSize + bmp.Metadata.HeaderSize);
 			if (bmp.HasPalette)
-				minOffset += (int)bmp.Metadata.PaletteSizeInBytes;
+				minOffset += bmp.Metadata.PaletteSizeInBytes;
 
 			if (bmp.Metadata.PixelDataOffset != 0 && bmp.Metadata.PixelDataOffset < minOffset)
 				result.AddError($"Invalid pixel data offset: {bmp.Metadata.PixelDataOffset}. Minimum required: {minOffset}.");

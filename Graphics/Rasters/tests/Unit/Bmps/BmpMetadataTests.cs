@@ -14,7 +14,7 @@ public class BmpMetadataTests
 
 		// Assert
 		Assert.Equal("BM", metadata.FileSignature);
-		Assert.Equal(BmpConstants.BitmapInfoHeaderSize, metadata.HeaderSize);
+		Assert.Equal((uint)BmpConstants.BitmapInfoHeaderSize, metadata.HeaderSize);
 		Assert.Equal(BmpConstants.Planes, metadata.Planes);
 		Assert.Equal(BmpCompression.Rgb, metadata.Compression);
 		Assert.Equal(BmpConstants.DefaultHorizontalResolution, metadata.XPixelsPerMeter);

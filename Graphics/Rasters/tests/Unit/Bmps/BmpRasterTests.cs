@@ -137,7 +137,7 @@ public class BmpRasterTests
 	[Theory]
 	[InlineData(BmpColorDepth.Monochrome, 0)]
 	[InlineData(BmpColorDepth.FourBit, 0)]
-	public void BytesPerPixel_ShouldReturnZeroForPackedFormats(BmpColorDepth colorDepth)
+	public void BytesPerPixel_ShouldReturnZeroForPackedFormats(BmpColorDepth colorDepth, int expectedBytes)
 	{
 		// Arrange
 		var bmp = new BmpRaster(100, 100, colorDepth);
@@ -146,7 +146,7 @@ public class BmpRasterTests
 		var bytesPerPixel = bmp.BytesPerPixel;
 
 		// Assert
-		Assert.Equal(0, bytesPerPixel);
+		Assert.Equal(expectedBytes, bytesPerPixel);
 	}
 
 	[Fact]
