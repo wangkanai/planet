@@ -26,12 +26,14 @@ public class TiffRaster : Raster, ITiffRaster
 	public int SamplesPerPixel { get; set; }
 
 	/// <summary>Inline storage for up to 4 samples (covers 95% of TIFF use cases).</summary>
-#pragma warning disable CS0414// Field assigned but never used - accessed via MemoryMarshal
+#pragma warning disable CS0414 // Field assigned but never used - accessed via MemoryMarshal
 	private int _sample1, _sample2, _sample3, _sample4;
 #pragma warning restore CS0414
 
 	/// <summary>Backing array for cases with more than 4 samples.</summary>
 	private int[]? _bitsPerSampleArray;
+
+	private static readonly int[] Int32Array = [8, 8, 8];
 
 	/// <summary>Number of samples per pixel.</summary>
 	private int _samplesCount;
@@ -44,39 +46,6 @@ public class TiffRaster : Raster, ITiffRaster
 
 	/// <inheritdoc />
 	public int PlanarConfiguration { get; set; } = 1;
-
-	/// <inheritdoc />
-	public override bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
-
-	/// <inheritdoc />
-	public override long EstimatedMetadataSize
-	{
-		get
-		{
-			var size = 0L;
-			
-			// Add string metadata sizes
-			if (!string.IsNullOrEmpty(Metadata.ImageDescription))
-				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.ImageDescription);
-			if (!string.IsNullOrEmpty(Metadata.Make))
-				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Make);
-			if (!string.IsNullOrEmpty(Metadata.Model))
-				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Model);
-			if (!string.IsNullOrEmpty(Metadata.Software))
-				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Software);
-			if (!string.IsNullOrEmpty(Metadata.Copyright))
-				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Copyright);
-			if (!string.IsNullOrEmpty(Metadata.Artist))
-				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Artist);
-			
-			// Add custom tags size
-			size += Metadata.CustomTags.Count * 16; // Estimate 16 bytes per tag
-			
-			return size;
-		}
-	}
-
-	private static readonly int[] Int32Array = [8, 8, 8];
 
 	/// <summary>Initializes a new instance of the <see cref="TiffRaster"/> class.</summary>
 	public TiffRaster()
@@ -95,6 +64,38 @@ public class TiffRaster : Raster, ITiffRaster
 	{
 		Width  = width;
 		Height = height;
+	}
+
+	/// <inheritdoc />
+	public override bool HasLargeMetadata
+		=> EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
+
+	/// <inheritdoc />
+	public override long EstimatedMetadataSize
+	{
+		get
+		{
+			var size = 0L;
+
+			// Add string metadata sizes
+			if (!string.IsNullOrEmpty(Metadata.ImageDescription))
+				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.ImageDescription);
+			if (!string.IsNullOrEmpty(Metadata.Make))
+				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Make);
+			if (!string.IsNullOrEmpty(Metadata.Model))
+				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Model);
+			if (!string.IsNullOrEmpty(Metadata.Software))
+				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Software);
+			if (!string.IsNullOrEmpty(Metadata.Copyright))
+				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Copyright);
+			if (!string.IsNullOrEmpty(Metadata.Artist))
+				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Artist);
+
+			// Add custom tags size
+			size += Metadata.CustomTags.Count * 16; // Estimate 16 bytes per tag
+
+			return size;
+		}
 	}
 
 	/// <inheritdoc />
@@ -173,28 +174,28 @@ public class TiffRaster : Raster, ITiffRaster
 			// For large TIFF metadata, clear in stages with yielding
 			await Task.Yield();
 			Metadata.ImageDescription = null;
-			
+
 			await Task.Yield();
 			Metadata.Make = null;
-			
+
 			await Task.Yield();
 			Metadata.Model = null;
-			
+
 			await Task.Yield();
 			Metadata.Software = null;
-			
+
 			await Task.Yield();
 			Metadata.Copyright = null;
-			
+
 			await Task.Yield();
 			Metadata.Artist = null;
-			
+
 			await Task.Yield();
 			Metadata.CustomTags.Clear();
-			
+
 			await Task.Yield();
 			_bitsPerSampleArray = null;
-			
+
 			// Suggest GC for very large TIFF metadata
 			if (EstimatedMetadataSize > ImageConstants.VeryLargeMetadataThreshold)
 			{
@@ -216,13 +217,13 @@ public class TiffRaster : Raster, ITiffRaster
 		if (disposing)
 		{
 			// Clear TIFF-specific managed resources
-			_bitsPerSampleArray = null;
+			_bitsPerSampleArray       = null;
 			Metadata.ImageDescription = null;
-			Metadata.Make = null;
-			Metadata.Model = null;
-			Metadata.Software = null;
-			Metadata.Copyright = null;
-			Metadata.Artist = null;
+			Metadata.Make             = null;
+			Metadata.Model            = null;
+			Metadata.Software         = null;
+			Metadata.Copyright        = null;
+			Metadata.Artist           = null;
 			Metadata.CustomTags.Clear();
 		}
 
