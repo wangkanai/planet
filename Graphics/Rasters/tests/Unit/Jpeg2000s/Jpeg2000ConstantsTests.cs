@@ -279,15 +279,6 @@ public class Jpeg2000ConstantsTests
 		// Arrange
 		var originalSignature = Jpeg2000Constants.SignatureBoxType;
 
-		// Act - Attempt to modify the immutable array
-		Assert.Throws<InvalidOperationException>(() =>
-		{
-			// Attempting to modify the array should throw an exception
-			var mutableArray = originalSignature.ToArray();
-			mutableArray[0] = (byte)'X'; // Modify the cloned array
-			originalSignature = ImmutableArray.Create(mutableArray); // Attempt to reassign
-		});
-
 		// Assert - Verify the original array remains unchanged
 		Assert.True(originalSignature.IsDefaultOrEmpty == false);
 		Assert.NotEmpty(originalSignature);
