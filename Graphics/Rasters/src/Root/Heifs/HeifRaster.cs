@@ -66,7 +66,10 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	public int Quality { get; set; }
 
 	/// <inheritdoc />
-	public HeifMetadata Metadata { get; set; }
+	public override IMetadata Metadata => HeifMetadata;
+
+	/// <summary>Gets or sets the HEIF-specific metadata.</summary>
+	public HeifMetadata HeifMetadata { get; set; }
 
 	/// <inheritdoc />
 	public int BitDepth { get; set; }
