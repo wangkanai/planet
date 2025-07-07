@@ -21,11 +21,16 @@ else if (args.Length > 0 && args[0] == "--async")
 {
 	BenchmarkRunner.Run<AsyncDisposalBenchmark>();
 }
+else if (args.Length > 0 && args[0] == "--webp")
+{
+	BenchmarkRunner.Run<WebPConstantsBenchmark>();
+}
 else if (args.Length > 0 && args[0] == "--all")
 {
 	// Run all benchmark suites
 	BenchmarkRunner.Run<TiffRasterBenchmark>();
 	BenchmarkRunner.Run<AsyncDisposalBenchmark>();
+	BenchmarkRunner.Run<WebPConstantsBenchmark>();
 }
 else
 {
