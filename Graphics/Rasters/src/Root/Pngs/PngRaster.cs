@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Rasters.Pngs;
 
 /// <summary>Represents a PNG raster image implementation.</summary>
-public class PngRaster : Raster, IPngRaster
+public sealed class PngRaster : Raster, IPngRaster
 {
 	private PngColorType _colorType        = PngColorType.Truecolor;
 	private byte         _bitDepth         = 8;
