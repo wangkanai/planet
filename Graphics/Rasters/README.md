@@ -13,6 +13,9 @@ The library supports multiple raster image formats through a unified abstraction
 ### ✅ **Currently Implemented**
 - **TIFF** (.tiff, .tif) - Complete implementation with full specification support
 - **JPEG** (.jpg, .jpeg, .jpe, .jfif) - Complete implementation with quality control and optimization
+- **AVIF** (.avif) - AV1 Image File Format with HDR support and advanced compression
+- **HEIF** (.heif, .heic) - High Efficiency Image File Format with multiple codec support
+- **JPEG 2000** (.jp2, .j2k, .jpf, .jpx) - Wavelet-based compression with lossless support
 
 ### 🔄 **Architecture Ready** 
 - **PNG** (.png) - Portable Network Graphics format
@@ -31,13 +34,16 @@ This universal raster image library addresses the following GitHub issues:
 > - [#50 - Raster image manipulation library](https://github.com/wangkanai/planet/issues/50)  
 > 
 > 📋 **Raster Image Format Support**
-> - [#53 - JPEG specifications and support](https://github.com/wangkanai/planet/issues/53)
-> - [#54 - TIFF specifications and support](https://github.com/wangkanai/planet/issues/54)
+> - [#53 - JPEG specifications and support](https://github.com/wangkanai/planet/issues/53) ✅
+> - [#54 - TIFF specifications and support](https://github.com/wangkanai/planet/issues/54) ✅
 > - [#58 - PNG specifications support](https://github.com/wangkanai/planet/issues/58)
 > - [#59 - WebP specifications support](https://github.com/wangkanai/planet/issues/59)
 > - [#60 - GeoTIFF specifications support](https://github.com/wangkanai/planet/issues/60)
+> - [#86 - AVIF specifications and support](https://github.com/wangkanai/planet/issues/86) ✅
+> - [#89 - HEIF specifications and support](https://github.com/wangkanai/planet/issues/89) ✅
+> - [#82 - JPEG 2000 specifications and support](https://github.com/wangkanai/planet/issues/82) ✅
 > 
-> **Status**: ✅ **Core Implementation Complete** - Universal raster library with complete TIFF and JPEG format implementations. Additional formats (PNG, WebP) are planned for future releases.
+> **Status**: ✅ **Core Implementation Complete** - Universal raster library with complete TIFF, JPEG, AVIF, HEIF, and JPEG 2000 format implementations. Additional formats (PNG, WebP) are planned for future releases.
 
 ## Universal Image Processing Capabilities
 
@@ -54,6 +60,9 @@ The Raster component is built as a **generic library for all rasterized images**
 ### Current Format Implementations
 - **TIFF**: Complete implementation with full specification support
 - **JPEG**: Complete implementation with quality control and optimization
+- **AVIF**: Modern format with AV1 codec, HDR support, and film grain synthesis
+- **HEIF**: Container format supporting HEVC, AVC, AV1, and VVC codecs
+- **JPEG 2000**: Wavelet-based compression with superior quality and lossless support
 - **Future Formats**: Architecture ready for PNG, BMP, GIF, WebP, and other image formats
 
 This universal approach means you can process images without worrying about format-specific details, while still having access to format-specific optimizations when needed.
@@ -88,9 +97,25 @@ The library is built around format-agnostic abstractions that provide consistent
 - **`IRaster`** - Base interface for all raster image types, providing universal image operations
 - **`RasterProcessor`** - High-performance image processing engine that works across all formats
 - **`RasterValidator`** - Format-agnostic validation framework with universal compliance checking
-- **`RasterMetadata`** - Universal metadata management system supporting all image formats
 - **`RasterFactory`** - Intelligent format detection and creation with automatic format selection
 - **`RasterProcessingPipeline`** - Flexible operation chaining that works across all formats
+
+### Shared Metadata Architecture
+The library provides a comprehensive metadata system in the `Metadatas` namespace:
+
+- **`IRasterMetadata`** - Common metadata interface for all raster formats
+- **`RasterMetadataBase`** - Base class with common metadata implementation
+- **`CameraMetadata`** - Camera and photography-specific metadata
+- **`HdrMetadata`** - HDR metadata with color primaries and transfer characteristics
+- **`GpsCoordinates`** - GPS location data for geotagged images
+- **`ColorVolumeMetadata`** - Color volume information for HDR content
+
+### Shared Encoding and Validation
+- **`IRasterEncodingOptions`** - Common encoding options interface
+- **`RasterEncodingOptionsBase`** - Base class with factory methods for common presets
+- **`RasterValidatorBase`** - Common validation methods for all formats
+- **`RasterValidationResult`** - Unified validation result structure
+- **`RasterConstants`** - Centralized constants for quality, speed, and memory settings
 
 ### Format-Specific Implementations
 The universal abstractions are implemented for specific image formats, with each format extending the core capabilities:
@@ -109,6 +134,32 @@ The universal abstractions are implemented for specific image formats, with each
 - **`JpegValidator`** - JPEG format validation and quality checking
 - **`JpegConstants`** - JPEG specification constants and markers
 - **`JpegExamples`** - Usage patterns and quality recommendations
+
+#### AVIF Implementation
+- **`IAvifRaster`** - AVIF-specific interface extending `IRaster`
+- **`AvifRaster`** - Main AVIF processing class with HDR support
+- **`AvifMetadata`** - Comprehensive metadata including HDR and film grain
+- **`AvifValidator`** - AVIF format validation and compliance checking
+- **`AvifConstants`** - AVIF specification constants and box types
+- **`AvifEncodingOptions`** - Advanced encoding configuration
+- **`AvifExamples`** - Factory methods for common use cases
+
+#### HEIF Implementation
+- **`IHeifRaster`** - HEIF-specific interface extending `IRaster`
+- **`HeifRaster`** - Main HEIF processing class with multi-codec support
+- **`HeifMetadata`** - Extended metadata with camera and auxiliary images
+- **`HeifValidator`** - HEIF format validation and container checking
+- **`HeifConstants`** - HEIF specification constants and codec profiles
+- **`HeifEncodingOptions`** - Codec-specific encoding configuration
+- **`HeifExamples`** - Factory methods for various use cases
+
+#### JPEG 2000 Implementation
+- **`IJpeg2000Raster`** - JPEG 2000-specific interface extending `IRaster`
+- **`Jpeg2000Raster`** - Main JPEG 2000 processing with wavelet support
+- **`Jpeg2000Metadata`** - Geospatial and multi-resolution metadata
+- **`Jpeg2000Validator`** - Format validation and codestream checking
+- **`Jpeg2000Constants`** - JPEG 2000 markers and progression orders
+- **`Jpeg2000EncodingOptions`** - Wavelet and tile configuration
 
 > 💡 **For detailed technical architecture**: See the [Fundamental Code Architecture](#fundamental-code-architecture) section below for comprehensive implementation details and code examples.
 
@@ -244,6 +295,106 @@ The Joint Photographic Experts Group (JPEG) format is a widely used lossy compre
 - **MIME Types**: image/jpeg, image/jpg
 - **Standard Markers**: SOI (0xFFD8), EOI (0xFFD9), APP0-APP15, SOF, DHT, DQT
 
+### AVIF Specifications Support
+
+The AV1 Image File Format (AVIF) implementation provides state-of-the-art image compression using the AV1 video codec, offering superior compression efficiency and advanced features like HDR support and film grain synthesis.
+
+#### AVIF Features
+
+##### Color Support
+- **Color Spaces**: sRGB, Display P3, Rec. 2020, BT.709, and more
+- **Bit Depths**: 8, 10, and 12 bits per channel
+- **HDR Support**: HDR10, HLG, Dolby Vision with full metadata
+- **Alpha Channel**: Full transparency support with independent compression
+
+##### Compression Features
+- **Quality Range**: 0-100 (100 = lossless)
+- **Speed Settings**: 0-10 (0 = slowest/best, 10 = fastest)
+- **Chroma Subsampling**: 4:4:4, 4:2:2, 4:2:0, 4:0:0 (monochrome)
+- **Film Grain Synthesis**: Preserves natural film grain at low bitrates
+
+##### Advanced Capabilities
+- **Multi-threading**: Automatic thread optimization
+- **Tile-based Encoding**: Efficient processing of large images
+- **Progressive Decoding**: Load images progressively
+- **Clean Aperture**: Crop information without re-encoding
+- **Mirror/Rotation**: Lossless transformations
+
+#### AVIF Constants and Specifications
+- **Maximum Dimensions**: 65,536 × 65,536 pixels
+- **Container Format**: ISO Base Media File Format (BMFF)
+- **File Extensions**: .avif, .avifs (sequence)
+- **MIME Type**: image/avif
+- **Quality Presets**: Lossless (100), Professional (90), Standard (85), Web (75)
+
+### HEIF Specifications Support
+
+The High Efficiency Image File Format (HEIF) implementation provides a versatile container format supporting multiple codecs, making it ideal for modern photography with features like image sequences, auxiliary images, and comprehensive metadata.
+
+#### HEIF Features
+
+##### Codec Support
+- **HEVC (H.265)**: Primary codec for HEIF, excellent compression
+- **AVC (H.264)**: Compatibility codec for broader support
+- **AV1**: Modern codec option for improved efficiency
+- **VVC (H.266)**: Next-generation video coding
+- **JPEG**: Thumbnail and compatibility support
+
+##### Container Features
+- **Image Collections**: Multiple images in one file
+- **Image Sequences**: Animation and burst photo support
+- **Auxiliary Images**: Depth maps, alpha channels, thumbnails
+- **Derived Images**: Non-destructive edits and transformations
+- **Multi-resolution**: Multiple versions at different resolutions
+
+##### Metadata Support
+- **Camera Metadata**: Complete EXIF with maker notes
+- **GPS Information**: Full location and timestamp data
+- **HDR Metadata**: Support for various HDR formats
+- **Custom Metadata**: Application-specific data storage
+- **Thumbnails**: Automatic generation and storage
+
+#### HEIF Constants and Specifications
+- **Maximum Dimensions**: 65,536 × 65,536 pixels
+- **Container Format**: ISO Base Media File Format (BMFF)
+- **File Extensions**: .heif, .heic, .hif
+- **MIME Types**: image/heif, image/heic
+- **Brands**: heic (still), heis (sequence), hevc (collection)
+
+### JPEG 2000 Specifications Support
+
+The JPEG 2000 implementation provides wavelet-based compression offering superior image quality, especially at high compression ratios, with support for lossless compression and progressive transmission.
+
+#### JPEG 2000 Features
+
+##### Compression Technology
+- **Wavelet Transform**: Superior to DCT at high compression
+- **Lossless Mode**: Bit-perfect compression and decompression
+- **Lossy Mode**: Better quality than JPEG at same file size
+- **ROI Encoding**: Region of Interest with higher quality
+- **Progressive Transmission**: Resolution and quality scalability
+
+##### Advanced Features
+- **Tiling**: Large image support with independent tiles
+- **Multiple Components**: Up to 16,384 color components
+- **Bit Depths**: 1-38 bits per component
+- **Color Spaces**: RGB, YCbCr, and arbitrary color spaces
+- **Transparency**: Alpha channel with full precision
+
+##### Codestream Features
+- **Progression Orders**: LRCP, RLCP, RPCL, PCRL, CPRL
+- **Quality Layers**: Multiple quality levels in one file
+- **Resolution Levels**: Multiple resolutions in one file
+- **Precincts**: Spatial locality for streaming
+- **Error Resilience**: Robust to transmission errors
+
+#### JPEG 2000 Constants and Specifications
+- **Maximum Dimensions**: 2³² - 1 pixels per dimension
+- **File Extensions**: .jp2, .j2k, .jpf, .jpx, .jpm
+- **MIME Types**: image/jp2, image/jpx, image/jpm
+- **Markers**: SOC (0xFF4F), SOT, SOD, EOC (0xFFD9)
+- **Wavelet Filters**: 9/7 (lossy), 5/3 (lossless)
+
 ## Performance Benchmarking
 
 The library includes comprehensive benchmarking tools:
@@ -281,6 +432,8 @@ bool isValid = validator.Validate(raster);
 ```csharp
 using Wangkanai.Graphics.Rasters.Tiffs;
 using Wangkanai.Graphics.Rasters.Jpegs;
+using Wangkanai.Graphics.Rasters.Avifs;
+using Wangkanai.Graphics.Rasters.Heifs;
 
 // TIFF-specific operations
 var tiffRaster = new TiffRaster();
@@ -294,8 +447,55 @@ jpegRaster.Quality = 85;
 jpegRaster.ColorMode = JpegColorMode.RGB;
 jpegRaster.IsProgressive = true;
 
+// AVIF-specific operations
+var avifRaster = AvifExamples.CreateWebOptimized(1920, 1080, true);
+avifRaster.Quality = AvifConstants.QualityPresets.Professional;
+avifRaster.Speed = AvifConstants.SpeedPresets.Slow;
+avifRaster.EnableFilmGrain = true;
+
+// HEIF-specific operations
+var heifRaster = HeifExamples.CreateHdr(3840, 2160);
+heifRaster.Compression = HeifCompression.Hevc;
+heifRaster.Profile = HeifProfile.Main10;
+heifRaster.SetHdrMetadata(new HdrMetadata 
+{
+    MaxLuminance = 1000.0,
+    ColorPrimaries = HdrColorPrimaries.Bt2020
+});
+
 // All format-specific instances also support universal operations
 var universalMetadata = tiffRaster.Metadata; // Works with universal interface
+```
+
+### Working with Shared Metadata
+```csharp
+using Wangkanai.Graphics.Rasters.Metadatas;
+
+// Use shared metadata components
+var metadata = new HeifMetadata
+{
+    Width = 1920,
+    Height = 1080,
+    BitDepth = 10,
+    Camera = new CameraMetadata
+    {
+        CameraMake = "Canon",
+        CameraModel = "EOS R5",
+        FocalLength = 50.0,
+        Aperture = 1.8,
+        IsoSensitivity = 400
+    },
+    HdrMetadata = new HdrMetadata
+    {
+        Format = HdrFormat.Hdr10,
+        MaxLuminance = 1000.0
+    }
+};
+
+// Common encoding options with factory methods
+var options = HeifEncodingOptions.CreateHighQuality();
+options.Quality = RasterConstants.QualityPresets.Professional;
+options.Speed = RasterConstants.SpeedPresets.Slow;
 ```
 
 ## Universal Image Processing Capabilities
