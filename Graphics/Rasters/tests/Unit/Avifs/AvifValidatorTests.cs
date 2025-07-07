@@ -43,20 +43,22 @@ public class AvifValidatorTests
 	[Fact]
 	public void Validate_WithDimensionsTooLarge_ShouldReturnErrors()
 	{
-		using var avif = new AvifRaster();
+		// Create raster with default dimensions, then set metadata to exceed limits
+		using var avif = new AvifRaster(100, 100);
 		avif.Metadata.Width = AvifConstants.MaxDimension + 1;
 		avif.Metadata.Height = AvifConstants.MaxDimension + 1;
 
 		var result = AvifValidator.Validate(avif);
 
 		Assert.False(result.IsValid);
+		// Test will now see both "exceeds maximum" and "mismatch" errors - that's expected behavior
 		Assert.Contains(result.Errors, e => e.Contains("exceeds maximum"));
 	}
 
 	[Fact]
 	public void Validate_WithVeryLargeImage_ShouldReturnWarnings()
 	{
-		using var avif = new AvifRaster(10000, 10000); // 100 megapixels
+		using var avif = new AvifRaster(11000, 11000); // 121 megapixels, which is > 100M
 
 		var result = AvifValidator.Validate(avif);
 
@@ -343,7 +345,9 @@ public class AvifValidatorTests
 	[Fact]
 	public void Validate_WithVeryLargeImage_ShouldReturnMemoryWarnings()
 	{
-		using var avif = new AvifRaster(8000, 8000)
+		// Use larger dimensions to exceed MaxPixelBufferSizeMB (1024MB)
+		// 25000*25000*4*(12/8) = 1.875GB which exceeds 1024MB  
+		using var avif = new AvifRaster(25000, 25000)
 		{
 			BitDepth = 12,
 			HasAlpha = true

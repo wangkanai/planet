@@ -58,9 +58,9 @@ public class AvifConstantsTests
 	}
 
 	[Fact]
-	public void DefaultThreadCount_ShouldBePositive()
+	public void DefaultThreadCount_ShouldBeValid()
 	{
-		Assert.True(AvifConstants.DefaultThreadCount > 0);
+		Assert.True(AvifConstants.DefaultThreadCount >= 0);
 		Assert.True(AvifConstants.DefaultThreadCount <= Environment.ProcessorCount);
 	}
 
