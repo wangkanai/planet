@@ -76,10 +76,22 @@ public abstract class RasterMetadataBase : IRasterMetadata
 
 	/// <inheritdoc />
 	public abstract IRasterMetadata Clone();
+	
+	/// <summary>
+	/// Throws an ObjectDisposedException if this instance has been disposed.
+	/// </summary>
+	protected void ThrowIfDisposed()
+	{
+		if (_disposed)
+			throw new ObjectDisposedException(GetType().Name);
+	}
 
 	/// <inheritdoc />
 	public virtual void Clear()
 	{
+		if (_disposed)
+			throw new ObjectDisposedException(GetType().Name);
+			
 		Width = 0;
 		Height = 0;
 		BitDepth = 8;

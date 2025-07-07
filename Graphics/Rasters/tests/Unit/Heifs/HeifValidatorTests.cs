@@ -114,7 +114,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains($"Bit depth must be between {HeifConstants.MinBitDepth} and {HeifConstants.MaxBitDepth}", result.Errors);
+		Assert.Contains($"Bit depth must be between {HeifConstants.MinBitDepth} and {HeifConstants.MaxBitDepth}.", result.Errors);
 	}
 
 	[Theory]
@@ -255,7 +255,7 @@ public class HeifValidatorTests
 	public void ValidateRaster_WithLargeImageAndSingleThread_ReturnsFailure()
 	{
 		// Arrange
-		var raster = new HeifRaster(10000, 10000) { ThreadCount = 1 };
+		var raster = new HeifRaster(10001, 10000) { ThreadCount = 1 };
 
 		// Act
 		var result = HeifValidator.ValidateRaster(raster);
@@ -274,7 +274,7 @@ public class HeifValidatorTests
 		// Assert
 		Assert.False(result.IsValid);
 		Assert.Single(result.Errors);
-		Assert.Contains("Encoding options cannot be null", result.Errors[0]);
+		Assert.Contains("Encoding options cannot be null.", result.Errors[0]);
 	}
 
 	[Fact]
@@ -314,7 +314,7 @@ public class HeifValidatorTests
 		// Assert
 		Assert.False(result.IsValid);
 		Assert.Single(result.Errors);
-		Assert.Contains("File data cannot be null", result.Errors[0]);
+		Assert.Contains("File data cannot be null.", result.Errors[0]);
 	}
 
 	[Fact]
@@ -328,7 +328,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains("File data is too small to be a valid HEIF file", result.Errors);
+		Assert.Contains("File data is too small to be a valid HEIF file.", result.Errors);
 	}
 
 	[Fact]
