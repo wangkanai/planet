@@ -67,96 +67,7 @@ public class TiffRaster : Raster, ITiffRaster
 	}
 
 	/// <inheritdoc />
-	public override bool HasLargeMetadata
-		=> EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
-
-	/// <inheritdoc />
-	public override long EstimatedMetadataSize
-	{
-		get
-		{
-			var size = 0L;
-
-			// Add string metadata sizes
-			if (!string.IsNullOrEmpty(Metadata.ImageDescription))
-				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.ImageDescription);
-			if (!string.IsNullOrEmpty(Metadata.Make))
-				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Make);
-			if (!string.IsNullOrEmpty(Metadata.Model))
-				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Model);
-			if (!string.IsNullOrEmpty(Metadata.Software))
-				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Software);
-			if (!string.IsNullOrEmpty(Metadata.Copyright))
-				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Copyright);
-			if (!string.IsNullOrEmpty(Metadata.Artist))
-				size += System.Text.Encoding.UTF8.GetByteCount(Metadata.Artist);
-
-			// Add TIFF-specific array data sizes
-			if (Metadata.StripOffsets != null)
-				size += Metadata.StripOffsets.Length * sizeof(int);
-			if (Metadata.StripByteCounts != null)
-				size += Metadata.StripByteCounts.Length * sizeof(int);
-			if (Metadata.TileOffsets != null)
-				size += Metadata.TileOffsets.Length * sizeof(int);
-			if (Metadata.TileByteCounts != null)
-				size += Metadata.TileByteCounts.Length * sizeof(int);
-
-			// Add color data sizes
-			if (Metadata.ColorMap != null)
-				size += Metadata.ColorMap.Length * sizeof(ushort);
-			if (Metadata.TransferFunction != null)
-				size += Metadata.TransferFunction.Length * sizeof(ushort);
-
-			// Add chromaticity and color space data
-			if (Metadata.WhitePoint != null)
-				size += Metadata.WhitePoint.Length * sizeof(double);
-			if (Metadata.PrimaryChromaticities != null)
-				size += Metadata.PrimaryChromaticities.Length * sizeof(double);
-			if (Metadata.YCbCrCoefficients != null)
-				size += Metadata.YCbCrCoefficients.Length * sizeof(double);
-			if (Metadata.ReferenceBlackWhite != null)
-				size += Metadata.ReferenceBlackWhite.Length * sizeof(double);
-
-			// Add embedded metadata sizes
-			if (Metadata.ExifIfd != null)
-				size += Metadata.ExifIfd.Length;
-			if (Metadata.GpsIfd != null)
-				size += Metadata.GpsIfd.Length;
-			if (Metadata.IccProfile != null)
-				size += Metadata.IccProfile.Length;
-			if (Metadata.XmpData != null)
-				size += Metadata.XmpData.Length;
-			if (Metadata.IptcData != null)
-				size += Metadata.IptcData.Length;
-
-			// Add custom tags size (more accurate estimation)
-			foreach (var tag in Metadata.CustomTags.Values)
-				size += tag switch
-				{
-					string str       => System.Text.Encoding.UTF8.GetByteCount(str),
-					byte[] bytes     => bytes.Length,
-					int[] ints       => ints.Length * sizeof(int),
-					ushort[] ushorts => ushorts.Length * sizeof(ushort),
-					double[] doubles => doubles.Length * sizeof(double),
-					float[] floats   => floats.Length * sizeof(float),
-					_                => 16 // Default estimate for other types
-				};
-
-			// Add bits per sample array size
-			if (_bitsPerSampleArray != null)
-				size += _bitsPerSampleArray.Length * sizeof(int);
-
-			// Add TIFF directory entry overhead (12 bytes per standard tag + IFD overhead)
-			var estimatedTagCount = 20; // Standard TIFF tags
-			if (Metadata.CustomTags.Count > 0)
-				estimatedTagCount += Metadata.CustomTags.Count;
-
-			size += estimatedTagCount * 12; // 12 bytes per directory entry
-			size += 6;                      // IFD header (2 bytes count + 4 bytes next IFD pointer)
-
-			return size;
-		}
-	}
+	IMetadata? IImage.Metadata => Metadata;
 
 	/// <inheritdoc />
 	public ReadOnlySpan<int> BitsPerSample
@@ -233,7 +144,7 @@ public class TiffRaster : Raster, ITiffRaster
 	/// <inheritdoc />
 	protected override async ValueTask DisposeAsyncCore()
 	{
-		if (HasLargeMetadata)
+		if (Metadata?.HasLargeMetadata ?? false)
 		{
 			// For large TIFF metadata, clear in stages with yielding
 			await Task.Yield();

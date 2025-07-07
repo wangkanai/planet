@@ -87,16 +87,10 @@ public class SvgVector : Vector, ISvgVector
 	}
 
 	/// <inheritdoc />
-	public override bool HasLargeMetadata
-		=> _metadata.IsVeryLargeSvg;
-
-	/// <inheritdoc />
-	public override long EstimatedMetadataSize
-		=> _metadata.CalculateEstimatedMemoryUsage();
+	public override IMetadata? Metadata => _metadata;
 
 	/// <summary>Gets the SVG metadata.</summary>
-	public ISvgMetadata Metadata
-		=> _metadata;
+	ISvgMetadata ISvgVector.Metadata => _metadata;
 
 	/// <summary>Gets the SVG document as XDocument.</summary>
 	public XDocument? Document

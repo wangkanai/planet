@@ -46,7 +46,7 @@ public abstract class RasterMetadataBase : IRasterMetadata
 	public virtual string? Author { get; set; }
 
 	/// <inheritdoc />
-	public virtual long EstimatedMemoryUsage
+	public virtual long EstimatedMetadataSize
 	{
 		get
 		{
@@ -72,7 +72,7 @@ public abstract class RasterMetadataBase : IRasterMetadata
 	}
 
 	/// <inheritdoc />
-	public virtual bool HasLargeMetadata => EstimatedMemoryUsage > ImageConstants.LargeMetadataThreshold;
+	public virtual bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
 
 	/// <inheritdoc />
 	public abstract IRasterMetadata Clone();
