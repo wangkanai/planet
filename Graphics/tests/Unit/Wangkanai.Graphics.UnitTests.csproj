@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\..\Abstractions\src\Wangkanai.Graphics.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Root\Wangkanai.Graphics.csproj" />
     <ProjectReference Include="..\..\Rasters\src\Root\Wangkanai.Graphics.Rasters.csproj" />
     <ProjectReference Include="..\..\Vectors\src\Root\Wangkanai.Graphics.Vectors.csproj" />
   </ItemGroup>
