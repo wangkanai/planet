@@ -21,13 +21,11 @@ public class GpsCoordinates
 
 	/// <summary>Creates a copy of the GPS coordinates.</summary>
 	public GpsCoordinates Clone()
-	{
-		return new GpsCoordinates
-		{
-			Latitude = Latitude,
-			Longitude = Longitude,
-			Altitude = Altitude,
-			Timestamp = Timestamp
-		};
-	}
+		=> new()
+		   {
+			   Latitude  = Latitude,
+			   Longitude = Longitude,
+			   Altitude  = Altitude,
+			   Timestamp = Timestamp
+		   };
 }

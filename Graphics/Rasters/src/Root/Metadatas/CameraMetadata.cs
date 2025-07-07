@@ -111,80 +111,78 @@ public class CameraMetadata
 
 	/// <summary>Creates a copy of the camera metadata.</summary>
 	public CameraMetadata Clone()
-	{
-		return new CameraMetadata
-		{
-			CameraMake = CameraMake,
-			CameraModel = CameraModel,
-			LensMake = LensMake,
-			LensModel = LensModel,
-			FocalLength = FocalLength,
-			Aperture = Aperture,
-			ExposureTime = ExposureTime,
-			IsoSensitivity = IsoSensitivity,
-			WhiteBalance = WhiteBalance,
-			Flash = Flash,
-			ExposureBias = ExposureBias,
-			MeteringMode = MeteringMode,
-			ExposureProgram = ExposureProgram,
-			LightSource = LightSource,
-			FocalLengthIn35mm = FocalLengthIn35mm,
-			DigitalZoomRatio = DigitalZoomRatio,
-			SceneCaptureType = SceneCaptureType,
-			Contrast = Contrast,
-			Saturation = Saturation,
-			Sharpness = Sharpness,
-			SubjectDistanceRange = SubjectDistanceRange,
-			SensingMethod = SensingMethod,
-			GainControl = GainControl,
-			BodySerialNumber = BodySerialNumber,
-			LensSerialNumber = LensSerialNumber,
-			LensSpecification = LensSpecification?.ToArray(),
-			XResolution = XResolution,
-			YResolution = YResolution,
-			ResolutionUnit = ResolutionUnit,
-			GpsLatitude = GpsLatitude,
-			GpsLongitude = GpsLongitude,
-			GpsAltitude = GpsAltitude,
-			GpsTimestamp = GpsTimestamp
-		};
-	}
+		=> new()
+		   {
+			   CameraMake           = CameraMake,
+			   CameraModel          = CameraModel,
+			   LensMake             = LensMake,
+			   LensModel            = LensModel,
+			   FocalLength          = FocalLength,
+			   Aperture             = Aperture,
+			   ExposureTime         = ExposureTime,
+			   IsoSensitivity       = IsoSensitivity,
+			   WhiteBalance         = WhiteBalance,
+			   Flash                = Flash,
+			   ExposureBias         = ExposureBias,
+			   MeteringMode         = MeteringMode,
+			   ExposureProgram      = ExposureProgram,
+			   LightSource          = LightSource,
+			   FocalLengthIn35mm    = FocalLengthIn35mm,
+			   DigitalZoomRatio     = DigitalZoomRatio,
+			   SceneCaptureType     = SceneCaptureType,
+			   Contrast             = Contrast,
+			   Saturation           = Saturation,
+			   Sharpness            = Sharpness,
+			   SubjectDistanceRange = SubjectDistanceRange,
+			   SensingMethod        = SensingMethod,
+			   GainControl          = GainControl,
+			   BodySerialNumber     = BodySerialNumber,
+			   LensSerialNumber     = LensSerialNumber,
+			   LensSpecification    = LensSpecification?.ToArray(),
+			   XResolution          = XResolution,
+			   YResolution          = YResolution,
+			   ResolutionUnit       = ResolutionUnit,
+			   GpsLatitude          = GpsLatitude,
+			   GpsLongitude         = GpsLongitude,
+			   GpsAltitude          = GpsAltitude,
+			   GpsTimestamp         = GpsTimestamp
+		   };
 
 	/// <summary>Clears all camera metadata values.</summary>
 	public void Clear()
 	{
-		CameraMake = null;
-		CameraModel = null;
-		LensMake = null;
-		LensModel = null;
-		FocalLength = null;
-		Aperture = null;
-		ExposureTime = null;
-		IsoSensitivity = null;
-		WhiteBalance = null;
-		Flash = null;
-		ExposureBias = null;
-		MeteringMode = null;
-		ExposureProgram = null;
-		LightSource = null;
-		FocalLengthIn35mm = null;
-		DigitalZoomRatio = null;
-		SceneCaptureType = null;
-		Contrast = null;
-		Saturation = null;
-		Sharpness = null;
+		CameraMake           = null;
+		CameraModel          = null;
+		LensMake             = null;
+		LensModel            = null;
+		FocalLength          = null;
+		Aperture             = null;
+		ExposureTime         = null;
+		IsoSensitivity       = null;
+		WhiteBalance         = null;
+		Flash                = null;
+		ExposureBias         = null;
+		MeteringMode         = null;
+		ExposureProgram      = null;
+		LightSource          = null;
+		FocalLengthIn35mm    = null;
+		DigitalZoomRatio     = null;
+		SceneCaptureType     = null;
+		Contrast             = null;
+		Saturation           = null;
+		Sharpness            = null;
 		SubjectDistanceRange = null;
-		SensingMethod = null;
-		GainControl = null;
-		BodySerialNumber = null;
-		LensSerialNumber = null;
-		LensSpecification = null;
-		XResolution = null;
-		YResolution = null;
-		ResolutionUnit = null;
-		GpsLatitude = null;
-		GpsLongitude = null;
-		GpsAltitude = null;
-		GpsTimestamp = null;
+		SensingMethod        = null;
+		GainControl          = null;
+		BodySerialNumber     = null;
+		LensSerialNumber     = null;
+		LensSpecification    = null;
+		XResolution          = null;
+		YResolution          = null;
+		ResolutionUnit       = null;
+		GpsLatitude          = null;
+		GpsLongitude         = null;
+		GpsAltitude          = null;
+		GpsTimestamp         = null;
 	}
 }

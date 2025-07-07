@@ -39,19 +39,17 @@ public class ColorVolumeMetadata
 
 	/// <summary>Creates a copy of the color volume metadata.</summary>
 	public ColorVolumeMetadata Clone()
-	{
-		return new ColorVolumeMetadata
-		{
-			RedPrimaryX = RedPrimaryX,
-			RedPrimaryY = RedPrimaryY,
-			GreenPrimaryX = GreenPrimaryX,
-			GreenPrimaryY = GreenPrimaryY,
-			BluePrimaryX = BluePrimaryX,
-			BluePrimaryY = BluePrimaryY,
-			WhitePointX = WhitePointX,
-			WhitePointY = WhitePointY,
-			LuminanceMin = LuminanceMin,
-			LuminanceMax = LuminanceMax
-		};
-	}
+		=> new()
+		   {
+			   RedPrimaryX   = RedPrimaryX,
+			   RedPrimaryY   = RedPrimaryY,
+			   GreenPrimaryX = GreenPrimaryX,
+			   GreenPrimaryY = GreenPrimaryY,
+			   BluePrimaryX  = BluePrimaryX,
+			   BluePrimaryY  = BluePrimaryY,
+			   WhitePointX   = WhitePointX,
+			   WhitePointY   = WhitePointY,
+			   LuminanceMin  = LuminanceMin,
+			   LuminanceMax  = LuminanceMax
+		   };
 }
