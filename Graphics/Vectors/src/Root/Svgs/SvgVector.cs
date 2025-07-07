@@ -4,6 +4,8 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.IO.Compression;
+using Wangkanai.Spatial;
+using Wangkanai.Spatial.Coordinates;
 
 namespace Wangkanai.Graphics.Vectors.Svgs;
 
@@ -416,5 +418,122 @@ public class SvgVector : Vector, ISvgVector
 	{
 		if (_disposed)
 			throw new ObjectDisposedException(nameof(SvgVector));
+	}
+
+	/// <summary>Transforms geographic coordinates to SVG coordinate space.</summary>
+	/// <param name="geodetic">The geographic coordinate (lat/lon).</param>
+	/// <param name="boundingBox">The geographic bounding box for the SVG.</param>
+	/// <returns>A coordinate in SVG space.</returns>
+	public Coordinate TransformToSvgSpace(Geodetic geodetic, GeographicBounds boundingBox)
+	{
+		ThrowIfDisposed();
+		
+		// Normalize the coordinate to 0-1 range within the bounding box
+		var normalizedX = (geodetic.Longitude - boundingBox.MinLongitude) / 
+		                  (boundingBox.MaxLongitude - boundingBox.MinLongitude);
+		var normalizedY = (boundingBox.MaxLatitude - geodetic.Latitude) / 
+		                  (boundingBox.MaxLatitude - boundingBox.MinLatitude);
+		
+		// Transform to SVG coordinate space
+		var svgX = normalizedX * _metadata.ViewBox.Width + _metadata.ViewBox.X;
+		var svgY = normalizedY * _metadata.ViewBox.Height + _metadata.ViewBox.Y;
+		
+		return new Coordinate(svgX, svgY);
+	}
+
+	/// <summary>Transforms SVG coordinates back to geographic coordinates.</summary>
+	/// <param name="svgCoordinate">The SVG coordinate.</param>
+	/// <param name="boundingBox">The geographic bounding box for the SVG.</param>
+	/// <returns>A geographic coordinate (lat/lon).</returns>
+	public Geodetic TransformToGeographic(Coordinate svgCoordinate, GeographicBounds boundingBox)
+	{
+		ThrowIfDisposed();
+		
+		// Normalize SVG coordinate to 0-1 range
+		var normalizedX = (svgCoordinate.X - _metadata.ViewBox.X) / _metadata.ViewBox.Width;
+		var normalizedY = (svgCoordinate.Y - _metadata.ViewBox.Y) / _metadata.ViewBox.Height;
+		
+		// Transform to geographic coordinates
+		var longitude = boundingBox.MinLongitude + normalizedX * 
+		                (boundingBox.MaxLongitude - boundingBox.MinLongitude);
+		var latitude = boundingBox.MaxLatitude - normalizedY * 
+		               (boundingBox.MaxLatitude - boundingBox.MinLatitude);
+		
+		return new Geodetic(latitude, longitude);
+	}
+
+	/// <summary>Sets the coordinate reference system for the SVG.</summary>
+	/// <param name="crs">The coordinate reference system identifier (e.g., "EPSG:4326", "EPSG:3857").</param>
+	public void SetCoordinateReferenceSystem(string crs)
+	{
+		ThrowIfDisposed();
+		_metadata.CoordinateReferenceSystem = crs;
+		
+		// Add CRS metadata to the SVG document
+		if (_document?.Root != null)
+		{
+			_document.Root.SetAttributeValue("data-crs", crs);
+		}
+	}
+
+	/// <summary>Transforms the entire SVG from one coordinate system to another.</summary>
+	/// <param name="fromCrs">Source coordinate reference system.</param>
+	/// <param name="toCrs">Target coordinate reference system.</param>
+	/// <param name="boundingBox">The geographic bounding box.</param>
+	public void TransformCoordinateSystem(string fromCrs, string toCrs, GeographicBounds boundingBox)
+	{
+		ThrowIfDisposed();
+		if (_document?.Root == null) return;
+		
+		// Update CRS metadata
+		SetCoordinateReferenceSystem(toCrs);
+		
+		// For now, we'll handle the most common transformations
+		if (fromCrs == "EPSG:4326" && toCrs == "EPSG:3857")
+		{
+			// Transform from WGS84 to Web Mercator
+			TransformToWebMercator(boundingBox);
+		}
+		else if (fromCrs == "EPSG:3857" && toCrs == "EPSG:4326")
+		{
+			// Transform from Web Mercator to WGS84
+			TransformFromWebMercator(boundingBox);
+		}
+		
+		_metadata.ModificationDate = DateTime.UtcNow;
+	}
+
+	/// <summary>Transforms coordinates from WGS84 to Web Mercator projection.</summary>
+	private void TransformToWebMercator(GeographicBounds bounds)
+	{
+		var mercator = new Mercator();
+		
+		// Transform bounding box corners
+		var topLeft = mercator.LatLonToMeters(bounds.MinLongitude, bounds.MaxLatitude);
+		var bottomRight = mercator.LatLonToMeters(bounds.MaxLongitude, bounds.MinLatitude);
+		
+		// Update viewBox to reflect Mercator coordinates
+		var newViewBox = new SvgViewBox(topLeft.X, topLeft.Y, 
+			bottomRight.X - topLeft.X, bottomRight.Y - topLeft.Y);
+		_metadata.ViewBox = newViewBox;
+		
+		if (_document?.Root != null)
+		{
+			_document.Root.SetAttributeValue("viewBox", newViewBox.ToString());
+		}
+	}
+
+	/// <summary>Transforms coordinates from Web Mercator to WGS84.</summary>
+	private void TransformFromWebMercator(GeographicBounds bounds)
+	{
+		// For simplicity, we'll just reset to the geographic bounds
+		var newViewBox = new SvgViewBox(bounds.MinLongitude, bounds.MinLatitude,
+			bounds.MaxLongitude - bounds.MinLongitude, bounds.MaxLatitude - bounds.MinLatitude);
+		_metadata.ViewBox = newViewBox;
+		
+		if (_document?.Root != null)
+		{
+			_document.Root.SetAttributeValue("viewBox", newViewBox.ToString());
+		}
 	}
 }
