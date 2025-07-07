@@ -41,9 +41,12 @@ public class BmpValidatorTests
 	public void Validate_DimensionsTooLarge_ShouldReturnErrors()
 	{
 		// Arrange
-		var bmp = new BmpRaster(100, 100);
+		var bmp = new BmpRaster(100, 100, BmpColorDepth.TwentyFourBit);
 		bmp.Width = int.MaxValue;
 		bmp.Height = int.MaxValue;
+		bmp.Metadata.Width = int.MaxValue;         // Update metadata to match
+		bmp.Metadata.Height = int.MaxValue;        // Update metadata to match
+		bmp.Metadata.BitsPerPixel = (ushort)BmpColorDepth.TwentyFourBit; // Ensure consistency
 
 		// Act
 		var result = BmpValidator.Validate(bmp);
@@ -78,7 +81,7 @@ public class BmpValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains(result.Errors, e => e.Contains("Unsupported color depth"));
+		Assert.Contains(result.Errors, e => e.Contains("Color depth mismatch"));
 	}
 
 	[Fact]
@@ -222,6 +225,7 @@ public class BmpValidatorTests
 		// Arrange
 		var bmp = new BmpRaster(100, 100, BmpColorDepth.SixteenBit);
 		bmp.Compression = BmpCompression.BitFields;
+		bmp.Metadata.Compression = BmpCompression.BitFields; // Update metadata to match
 		// Masks remain zero (default)
 
 		// Act
