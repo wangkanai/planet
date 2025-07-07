@@ -360,6 +360,7 @@ public class HeifExamplesTests
 		Assert.True(HeifExamples.CreateHdr(width, height).IsValid());
 		Assert.True(HeifExamples.CreateMobile(width, height).IsValid());
 		Assert.True(HeifExamples.CreateAv1(width, height).IsValid());
+		Assert.True(HeifExamples.CreateProfessionalPhoto(width, height).IsValid());
 		Assert.True(HeifExamples.CreateDemo(width, height).IsValid());
 	}
 
@@ -381,6 +382,7 @@ public class HeifExamplesTests
 			HeifExamples.CreateMobile(width, height),
 			HeifExamples.CreateThumbnail(256, 256),
 			HeifExamples.CreateAv1(width, height),
+			HeifExamples.CreateProfessionalPhoto(width, height),
 			HeifExamples.CreateDemo(width, height)
 		};
 
@@ -437,6 +439,7 @@ public class HeifExamplesTests
 			HeifExamples.CreateMobile(width, height),
 			HeifExamples.CreateThumbnail(256, 256),
 			HeifExamples.CreateAv1(width, height),
+			HeifExamples.CreateProfessionalPhoto(width, height),
 			HeifExamples.CreateDemo(width, height)
 		};
 

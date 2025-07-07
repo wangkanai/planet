@@ -246,6 +246,57 @@ public static class HeifExamples
 	}
 
 	/// <summary>
+	/// Creates a professional photography HEIF image with comprehensive camera metadata.
+	/// </summary>
+	/// <param name="width">Image width in pixels.</param>
+	/// <param name="height">Image height in pixels.</param>
+	/// <returns>A HEIF raster configured for professional photography with full metadata.</returns>
+	public static HeifRaster CreateProfessionalPhoto(int width, int height)
+	{
+		var heif = CreateHighQuality(width, height, false);
+
+		// Professional camera metadata
+		heif.Metadata.CameraMetadata = new CameraMetadata
+		{
+			CameraMake = "Canon",
+			CameraModel = "EOS R5",
+			LensMake = "Canon",
+			LensModel = "RF 85mm F1.2 L USM",
+			FocalLength = 85.0,
+			Aperture = 1.2,
+			ExposureTime = 1.0 / 200.0,
+			IsoSensitivity = 100,
+			XResolution = 300.0,
+			YResolution = 300.0,
+			ResolutionUnit = 2, // Inches
+			WhiteBalance = 1, // Manual
+			Flash = 0, // Flash did not fire
+			ExposureBias = 0.0,
+			MeteringMode = 3, // Spot
+			ExposureProgram = 1, // Manual
+			LightSource = 10, // Flash
+			FocalLengthIn35mm = 85.0,
+			DigitalZoomRatio = 1.0,
+			SceneCaptureType = 0, // Standard
+			Contrast = 0, // Normal
+			Saturation = 0, // Normal
+			Sharpness = 1, // Soft
+			SubjectDistanceRange = 2, // Macro
+			SensingMethod = 2, // One-chip color area sensor
+			GainControl = 0, // None
+			BodySerialNumber = "082024001234",
+			LensSerialNumber = "1234567890",
+			LensSpecification = new[] { 85.0, 85.0, 1.2, 1.2 } // 85mm f/1.2
+		};
+
+		heif.Metadata.Copyright = "© Professional Photographer";
+		heif.Metadata.Author = "John Doe Photography";
+		heif.Metadata.Description = "Portrait photography with shallow depth of field";
+
+		return heif;
+	}
+
+	/// <summary>
 	/// Creates a demonstration HEIF image with comprehensive metadata.
 	/// </summary>
 	/// <param name="width">Image width in pixels.</param>
@@ -283,17 +334,42 @@ public static class HeifExamples
 			IsoSensitivity = 100,
 			XResolution = 300.0,
 			YResolution = 300.0,
-			ResolutionUnit = 2 // Inches
+			ResolutionUnit = 2, // Inches
+			WhiteBalance = 0, // Auto
+			Flash = 16, // Flash fired, auto mode
+			ExposureBias = 0.0,
+			MeteringMode = 5, // Pattern
+			ExposureProgram = 2, // Normal program
+			LightSource = 0, // Unknown
+			FocalLengthIn35mm = 75.0,
+			DigitalZoomRatio = 1.0,
+			SceneCaptureType = 0, // Standard
+			Contrast = 0, // Normal
+			Saturation = 0, // Normal
+			Sharpness = 0, // Normal
+			SubjectDistanceRange = 0, // Unknown
+			SensingMethod = 2, // One-chip color area sensor
+			GainControl = 0, // None
+			BodySerialNumber = "DEMO12345",
+			LensSerialNumber = "LENS67890",
+			LensSpecification = new[] { 24.0, 70.0, 2.8, 2.8 }, // 24-70mm f/2.8
+			// GPS data can also be stored in CameraMetadata
+			GpsLatitude = -33.8568,
+			GpsLongitude = 151.2153,
+			GpsAltitude = 5.0,
+			GpsTimestamp = DateTime.UtcNow
 		};
 		heif.Metadata.ColorSpaceInfo = "sRGB";
 		heif.Metadata.WhiteBalance = "Auto";
 
-		// Add GPS coordinates (Sydney Opera House)
+		// GPS coordinates can also be stored separately in HeifMetadata
+		// This provides a more detailed GPS structure with timestamp
 		heif.Metadata.GpsCoordinates = new GpsCoordinates
 		{
 			Latitude = -33.8568,
 			Longitude = 151.2153,
-			Altitude = 5.0
+			Altitude = 5.0,
+			Timestamp = DateTimeOffset.UtcNow
 		};
 
 		return heif;

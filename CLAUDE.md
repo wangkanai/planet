@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Claude Code
+
+- Claude Code local development has MCP access to extra resources like SonarCloud, GitHub issues, and discussions.
+
 ## Coding Guidelines
 
 - Always use a descriptive variable name
@@ -18,9 +22,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Use `IHttpClientFactory` for HTTP client creation
 - Use `IActionResult` for controller actions
 
-## Claude Code
+## Code Unit Tests guidelines
 
-- Claude Code local development has MCP access to extra resources like SonarCloud, GitHub issues, and discussions.
+- Use xUnit v3 for unit tests
+- Don't use '*Tests' suffix in the test namespace.
+- Use `xunit.runner.json` to configure xUnit test settings
+- Use `Fact` attribute for test methods
+- Use `Theory` attribute for parameterized tests
+- Use `Assert` methods for assertions
 
 ## Available MCP Tools
 
