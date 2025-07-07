@@ -65,8 +65,8 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains($"Width cannot exceed {HeifConstants.MaxDimension} pixels", result.Errors);
-		Assert.Contains($"Height cannot exceed {HeifConstants.MaxDimension} pixels", result.Errors);
+		Assert.Contains($"Width cannot exceed {HeifConstants.MaxDimension} pixels.", result.Errors);
+		Assert.Contains($"Height cannot exceed {HeifConstants.MaxDimension} pixels.", result.Errors);
 	}
 
 	[Theory]
@@ -147,7 +147,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains("Thread count cannot be negative", result.Errors);
+		Assert.Contains("Thread count cannot be negative.", result.Errors);
 	}
 
 	[Fact]
@@ -161,7 +161,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains($"Thread count cannot exceed {HeifConstants.Memory.MaxThreads}", result.Errors);
+		Assert.Contains($"Thread count cannot exceed {HeifConstants.Memory.MaxThreads}.", result.Errors);
 	}
 
 	[Fact]
@@ -179,7 +179,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains("Lossless mode requires quality to be 100", result.Errors);
+		Assert.Contains("Lossless mode requires quality to be 100.", result.Errors);
 	}
 
 	[Fact]
@@ -198,7 +198,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains("JPEG compression cannot be used with lossless mode", result.Errors);
+		Assert.Contains("JPEG compression cannot be used with lossless mode.", result.Errors);
 	}
 
 	[Fact]
@@ -216,7 +216,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains("Main 10 profile requires bit depth of at least 10", result.Errors);
+		Assert.Contains("Main 10 profile requires bit depth of at least 10.", result.Errors);
 	}
 
 	[Fact]
@@ -233,7 +233,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains("Monochrome (YUV 4:0:0) subsampling cannot be used with alpha channel", result.Errors);
+		Assert.Contains("Monochrome (YUV 4:0:0) subsampling cannot be used with alpha channel.", result.Errors);
 	}
 
 	[Fact]
@@ -248,7 +248,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains("HDR metadata requires bit depth of at least 10", result.Errors);
+		Assert.Contains("HDR metadata requires bit depth of at least 10.", result.Errors);
 	}
 
 	[Fact]
@@ -262,7 +262,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains("Large images should use multiple threads for better performance", result.Errors);
+		Assert.Contains("Large images should use multiple threads for better performance.", result.Errors);
 	}
 
 	[Fact]
@@ -343,7 +343,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains("File does not start with a valid HEIF file type box", result.Errors);
+		Assert.Contains("File does not start with a valid HEIF file type box.", result.Errors);
 	}
 
 	[Fact]
@@ -359,7 +359,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains("File does not contain a recognized HEIF brand", result.Errors);
+		Assert.Contains("File does not contain a recognized HEIF brand.", result.Errors);
 	}
 
 	[Theory]
@@ -392,7 +392,7 @@ public class HeifValidatorTests
 		// Assert
 		Assert.False(result.IsValid);
 		Assert.Single(result.Errors);
-		Assert.Contains("Metadata cannot be null", result.Errors[0]);
+		Assert.Contains("Metadata cannot be null.", result.Errors[0]);
 	}
 
 	[Fact]
@@ -420,7 +420,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains("EXIF data is too small to be valid", result.Errors);
+		Assert.Contains("EXIF data is too small to be valid.", result.Errors);
 	}
 
 	[Fact]
@@ -434,7 +434,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains("XMP data is too small to be valid", result.Errors);
+		Assert.Contains("XMP data is too small to be valid.", result.Errors);
 	}
 
 	[Fact]
@@ -448,7 +448,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains("ICC profile data is too small to be valid", result.Errors);
+		Assert.Contains("ICC profile data is too small to be valid.", result.Errors);
 	}
 
 	[Theory]
