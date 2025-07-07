@@ -1,4 +1,4 @@
-## Wangkanai Graphics Abstractions
+## Wangkanai Graphics
 
 **Namespace:** `Wangkanai.Graphics`
 
@@ -67,14 +67,14 @@ using Wangkanai.Graphics;
 public void ProcessImage(IImage image)
 {
     Console.WriteLine($"Processing image: {image.Width}x{image.Height}");
-    
+
     // Perform operations common to all image types
     if (image.Width > 1920 || image.Height > 1080)
     {
         // Handle large images
         Console.WriteLine("Large image detected");
     }
-    
+
     // Always dispose properly
     using (image)
     {
@@ -92,15 +92,15 @@ public class CustomImage : IImage
 {
     public int Width { get; set; }
     public int Height { get; set; }
-    
+
     private bool _disposed = false;
-    
+
     public void Dispose()
     {
         Dispose(true);
         GC.SuppressFinalize(this);
     }
-    
+
     protected virtual void Dispose(bool disposing)
     {
         if (!_disposed)
@@ -109,7 +109,7 @@ public class CustomImage : IImage
             {
                 // Dispose managed resources
             }
-            
+
             // Dispose unmanaged resources
             _disposed = true;
         }
