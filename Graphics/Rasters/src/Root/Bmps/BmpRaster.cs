@@ -18,7 +18,10 @@ public sealed class BmpRaster : Raster, IBmpRaster
 	public BmpCompression Compression { get; set; }
 
 	/// <inheritdoc />
-	public BmpMetadata Metadata { get; set; } = new();
+	public override IMetadata Metadata => BmpMetadata;
+
+	/// <summary>Gets or sets the BMP-specific metadata.</summary>
+	public BmpMetadata BmpMetadata { get; set; } = new();
 
 	/// <inheritdoc />
 	public int HorizontalResolution { get; set; } = BmpConstants.DefaultHorizontalResolution;
@@ -43,8 +46,8 @@ public sealed class BmpRaster : Raster, IBmpRaster
 	{
 		Width           = width;
 		Height          = height;
-		Metadata.Width  = width;
-		Metadata.Height = height;
+		BmpMetadata.Width  = width;
+		BmpMetadata.Height = height;
 	}
 
 	/// <summary>Initializes a new instance of the <see cref="BmpRaster"/> class with specified dimensions and color depth.</summary>
@@ -54,7 +57,7 @@ public sealed class BmpRaster : Raster, IBmpRaster
 	public BmpRaster(int width, int height, BmpColorDepth colorDepth) : this(width, height)
 	{
 		ColorDepth            = colorDepth;
-		Metadata.BitsPerPixel = (ushort)colorDepth;
+		BmpMetadata.BitsPerPixel = (ushort)colorDepth;
 
 		// Initialize default bit masks for specific formats
 		InitializeDefaultBitMasks();
@@ -68,11 +71,11 @@ public sealed class BmpRaster : Raster, IBmpRaster
 	public bool HasTransparency
 		=> ColorDepth == BmpColorDepth.ThirtyTwoBit ||
 		   Compression == BmpCompression.BitFields &&
-		   Metadata.AlphaMask != 0;
+		   BmpMetadata.AlphaMask != 0;
 
 	/// <inheritdoc />
 	public bool IsTopDown
-		=> Metadata.Height < 0;
+		=> BmpMetadata.Height < 0;
 
 	/// <inheritdoc />
 	public uint PixelDataSize
@@ -108,7 +111,7 @@ public sealed class BmpRaster : Raster, IBmpRaster
 	{
 		// Return current bit masks or defaults based on color depth and compression
 		if (Compression == BmpCompression.BitFields)
-			return (Metadata.RedMask, Metadata.GreenMask, Metadata.BlueMask, Metadata.AlphaMask);
+			return (BmpMetadata.RedMask, BmpMetadata.GreenMask, BmpMetadata.BlueMask, BmpMetadata.AlphaMask);
 
 		// Return default masks based on color depth
 		return ColorDepth switch
@@ -128,14 +131,14 @@ public sealed class BmpRaster : Raster, IBmpRaster
 		// Convert to 24-bit RGB
 		ColorDepth            = BmpColorDepth.TwentyFourBit;
 		Compression           = BmpCompression.Rgb;
-		Metadata.BitsPerPixel = (ushort)ColorDepth;
-		Metadata.Compression  = Compression;
+		BmpMetadata.BitsPerPixel = (ushort)ColorDepth;
+		BmpMetadata.Compression  = Compression;
 
 		// Clear bit masks and palette
-		Metadata.RedMask   = 0;
-		Metadata.GreenMask = 0;
-		Metadata.BlueMask  = 0;
-		Metadata.AlphaMask = 0;
+		BmpMetadata.RedMask   = 0;
+		BmpMetadata.GreenMask = 0;
+		BmpMetadata.BlueMask  = 0;
+		BmpMetadata.AlphaMask = 0;
 		ColorPalette       = null;
 	}
 
@@ -148,7 +151,7 @@ public sealed class BmpRaster : Raster, IBmpRaster
 		if (palette.Length % BmpConstants.PaletteEntrySize != 0)
 			throw new ArgumentException($"Palette size must be a multiple of {BmpConstants.PaletteEntrySize} bytes (BGRA format).", nameof(palette));
 
-		var maxColors      = Metadata.PaletteColors;
+		var maxColors      = BmpMetadata.PaletteColors;
 		var providedColors = palette.Length / BmpConstants.PaletteEntrySize;
 
 		if (providedColors > maxColors)
@@ -156,8 +159,8 @@ public sealed class BmpRaster : Raster, IBmpRaster
 
 		ColorPalette = new byte[palette.Length];
 		Array.Copy(palette, ColorPalette, palette.Length);
-		Metadata.ColorPalette = ColorPalette;
-		Metadata.ColorsUsed   = (uint)providedColors;
+		BmpMetadata.ColorPalette = ColorPalette;
+		BmpMetadata.ColorsUsed   = (uint)providedColors;
 	}
 
 	/// <inheritdoc />
@@ -167,11 +170,11 @@ public sealed class BmpRaster : Raster, IBmpRaster
 			throw new InvalidOperationException($"Bit masks are only supported for 16-bit and 32-bit images, not {ColorDepth}.");
 
 		Compression          = BmpCompression.BitFields;
-		Metadata.Compression = Compression;
-		Metadata.RedMask     = redMask;
-		Metadata.GreenMask   = greenMask;
-		Metadata.BlueMask    = blueMask;
-		Metadata.AlphaMask   = alphaMask;
+		BmpMetadata.Compression = Compression;
+		BmpMetadata.RedMask     = redMask;
+		BmpMetadata.GreenMask   = greenMask;
+		BmpMetadata.BlueMask    = blueMask;
+		BmpMetadata.AlphaMask   = alphaMask;
 	}
 
 	/// <inheritdoc />
@@ -198,7 +201,7 @@ public sealed class BmpRaster : Raster, IBmpRaster
 			return false;
 
 		// Validate palette requirements
-		if (HasPalette && ColorPalette == null && Metadata.ColorsUsed > 0)
+		if (HasPalette && ColorPalette == null && BmpMetadata.ColorsUsed > 0)
 			return false;
 
 		return true;
