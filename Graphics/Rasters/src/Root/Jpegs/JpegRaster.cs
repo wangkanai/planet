@@ -175,7 +175,7 @@ public class JpegRaster : Raster, IJpegRaster
 		{
 			// For large metadata, clear in stages with yielding
 			await Task.Yield();
-			Metadata.IccProfile = null;
+			Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
 			
 			await Task.Yield();
 			Metadata.CustomExifTags.Clear();
