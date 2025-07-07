@@ -2,4 +2,13 @@
 
 namespace Wangkanai.Graphics.Vectors;
 
+/// <summary>
+/// Defines the contract for vector graphics metadata.
+/// This interface serves as a marker for vector-specific metadata implementations.
+/// </summary>
+/// <remarks>
+/// Unlike raster images which have fixed pixel dimensions, vector graphics
+/// are resolution-independent and may have different metadata requirements
+/// such as viewbox dimensions, path counts, or coordinate systems.
+/// </remarks>
 public interface IVectorMetadata : IMetadata { }

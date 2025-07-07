@@ -2,4 +2,8 @@
 
 namespace Wangkanai.Graphics;
 
+/// <summary>
+/// Base interface for all metadata implementations in the Graphics library.
+/// Provides a common contract for resource cleanup through disposable patterns.
+/// </summary>
 public interface IMetadata : IDisposable, IAsyncDisposable { }
