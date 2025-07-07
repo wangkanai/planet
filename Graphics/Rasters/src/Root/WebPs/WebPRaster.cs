@@ -157,7 +157,7 @@ public class WebPRaster : Raster, IWebPRaster
 				size += chunk.Length;
 			
 			// Add estimated size of animation frames
-			if (IsAnimated)
+			if (Metadata.HasAnimation)
 			{
 				foreach (var frame in Metadata.AnimationFrames)
 					size += frame.Data.Length;
