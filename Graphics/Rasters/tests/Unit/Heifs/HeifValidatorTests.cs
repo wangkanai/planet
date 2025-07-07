@@ -1,6 +1,5 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Graphics.Rasters.Heifs;
 using Wangkanai.Graphics.Rasters.Metadatas;
 
 namespace Wangkanai.Graphics.Rasters.Heifs;
@@ -428,7 +427,7 @@ public class HeifValidatorTests
 	public void ValidateMetadata_WithInvalidXmpData_ReturnsFailure()
 	{
 		// Arrange
-		var metadata = new HeifMetadata { XmpData = new byte[5] }; // Too small
+		var metadata = new HeifMetadata { XmpData = "<x>" }; // Too small
 
 		// Act
 		var result = HeifValidator.ValidateMetadata(metadata);
@@ -482,24 +481,28 @@ public class HeifValidatorTests
 	public void ValidateMetadata_WithNegativeCameraSettings_ReturnsFailure(object value, string expectedError)
 	{
 		// Arrange
-		var metadata = new HeifMetadata();
+		var metadata = new HeifMetadata
+		{
+			CameraMetadata = new CameraMetadata()
+		};
 
 		switch (expectedError)
 		{
 			case string s when s.Contains("Aperture"):
-				metadata.Aperture = (double)value;
+				metadata.CameraMetadata.Aperture = (double)value;
 				break;
 			case string s when s.Contains("Exposure"):
-				metadata.ExposureTime = (double)value;
+				metadata.CameraMetadata.ExposureTime = (double)value;
 				break;
 			case string s when s.Contains("Focal"):
-				metadata.FocalLength = (double)value;
+				metadata.CameraMetadata.FocalLength = (double)value;
 				break;
 			case string s when s.Contains("ISO"):
-				metadata.IsoSensitivity = (int)value;
+				metadata.CameraMetadata.IsoSensitivity = (int)value;
 				break;
 			case string s when s.Contains("Pixel"):
-				metadata.PixelDensity = (double)value;
+				metadata.CameraMetadata.XResolution = (double)value;
+				metadata.CameraMetadata.YResolution = (double)value;
 				break;
 		}
 
