@@ -2,7 +2,7 @@
 
 using Wangkanai.Graphics.Rasters.Jpegs;
 
-namespace Wangkanai.Graphics.Rasters.UnitTests.Jpegs;
+namespace Wangkanai.Graphics.Rasters.Jpegs;
 
 public class JpegMetadataTests
 {

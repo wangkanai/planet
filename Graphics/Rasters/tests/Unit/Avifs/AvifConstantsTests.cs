@@ -2,7 +2,7 @@
 
 using Wangkanai.Graphics.Rasters.Avifs;
 
-namespace Wangkanai.Graphics.Rasters.UnitTests.Avifs;
+namespace Wangkanai.Graphics.Rasters.Avifs;
 
 public class AvifConstantsTests
 {

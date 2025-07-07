@@ -3,7 +3,7 @@
 using System.Drawing;
 using Wangkanai.Graphics.Rasters.Jpeg2000s;
 
-namespace Wangkanai.Graphics.Rasters.UnitTests.Jpeg2000s;
+namespace Wangkanai.Graphics.Rasters.Jpeg2000s;
 
 public class Jpeg2000ValidatorTests
 {

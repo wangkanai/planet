@@ -2,7 +2,7 @@
 
 using Wangkanai.Graphics.Rasters.Avifs;
 
-namespace Wangkanai.Graphics.Rasters.UnitTests.Avifs;
+namespace Wangkanai.Graphics.Rasters.Avifs;
 
 public class AvifRasterTests
 {
@@ -55,9 +55,9 @@ public class AvifRasterTests
 	public void BitDepth_WithValidValues_ShouldSet(int bitDepth)
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		avif.BitDepth = bitDepth;
-		
+
 		Assert.Equal(bitDepth, avif.BitDepth);
 		Assert.Equal(bitDepth, avif.Metadata.BitDepth);
 	}
@@ -70,7 +70,7 @@ public class AvifRasterTests
 	public void BitDepth_WithInvalidValues_ShouldThrowArgumentException(int bitDepth)
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		Assert.Throws<ArgumentException>(() => avif.BitDepth = bitDepth);
 	}
 
@@ -81,9 +81,9 @@ public class AvifRasterTests
 	public void Quality_WithValidValues_ShouldSet(int quality)
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		avif.Quality = quality;
-		
+
 		Assert.Equal(quality, avif.Quality);
 		Assert.Equal(quality, avif.Metadata.Quality);
 	}
@@ -96,7 +96,7 @@ public class AvifRasterTests
 	public void Quality_WithInvalidValues_ShouldThrowArgumentException(int quality)
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		Assert.Throws<ArgumentException>(() => avif.Quality = quality);
 	}
 
@@ -107,9 +107,9 @@ public class AvifRasterTests
 	public void Speed_WithValidValues_ShouldSet(int speed)
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		avif.Speed = speed;
-		
+
 		Assert.Equal(speed, avif.Speed);
 		Assert.Equal(speed, avif.Metadata.Speed);
 	}
@@ -122,7 +122,7 @@ public class AvifRasterTests
 	public void Speed_WithInvalidValues_ShouldThrowArgumentException(int speed)
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		Assert.Throws<ArgumentException>(() => avif.Speed = speed);
 	}
 
@@ -162,9 +162,9 @@ public class AvifRasterTests
 	public void ColorSpace_WithValidValues_ShouldSet(AvifColorSpace colorSpace)
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		avif.ColorSpace = colorSpace;
-		
+
 		Assert.Equal(colorSpace, avif.ColorSpace);
 		Assert.Equal(colorSpace, avif.Metadata.ColorSpace);
 	}
@@ -177,9 +177,9 @@ public class AvifRasterTests
 	public void ChromaSubsampling_WithValidValues_ShouldSet(AvifChromaSubsampling subsampling)
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		avif.ChromaSubsampling = subsampling;
-		
+
 		Assert.Equal(subsampling, avif.ChromaSubsampling);
 		Assert.Equal(subsampling, avif.Metadata.ChromaSubsampling);
 	}
@@ -235,7 +235,7 @@ public class AvifRasterTests
 	public void SetHdrMetadata_WithNullMetadata_ShouldThrowArgumentNullException()
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		Assert.Throws<ArgumentNullException>(() => avif.SetHdrMetadata(null!));
 	}
 
@@ -243,9 +243,9 @@ public class AvifRasterTests
 	public void GetEstimatedFileSize_ShouldReturnReasonableSize()
 	{
 		using var avif = new AvifRaster(1920, 1080);
-		
+
 		var estimatedSize = avif.GetEstimatedFileSize();
-		
+
 		Assert.True(estimatedSize > 0);
 		Assert.True(estimatedSize < (long)1920 * 1080 * 3); // Should be compressed
 	}
@@ -255,10 +255,10 @@ public class AvifRasterTests
 	{
 		using var lossyAvif = new AvifRaster(1920, 1080) { IsLossless = false, Quality = 50 };
 		using var losslessAvif = new AvifRaster(1920, 1080) { IsLossless = true };
-		
+
 		var lossySize = lossyAvif.GetEstimatedFileSize();
 		var losslessSize = losslessAvif.GetEstimatedFileSize();
-		
+
 		Assert.True(losslessSize > lossySize);
 	}
 
@@ -267,10 +267,10 @@ public class AvifRasterTests
 	{
 		using var avif8bit = new AvifRaster(1920, 1080) { BitDepth = 8 };
 		using var avif10bit = new AvifRaster(1920, 1080) { BitDepth = 10 };
-		
+
 		var size8bit = avif8bit.GetEstimatedFileSize();
 		var size10bit = avif10bit.GetEstimatedFileSize();
-		
+
 		Assert.True(size10bit > size8bit);
 	}
 
@@ -279,10 +279,10 @@ public class AvifRasterTests
 	{
 		using var avifWithoutAlpha = new AvifRaster(1920, 1080, false);
 		using var avifWithAlpha = new AvifRaster(1920, 1080, true);
-		
+
 		var sizeWithoutAlpha = avifWithoutAlpha.GetEstimatedFileSize();
 		var sizeWithAlpha = avifWithAlpha.GetEstimatedFileSize();
-		
+
 		Assert.True(sizeWithAlpha > sizeWithoutAlpha);
 	}
 
@@ -295,7 +295,7 @@ public class AvifRasterTests
 			BitDepth = 8,
 			ColorSpace = AvifColorSpace.Srgb
 		};
-		
+
 		Assert.True(avif.IsValid());
 	}
 
@@ -303,9 +303,9 @@ public class AvifRasterTests
 	public async Task EncodeAsync_WithValidConfiguration_ShouldReturnData()
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		var encodedData = await avif.EncodeAsync();
-		
+
 		Assert.NotNull(encodedData);
 		Assert.True(encodedData.Length > 0);
 	}
@@ -320,9 +320,9 @@ public class AvifRasterTests
 			Speed = AvifConstants.SpeedPresets.Slow,
 			IsLossless = true
 		};
-		
+
 		var encodedData = await avif.EncodeAsync(options);
-		
+
 		Assert.NotNull(encodedData);
 		Assert.True(encodedData.Length > 0);
 		Assert.Equal(100, avif.Quality); // Should be 100 for lossless
@@ -334,10 +334,10 @@ public class AvifRasterTests
 	{
 		using var sourceAvif = new AvifRaster(200, 150);
 		var encodedData = await sourceAvif.EncodeAsync();
-		
+
 		using var targetAvif = new AvifRaster();
 		await targetAvif.DecodeAsync(encodedData);
-		
+
 		Assert.True(targetAvif.Width > 0);
 		Assert.True(targetAvif.Height > 0);
 	}
@@ -348,7 +348,7 @@ public class AvifRasterTests
 	public async Task DecodeAsync_WithInvalidData_ShouldThrowArgumentException(byte[]? data)
 	{
 		using var avif = new AvifRaster();
-		
+
 		await Assert.ThrowsAsync<ArgumentException>(() => avif.DecodeAsync(data!));
 	}
 
@@ -356,9 +356,9 @@ public class AvifRasterTests
 	public async Task CreateThumbnailAsync_ShouldReturnValidData()
 	{
 		using var avif = new AvifRaster(1920, 1080);
-		
+
 		var thumbnailData = await avif.CreateThumbnailAsync(200, 200);
-		
+
 		Assert.NotNull(thumbnailData);
 		Assert.True(thumbnailData.Length > 0);
 	}
@@ -371,7 +371,7 @@ public class AvifRasterTests
 	public async Task CreateThumbnailAsync_WithInvalidDimensions_ShouldThrowArgumentException(int maxWidth, int maxHeight)
 	{
 		using var avif = new AvifRaster(1920, 1080);
-		
+
 		await Assert.ThrowsAsync<ArgumentException>(() => avif.CreateThumbnailAsync(maxWidth, maxHeight));
 	}
 
@@ -380,9 +380,9 @@ public class AvifRasterTests
 	{
 		using var avif = new AvifRaster(100, 100);
 		var iccProfile = new byte[] { 1, 2, 3, 4, 5 };
-		
+
 		avif.ApplyColorProfile(iccProfile);
-		
+
 		Assert.Same(iccProfile, avif.Metadata.IccProfile);
 	}
 
@@ -392,7 +392,7 @@ public class AvifRasterTests
 	public void ApplyColorProfile_WithInvalidProfile_ShouldThrowArgumentException(byte[]? profile)
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		Assert.Throws<ArgumentException>(() => avif.ApplyColorProfile(profile!));
 	}
 
@@ -400,9 +400,9 @@ public class AvifRasterTests
 	public void GetSupportedFeatures_ShouldReturnValidFeatures()
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		var features = avif.GetSupportedFeatures();
-		
+
 		Assert.True(features.HasFlag(AvifFeatures.BasicCodec));
 		Assert.True(features.HasFlag(AvifFeatures.TenBitDepth));
 		Assert.True(features.HasFlag(AvifFeatures.AlphaChannel));
@@ -414,7 +414,7 @@ public class AvifRasterTests
 		using var avif = new AvifRaster(8000, 8000) { BitDepth = 12 };
 		// Need actual large metadata content to trigger large metadata threshold
 		avif.Metadata.ExifData = new byte[2 * 1024 * 1024]; // 2MB of EXIF data
-		
+
 		Assert.True(avif.HasLargeMetadata);
 	}
 
@@ -422,7 +422,7 @@ public class AvifRasterTests
 	public void HasLargeMetadata_WithSmallImage_ShouldReturnFalse()
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		Assert.False(avif.HasLargeMetadata);
 	}
 
@@ -430,9 +430,9 @@ public class AvifRasterTests
 	public void EstimatedMetadataSize_ShouldIncludeMetadataSize()
 	{
 		using var avif = new AvifRaster(1920, 1080);
-		
+
 		var estimatedSize = avif.EstimatedMetadataSize;
-		
+
 		Assert.True(estimatedSize > 0);
 		Assert.True(estimatedSize >= avif.Metadata.EstimatedMemoryUsage);
 	}
@@ -441,7 +441,7 @@ public class AvifRasterTests
 	public void ThreadCount_ShouldDefaultToReasonableValue()
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		Assert.Equal(0, avif.ThreadCount); // Default is 0 (auto-detect)
 	}
 
@@ -449,7 +449,7 @@ public class AvifRasterTests
 	public void Dispose_ShouldNotThrowWhenCalledMultipleTimes()
 	{
 		var avif = new AvifRaster(100, 100);
-		
+
 		avif.Dispose();
 		avif.Dispose(); // Should not throw
 	}
@@ -458,7 +458,7 @@ public class AvifRasterTests
 	public async Task DisposeAsync_ShouldNotThrowWhenCalledMultipleTimes()
 	{
 		var avif = new AvifRaster(100, 100);
-		
+
 		await avif.DisposeAsync();
 		await avif.DisposeAsync(); // Should not throw
 	}
@@ -468,11 +468,11 @@ public class AvifRasterTests
 	{
 		var avif = new AvifRaster(100, 100);
 		avif.Dispose();
-		
+
 		// Width and Height seem to be allowed after disposal
 		Assert.Equal(100, avif.Width);
 		Assert.Equal(100, avif.Height);
-		
+
 		// But operations that require object state should throw
 		Assert.Throws<ObjectDisposedException>(() => avif.Quality);
 		Assert.Throws<ObjectDisposedException>(() => avif.BitDepth);
@@ -483,7 +483,7 @@ public class AvifRasterTests
 	{
 		var avif = new AvifRaster(100, 100);
 		avif.Dispose();
-		
+
 		Assert.Throws<ObjectDisposedException>(() => avif.Quality = 50);
 		Assert.Throws<ObjectDisposedException>(() => avif.BitDepth = 10);
 		Assert.Throws<ObjectDisposedException>(() => avif.HasAlpha = true);

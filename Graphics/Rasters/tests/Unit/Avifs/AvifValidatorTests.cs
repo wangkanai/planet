@@ -2,7 +2,7 @@
 
 using Wangkanai.Graphics.Rasters.Avifs;
 
-namespace Wangkanai.Graphics.Rasters.UnitTests.Avifs;
+namespace Wangkanai.Graphics.Rasters.Avifs;
 
 public class AvifValidatorTests
 {
@@ -46,7 +46,7 @@ public class AvifValidatorTests
 		// Create raster with dimensions that exceed the maximum directly
 		// The validator checks avif.Width/Height, not metadata.Width/Height for "exceeds maximum"
 		using var avif = new AvifRaster(100, 100);
-		
+
 		// To test "exceeds maximum", we need to set the raster properties, not just metadata
 		// But this test is actually testing the metadata mismatch scenario
 		avif.Metadata.Width = AvifConstants.MaxDimension + 1;
@@ -107,14 +107,14 @@ public class AvifValidatorTests
 		{
 			BitDepth = 8
 		};
-		
+
 		avif.SetHdrMetadata(new HdrMetadata
 		{
 			Format = HdrFormat.Hdr10,
 			MaxLuminance = 4000,
 			MinLuminance = 0.01
 		});
-		
+
 		// Manually set bit depth back to 8 after HDR sets it to 10
 		avif.Metadata.BitDepth = 8;
 
@@ -234,7 +234,7 @@ public class AvifValidatorTests
 		{
 			ChromaSubsampling = AvifChromaSubsampling.Yuv420
 		};
-		
+
 		avif.SetHdrMetadata(new HdrMetadata
 		{
 			Format = HdrFormat.Hdr10,
@@ -252,7 +252,7 @@ public class AvifValidatorTests
 	public void Validate_WithInvalidHdrLuminance_ShouldReturnErrors()
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		avif.SetHdrMetadata(new HdrMetadata
 		{
 			Format = HdrFormat.Hdr10,
@@ -270,7 +270,7 @@ public class AvifValidatorTests
 	public void Validate_WithNegativeMinLuminance_ShouldReturnErrors()
 	{
 		using var avif = new AvifRaster(100, 100);
-		
+
 		avif.SetHdrMetadata(new HdrMetadata
 		{
 			Format = HdrFormat.Hdr10,
@@ -350,7 +350,7 @@ public class AvifValidatorTests
 	public void Validate_WithVeryLargeImage_ShouldReturnMemoryWarnings()
 	{
 		// Use larger dimensions to exceed MaxPixelBufferSizeMB (1024MB)
-		// 25000*25000*4*(12/8) = 1.875GB which exceeds 1024MB  
+		// 25000*25000*4*(12/8) = 1.875GB which exceeds 1024MB
 		using var avif = new AvifRaster(25000, 25000)
 		{
 			BitDepth = 12,
@@ -387,13 +387,13 @@ public class AvifValidatorTests
 	public void IsValidAvifSignature_WithInvalidBoxType_ShouldReturnFalse()
 	{
 		var data = new byte[28];
-		
+
 		// Write box size
 		data[0] = 0x00;
 		data[1] = 0x00;
 		data[2] = 0x00;
 		data[3] = 0x1C;
-		
+
 		// Write invalid box type (not "ftyp")
 		data[4] = (byte)'i';
 		data[5] = (byte)'n';
@@ -409,19 +409,19 @@ public class AvifValidatorTests
 	public void IsValidAvifSignature_WithInvalidBrand_ShouldReturnFalse()
 	{
 		var data = new byte[28];
-		
+
 		// Write box size
 		data[0] = 0x00;
 		data[1] = 0x00;
 		data[2] = 0x00;
 		data[3] = 0x1C;
-		
+
 		// Write ftyp box type
 		data[4] = (byte)'f';
 		data[5] = (byte)'t';
 		data[6] = (byte)'y';
 		data[7] = (byte)'p';
-		
+
 		// Write invalid brand
 		data[8] = (byte)'i';
 		data[9] = (byte)'n';
@@ -486,35 +486,35 @@ public class AvifValidatorTests
 	private static byte[] CreateValidAvifSignature(string brand = "avif")
 	{
 		var data = new byte[28];
-		
+
 		// Write box size (28 bytes)
 		data[0] = 0x00;
 		data[1] = 0x00;
 		data[2] = 0x00;
 		data[3] = 0x1C;
-		
+
 		// Write ftyp box type
 		data[4] = (byte)'f';
 		data[5] = (byte)'t';
 		data[6] = (byte)'y';
 		data[7] = (byte)'p';
-		
+
 		// Write major brand
 		var brandBytes = System.Text.Encoding.ASCII.GetBytes(brand);
 		Array.Copy(brandBytes, 0, data, 8, Math.Min(4, brandBytes.Length));
-		
+
 		// Write minor version (0)
 		data[12] = 0x00;
 		data[13] = 0x00;
 		data[14] = 0x00;
 		data[15] = 0x00;
-		
+
 		// Write compatible brands
 		Array.Copy(brandBytes, 0, data, 16, Math.Min(4, brandBytes.Length));
-		
+
 		var mif1Bytes = System.Text.Encoding.ASCII.GetBytes("mif1");
 		Array.Copy(mif1Bytes, 0, data, 20, 4);
-		
+
 		return data;
 	}
 }

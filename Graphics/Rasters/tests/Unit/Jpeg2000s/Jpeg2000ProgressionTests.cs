@@ -2,7 +2,7 @@
 
 using Wangkanai.Graphics.Rasters.Jpeg2000s;
 
-namespace Wangkanai.Graphics.Rasters.UnitTests.Jpeg2000s;
+namespace Wangkanai.Graphics.Rasters.Jpeg2000s;
 
 public class Jpeg2000ProgressionTests
 {
@@ -192,13 +192,13 @@ public class Jpeg2000ProgressionTests
 		// Act & Assert
 		foreach (var progression in spatialProgressions)
 		{
-			Assert.True(progression.SupportsEfficientSpatialAccess(), 
+			Assert.True(progression.SupportsEfficientSpatialAccess(),
 				$"{progression} should support efficient spatial access");
 		}
 
 		foreach (var progression in nonSpatialProgressions)
 		{
-			Assert.False(progression.SupportsEfficientSpatialAccess(), 
+			Assert.False(progression.SupportsEfficientSpatialAccess(),
 				$"{progression} should not support efficient spatial access");
 		}
 	}
@@ -223,13 +223,13 @@ public class Jpeg2000ProgressionTests
 		// Act & Assert
 		foreach (var progression in qualityProgressions)
 		{
-			Assert.True(progression.SupportsEfficientQualityScaling(), 
+			Assert.True(progression.SupportsEfficientQualityScaling(),
 				$"{progression} should support efficient quality scaling");
 		}
 
 		foreach (var progression in nonQualityProgressions)
 		{
-			Assert.False(progression.SupportsEfficientQualityScaling(), 
+			Assert.False(progression.SupportsEfficientQualityScaling(),
 				$"{progression} should not support efficient quality scaling");
 		}
 	}
@@ -254,13 +254,13 @@ public class Jpeg2000ProgressionTests
 		// Act & Assert
 		foreach (var progression in resolutionProgressions)
 		{
-			Assert.True(progression.SupportsEfficientResolutionScaling(), 
+			Assert.True(progression.SupportsEfficientResolutionScaling(),
 				$"{progression} should support efficient resolution scaling");
 		}
 
 		foreach (var progression in nonResolutionProgressions)
 		{
-			Assert.False(progression.SupportsEfficientResolutionScaling(), 
+			Assert.False(progression.SupportsEfficientResolutionScaling(),
 				$"{progression} should not support efficient resolution scaling");
 		}
 	}

@@ -2,7 +2,7 @@
 
 using Wangkanai.Graphics.Rasters.Bmps;
 
-namespace Wangkanai.Graphics.Rasters.UnitTests.Bmps;
+namespace Wangkanai.Graphics.Rasters.Bmps;
 
 public class BmpValidatorTests
 {
@@ -42,7 +42,7 @@ public class BmpValidatorTests
 	{
 		// Arrange - use dimensions larger than int.MaxValue to trigger overflow validation
 		var bmp = new BmpRaster(100, 100, BmpColorDepth.TwentyFourBit);
-		
+
 		// Set dimensions that would cause totalPixels > int.MaxValue
 		// Using large values that multiply to exceed int.MaxValue but are individually within limits
 		bmp.Width = 100000;
@@ -229,7 +229,7 @@ public class BmpValidatorTests
 		var bmp = new BmpRaster(100, 100, BmpColorDepth.SixteenBit);
 		bmp.Compression = BmpCompression.BitFields;
 		bmp.Metadata.Compression = BmpCompression.BitFields; // Update metadata to match
-		
+
 		// Explicitly set all masks to zero to trigger validation error
 		bmp.SetBitMasks(0, 0, 0, 0);
 

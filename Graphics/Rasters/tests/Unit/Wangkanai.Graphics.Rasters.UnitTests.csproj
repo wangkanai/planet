@@ -1,4 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Wangkanai.Graphics.Rasters</RootNamespace>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Root\Wangkanai.Graphics.Rasters.csproj" />
   </ItemGroup>

@@ -1,10 +1,8 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Graphics.Rasters;
-using Wangkanai.Graphics.Rasters.Heifs;
 using Wangkanai.Graphics.Rasters.Metadatas;
 
-namespace Wangkanai.Graphics.Rasters.Tests.Unit.Heifs;
+namespace Wangkanai.Graphics.Rasters.Heifs;
 
 public class HeifRasterTests
 {
@@ -421,7 +419,7 @@ public class HeifRasterTests
 		// Arrange
 		var heif = new HeifRaster(1920, 1080);
 		heif.Metadata.ExifData = new byte[1024];
-		heif.Metadata.XmpData = new byte[512];
+		heif.Metadata.XmpData = "<x:xmpmeta>test metadata</x:xmpmeta>";
 		heif.SetHdrMetadata(new HdrMetadata());
 
 		// Act

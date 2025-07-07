@@ -2,7 +2,7 @@
 
 using Wangkanai.Graphics.Rasters.Avifs;
 
-namespace Wangkanai.Graphics.Rasters.UnitTests.Avifs;
+namespace Wangkanai.Graphics.Rasters.Avifs;
 
 public class AvifMetadataTests
 {
@@ -96,7 +96,7 @@ public class AvifMetadataTests
 		};
 
 		var estimatedSize = metadata.EstimatedMemoryUsage;
-		
+
 		// Should include pixel data, metadata, EXIF, and ICC profile
 		Assert.True(estimatedSize > 0);
 		Assert.True(estimatedSize > 64 * 1024 + 128 * 1024); // At least EXIF + ICC
@@ -117,9 +117,9 @@ public class AvifMetadataTests
 		};
 
 		var estimatedSize = metadata.EstimatedMemoryUsage;
-		
+
 		Assert.True(estimatedSize > 0);
-		
+
 		// All these configurations have the same base metadata size since dimensions don't affect it
 		Assert.False(estimatedSize > ImageConstants.LargeMetadataThreshold);
 	}
@@ -148,7 +148,7 @@ public class AvifMetadataTests
 		Assert.Equal(original.ColorSpace, clone.ColorSpace);
 		Assert.Equal(original.Quality, clone.Quality);
 		Assert.Equal(original.HasAlpha, clone.HasAlpha);
-		
+
 		// Should be deep copy of arrays
 		Assert.NotSame(original.ExifData, clone.ExifData);
 		Assert.NotSame(original.IccProfile, clone.IccProfile);
@@ -285,7 +285,7 @@ public class AvifMetadataTests
 		var metadata = new AvifMetadata();
 
 		Assert.False(metadata.UsesFilmGrain);
-		
+
 		metadata.UsesFilmGrain = true;
 		Assert.True(metadata.UsesFilmGrain);
 	}

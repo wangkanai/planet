@@ -1,10 +1,8 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Graphics.Rasters;
-using Wangkanai.Graphics.Rasters.Heifs;
 using Wangkanai.Graphics.Rasters.Metadatas;
 
-namespace Wangkanai.Graphics.Rasters.Tests.Unit.Heifs;
+namespace Wangkanai.Graphics.Rasters.Heifs;
 
 public class HeifMetadataTests
 {
@@ -198,7 +196,6 @@ public class HeifMetadataTests
 		Assert.Equal(original.GpsCoordinates.Latitude, clone.GpsCoordinates!.Latitude);
 		Assert.Equal(original.GpsCoordinates.Longitude, clone.GpsCoordinates.Longitude);
 		Assert.Equal(original.Orientation, clone.Orientation);
-		Assert.Equal(original.PixelDensity, clone.PixelDensity);
 		Assert.Equal(original.ColorSpaceInfo, clone.ColorSpaceInfo);
 		Assert.Equal(original.WhiteBalance, clone.WhiteBalance);
 		Assert.Equal(original.CodecParameters["profile"], clone.CodecParameters!["profile"]);
@@ -238,7 +235,7 @@ public class HeifMetadataTests
 		var metadata = new HeifMetadata
 		{
 			ExifData = new byte[] { 1, 2, 3 },
-			XmpData = new byte[] { 4, 5, 6 },
+			XmpData = "<x:xmpmeta>test</x:xmpmeta>",
 			IccProfile = new byte[] { 7, 8, 9 },
 			HdrMetadata = new HdrMetadata(),
 			Software = "Test Software",
@@ -326,9 +323,23 @@ public class HeifMetadataTests
 	{
 		// Arrange
 		var metadata = new HeifMetadata();
-		var testTime = DateTimeOffset.UtcNow;
+		var testTime = DateTime.UtcNow;
 		var gpsCoords = new GpsCoordinates { Latitude = 40.7128, Longitude = -74.0060 };
 		var hdrMetadata = new HdrMetadata { MaxLuminance = 4000.0 };
+		var cameraMetadata = new CameraMetadata
+		{
+			CameraMake = "Canon",
+			CameraModel = "EOS R5",
+			LensMake = "Canon",
+			LensModel = "RF 24-70mm f/2.8L",
+			FocalLength = 50.0,
+			Aperture = 2.8,
+			ExposureTime = 1.0 / 125.0,
+			IsoSensitivity = 800,
+			XResolution = 300.0,
+			YResolution = 300.0,
+			ResolutionUnit = 2 // Inches
+		};
 
 		// Act
 		metadata.CreationTime = testTime;
@@ -337,17 +348,9 @@ public class HeifMetadataTests
 		metadata.Description = "Test Description";
 		metadata.Copyright = "© 2025 Test";
 		metadata.Author = "Test Author";
-		metadata.CameraMake = "Canon";
-		metadata.CameraModel = "EOS R5";
-		metadata.LensMake = "Canon";
-		metadata.LensModel = "RF 24-70mm f/2.8L";
-		metadata.FocalLength = 50.0;
-		metadata.Aperture = 2.8;
-		metadata.ExposureTime = 1.0 / 125.0;
-		metadata.IsoSensitivity = 800;
+		metadata.CameraMetadata = cameraMetadata;
 		metadata.GpsCoordinates = gpsCoords;
 		metadata.Orientation = ImageOrientation.Rotate180;
-		metadata.PixelDensity = 300.0;
 		metadata.ColorSpaceInfo = "Adobe RGB";
 		metadata.WhiteBalance = "Daylight";
 		metadata.HdrMetadata = hdrMetadata;
@@ -359,17 +362,20 @@ public class HeifMetadataTests
 		Assert.Equal("Test Description", metadata.Description);
 		Assert.Equal("© 2025 Test", metadata.Copyright);
 		Assert.Equal("Test Author", metadata.Author);
-		Assert.Equal("Canon", metadata.CameraMake);
-		Assert.Equal("EOS R5", metadata.CameraModel);
-		Assert.Equal("Canon", metadata.LensMake);
-		Assert.Equal("RF 24-70mm f/2.8L", metadata.LensModel);
-		Assert.Equal(50.0, metadata.FocalLength);
-		Assert.Equal(2.8, metadata.Aperture);
-		Assert.Equal(1.0 / 125.0, metadata.ExposureTime);
-		Assert.Equal(800, metadata.IsoSensitivity);
+		Assert.NotNull(metadata.CameraMetadata);
+		Assert.Equal("Canon", metadata.CameraMetadata.CameraMake);
+		Assert.Equal("EOS R5", metadata.CameraMetadata.CameraModel);
+		Assert.Equal("Canon", metadata.CameraMetadata.LensMake);
+		Assert.Equal("RF 24-70mm f/2.8L", metadata.CameraMetadata.LensModel);
+		Assert.Equal(50.0, metadata.CameraMetadata.FocalLength);
+		Assert.Equal(2.8, metadata.CameraMetadata.Aperture);
+		Assert.Equal(1.0 / 125.0, metadata.CameraMetadata.ExposureTime);
+		Assert.Equal(800, metadata.CameraMetadata.IsoSensitivity);
+		Assert.Equal(300.0, metadata.CameraMetadata.XResolution);
+		Assert.Equal(300.0, metadata.CameraMetadata.YResolution);
+		Assert.Equal(2, metadata.CameraMetadata.ResolutionUnit);
 		Assert.Equal(gpsCoords, metadata.GpsCoordinates);
 		Assert.Equal(ImageOrientation.Rotate180, metadata.Orientation);
-		Assert.Equal(300.0, metadata.PixelDensity);
 		Assert.Equal("Adobe RGB", metadata.ColorSpaceInfo);
 		Assert.Equal("Daylight", metadata.WhiteBalance);
 		Assert.Equal(hdrMetadata, metadata.HdrMetadata);

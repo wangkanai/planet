@@ -1,6 +1,5 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Graphics.Rasters;
 using Wangkanai.Graphics.Rasters.Heifs;
 using Wangkanai.Graphics.Rasters.Metadatas;
 
@@ -254,15 +253,17 @@ public class HeifExamplesTests
 		Assert.Equal("Demonstration HEIF image created with Wangkanai Graphics Library", heif.Metadata.Description);
 		Assert.Equal("© 2025 Wangkanai", heif.Metadata.Copyright);
 		Assert.Equal("Graphics Library", heif.Metadata.Author);
-		Assert.Equal("Demo Camera", heif.Metadata.CameraMake);
-		Assert.Equal("Model X", heif.Metadata.CameraModel);
-		Assert.Equal("Demo Lens", heif.Metadata.LensMake);
-		Assert.Equal("50mm f/1.8", heif.Metadata.LensModel);
-		Assert.Equal(50.0, heif.Metadata.FocalLength);
-		Assert.Equal(1.8, heif.Metadata.Aperture);
-		Assert.Equal(1.0 / 60.0, heif.Metadata.ExposureTime);
-		Assert.Equal(100, heif.Metadata.IsoSensitivity);
-		Assert.Equal(300.0, heif.Metadata.PixelDensity);
+		Assert.NotNull(heif.Metadata.CameraMetadata);
+		Assert.Equal("Demo Camera", heif.Metadata.CameraMetadata.CameraMake);
+		Assert.Equal("Model X", heif.Metadata.CameraMetadata.CameraModel);
+		Assert.Equal("Demo Lens", heif.Metadata.CameraMetadata.LensMake);
+		Assert.Equal("50mm f/1.8", heif.Metadata.CameraMetadata.LensModel);
+		Assert.Equal(50.0, heif.Metadata.CameraMetadata.FocalLength);
+		Assert.Equal(1.8, heif.Metadata.CameraMetadata.Aperture);
+		Assert.Equal(1.0 / 60.0, heif.Metadata.CameraMetadata.ExposureTime);
+		Assert.Equal(100, heif.Metadata.CameraMetadata.IsoSensitivity);
+		Assert.Equal(300.0, heif.Metadata.CameraMetadata.XResolution);
+		Assert.Equal(300.0, heif.Metadata.CameraMetadata.YResolution);
 		Assert.Equal("sRGB", heif.Metadata.ColorSpaceInfo);
 		Assert.Equal("Auto", heif.Metadata.WhiteBalance);
 		Assert.NotNull(heif.Metadata.CreationTime);
@@ -284,6 +285,63 @@ public class HeifExamplesTests
 		Assert.Equal(2560, heif.Width);
 		Assert.Equal(1440, heif.Height);
 		Assert.True(heif.IsValid());
+	}
+
+	[Fact]
+	public void CreateProfessionalPhoto_WithValidDimensions_ReturnsConfiguredRaster()
+	{
+		// Act
+		var heif = HeifExamples.CreateProfessionalPhoto(3840, 2160);
+
+		// Assert
+		Assert.Equal(3840, heif.Width);
+		Assert.Equal(2160, heif.Height);
+		Assert.False(heif.HasAlpha);
+		Assert.Equal(HeifConstants.QualityPresets.Professional, heif.Quality);
+		Assert.Equal(HeifConstants.SpeedPresets.Slow, heif.Speed);
+		Assert.Equal(HeifChromaSubsampling.Yuv444, heif.ChromaSubsampling);
+		Assert.Equal(HeifCompression.Hevc, heif.Compression);
+		Assert.Equal(10, heif.BitDepth);
+		Assert.Equal(HeifProfile.Main10, heif.Profile);
+		Assert.True(heif.IsValid());
+
+		// Verify professional metadata
+		Assert.Equal("© Professional Photographer", heif.Metadata.Copyright);
+		Assert.Equal("John Doe Photography", heif.Metadata.Author);
+		Assert.Equal("Portrait photography with shallow depth of field", heif.Metadata.Description);
+
+		// Verify professional camera metadata
+		Assert.NotNull(heif.Metadata.CameraMetadata);
+		Assert.Equal("Canon", heif.Metadata.CameraMetadata.CameraMake);
+		Assert.Equal("EOS R5", heif.Metadata.CameraMetadata.CameraModel);
+		Assert.Equal("Canon", heif.Metadata.CameraMetadata.LensMake);
+		Assert.Equal("RF 85mm F1.2 L USM", heif.Metadata.CameraMetadata.LensModel);
+		Assert.Equal(85.0, heif.Metadata.CameraMetadata.FocalLength);
+		Assert.Equal(1.2, heif.Metadata.CameraMetadata.Aperture);
+		Assert.Equal(1.0 / 200.0, heif.Metadata.CameraMetadata.ExposureTime);
+		Assert.Equal(100, heif.Metadata.CameraMetadata.IsoSensitivity);
+		Assert.Equal(300.0, heif.Metadata.CameraMetadata.XResolution);
+		Assert.Equal(300.0, heif.Metadata.CameraMetadata.YResolution);
+		Assert.Equal(2, heif.Metadata.CameraMetadata.ResolutionUnit); // Inches
+		Assert.Equal(1, heif.Metadata.CameraMetadata.WhiteBalance); // Manual
+		Assert.Equal(0, heif.Metadata.CameraMetadata.Flash); // Flash did not fire
+		Assert.Equal(0.0, heif.Metadata.CameraMetadata.ExposureBias);
+		Assert.Equal(3, heif.Metadata.CameraMetadata.MeteringMode); // Spot
+		Assert.Equal(1, heif.Metadata.CameraMetadata.ExposureProgram); // Manual
+		Assert.Equal(10, heif.Metadata.CameraMetadata.LightSource); // Flash
+		Assert.Equal(85.0, heif.Metadata.CameraMetadata.FocalLengthIn35mm);
+		Assert.Equal(1.0, heif.Metadata.CameraMetadata.DigitalZoomRatio);
+		Assert.Equal(0, heif.Metadata.CameraMetadata.SceneCaptureType); // Standard
+		Assert.Equal(0, heif.Metadata.CameraMetadata.Contrast); // Normal
+		Assert.Equal(0, heif.Metadata.CameraMetadata.Saturation); // Normal
+		Assert.Equal(1, heif.Metadata.CameraMetadata.Sharpness); // Soft
+		Assert.Equal(2, heif.Metadata.CameraMetadata.SubjectDistanceRange); // Macro
+		Assert.Equal(2, heif.Metadata.CameraMetadata.SensingMethod); // One-chip color area sensor
+		Assert.Equal(0, heif.Metadata.CameraMetadata.GainControl); // None
+		Assert.Equal("082024001234", heif.Metadata.CameraMetadata.BodySerialNumber);
+		Assert.Equal("1234567890", heif.Metadata.CameraMetadata.LensSerialNumber);
+		Assert.NotNull(heif.Metadata.CameraMetadata.LensSpecification);
+		Assert.Equal(new[] { 85.0, 85.0, 1.2, 1.2 }, heif.Metadata.CameraMetadata.LensSpecification);
 	}
 
 	[Theory]

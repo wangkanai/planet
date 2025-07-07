@@ -2,7 +2,7 @@
 
 using Wangkanai.Graphics.Rasters.Bmps;
 
-namespace Wangkanai.Graphics.Rasters.UnitTests.Bmps;
+namespace Wangkanai.Graphics.Rasters.Bmps;
 
 public class BmpConstantsTests
 {

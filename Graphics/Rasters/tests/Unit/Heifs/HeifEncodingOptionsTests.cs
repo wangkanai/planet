@@ -1,8 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Graphics.Rasters.Heifs;
-
-namespace Wangkanai.Graphics.Rasters.Tests.Unit.Heifs;
+namespace Wangkanai.Graphics.Rasters.Heifs;
 
 public class HeifEncodingOptionsTests
 {
@@ -409,13 +407,13 @@ public class HeifEncodingOptionsTests
 		Assert.Equal(original.ThreadCount, clone.ThreadCount);
 		Assert.Equal(original.Compression, clone.Compression);
 		Assert.Equal(original.Profile, clone.Profile);
-		
+
 		// Verify collections are independent
 		Assert.NotSame(original.CodecParameters, clone.CodecParameters);
 		Assert.NotSame(original.CustomParameters, clone.CustomParameters);
 		Assert.Equal(original.CodecParameters["test"], clone.CodecParameters["test"]);
 		Assert.Equal(original.CustomParameters["custom"], clone.CustomParameters["custom"]);
-		
+
 		// Modify original to ensure independence
 		original.Quality = 50;
 		original.CodecParameters["test"] = "modified";
