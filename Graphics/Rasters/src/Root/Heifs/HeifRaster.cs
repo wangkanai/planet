@@ -184,7 +184,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 		var compressedSize = (long)(baseSize * compressionRatio);
 
 		// Add overhead for container and metadata
-		var overhead = 8192 + Metadata.EstimatedMemoryUsage;
+		var overhead = 8192 + Metadata.EstimatedMetadataSize;
 
 		return compressedSize + overhead;
 	}
