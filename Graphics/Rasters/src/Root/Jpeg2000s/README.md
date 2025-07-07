@@ -1,10 +1,13 @@
 # JPEG2000 Raster Format Implementation
 
-This directory contains a comprehensive implementation of the JPEG2000 (JP2) image format for the Wangkanai Graphics library. JPEG2000 is an advanced image compression standard that provides superior compression efficiency and advanced features compared to traditional JPEG.
+This directory contains a comprehensive implementation of the JPEG2000 (JP2) image format for the Wangkanai Graphics
+library. JPEG2000 is an advanced image compression standard that provides superior compression efficiency and advanced
+features compared to traditional JPEG.
 
 ## Features
 
 ### Core JPEG2000 Capabilities
+
 - **Wavelet-based compression** with 9/7 irreversible and 5/3 reversible filters
 - **Lossless and lossy compression** modes with configurable quality levels
 - **Multi-resolution image pyramids** for efficient scaling and thumbnails
@@ -15,12 +18,14 @@ This directory contains a comprehensive implementation of the JPEG2000 (JP2) ima
 - **Advanced metadata support** including ICC color profiles
 
 ### Geospatial Extensions (GeoJP2)
+
 - **Geospatial metadata integration** with coordinate reference systems
 - **GeoTIFF metadata embedding** for compatibility with GIS applications
 - **Geographic transformation matrices** for proper spatial referencing
 - **GML (Geography Markup Language) support** for complex geographic descriptions
 
 ### Format Compliance
+
 - **JP2 (JPEG2000 Part 1)** standard compliance
 - **Box-based file structure** following ISO/IEC 15444-1
 - **Comprehensive validation** with detailed error reporting
@@ -31,6 +36,7 @@ This directory contains a comprehensive implementation of the JPEG2000 (JP2) ima
 ### Core Classes
 
 #### `Jpeg2000Raster`
+
 The main implementation class that provides the complete JPEG2000 functionality:
 
 ```csharp
@@ -55,6 +61,7 @@ byte[] encodedData = await jpeg2000.EncodeAsync(encodingOptions);
 ```
 
 #### `Jpeg2000Metadata`
+
 Comprehensive metadata container supporting all JPEG2000 features:
 
 ```csharp
@@ -66,6 +73,7 @@ Console.WriteLine($"Tiles: {metadata.TilesAcross}x{metadata.TilesDown}");
 ```
 
 #### `Jpeg2000Validator`
+
 Advanced validation system with detailed compliance checking:
 
 ```csharp
@@ -83,6 +91,7 @@ foreach (var warning in validation.Warnings)
 ```
 
 #### `Jpeg2000Examples`
+
 Factory methods for common usage patterns:
 
 ```csharp
@@ -248,9 +257,9 @@ byte[] streamData = await webImage.EncodeAsync(streamingOptions);
 ```csharp
 // Multi-spectral image with many bands
 var scientificImage = Jpeg2000Examples.CreateMultiSpectral(
-    width: 4096, 
-    height: 4096, 
-    spectralBands: 16, 
+    width: 4096,
+    height: 4096,
+    spectralBands: 16,
     bitDepth: 12
 );
 
@@ -269,11 +278,11 @@ if (validation.IsValid)
 
 ```csharp
 // Create geospatial image (GeoJP2)
-double[] geoTransform = { 
+double[] geoTransform = {
     -180.0,  // Top-left X
     0.1,     // Pixel width
     0.0,     // X rotation
-    90.0,    // Top-left Y  
+    90.0,    // Top-left Y
     0.0,     // Y rotation
     -0.1     // Pixel height (negative for north-up)
 };
@@ -322,10 +331,10 @@ Console.WriteLine($"Compression ratio: {actualRatio:F1}:1");
 
 1. **Use appropriate tile sizes**: 512x512 or 1024x1024 for most applications
 2. **Choose optimal decomposition levels**: Usually 5-6 levels for most images
-3. **Select proper progression order**: 
-   - LRCP for quality-first streaming
-   - RLCP for resolution-first thumbnails
-   - PCRL for spatial region access
+3. **Select proper progression order**:
+	- LRCP for quality-first streaming
+	- RLCP for resolution-first thumbnails
+	- PCRL for spatial region access
 4. **Use ROI encoding sparingly**: Only for critical image regions
 5. **Consider lossless vs. lossy**: Lossless for archival, lossy for web/mobile
 
@@ -363,7 +372,7 @@ public class ImageController : ControllerBase
     {
         var jpeg2000 = Jpeg2000Examples.CreateWebOptimized(
             request.Width, request.Height, request.CompressionRatio);
-        
+
         var encoded = await jpeg2000.EncodeAsync();
         return File(encoded, "image/jp2");
     }
@@ -375,8 +384,8 @@ public class ImageController : ControllerBase
 ```csharp
 @page "/image-processor"
 
-<ImageProcessor @ref="processor" 
-                OnImageProcessed="HandleProcessed" 
+<ImageProcessor @ref="processor"
+                OnImageProcessed="HandleProcessed"
                 Format="Jpeg2000" />
 
 @code {
@@ -394,12 +403,13 @@ public class ImageController : ControllerBase
 The implementation includes comprehensive unit tests covering:
 
 - ✅ All core functionality and edge cases
-- ✅ Validation scenarios and error conditions  
+- ✅ Validation scenarios and error conditions
 - ✅ Performance benchmarks and memory usage
 - ✅ Format compliance and interoperability
 - ✅ Geospatial extensions and metadata handling
 
 Run tests with:
+
 ```bash
 dotnet test Graphics/Rasters/tests/Unit/Jpeg2000s/
 ```

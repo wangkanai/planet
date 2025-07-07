@@ -9,27 +9,33 @@ public static class TiffValidator
 	/// <param name="colorDepth">The color depth to validate.</param>
 	/// <returns>True if the color depth is valid, otherwise false.</returns>
 	public static bool IsValidColorDepth(TiffColorDepth colorDepth)
-		=> Enum.IsDefined<TiffColorDepth>(colorDepth);
+	{
+		return Enum.IsDefined<TiffColorDepth>(colorDepth);
+	}
 
 	/// <summary>Validates that the compression algorithm is supported by TIFF format.</summary>
 	/// <param name="compression">The compression algorithm to validate.</param>
 	/// <returns>True if the compression is valid, otherwise false.</returns>
 	public static bool IsValidCompression(TiffCompression compression)
-		=> Enum.IsDefined<TiffCompression>(compression);
+	{
+		return Enum.IsDefined<TiffCompression>(compression);
+	}
 
 	/// <summary>Validates that the photometric interpretation is valid for the given color depth.</summary>
 	/// <param name="photometric">The photometric interpretation.</param>
 	/// <param name="colorDepth">The color depth.</param>
 	/// <returns>True if the combination is valid, otherwise false.</returns>
 	public static bool IsValidPhotometricInterpretation(PhotometricInterpretation photometric, TiffColorDepth colorDepth)
-		=> photometric switch
+	{
+		return photometric switch
 		{
 			PhotometricInterpretation.WhiteIsZero or PhotometricInterpretation.BlackIsZero => colorDepth is TiffColorDepth.Bilevel or TiffColorDepth.FourBit or TiffColorDepth.EightBit or TiffColorDepth.SixteenBit,
 			PhotometricInterpretation.Rgb                                                  => colorDepth is TiffColorDepth.TwentyFourBit or TiffColorDepth.ThirtyTwoBit or TiffColorDepth.FortyEightBit or TiffColorDepth.SixtyFourBit,
 			PhotometricInterpretation.Palette                                              => colorDepth is TiffColorDepth.Bilevel or TiffColorDepth.FourBit or TiffColorDepth.EightBit,
 			PhotometricInterpretation.Cmyk                                                 => colorDepth is TiffColorDepth.ThirtyTwoBit,
-			_                                                                              => true// Allow other combinations for flexibility
+			_                                                                              => true // Allow other combinations for flexibility
 		};
+	}
 
 	/// <summary>Validates the samples per pixel against the color depth and photometric interpretation.</summary>
 	/// <param name="samplesPerPixel">The number of samples per pixel.</param>
@@ -45,7 +51,7 @@ public static class TiffValidator
 			PhotometricInterpretation.Palette                                              => 1,
 			PhotometricInterpretation.Cmyk                                                 => hasAlpha ? 5 : 4,
 			PhotometricInterpretation.YCbCr                                                => hasAlpha ? 4 : 3,
-			_                                                                              => samplesPerPixel// Allow flexibility for other formats
+			_                                                                              => samplesPerPixel // Allow flexibility for other formats
 		};
 
 		return samplesPerPixel == expectedSamples;

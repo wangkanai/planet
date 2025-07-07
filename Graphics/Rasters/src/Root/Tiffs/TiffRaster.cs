@@ -131,18 +131,16 @@ public class TiffRaster : Raster, ITiffRaster
 
 			// Add custom tags size (more accurate estimation)
 			foreach (var tag in Metadata.CustomTags.Values)
-			{
 				size += tag switch
 				{
-					string str => System.Text.Encoding.UTF8.GetByteCount(str),
-					byte[] bytes => bytes.Length,
-					int[] ints => ints.Length * sizeof(int),
+					string str       => System.Text.Encoding.UTF8.GetByteCount(str),
+					byte[] bytes     => bytes.Length,
+					int[] ints       => ints.Length * sizeof(int),
 					ushort[] ushorts => ushorts.Length * sizeof(ushort),
 					double[] doubles => doubles.Length * sizeof(double),
-					float[] floats => floats.Length * sizeof(float),
-					_ => 16 // Default estimate for other types
+					float[] floats   => floats.Length * sizeof(float),
+					_                => 16 // Default estimate for other types
 				};
-			}
 
 			// Add bits per sample array size
 			if (_bitsPerSampleArray != null)
@@ -152,9 +150,9 @@ public class TiffRaster : Raster, ITiffRaster
 			var estimatedTagCount = 20; // Standard TIFF tags
 			if (Metadata.CustomTags.Count > 0)
 				estimatedTagCount += Metadata.CustomTags.Count;
-			
+
 			size += estimatedTagCount * 12; // 12 bytes per directory entry
-			size += 6; // IFD header (2 bytes count + 4 bytes next IFD pointer)
+			size += 6;                      // IFD header (2 bytes count + 4 bytes next IFD pointer)
 
 			return size;
 		}
@@ -167,6 +165,7 @@ public class TiffRaster : Raster, ITiffRaster
 		{
 			// Fast path for most common cases using unsafe operations for better performance
 			if (_samplesCount <= 4)
+			{
 				return _samplesCount switch
 				{
 					0 => ReadOnlySpan<int>.Empty,
@@ -176,6 +175,7 @@ public class TiffRaster : Raster, ITiffRaster
 					4 => MemoryMarshal.CreateReadOnlySpan(ref _sample1, 4),
 					_ => ReadOnlySpan<int>.Empty // Should never hit this
 				};
+			}
 
 			// Fallback to array for larger cases
 			return _bitsPerSampleArray.AsSpan();
@@ -186,7 +186,9 @@ public class TiffRaster : Raster, ITiffRaster
 	/// <summary>Sets the bits per sample values with optimal performance for common cases.</summary>
 	/// <param name="bitsPerSample">The bits per sample array.</param>
 	public void SetBitsPerSample(int[] bitsPerSample)
-		=> SetBitsPerSample(bitsPerSample.AsSpan());
+	{
+		SetBitsPerSample(bitsPerSample.AsSpan());
+	}
 
 	/// <summary>Sets the bits per sample values with optimal performance for common cases.</summary>
 	/// <param name="bitsPerSample">The bits per sample span.</param>
@@ -260,33 +262,33 @@ public class TiffRaster : Raster, ITiffRaster
 
 			// Clear TIFF-specific arrays with yielding
 			await Task.Yield();
-			Metadata.StripOffsets = null;
+			Metadata.StripOffsets    = null;
 			Metadata.StripByteCounts = null;
 
 			await Task.Yield();
-			Metadata.TileOffsets = null;
+			Metadata.TileOffsets    = null;
 			Metadata.TileByteCounts = null;
 
 			await Task.Yield();
-			Metadata.ColorMap = null;
+			Metadata.ColorMap         = null;
 			Metadata.TransferFunction = null;
 
 			await Task.Yield();
-			Metadata.WhitePoint = null;
+			Metadata.WhitePoint            = null;
 			Metadata.PrimaryChromaticities = null;
 
 			await Task.Yield();
-			Metadata.YCbCrCoefficients = null;
+			Metadata.YCbCrCoefficients   = null;
 			Metadata.ReferenceBlackWhite = null;
 
 			await Task.Yield();
 			Metadata.ExifIfd = null;
-			Metadata.GpsIfd = null;
+			Metadata.GpsIfd  = null;
 
 			await Task.Yield();
 			Metadata.IccProfile = null;
-			Metadata.XmpData = null;
-			Metadata.IptcData = null;
+			Metadata.XmpData    = null;
+			Metadata.IptcData   = null;
 
 			// Let the runtime handle garbage collection automatically
 		}
@@ -303,33 +305,33 @@ public class TiffRaster : Raster, ITiffRaster
 		if (disposing)
 		{
 			// Clear TIFF-specific managed resources
-			_bitsPerSampleArray = null;
+			_bitsPerSampleArray       = null;
 			Metadata.ImageDescription = null;
-			Metadata.Make = null;
-			Metadata.Model = null;
-			Metadata.Software = null;
-			Metadata.Copyright = null;
-			Metadata.Artist = null;
+			Metadata.Make             = null;
+			Metadata.Model            = null;
+			Metadata.Software         = null;
+			Metadata.Copyright        = null;
+			Metadata.Artist           = null;
 			Metadata.CustomTags.Clear();
 
 			// Clear TIFF-specific arrays
-			Metadata.StripOffsets = null;
-			Metadata.StripByteCounts = null;
-			Metadata.TileOffsets = null;
-			Metadata.TileByteCounts = null;
-			Metadata.ColorMap = null;
-			Metadata.TransferFunction = null;
-			Metadata.WhitePoint = null;
+			Metadata.StripOffsets          = null;
+			Metadata.StripByteCounts       = null;
+			Metadata.TileOffsets           = null;
+			Metadata.TileByteCounts        = null;
+			Metadata.ColorMap              = null;
+			Metadata.TransferFunction      = null;
+			Metadata.WhitePoint            = null;
 			Metadata.PrimaryChromaticities = null;
-			Metadata.YCbCrCoefficients = null;
-			Metadata.ReferenceBlackWhite = null;
+			Metadata.YCbCrCoefficients     = null;
+			Metadata.ReferenceBlackWhite   = null;
 
 			// Clear embedded metadata
-			Metadata.ExifIfd = null;
-			Metadata.GpsIfd = null;
+			Metadata.ExifIfd    = null;
+			Metadata.GpsIfd     = null;
 			Metadata.IccProfile = null;
-			Metadata.XmpData = null;
-			Metadata.IptcData = null;
+			Metadata.XmpData    = null;
+			Metadata.IptcData   = null;
 		}
 
 		// Call base class disposal

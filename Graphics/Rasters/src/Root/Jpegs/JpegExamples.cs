@@ -188,24 +188,28 @@ public static class JpegExamples
 	/// <summary>Demonstrates common quality settings and their use cases.</summary>
 	/// <returns>A dictionary of quality settings with descriptions.</returns>
 	public static Dictionary<int, string> GetQualityRecommendations()
-		=> new()
-		   {
-			   { 100, "Lossless quality - largest file size, perfect for archival" },
-			   { 95, "Excellent quality - minimal compression, suitable for professional photography" },
-			   { 85, "High quality - good balance of quality and file size, suitable for print" },
-			   { 75, "Good quality - standard web quality, good for most web applications" },
-			   { 60, "Medium quality - noticeable compression, suitable for thumbnails" },
-			   { 40, "Low quality - high compression, suitable for previews or low-bandwidth" },
-			   { 20, "Very low quality - maximum compression, suitable for placeholders" }
-		   };
+	{
+		return new Dictionary<int, string>
+		       {
+			       { 100, "Lossless quality - largest file size, perfect for archival" },
+			       { 95, "Excellent quality - minimal compression, suitable for professional photography" },
+			       { 85, "High quality - good balance of quality and file size, suitable for print" },
+			       { 75, "Good quality - standard web quality, good for most web applications" },
+			       { 60, "Medium quality - noticeable compression, suitable for thumbnails" },
+			       { 40, "Low quality - high compression, suitable for previews or low-bandwidth" },
+			       { 20, "Very low quality - maximum compression, suitable for placeholders" }
+		       };
+	}
 
 	/// <summary>Demonstrates chroma subsampling options and their effects.</summary>
 	/// <returns>A dictionary of chroma subsampling modes with descriptions.</returns>
 	public static Dictionary<JpegChromaSubsampling, string> GetChromaSubsamplingGuide()
-		=> new()
-		   {
-			   { JpegChromaSubsampling.None, "4:4:4 - No subsampling, highest quality, larger file size" },
-			   { JpegChromaSubsampling.Horizontal, "4:2:2 - Horizontal subsampling, good quality, moderate compression" },
-			   { JpegChromaSubsampling.Both, "4:2:0 - Both horizontal and vertical subsampling, standard compression" }
-		   };
+	{
+		return new Dictionary<JpegChromaSubsampling, string>
+		       {
+			       { JpegChromaSubsampling.None, "4:4:4 - No subsampling, highest quality, larger file size" },
+			       { JpegChromaSubsampling.Horizontal, "4:2:2 - Horizontal subsampling, good quality, moderate compression" },
+			       { JpegChromaSubsampling.Both, "4:2:0 - Both horizontal and vertical subsampling, standard compression" }
+		       };
+	}
 }

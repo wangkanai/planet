@@ -153,10 +153,7 @@ public static class WebPValidator
 			if (webp.Metadata.AnimationFrames.Count > 100)
 				result.AddWarning("Large number of animation frames (>100) may impact performance and file size.");
 		}
-		else if (webp.Metadata.AnimationFrames.Count > 0)
-		{
-			result.AddWarning("Animation frames are defined but IsAnimated is false.");
-		}
+		else if (webp.Metadata.AnimationFrames.Count > 0) result.AddWarning("Animation frames are defined but IsAnimated is false.");
 	}
 
 	/// <summary>Validates the metadata of a WebP raster image.</summary>
@@ -179,9 +176,7 @@ public static class WebPValidator
 		// Validate extended features requirement
 		if ((metadata.HasIccProfile || metadata.HasExif || metadata.HasXmp || metadata.HasAnimation)
 		    && webp.Format != WebPFormat.Extended)
-		{
 			result.AddWarning("Metadata features require Extended format for optimal compatibility.");
-		}
 
 		// Validate custom chunks
 		foreach (var chunk in metadata.CustomChunks)

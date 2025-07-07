@@ -136,7 +136,7 @@ public class Jpeg2000Metadata : IAsyncDisposable, IDisposable
 	public string? IntellectualProperty { get; set; }
 
 	/// <summary>Determines if this metadata represents a large dataset requiring async disposal.</summary>
-	public bool HasLargeMetadata => 
+	public bool HasLargeMetadata =>
 		(IccProfile?.Length ?? 0) > 1024 * 1024 ||
 		(GeoTiffMetadata?.Length ?? 0) > 1024 * 1024 ||
 		UuidBoxes.Values.Any(data => data.Length > 1024 * 1024) ||
@@ -155,10 +155,10 @@ public class Jpeg2000Metadata : IAsyncDisposable, IDisposable
 			size += Comments.Sum(comment => comment.Length * 2);
 			size += PaletteData?.Length ?? 0;
 			size += ChannelDefinitions.Count * 16; // Approximate size per definition
-			size += ComponentMappings.Count * 8; // Approximate size per mapping
-			size += Boxes.Count * 24; // Approximate size per box info
-			size += Markers.Count * 16; // Approximate size per marker info
-			return size + 1024; // Base metadata overhead
+			size += ComponentMappings.Count * 8;   // Approximate size per mapping
+			size += Boxes.Count * 24;              // Approximate size per box info
+			size += Markers.Count * 16;            // Approximate size per marker info
+			return size + 1024;                    // Base metadata overhead
 		}
 	}
 
@@ -193,7 +193,7 @@ public class Jpeg2000Metadata : IAsyncDisposable, IDisposable
 		if (DecompositionLevels < 0 || DecompositionLevels > Jpeg2000Constants.MaxDecompositionLevels)
 			return false;
 
-		if (QualityLayers < Jpeg2000Constants.QualityLayers.MinLayers || 
+		if (QualityLayers < Jpeg2000Constants.QualityLayers.MinLayers ||
 		    QualityLayers > Jpeg2000Constants.QualityLayers.MaxLayers)
 			return false;
 
@@ -211,49 +211,49 @@ public class Jpeg2000Metadata : IAsyncDisposable, IDisposable
 	public Jpeg2000Metadata Clone()
 	{
 		var clone = new Jpeg2000Metadata
-		{
-			Width = Width,
-			Height = Height,
-			Components = Components,
-			BitDepth = BitDepth,
-			IsSigned = IsSigned,
-			IsLossless = IsLossless,
-			CompressionRatio = CompressionRatio,
-			DecompositionLevels = DecompositionLevels,
-			ProgressionOrder = ProgressionOrder,
-			QualityLayers = QualityLayers,
-			ColorSpace = ColorSpace,
-			HasIccProfile = HasIccProfile,
-			IccProfile = IccProfile?.ToArray(),
-			TileWidth = TileWidth,
-			TileHeight = TileHeight,
-			CaptureResolutionX = CaptureResolutionX,
-			CaptureResolutionY = CaptureResolutionY,
-			DisplayResolutionX = DisplayResolutionX,
-			DisplayResolutionY = DisplayResolutionY,
-			GeoTiffMetadata = GeoTiffMetadata?.ToArray(),
-			GmlData = GmlData,
-			GeoTransform = GeoTransform?.ToArray(),
-			CoordinateReferenceSystem = CoordinateReferenceSystem,
-			UuidBoxes = new Dictionary<string, byte[]>(UuidBoxes.ToDictionary(
-				kvp => kvp.Key, 
-				kvp => kvp.Value.ToArray())),
-			XmlMetadata = new List<string>(XmlMetadata),
-			Comments = new List<string>(Comments),
-			WaveletTransform = WaveletTransform,
-			ErrorResilience = ErrorResilience,
-			RegionOfInterest = RegionOfInterest,
-			RoiQualityFactor = RoiQualityFactor,
-			ChannelDefinitions = new List<ChannelDefinition>(ChannelDefinitions.Select(cd => cd.Clone())),
-			ComponentMappings = new List<ComponentMapping>(ComponentMappings.Select(cm => cm.Clone())),
-			PaletteData = PaletteData?.ToArray(),
-			PaletteEntries = PaletteEntries,
-			Boxes = new List<BoxInfo>(Boxes.Select(b => b.Clone())),
-			Markers = new List<MarkerInfo>(Markers.Select(m => m.Clone())),
-			CreationTime = CreationTime,
-			ModificationTime = ModificationTime,
-			IntellectualProperty = IntellectualProperty
-		};
+		            {
+			            Width                     = Width,
+			            Height                    = Height,
+			            Components                = Components,
+			            BitDepth                  = BitDepth,
+			            IsSigned                  = IsSigned,
+			            IsLossless                = IsLossless,
+			            CompressionRatio          = CompressionRatio,
+			            DecompositionLevels       = DecompositionLevels,
+			            ProgressionOrder          = ProgressionOrder,
+			            QualityLayers             = QualityLayers,
+			            ColorSpace                = ColorSpace,
+			            HasIccProfile             = HasIccProfile,
+			            IccProfile                = IccProfile?.ToArray(),
+			            TileWidth                 = TileWidth,
+			            TileHeight                = TileHeight,
+			            CaptureResolutionX        = CaptureResolutionX,
+			            CaptureResolutionY        = CaptureResolutionY,
+			            DisplayResolutionX        = DisplayResolutionX,
+			            DisplayResolutionY        = DisplayResolutionY,
+			            GeoTiffMetadata           = GeoTiffMetadata?.ToArray(),
+			            GmlData                   = GmlData,
+			            GeoTransform              = GeoTransform?.ToArray(),
+			            CoordinateReferenceSystem = CoordinateReferenceSystem,
+			            UuidBoxes = new Dictionary<string, byte[]>(UuidBoxes.ToDictionary(
+				            kvp => kvp.Key,
+				            kvp => kvp.Value.ToArray())),
+			            XmlMetadata          = new List<string>(XmlMetadata),
+			            Comments             = new List<string>(Comments),
+			            WaveletTransform     = WaveletTransform,
+			            ErrorResilience      = ErrorResilience,
+			            RegionOfInterest     = RegionOfInterest,
+			            RoiQualityFactor     = RoiQualityFactor,
+			            ChannelDefinitions   = new List<ChannelDefinition>(ChannelDefinitions.Select(cd => cd.Clone())),
+			            ComponentMappings    = new List<ComponentMapping>(ComponentMappings.Select(cm => cm.Clone())),
+			            PaletteData          = PaletteData?.ToArray(),
+			            PaletteEntries       = PaletteEntries,
+			            Boxes                = new List<BoxInfo>(Boxes.Select(b => b.Clone())),
+			            Markers              = new List<MarkerInfo>(Markers.Select(m => m.Clone())),
+			            CreationTime         = CreationTime,
+			            ModificationTime     = ModificationTime,
+			            IntellectualProperty = IntellectualProperty
+		            };
 
 		return clone;
 	}
@@ -280,10 +280,10 @@ public class Jpeg2000Metadata : IAsyncDisposable, IDisposable
 		if (!_disposed && disposing)
 		{
 			// Clear large byte arrays
-			IccProfile = null;
+			IccProfile      = null;
 			GeoTiffMetadata = null;
-			PaletteData = null;
-			
+			PaletteData     = null;
+
 			// Clear collections
 			UuidBoxes.Clear();
 			XmlMetadata.Clear();
@@ -324,12 +324,15 @@ public class ChannelDefinition
 	public ushort ChannelAssociation { get; set; }
 
 	/// <summary>Clones this channel definition.</summary>
-	public ChannelDefinition Clone() => new()
+	public ChannelDefinition Clone()
 	{
-		ChannelIndex = ChannelIndex,
-		ChannelType = ChannelType,
-		ChannelAssociation = ChannelAssociation
-	};
+		return new ChannelDefinition
+		       {
+			       ChannelIndex       = ChannelIndex,
+			       ChannelType        = ChannelType,
+			       ChannelAssociation = ChannelAssociation
+		       };
+	}
 }
 
 /// <summary>Represents component mapping for palette images.</summary>
@@ -345,12 +348,15 @@ public class ComponentMapping
 	public byte PaletteColumn { get; set; }
 
 	/// <summary>Clones this component mapping.</summary>
-	public ComponentMapping Clone() => new()
+	public ComponentMapping Clone()
 	{
-		ComponentIndex = ComponentIndex,
-		MappingType = MappingType,
-		PaletteColumn = PaletteColumn
-	};
+		return new ComponentMapping
+		       {
+			       ComponentIndex = ComponentIndex,
+			       MappingType    = MappingType,
+			       PaletteColumn  = PaletteColumn
+		       };
+	}
 }
 
 /// <summary>Represents information about a JP2 box.</summary>
@@ -369,13 +375,16 @@ public class BoxInfo
 	public bool IsExtendedSize { get; set; }
 
 	/// <summary>Clones this box info.</summary>
-	public BoxInfo Clone() => new()
+	public BoxInfo Clone()
 	{
-		BoxType = BoxType,
-		BoxSize = BoxSize,
-		BoxOffset = BoxOffset,
-		IsExtendedSize = IsExtendedSize
-	};
+		return new BoxInfo
+		       {
+			       BoxType        = BoxType,
+			       BoxSize        = BoxSize,
+			       BoxOffset      = BoxOffset,
+			       IsExtendedSize = IsExtendedSize
+		       };
+	}
 }
 
 /// <summary>Represents information about a JPEG2000 codestream marker.</summary>
@@ -391,10 +400,13 @@ public class MarkerInfo
 	public int SegmentLength { get; set; }
 
 	/// <summary>Clones this marker info.</summary>
-	public MarkerInfo Clone() => new()
+	public MarkerInfo Clone()
 	{
-		MarkerType = MarkerType,
-		MarkerOffset = MarkerOffset,
-		SegmentLength = SegmentLength
-	};
+		return new MarkerInfo
+		       {
+			       MarkerType    = MarkerType,
+			       MarkerOffset  = MarkerOffset,
+			       SegmentLength = SegmentLength
+		       };
+	}
 }

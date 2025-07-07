@@ -12,7 +12,7 @@ namespace Wangkanai.Graphics.Rasters.Jpeg2000s;
 public class Jpeg2000Raster : Raster, IJpeg2000Raster
 {
 	private byte[]? _encodedData;
-	private bool _disposed;
+	private bool    _disposed;
 
 	/// <summary>Initializes a new JPEG2000 raster with default settings.</summary>
 	public Jpeg2000Raster()
@@ -34,15 +34,15 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		if (components <= 0 || components > Jpeg2000Constants.MaxComponents)
 			throw new ArgumentException($"Components must be between 1 and {Jpeg2000Constants.MaxComponents}.", nameof(components));
 
-		Width = width;
+		Width  = width;
 		Height = height;
 
 		Metadata = new Jpeg2000Metadata
-		{
-			Width = width,
-			Height = height,
-			Components = components
-		};
+		           {
+			           Width      = width,
+			           Height     = height,
+			           Components = components
+		           };
 
 		InitializeDefaults();
 	}
@@ -83,22 +83,32 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	/// <summary>Indicates if the image uses lossless compression.</summary>
 	public bool IsLossless
 	{
-		get => Metadata.IsLossless;
+		get
+		{
+			ThrowIfDisposed();
+			return Metadata.IsLossless;
+		}
 		set
 		{
+			ThrowIfDisposed();
 			Metadata.IsLossless = value;
 			Metadata.WaveletTransform = value
-				? Jpeg2000Constants.WaveletTransforms.Reversible53
-				: Jpeg2000Constants.WaveletTransforms.Irreversible97;
+				                            ? Jpeg2000Constants.WaveletTransforms.Reversible53
+				                            : Jpeg2000Constants.WaveletTransforms.Irreversible97;
 		}
 	}
 
 	/// <summary>Target compression ratio for lossy encoding.</summary>
 	public float CompressionRatio
 	{
-		get => Metadata.CompressionRatio;
+		get
+		{
+			ThrowIfDisposed();
+			return Metadata.CompressionRatio;
+		}
 		set
 		{
+			ThrowIfDisposed();
 			if (value <= 1.0f && !IsLossless)
 				throw new ArgumentException("Compression ratio must be greater than 1.0 for lossy compression.");
 			Metadata.CompressionRatio = value;
@@ -108,9 +118,14 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	/// <summary>Number of DWT decomposition levels.</summary>
 	public int DecompositionLevels
 	{
-		get => Metadata.DecompositionLevels;
+		get
+		{
+			ThrowIfDisposed();
+			return Metadata.DecompositionLevels;
+		}
 		set
 		{
+			ThrowIfDisposed();
 			if (value < 0 || value > Jpeg2000Constants.MaxDecompositionLevels)
 				throw new ArgumentException($"Decomposition levels must be between 0 and {Jpeg2000Constants.MaxDecompositionLevels}.");
 			Metadata.DecompositionLevels = value;
@@ -120,16 +135,29 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	/// <summary>Progression order for codestream organization.</summary>
 	public Jpeg2000Progression ProgressionOrder
 	{
-		get => Metadata.ProgressionOrder;
-		set => Metadata.ProgressionOrder = value;
+		get
+		{
+			ThrowIfDisposed();
+			return Metadata.ProgressionOrder;
+		}
+		set
+		{
+			ThrowIfDisposed();
+			Metadata.ProgressionOrder = value;
+		}
 	}
 
 	/// <summary>Tile width for tiled images.</summary>
 	public int TileWidth
 	{
-		get => Metadata.TileWidth;
+		get
+		{
+			ThrowIfDisposed();
+			return Metadata.TileWidth;
+		}
 		set
 		{
+			ThrowIfDisposed();
 			if (value <= 0)
 				throw new ArgumentException("Tile width must be positive.");
 			Metadata.TileWidth = value;
@@ -139,9 +167,14 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	/// <summary>Tile height for tiled images.</summary>
 	public int TileHeight
 	{
-		get => Metadata.TileHeight;
+		get
+		{
+			ThrowIfDisposed();
+			return Metadata.TileHeight;
+		}
 		set
 		{
+			ThrowIfDisposed();
 			if (value <= 0)
 				throw new ArgumentException("Tile height must be positive.");
 			Metadata.TileHeight = value;
@@ -151,9 +184,14 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	/// <summary>Number of quality layers for progressive transmission.</summary>
 	public int QualityLayers
 	{
-		get => Metadata.QualityLayers;
+		get
+		{
+			ThrowIfDisposed();
+			return Metadata.QualityLayers;
+		}
 		set
 		{
+			ThrowIfDisposed();
 			if (value < Jpeg2000Constants.QualityLayers.MinLayers || value > Jpeg2000Constants.QualityLayers.MaxLayers)
 				throw new ArgumentException($"Quality layers must be between {Jpeg2000Constants.QualityLayers.MinLayers} and {Jpeg2000Constants.QualityLayers.MaxLayers}.");
 			Metadata.QualityLayers = value;
@@ -161,21 +199,41 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	}
 
 	/// <summary>Gets the number of available resolution levels.</summary>
-	public int AvailableResolutionLevels => DecompositionLevels + 1;
+	public int AvailableResolutionLevels
+	{
+		get
+		{
+			ThrowIfDisposed();
+			return DecompositionLevels + 1;
+		}
+	}
 
 	/// <summary>Current region of interest for enhanced quality encoding.</summary>
 	public Rectangle? RegionOfInterest
 	{
-		get => Metadata.RegionOfInterest;
-		set => Metadata.RegionOfInterest = value;
+		get
+		{
+			ThrowIfDisposed();
+			return Metadata.RegionOfInterest;
+		}
+		set
+		{
+			ThrowIfDisposed();
+			Metadata.RegionOfInterest = value;
+		}
 	}
 
 	/// <summary>Quality enhancement factor for ROI.</summary>
 	public float RoiQualityFactor
 	{
-		get => Metadata.RoiQualityFactor;
+		get
+		{
+			ThrowIfDisposed();
+			return Metadata.RoiQualityFactor;
+		}
 		set
 		{
+			ThrowIfDisposed();
 			if (value <= 0.0f)
 				throw new ArgumentException("ROI quality factor must be positive.");
 			Metadata.RoiQualityFactor = value;
@@ -183,22 +241,56 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	}
 
 	/// <summary>Indicates if the image uses tiling.</summary>
-	public bool SupportsTiling => TileWidth < Width || TileHeight < Height;
+	public bool SupportsTiling
+	{
+		get
+		{
+			ThrowIfDisposed();
+			return TileWidth < Width || TileHeight < Height;
+		}
+	}
 
 	/// <summary>Indicates if geospatial metadata is present.</summary>
-	public bool HasGeospatialMetadata =>
-		Metadata.GeoTiffMetadata != null ||
-		!string.IsNullOrEmpty(Metadata.GmlData) ||
-		Metadata.GeoTransform != null;
+	public bool HasGeospatialMetadata
+	{
+		get
+		{
+			ThrowIfDisposed();
+			return Metadata.GeoTiffMetadata != null ||
+			       !string.IsNullOrEmpty(Metadata.GmlData) ||
+			       Metadata.GeoTransform != null;
+		}
+	}
 
 	/// <summary>Indicates if ICC color profile is embedded.</summary>
-	public bool HasIccProfile => Metadata.HasIccProfile && Metadata.IccProfile != null;
+	public bool HasIccProfile
+	{
+		get
+		{
+			ThrowIfDisposed();
+			return Metadata.HasIccProfile && Metadata.IccProfile != null;
+		}
+	}
 
 	/// <summary>Gets the total number of tiles in the image.</summary>
-	public int TotalTiles => Metadata.TotalTiles;
+	public int TotalTiles
+	{
+		get
+		{
+			ThrowIfDisposed();
+			return Metadata.TotalTiles;
+		}
+	}
 
 	/// <summary>Indicates if metadata should be disposed asynchronously.</summary>
-	public override bool HasLargeMetadata => Metadata.HasLargeMetadata;
+	public override bool HasLargeMetadata
+	{
+		get
+		{
+			ThrowIfDisposed();
+			return Metadata.HasLargeMetadata;
+		}
+	}
 
 	/// <summary>Initializes default settings for the raster.</summary>
 	private void InitializeDefaults()
@@ -212,7 +304,7 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		else
 		{
 			// Color images may use lossy compression for better ratios
-			IsLossless = false;
+			IsLossless       = false;
 			CompressionRatio = Jpeg2000Constants.DefaultCompressionRatio;
 		}
 
@@ -227,9 +319,7 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 			);
 		}
 		else
-		{
 			DecompositionLevels = Jpeg2000Constants.DefaultDecompositionLevels;
-		}
 
 		// Set tile size based on image dimensions
 		if (Width > 0 && Height > 0)
@@ -237,20 +327,20 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 			if (Width > 2048 || Height > 2048)
 			{
 				// Large images benefit from tiling
-				TileWidth = Math.Min(Jpeg2000Constants.DefaultTileSize, Width);
+				TileWidth  = Math.Min(Jpeg2000Constants.DefaultTileSize, Width);
 				TileHeight = Math.Min(Jpeg2000Constants.DefaultTileSize, Height);
 			}
 			else
 			{
 				// Small images can use single tile (tile size = image size)
-				TileWidth = Width;
+				TileWidth  = Width;
 				TileHeight = Height;
 			}
 		}
 		else
 		{
 			// Default tile size for uninitialized dimensions
-			Metadata.TileWidth = Jpeg2000Constants.DefaultTileSize;
+			Metadata.TileWidth  = Jpeg2000Constants.DefaultTileSize;
 			Metadata.TileHeight = Jpeg2000Constants.DefaultTileSize;
 		}
 	}
@@ -261,13 +351,13 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		ThrowIfDisposed();
 
 		options ??= new Jpeg2000EncodingOptions
-		{
-			IsLossless = IsLossless,
-			CompressionRatio = CompressionRatio,
-			DecompositionLevels = DecompositionLevels,
-			QualityLayers = QualityLayers,
-			ProgressionOrder = ProgressionOrder
-		};
+		            {
+			            IsLossless          = IsLossless,
+			            CompressionRatio    = CompressionRatio,
+			            DecompositionLevels = DecompositionLevels,
+			            QualityLayers       = QualityLayers,
+			            ProgressionOrder    = ProgressionOrder
+		            };
 
 		// Apply encoding options
 		ApplyEncodingOptions(options);
@@ -295,6 +385,9 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		if (resolutionLevel < 0 || resolutionLevel >= AvailableResolutionLevels)
 			throw new ArgumentException($"Resolution level must be between 0 and {AvailableResolutionLevels - 1}.", nameof(resolutionLevel));
 
+		if (qualityLayer != -1 && (qualityLayer < 0 || qualityLayer >= QualityLayers))
+			throw new ArgumentException($"Quality layer must be -1 (all layers) or between 0 and {QualityLayers - 1}.", nameof(qualityLayer));
+
 		// For now, simulate decoding
 		await Task.Yield();
 
@@ -316,12 +409,12 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		// For now, simulate region decoding
 		await Task.Yield();
 
-		var bytesPerPixel = GetBytesPerPixel();
+		var bytesPerPixel  = GetBytesPerPixel();
 		var regionDataSize = region.Width * region.Height * bytesPerPixel;
 
 		// Scale for resolution level
 		var scaleFactor = 1 << resolutionLevel;
-		regionDataSize /= (scaleFactor * scaleFactor);
+		regionDataSize /= scaleFactor * scaleFactor;
 
 		return new byte[regionDataSize];
 	}
@@ -420,9 +513,9 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		if (string.IsNullOrEmpty(coordinateSystem))
 			throw new ArgumentException("Coordinate system cannot be null or empty.");
 
-		Metadata.GeoTransform = geoTransform;
+		Metadata.GeoTransform              = geoTransform;
 		Metadata.CoordinateReferenceSystem = coordinateSystem;
-		Metadata.GeoTiffMetadata = geoTiffTags;
+		Metadata.GeoTiffMetadata           = geoTiffTags;
 	}
 
 	/// <summary>Applies an ICC color profile for accurate color reproduction.</summary>
@@ -433,7 +526,7 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		if (profileData == null || profileData.Length == 0)
 			throw new ArgumentException("ICC profile data cannot be null or empty.");
 
-		Metadata.IccProfile = profileData;
+		Metadata.IccProfile    = profileData;
 		Metadata.HasIccProfile = true;
 	}
 
@@ -471,12 +564,12 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 			throw new ArgumentException($"Tile index must be between 0 and {TotalTiles - 1}.");
 
 		var tilesAcross = Metadata.TilesAcross;
-		var tileX = tileIndex % tilesAcross;
-		var tileY = tileIndex / tilesAcross;
+		var tileX       = tileIndex % tilesAcross;
+		var tileY       = tileIndex / tilesAcross;
 
-		var x = tileX * TileWidth;
-		var y = tileY * TileHeight;
-		var width = Math.Min(TileWidth, Width - x);
+		var x      = tileX * TileWidth;
+		var y      = tileY * TileHeight;
+		var width  = Math.Min(TileWidth, Width - x);
 		var height = Math.Min(TileHeight, Height - y);
 
 		return new Rectangle(x, y, width, height);
@@ -503,7 +596,7 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		if (tileWidth <= 0 || tileHeight <= 0)
 			throw new ArgumentException("Tile dimensions must be positive.");
 
-		TileWidth = Math.Min(tileWidth, Width);
+		TileWidth  = Math.Min(tileWidth, Width);
 		TileHeight = Math.Min(tileHeight, Height);
 	}
 
@@ -517,22 +610,16 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	/// <summary>Applies encoding options to the raster configuration.</summary>
 	private void ApplyEncodingOptions(Jpeg2000EncodingOptions options)
 	{
-		IsLossless = options.IsLossless;
-		CompressionRatio = options.CompressionRatio;
-		DecompositionLevels = options.DecompositionLevels;
-		QualityLayers = options.QualityLayers;
-		ProgressionOrder = options.ProgressionOrder;
+		IsLossless               = options.IsLossless;
+		CompressionRatio         = options.CompressionRatio;
+		DecompositionLevels      = options.DecompositionLevels;
+		QualityLayers            = options.QualityLayers;
+		ProgressionOrder         = options.ProgressionOrder;
 		Metadata.ErrorResilience = options.ErrorResilience;
 
-		if (options.EnableTiling)
-		{
-			SetTileSize(options.TileWidth, options.TileHeight);
-		}
+		if (options.EnableTiling) SetTileSize(options.TileWidth, options.TileHeight);
 
-		if (options.RegionOfInterest.HasValue)
-		{
-			SetRegionOfInterest(options.RegionOfInterest.Value, options.RoiQualityFactor);
-		}
+		if (options.RegionOfInterest.HasValue) SetRegionOfInterest(options.RegionOfInterest.Value, options.RoiQualityFactor);
 	}
 
 	/// <summary>Creates placeholder encoded data for demonstration purposes.</summary>
@@ -551,7 +638,7 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		writer.Write((uint)20); // Box size
 		writer.Write(Jpeg2000Constants.FileTypeBoxType.AsSpan());
 		writer.Write(Jpeg2000Constants.Jp2Brand.AsSpan());
-		writer.Write((uint)0); // Minor version
+		writer.Write((uint)0);                             // Minor version
 		writer.Write(Jpeg2000Constants.Jp2Brand.AsSpan()); // Compatibility list
 
 		// Placeholder codestream
@@ -575,13 +662,13 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		Metadata.ModificationTime = DateTime.UtcNow;
 
 		// Calculate estimated dimensions based on data size
-		var estimatedPixels = data.Length * (IsLossless ? 3 : (int)CompressionRatio);
+		var estimatedPixels    = data.Length * (IsLossless ? 3 : (int)CompressionRatio);
 		var estimatedDimension = (int)Math.Sqrt(estimatedPixels / GetBytesPerPixel());
 
-		if (Width == 0) Width = estimatedDimension;
+		if (Width == 0) Width   = estimatedDimension;
 		if (Height == 0) Height = estimatedDimension;
 
-		Metadata.Width = Width;
+		Metadata.Width  = Width;
 		Metadata.Height = Height;
 	}
 
@@ -598,7 +685,7 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		if (!_disposed && disposing)
 		{
 			_encodedData = null;
-			_disposed = true;
+			_disposed    = true;
 		}
 
 		base.Dispose(disposing);
@@ -607,10 +694,7 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	/// <summary>Async dispose implementation for large metadata.</summary>
 	protected override async ValueTask DisposeAsyncCore()
 	{
-		if (Metadata.HasLargeMetadata)
-		{
-			await Metadata.DisposeAsync().ConfigureAwait(false);
-		}
+		if (Metadata.HasLargeMetadata) await Metadata.DisposeAsync().ConfigureAwait(false);
 
 		await base.DisposeAsyncCore().ConfigureAwait(false);
 	}

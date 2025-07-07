@@ -107,29 +107,29 @@ public class PngRaster : Raster, IPngRaster
 		get
 		{
 			var size = 0L;
-			
+
 			// Add palette data size
 			if (!PaletteData.IsEmpty)
 				size += PaletteData.Length;
-			
+
 			// Add transparency data size
 			if (!TransparencyData.IsEmpty)
 				size += TransparencyData.Length;
-			
+
 			// Add text chunk sizes
 			foreach (var textChunk in Metadata.TextChunks.Values)
 				size += System.Text.Encoding.UTF8.GetByteCount(textChunk);
-			
+
 			foreach (var compressedTextChunk in Metadata.CompressedTextChunks.Values)
 				size += compressedTextChunk.Length;
-			
+
 			foreach (var internationalTextChunk in Metadata.InternationalTextChunks.Values)
 				size += System.Text.Encoding.UTF8.GetByteCount(internationalTextChunk.text);
-			
+
 			// Add custom chunk sizes
 			foreach (var customChunk in Metadata.CustomChunks.Values)
 				size += customChunk.Length;
-			
+
 			return size;
 		}
 	}
@@ -137,7 +137,9 @@ public class PngRaster : Raster, IPngRaster
 	/// <summary>Validates the PNG raster image.</summary>
 	/// <returns>True if the image is valid, false otherwise.</returns>
 	public bool IsValid()
-		=> Width > 0 && Height > 0 && IsValidBitDepthForColorType() && CompressionLevel is >= 0 and <= 9;
+	{
+		return Width > 0 && Height > 0 && IsValidBitDepthForColorType() && CompressionLevel is >= 0 and <= 9;
+	}
 
 	/// <summary>Gets the estimated file size in bytes.</summary>
 	/// <returns>The estimated file size.</returns>
@@ -172,7 +174,9 @@ public class PngRaster : Raster, IPngRaster
 	/// <summary>Gets the color depth in bits per pixel.</summary>
 	/// <returns>The color depth.</returns>
 	public int GetColorDepth()
-		=> SamplesPerPixel * BitDepth;
+	{
+		return SamplesPerPixel * BitDepth;
+	}
 
 	/// <summary>Updates dependent properties when the color type changes.</summary>
 	private void UpdateDependentProperties()
@@ -223,19 +227,19 @@ public class PngRaster : Raster, IPngRaster
 			// For large PNG metadata, clear in stages with yielding
 			await Task.Yield();
 			PaletteData = ReadOnlyMemory<byte>.Empty;
-			
+
 			await Task.Yield();
 			TransparencyData = ReadOnlyMemory<byte>.Empty;
-			
+
 			await Task.Yield();
 			Metadata.TextChunks.Clear();
-			
+
 			await Task.Yield();
 			Metadata.CompressedTextChunks.Clear();
-			
+
 			await Task.Yield();
 			Metadata.InternationalTextChunks.Clear();
-			
+
 			await Task.Yield();
 			Metadata.CustomChunks.Clear();
 		}
@@ -252,7 +256,7 @@ public class PngRaster : Raster, IPngRaster
 		if (disposing)
 		{
 			// Clear PNG-specific managed resources
-			PaletteData = ReadOnlyMemory<byte>.Empty;
+			PaletteData      = ReadOnlyMemory<byte>.Empty;
 			TransparencyData = ReadOnlyMemory<byte>.Empty;
 			Metadata.TextChunks.Clear();
 			Metadata.CompressedTextChunks.Clear();

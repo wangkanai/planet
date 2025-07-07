@@ -252,17 +252,17 @@ public static class Jpeg2000Constants
 	{
 		/// <summary>GeoTIFF UUID for GeoJP2.</summary>
 		public static readonly ImmutableArray<byte> GeoTiffUuid = new byte[]
-		{
-			0xB1, 0x4B, 0xF8, 0xBD, 0x08, 0x3D, 0x4B, 0x43,
-			0xA5, 0xAE, 0x8C, 0xD7, 0xD5, 0xA6, 0xCE, 0x03
-		}.ToImmutableArray();
+		                                                          {
+			                                                          0xB1, 0x4B, 0xF8, 0xBD, 0x08, 0x3D, 0x4B, 0x43,
+			                                                          0xA5, 0xAE, 0x8C, 0xD7, 0xD5, 0xA6, 0xCE, 0x03
+		                                                          }.ToImmutableArray();
 
 		/// <summary>GML UUID for GeoJP2.</summary>
 		public static readonly ImmutableArray<byte> GmlUuid = new byte[]
-		{
-			0x96, 0xA9, 0xF1, 0xF1, 0xDC, 0x98, 0x40, 0x2D,
-			0xA7, 0xAE, 0xD6, 0x8E, 0x34, 0x45, 0x18, 0x09
-		}.ToImmutableArray();
+		                                                      {
+			                                                      0x96, 0xA9, 0xF1, 0xF1, 0xDC, 0x98, 0x40, 0x2D,
+			                                                      0xA7, 0xAE, 0xD6, 0x8E, 0x34, 0x45, 0x18, 0x09
+		                                                      }.ToImmutableArray();
 	}
 
 	/// <summary>Quality layer constants.</summary>

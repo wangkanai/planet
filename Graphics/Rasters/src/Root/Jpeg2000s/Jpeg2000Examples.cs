@@ -35,17 +35,14 @@ public static class Jpeg2000Examples
 	public static Jpeg2000Raster CreateArchival(int width, int height, int components = 3)
 	{
 		var jpeg2000 = new Jpeg2000Raster(width, height, components)
-		{
-			IsLossless = true,
-			DecompositionLevels = Math.Min(8, (int)Math.Floor(Math.Log2(Math.Min(width, height) / 32.0))),
-			QualityLayers = 1 // Single layer for lossless
-		};
+		               {
+			               IsLossless          = true,
+			               DecompositionLevels = Math.Min(8, (int)Math.Floor(Math.Log2(Math.Min(width, height) / 32.0))),
+			               QualityLayers       = 1 // Single layer for lossless
+		               };
 
 		// Use optimal tile size for large images
-		if (width > 4096 || height > 4096)
-		{
-			jpeg2000.SetTileSize(1024, 1024);
-		}
+		if (width > 4096 || height > 4096) jpeg2000.SetTileSize(1024, 1024);
 
 		return jpeg2000;
 	}
@@ -62,12 +59,12 @@ public static class Jpeg2000Examples
 	public static Jpeg2000Raster CreateWebOptimized(int width, int height, float compressionRatio = 30.0f)
 	{
 		var jpeg2000 = new Jpeg2000Raster(width, height, 3)
-		{
-			IsLossless = false,
-			CompressionRatio = compressionRatio,
-			DecompositionLevels = 5,
-			QualityLayers = 8 // Multiple layers for progressive quality
-		};
+		               {
+			               IsLossless          = false,
+			               CompressionRatio    = compressionRatio,
+			               DecompositionLevels = 5,
+			               QualityLayers       = 8 // Multiple layers for progressive quality
+		               };
 
 		// Set progression order for quality-first streaming
 		jpeg2000.Metadata.ProgressionOrder = Jpeg2000Progression.LayerResolutionComponentPosition;
@@ -86,25 +83,22 @@ public static class Jpeg2000Examples
 	/// <param name="coordinateSystem">Coordinate reference system (e.g., "EPSG:4326")</param>
 	/// <param name="components">Number of spectral bands/components</param>
 	/// <returns>Geospatial JPEG2000 raster</returns>
-	public static Jpeg2000Raster CreateGeospatial(int width, int height, double[] geoTransform,
-		string coordinateSystem, int components = 3)
+	public static Jpeg2000Raster CreateGeospatial(int width,            int height, double[] geoTransform,
+		string                                        coordinateSystem, int components = 3)
 	{
 		var jpeg2000 = new Jpeg2000Raster(width, height, components)
-		{
-			IsLossless = false,
-			CompressionRatio = 10.0f, // Conservative compression for scientific data
-			DecompositionLevels = Math.Min(6, (int)Math.Floor(Math.Log2(Math.Min(width, height) / 64.0))),
-			QualityLayers = 5
-		};
+		               {
+			               IsLossless          = false,
+			               CompressionRatio    = 10.0f, // Conservative compression for scientific data
+			               DecompositionLevels = Math.Min(6, (int)Math.Floor(Math.Log2(Math.Min(width, height) / 64.0))),
+			               QualityLayers       = 5
+		               };
 
 		// Apply geospatial metadata
 		jpeg2000.ApplyGeospatialMetadata(geoTransform, coordinateSystem);
 
 		// Use tiling for large geospatial datasets
-		if (width > 2048 || height > 2048)
-		{
-			jpeg2000.SetTileSize(512, 512);
-		}
+		if (width > 2048 || height > 2048) jpeg2000.SetTileSize(512, 512);
 
 		return jpeg2000;
 	}
@@ -120,16 +114,16 @@ public static class Jpeg2000Examples
 	/// <param name="roiQualityFactor">Quality enhancement factor for ROI (1.5-5.0 recommended)</param>
 	/// <param name="components">Number of color components</param>
 	/// <returns>ROI-optimized JPEG2000 raster</returns>
-	public static Jpeg2000Raster CreateRegionOfInterest(int width, int height, Rectangle roiRegion,
-		float roiQualityFactor = 3.0f, int components = 3)
+	public static Jpeg2000Raster CreateRegionOfInterest(int width,                   int height, Rectangle roiRegion,
+		float                                               roiQualityFactor = 3.0f, int components = 3)
 	{
 		var jpeg2000 = new Jpeg2000Raster(width, height, components)
-		{
-			IsLossless = false,
-			CompressionRatio = 25.0f,
-			DecompositionLevels = 6,
-			QualityLayers = 6
-		};
+		               {
+			               IsLossless          = false,
+			               CompressionRatio    = 25.0f,
+			               DecompositionLevels = 6,
+			               QualityLayers       = 6
+		               };
 
 		// Set spatial progression for efficient ROI access
 		jpeg2000.Metadata.ProgressionOrder = Jpeg2000Progression.PositionComponentResolutionLayer;
@@ -153,21 +147,18 @@ public static class Jpeg2000Examples
 	public static Jpeg2000Raster CreateMultiSpectral(int width, int height, int spectralBands, int bitDepth = 12)
 	{
 		var jpeg2000 = new Jpeg2000Raster(width, height, spectralBands)
-		{
-			IsLossless = true, // Preserve scientific accuracy
-			DecompositionLevels = 5,
-			QualityLayers = 1 // Single layer for lossless
-		};
+		               {
+			               IsLossless          = true, // Preserve scientific accuracy
+			               DecompositionLevels = 5,
+			               QualityLayers       = 1 // Single layer for lossless
+		               };
 
 		// Set component-first progression for spectral analysis
 		jpeg2000.Metadata.ProgressionOrder = Jpeg2000Progression.ComponentPositionResolutionLayer;
-		jpeg2000.Metadata.BitDepth = bitDepth;
+		jpeg2000.Metadata.BitDepth         = bitDepth;
 
 		// Use larger tiles for multi-spectral data
-		if (width > 1024 || height > 1024)
-		{
-			jpeg2000.SetTileSize(512, 512);
-		}
+		if (width > 1024 || height > 1024) jpeg2000.SetTileSize(512, 512);
 
 		return jpeg2000;
 	}
@@ -184,13 +175,13 @@ public static class Jpeg2000Examples
 	public static Jpeg2000Raster CreateThumbnailOptimized(int width, int height, int maxResolutionLevels = 6)
 	{
 		var jpeg2000 = new Jpeg2000Raster(width, height, 3)
-		{
-			IsLossless = false,
-			CompressionRatio = 40.0f, // Higher compression for thumbnails
-			DecompositionLevels = Math.Min(maxResolutionLevels,
-				(int)Math.Floor(Math.Log2(Math.Min(width, height) / 16.0))),
-			QualityLayers = 4
-		};
+		               {
+			               IsLossless       = false,
+			               CompressionRatio = 40.0f, // Higher compression for thumbnails
+			               DecompositionLevels = Math.Min(maxResolutionLevels,
+				               (int)Math.Floor(Math.Log2(Math.Min(width, height) / 16.0))),
+			               QualityLayers = 4
+		               };
 
 		// Set resolution-first progression for fast thumbnail access
 		jpeg2000.Metadata.ProgressionOrder = Jpeg2000Progression.ResolutionLayerComponentPosition;
@@ -211,23 +202,17 @@ public static class Jpeg2000Examples
 	public static Jpeg2000Raster CreateMaximumQuality(int width, int height, byte[]? iccProfile = null, int components = 3)
 	{
 		var jpeg2000 = new Jpeg2000Raster(width, height, components)
-		{
-			IsLossless = true,
-			DecompositionLevels = Math.Min(7, (int)Math.Floor(Math.Log2(Math.Min(width, height) / 32.0))),
-			QualityLayers = 1 // Single layer for lossless
-		};
+		               {
+			               IsLossless          = true,
+			               DecompositionLevels = Math.Min(7, (int)Math.Floor(Math.Log2(Math.Min(width, height) / 32.0))),
+			               QualityLayers       = 1 // Single layer for lossless
+		               };
 
 		// Apply ICC profile if provided
-		if (iccProfile != null)
-		{
-			jpeg2000.ApplyIccProfile(iccProfile);
-		}
+		if (iccProfile != null) jpeg2000.ApplyIccProfile(iccProfile);
 
 		// Use optimal tile size for large images
-		if (width > 2048 || height > 2048)
-		{
-			jpeg2000.SetTileSize(1024, 1024);
-		}
+		if (width > 2048 || height > 2048) jpeg2000.SetTileSize(1024, 1024);
 
 		return jpeg2000;
 	}
@@ -244,18 +229,15 @@ public static class Jpeg2000Examples
 	public static Jpeg2000Raster CreateBandwidthConstrained(int width, int height, float targetCompressionRatio = 100.0f)
 	{
 		var jpeg2000 = new Jpeg2000Raster(width, height, 3)
-		{
-			IsLossless = false,
-			CompressionRatio = targetCompressionRatio,
-			DecompositionLevels = 3, // Minimal for bandwidth constraints
-			QualityLayers = 1 // Single layer for simplicity
-		};
+		               {
+			               IsLossless          = false,
+			               CompressionRatio    = targetCompressionRatio,
+			               DecompositionLevels = 3, // Minimal for bandwidth constraints
+			               QualityLayers       = 1  // Single layer for simplicity
+		               };
 
 		// Use smaller tiles to reduce memory usage
-		if (width > 512 || height > 512)
-		{
-			jpeg2000.SetTileSize(256, 256);
-		}
+		if (width > 512 || height > 512) jpeg2000.SetTileSize(256, 256);
 
 		return jpeg2000;
 	}
@@ -273,12 +255,12 @@ public static class Jpeg2000Examples
 	public static Jpeg2000Raster CreatePrintOptimized(int width, int height, int bitDepth = 8, int components = 4)
 	{
 		var jpeg2000 = new Jpeg2000Raster(width, height, components)
-		{
-			IsLossless = bitDepth > 8, // Use lossless for high bit depths
-			CompressionRatio = bitDepth > 8 ? 1.0f : 5.0f, // Conservative compression
-			DecompositionLevels = 4, // Moderate levels for print
-			QualityLayers = bitDepth > 8 ? 1 : 3
-		};
+		               {
+			               IsLossless          = bitDepth > 8,               // Use lossless for high bit depths
+			               CompressionRatio    = bitDepth > 8 ? 1.0f : 5.0f, // Conservative compression
+			               DecompositionLevels = 4,                          // Moderate levels for print
+			               QualityLayers       = bitDepth > 8 ? 1 : 3
+		               };
 
 		jpeg2000.Metadata.BitDepth = bitDepth;
 

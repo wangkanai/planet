@@ -143,7 +143,7 @@ public class WebPRaster : Raster, IWebPRaster
 		get
 		{
 			var size = 0L;
-			
+
 			// Add size of metadata components
 			if (!Metadata.IccProfile.IsEmpty)
 				size += Metadata.IccProfile.Length;
@@ -151,18 +151,18 @@ public class WebPRaster : Raster, IWebPRaster
 				size += Metadata.ExifData.Length;
 			if (!Metadata.XmpData.IsEmpty)
 				size += Metadata.XmpData.Length;
-			
+
 			// Add size of custom chunks
 			foreach (var chunk in Metadata.CustomChunks.Values)
 				size += chunk.Length;
-			
+
 			// Add estimated size of animation frames
 			if (Metadata.HasAnimation)
 			{
 				foreach (var frame in Metadata.AnimationFrames)
 					size += frame.Data.Length;
 			}
-			
+
 			return size;
 		}
 	}
@@ -204,10 +204,12 @@ public class WebPRaster : Raster, IWebPRaster
 
 	/// <inheritdoc />
 	public bool IsValid()
-		=> Width > 0 && Height > 0
-		             && Width <= WebPConstants.MaxWidth && Height <= WebPConstants.MaxHeight
-		             && Quality is >= WebPConstants.MinQuality and <= WebPConstants.MaxQuality
-		             && CompressionLevel is >= WebPConstants.MinCompressionLevel and <= WebPConstants.MaxCompressionLevel;
+	{
+		return Width > 0 && Height > 0
+		                 && Width <= WebPConstants.MaxWidth && Height <= WebPConstants.MaxHeight
+		                 && Quality is >= WebPConstants.MinQuality and <= WebPConstants.MaxQuality
+		                 && CompressionLevel is >= WebPConstants.MinCompressionLevel and <= WebPConstants.MaxCompressionLevel;
+	}
 
 	/// <inheritdoc />
 	public long GetEstimatedFileSize()
@@ -316,7 +318,7 @@ public class WebPRaster : Raster, IWebPRaster
 		// WebP typically achieves better compression than JPEG
 		// Quality 0: ~20:1 ratio, Quality 100: ~2:1 ratio
 		var normalizedQuality = quality / 100.0;
-		return 2.0 + (18.0 * (1.0 - normalizedQuality));
+		return 2.0 + 18.0 * (1.0 - normalizedQuality);
 	}
 
 	/// <summary>Calculates the compression ratio for lossless compression.</summary>
@@ -359,11 +361,8 @@ public class WebPRaster : Raster, IWebPRaster
 				var batchSize = 50;
 				for (var i = 0; i < Metadata.AnimationFrames.Count; i += batchSize)
 				{
-					var endIndex = Math.Min(i + batchSize, Metadata.AnimationFrames.Count);
-					for (var j = i; j < endIndex; j++)
-					{
-						Metadata.AnimationFrames[j].Data = ReadOnlyMemory<byte>.Empty;
-					}
+					var endIndex                                                        = Math.Min(i + batchSize, Metadata.AnimationFrames.Count);
+					for (var j = i; j < endIndex; j++) Metadata.AnimationFrames[j].Data = ReadOnlyMemory<byte>.Empty;
 					// Yield control after each batch
 					await Task.Yield();
 				}
@@ -371,7 +370,7 @@ public class WebPRaster : Raster, IWebPRaster
 
 			await Task.Yield();
 			Metadata.AnimationFrames.Clear();
-			
+
 			await Task.Yield();
 			Metadata.CustomChunks.Clear();
 
@@ -391,8 +390,8 @@ public class WebPRaster : Raster, IWebPRaster
 		{
 			// Clear WebP-specific managed resources
 			Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
-			Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
-			Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+			Metadata.ExifData   = ReadOnlyMemory<byte>.Empty;
+			Metadata.XmpData    = ReadOnlyMemory<byte>.Empty;
 			Metadata.CustomChunks.Clear();
 			Metadata.AnimationFrames.Clear();
 		}

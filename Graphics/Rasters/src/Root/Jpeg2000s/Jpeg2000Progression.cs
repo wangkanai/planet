@@ -56,7 +56,7 @@ public static class Jpeg2000ProgressionExtensions
 			Jpeg2000Progression.ResolutionPositionComponentLayer => "Mixed resolution and spatial progression",
 			Jpeg2000Progression.PositionComponentResolutionLayer => "Spatial progression - regions transmitted sequentially",
 			Jpeg2000Progression.ComponentPositionResolutionLayer => "Component progression - color channels transmitted separately",
-			_ => "Unknown progression order"
+			_                                                    => "Unknown progression order"
 		};
 	}
 
@@ -72,7 +72,7 @@ public static class Jpeg2000ProgressionExtensions
 			Jpeg2000Progression.ResolutionPositionComponentLayer => "Large images with spatial access patterns",
 			Jpeg2000Progression.PositionComponentResolutionLayer => "Region-of-interest streaming, tiled access",
 			Jpeg2000Progression.ComponentPositionResolutionLayer => "Multi-spectral imagery, scientific data",
-			_ => "General purpose"
+			_                                                    => "General purpose"
 		};
 	}
 
@@ -82,7 +82,7 @@ public static class Jpeg2000ProgressionExtensions
 	public static bool SupportsEfficientSpatialAccess(this Jpeg2000Progression progression)
 	{
 		return progression is Jpeg2000Progression.ResolutionPositionComponentLayer or
-		                    Jpeg2000Progression.PositionComponentResolutionLayer;
+			       Jpeg2000Progression.PositionComponentResolutionLayer;
 	}
 
 	/// <summary>Determines if the progression order supports efficient quality scaling.</summary>
@@ -91,7 +91,7 @@ public static class Jpeg2000ProgressionExtensions
 	public static bool SupportsEfficientQualityScaling(this Jpeg2000Progression progression)
 	{
 		return progression is Jpeg2000Progression.LayerResolutionComponentPosition or
-		                    Jpeg2000Progression.ResolutionLayerComponentPosition;
+			       Jpeg2000Progression.ResolutionLayerComponentPosition;
 	}
 
 	/// <summary>Determines if the progression order supports efficient resolution scaling.</summary>
@@ -100,7 +100,7 @@ public static class Jpeg2000ProgressionExtensions
 	public static bool SupportsEfficientResolutionScaling(this Jpeg2000Progression progression)
 	{
 		return progression is Jpeg2000Progression.ResolutionLayerComponentPosition or
-		                    Jpeg2000Progression.ResolutionPositionComponentLayer;
+			       Jpeg2000Progression.ResolutionPositionComponentLayer;
 	}
 
 	/// <summary>Gets the byte value for the progression order.</summary>

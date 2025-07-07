@@ -211,7 +211,7 @@ public class PngMetadata
 	{
 		if (string.IsNullOrEmpty(keyword)) return false;
 		if (keyword.StartsWith(' ') || keyword.EndsWith(' ')) return false;
-		if (keyword.Contains("  ")) return false;// No consecutive spaces
+		if (keyword.Contains("  ")) return false; // No consecutive spaces
 
 		foreach (var c in keyword)
 			// Latin-1 printable characters (32-126 and 161-255)

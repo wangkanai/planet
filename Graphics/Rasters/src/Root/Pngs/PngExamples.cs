@@ -10,27 +10,31 @@ public static class PngExamples
 	/// <param name="height">The height of the image.</param>
 	/// <returns>A configured PNG raster instance.</returns>
 	public static PngRaster CreateBasicTruecolor(int width, int height)
-		=> new(width, height)
-		   {
-			   ColorType        = PngColorType.Truecolor,
-			   BitDepth         = 8,
-			   CompressionLevel = 6,
-			   InterlaceMethod  = PngInterlaceMethod.None
-		   };
+	{
+		return new PngRaster(width, height)
+		       {
+			       ColorType        = PngColorType.Truecolor,
+			       BitDepth         = 8,
+			       CompressionLevel = 6,
+			       InterlaceMethod  = PngInterlaceMethod.None
+		       };
+	}
 
 	/// <summary>Creates a truecolor PNG with alpha channel.</summary>
 	/// <param name="width">The width of the image.</param>
 	/// <param name="height">The height of the image.</param>
 	/// <returns>A configured PNG raster instance with alpha support.</returns>
 	public static PngRaster CreateTruecolorWithAlpha(int width, int height)
-		=> new(width, height)
-		   {
-			   ColorType        = PngColorType.TruecolorWithAlpha,
-			   BitDepth         = 8,
-			   HasAlphaChannel  = true,
-			   CompressionLevel = 6,
-			   InterlaceMethod  = PngInterlaceMethod.None
-		   };
+	{
+		return new PngRaster(width, height)
+		       {
+			       ColorType        = PngColorType.TruecolorWithAlpha,
+			       BitDepth         = 8,
+			       HasAlphaChannel  = true,
+			       CompressionLevel = 6,
+			       InterlaceMethod  = PngInterlaceMethod.None
+		       };
+	}
 
 	/// <summary>Creates a grayscale PNG raster.</summary>
 	/// <param name="width">The width of the image.</param>
@@ -38,13 +42,15 @@ public static class PngExamples
 	/// <param name="bitDepth">The bit depth (1, 2, 4, 8, or 16).</param>
 	/// <returns>A configured grayscale PNG raster instance.</returns>
 	public static PngRaster CreateGrayscale(int width, int height, byte bitDepth = 8)
-		=> new(width, height)
-		   {
-			   ColorType        = PngColorType.Grayscale,
-			   BitDepth         = bitDepth,
-			   CompressionLevel = 6,
-			   InterlaceMethod  = PngInterlaceMethod.None
-		   };
+	{
+		return new PngRaster(width, height)
+		       {
+			       ColorType        = PngColorType.Grayscale,
+			       BitDepth         = bitDepth,
+			       CompressionLevel = 6,
+			       InterlaceMethod  = PngInterlaceMethod.None
+		       };
+	}
 
 	/// <summary>Creates an indexed-color PNG raster.</summary>
 	/// <param name="width">The width of the image.</param>

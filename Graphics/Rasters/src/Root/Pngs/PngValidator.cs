@@ -104,7 +104,7 @@ public static class PngValidator
 			else
 			{
 				var maxPaletteEntries = 1 << png.BitDepth;
-				var paletteEntries    = png.PaletteData.Length / 3;// RGB triplets
+				var paletteEntries    = png.PaletteData.Length / 3; // RGB triplets
 
 				if (png.PaletteData.Length % 3 != 0)
 					result.AddError("Palette data length must be a multiple of 3 (RGB triplets).");

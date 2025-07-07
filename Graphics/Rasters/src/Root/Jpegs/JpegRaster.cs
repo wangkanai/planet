@@ -73,15 +73,15 @@ public class JpegRaster : Raster, IJpegRaster
 	/// <summary>Initializes a new instance of the <see cref="JpegRaster"/> class.</summary>
 	public JpegRaster()
 	{
-		ColorMode = JpegColorMode.Rgb;
-		Quality = JpegConstants.DefaultQuality;
-		Encoding = JpegEncoding.Baseline;
-		SamplesPerPixel = 3;
-		BitsPerSample = JpegConstants.BitsPerSample;
+		ColorMode         = JpegColorMode.Rgb;
+		Quality           = JpegConstants.DefaultQuality;
+		Encoding          = JpegEncoding.Baseline;
+		SamplesPerPixel   = 3;
+		BitsPerSample     = JpegConstants.BitsPerSample;
 		ChromaSubsampling = JpegChromaSubsampling.Both;
-		IsProgressive = false;
-		IsOptimized = false;
-		CompressionRatio = 10.0;
+		IsProgressive     = false;
+		IsOptimized       = false;
+		CompressionRatio  = 10.0;
 	}
 
 	/// <summary>Initializes a new instance of the <see cref="JpegRaster"/> class with specified dimensions.</summary>
@@ -89,7 +89,7 @@ public class JpegRaster : Raster, IJpegRaster
 	/// <param name="height">The height of the image.</param>
 	public JpegRaster(int width, int height) : this()
 	{
-		Width = width;
+		Width  = width;
 		Height = height;
 	}
 
@@ -110,10 +110,10 @@ public class JpegRaster : Raster, IJpegRaster
 		SamplesPerPixel = colorMode switch
 		{
 			JpegColorMode.Grayscale => 1,
-			JpegColorMode.Rgb => 3,
-			JpegColorMode.Cmyk => 4,
-			JpegColorMode.YCbCr => 3,
-			_ => 3
+			JpegColorMode.Rgb       => 3,
+			JpegColorMode.Cmyk      => 4,
+			JpegColorMode.YCbCr     => 3,
+			_                       => 3
 		};
 	}
 
@@ -135,7 +135,7 @@ public class JpegRaster : Raster, IJpegRaster
 			>= 30 => 25.0,
 			>= 20 => 30.0,
 			>= 10 => 40.0,
-			_ => 50.0
+			_     => 50.0
 		};
 	}
 

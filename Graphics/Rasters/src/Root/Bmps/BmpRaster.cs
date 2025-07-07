@@ -65,7 +65,7 @@ public class BmpRaster : Raster, IBmpRaster
 
 	/// <inheritdoc />
 	public bool HasTransparency => ColorDepth == BmpColorDepth.ThirtyTwoBit ||
-	                               (Compression == BmpCompression.BitFields && Metadata.AlphaMask != 0);
+	                               Compression == BmpCompression.BitFields && Metadata.AlphaMask != 0;
 
 	/// <inheritdoc />
 	public bool IsTopDown => Metadata.Height < 0;
@@ -133,14 +133,12 @@ public class BmpRaster : Raster, IBmpRaster
 
 			// Custom metadata fields
 			foreach (var field in Metadata.CustomFields.Values)
-			{
 				size += field switch
 				{
 					string str   => System.Text.Encoding.UTF8.GetByteCount(str),
 					byte[] bytes => bytes.Length,
 					_            => 32 // Default estimate for other types
 				};
-			}
 
 			return size;
 		}
@@ -150,10 +148,7 @@ public class BmpRaster : Raster, IBmpRaster
 	public (uint Red, uint Green, uint Blue, uint Alpha) GetBitMasks()
 	{
 		// Return current bit masks or defaults based on color depth and compression
-		if (Compression == BmpCompression.BitFields)
-		{
-			return (Metadata.RedMask, Metadata.GreenMask, Metadata.BlueMask, Metadata.AlphaMask);
-		}
+		if (Compression == BmpCompression.BitFields) return (Metadata.RedMask, Metadata.GreenMask, Metadata.BlueMask, Metadata.AlphaMask);
 
 		// Return default masks based on color depth
 		return ColorDepth switch

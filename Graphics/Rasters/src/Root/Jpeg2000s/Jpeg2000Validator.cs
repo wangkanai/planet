@@ -47,7 +47,7 @@ public static class Jpeg2000Validator
 			result.AddWarning($"Very large image: {totalPixels:N0} pixels. Consider using tiling for better performance.");
 
 		// Validate dimension compatibility with decomposition levels
-		var minDimension = Math.Min(jpeg2000.Width, jpeg2000.Height);
+		var minDimension           = Math.Min(jpeg2000.Width, jpeg2000.Height);
 		var maxDecompositionLevels = (int)Math.Floor(Math.Log2(minDimension));
 		if (jpeg2000.DecompositionLevels > maxDecompositionLevels)
 			result.AddWarning($"Too many decomposition levels ({jpeg2000.DecompositionLevels}) for image size. Maximum recommended: {maxDecompositionLevels}.");
@@ -141,11 +141,11 @@ public static class Jpeg2000Validator
 		// Check for efficient tile sizes
 		if (jpeg2000.SupportsTiling)
 		{
-			if (jpeg2000.TileWidth < Jpeg2000Constants.Memory.MinEfficientTileSize || 
+			if (jpeg2000.TileWidth < Jpeg2000Constants.Memory.MinEfficientTileSize ||
 			    jpeg2000.TileHeight < Jpeg2000Constants.Memory.MinEfficientTileSize)
 				result.AddWarning($"Small tile size ({jpeg2000.TileWidth}x{jpeg2000.TileHeight}) may reduce compression efficiency.");
 
-			if (jpeg2000.TileWidth > Jpeg2000Constants.Memory.MaxEfficientTileSize || 
+			if (jpeg2000.TileWidth > Jpeg2000Constants.Memory.MaxEfficientTileSize ||
 			    jpeg2000.TileHeight > Jpeg2000Constants.Memory.MaxEfficientTileSize)
 				result.AddWarning($"Large tile size ({jpeg2000.TileWidth}x{jpeg2000.TileHeight}) may increase memory usage.");
 
@@ -165,9 +165,7 @@ public static class Jpeg2000Validator
 			}
 		}
 		else if ((long)jpeg2000.Width * jpeg2000.Height > 100_000_000) // 100 megapixels
-		{
 			result.AddWarning("Large image without tiling may cause memory issues. Consider enabling tiling.");
-		}
 	}
 
 	/// <summary>Validates progression order settings.</summary>
@@ -223,8 +221,8 @@ public static class Jpeg2000Validator
 				result.AddWarning($"Very high ROI quality factor ({jpeg2000.RoiQualityFactor}) may cause significant quality differences.");
 
 			// Check ROI size relative to image
-			var roiPixels = roi.Width * roi.Height;
-			var totalPixels = jpeg2000.Width * jpeg2000.Height;
+			var roiPixels     = roi.Width * roi.Height;
+			var totalPixels   = jpeg2000.Width * jpeg2000.Height;
 			var roiPercentage = (double)roiPixels / totalPixels * 100;
 
 			if (roiPercentage > 80)
@@ -334,10 +332,10 @@ public static class Jpeg2000Validator
 		// Validate tile cache implications
 		if (jpeg2000.SupportsTiling && jpeg2000.TileWidth > 0 && jpeg2000.TileHeight > 0)
 		{
-			var bytesPerTile = jpeg2000.TileWidth * jpeg2000.TileHeight * jpeg2000.Metadata.Components * 
-			                  ((jpeg2000.Metadata.BitDepth + 7) / 8);
+			var bytesPerTile = jpeg2000.TileWidth * jpeg2000.TileHeight * jpeg2000.Metadata.Components *
+			                   ((jpeg2000.Metadata.BitDepth + 7) / 8);
 			var defaultCacheSize = Jpeg2000Constants.Memory.DefaultTileCacheSizeMB * 1024 * 1024;
-			var tilesInCache = defaultCacheSize / bytesPerTile;
+			var tilesInCache     = defaultCacheSize / bytesPerTile;
 
 			if (tilesInCache < 4)
 				result.AddWarning("Large tile size may exceed default cache capacity. Consider smaller tiles or increased cache size.");
