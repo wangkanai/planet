@@ -17,7 +17,7 @@ public interface IHeifRaster : IRaster
 	int Quality { get; set; }
 
 	/// <summary>Gets or sets the comprehensive metadata for the HEIF image.</summary>
-	HeifMetadata Metadata { get; set; }
+	new HeifMetadata Metadata { get; set; }
 
 	/// <summary>Gets or sets the bit depth per channel (8, 10, 12, or 16).</summary>
 	int BitDepth { get; set; }

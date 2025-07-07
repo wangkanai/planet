@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Rasters.Pngs;
 
 /// <summary>Represents PNG metadata information including ancillary chunks.</summary>
-public class PngMetadata
+public class PngMetadata : IMetadata
 {
 	/// <summary>Gets or sets the image title.</summary>
 	public string? Title
@@ -219,5 +219,88 @@ public class PngMetadata
 				return false;
 
 		return true;
+	}
+
+	/// <inheritdoc />
+	public bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
+
+	/// <inheritdoc />
+	public long EstimatedMetadataSize
+	{
+		get
+		{
+			var size = 0L;
+
+			// Add transparency data size
+			if (!TransparencyData.IsEmpty)
+				size += TransparencyData.Length;
+
+			// Add text chunk sizes
+			foreach (var textChunk in TextChunks.Values)
+				size += System.Text.Encoding.UTF8.GetByteCount(textChunk);
+
+			foreach (var compressedTextChunk in CompressedTextChunks.Values)
+				size += compressedTextChunk.Length;
+
+			foreach (var internationalTextChunk in InternationalTextChunks.Values)
+				size += System.Text.Encoding.UTF8.GetByteCount(internationalTextChunk.text);
+
+			// Add custom chunk sizes
+			foreach (var customChunk in CustomChunks.Values)
+				size += customChunk.Length;
+
+			return size;
+		}
+	}
+
+	/// <inheritdoc />
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
+	/// <inheritdoc />
+	public async ValueTask DisposeAsync()
+	{
+		if (HasLargeMetadata)
+		{
+			// For large metadata, clear in stages with yielding
+			await Task.Yield();
+			TransparencyData = ReadOnlyMemory<byte>.Empty;
+
+			await Task.Yield();
+			TextChunks.Clear();
+
+			await Task.Yield();
+			CompressedTextChunks.Clear();
+
+			await Task.Yield();
+			InternationalTextChunks.Clear();
+
+			await Task.Yield();
+			CustomChunks.Clear();
+		}
+		else
+		{
+			// For small metadata, use synchronous disposal
+			Dispose(true);
+		}
+		GC.SuppressFinalize(this);
+	}
+
+	/// <summary>Releases unmanaged and - optionally - managed resources.</summary>
+	/// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+	protected virtual void Dispose(bool disposing)
+	{
+		if (disposing)
+		{
+			// Clear managed resources
+			TransparencyData = ReadOnlyMemory<byte>.Empty;
+			TextChunks.Clear();
+			CompressedTextChunks.Clear();
+			InternationalTextChunks.Clear();
+			CustomChunks.Clear();
+		}
 	}
 }

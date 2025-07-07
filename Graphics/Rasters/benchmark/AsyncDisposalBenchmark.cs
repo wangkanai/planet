@@ -48,7 +48,7 @@ public class AsyncDisposalBenchmark
 		_webpLarge.Metadata.IccProfile = new byte[2_000_000]; // 2MB
 		_webpLarge.Metadata.ExifData = new byte[500_000];     // 500KB
 		_webpLarge.Metadata.XmpData = new byte[300_000];      // 300KB
-		
+
 		// Add many animation frames for large WebP
 		for (int i = 0; i < 100; i++)
 		{
@@ -58,7 +58,7 @@ public class AsyncDisposalBenchmark
 
 		_jpegLarge = new JpegRaster(4096, 4096);
 		_jpegLarge.Metadata.IccProfile = new byte[1_500_000]; // 1.5MB
-		
+
 		// Add many EXIF tags
 		for (int i = 0; i < 10_000; i++)
 		{
@@ -69,7 +69,7 @@ public class AsyncDisposalBenchmark
 		_tiffLarge.Metadata.ImageDescription = new string('A', 500_000); // 500KB string
 		_tiffLarge.Metadata.Make = "Test Camera Manufacturer";
 		_tiffLarge.Metadata.Model = "Test Camera Model XYZ";
-		
+
 		// Add many custom tags
 		for (int i = 0; i < 5_000; i++)
 		{
@@ -77,13 +77,13 @@ public class AsyncDisposalBenchmark
 		}
 
 		_pngLarge = new PngRaster(4096, 4096);
-		
+
 		// Add many text chunks to create large metadata
 		for (int i = 0; i < 5_000; i++)
 		{
 			_pngLarge.Metadata.TextChunks.Add($"key{i}", new string('X', 200)); // 200 chars each
 		}
-		
+
 		// Add custom chunks
 		for (int i = 0; i < 500; i++)
 		{
@@ -225,7 +225,7 @@ public class AsyncDisposalBenchmark
 			tiff.DisposeAsync().AsTask(),
 			png.DisposeAsync().AsTask()
 		};
-		
+
 		await Task.WhenAll(tasks);
 	}
 
@@ -251,7 +251,7 @@ public class AsyncDisposalBenchmark
 	[BenchmarkCategory("MetadataEstimation")]
 	public long EstimateMetadataSize_TIFF_Large()
 	{
-		return _tiffLarge.EstimatedMetadataSize;
+		return _tiffLarge.Metadata.EstimatedMetadataSize;
 	}
 
 	[Benchmark]
@@ -271,7 +271,7 @@ public class AsyncDisposalBenchmark
 	{
 		var webp = new WebPRaster(800, 600);
 		webp.Metadata.IccProfile = new byte[100];
-		
+
 		// Multiple calls should be safe
 		await webp.DisposeAsync();
 		await webp.DisposeAsync();
@@ -284,7 +284,7 @@ public class AsyncDisposalBenchmark
 	{
 		var webp = new WebPRaster(800, 600);
 		webp.Metadata.IccProfile = new byte[100];
-		
+
 		// Multiple calls should be safe
 		webp.Dispose();
 		webp.Dispose();

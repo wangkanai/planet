@@ -137,11 +137,11 @@ public sealed class WebPRaster : Raster, IWebPRaster
 	}
 
 	/// <inheritdoc />
-	public override bool HasLargeMetadata
+	public bool HasLargeMetadata
 		=> EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
 
 	/// <inheritdoc />
-	public override long EstimatedMetadataSize
+	public long EstimatedMetadataSize
 	{
 		get
 		{

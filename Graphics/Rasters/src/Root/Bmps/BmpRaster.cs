@@ -102,53 +102,6 @@ public sealed class BmpRaster : Raster, IBmpRaster
 		}
 	}
 
-	/// <inheritdoc />
-	public override bool HasLargeMetadata
-	{
-		get
-		{
-			// Consider BMP as having large metadata if:
-			// 1. It has a large color palette (256+ colors)
-			// 2. The total file size is large
-			// 3. It has ICC profile data (V5 headers)
-			var estimatedSize = EstimatedMetadataSize;
-			return estimatedSize > ImageConstants.LargeMetadataThreshold;
-		}
-	}
-
-	/// <inheritdoc />
-	public override long EstimatedMetadataSize
-	{
-		get
-		{
-			var size = 0L;
-
-			// File header
-			size += BmpConstants.FileHeaderSize;
-
-			// DIB header
-			size += Metadata.HeaderSize;
-
-			// Color palette
-			if (HasPalette && ColorPalette != null)
-				size += ColorPalette.Length;
-
-			// ICC profile data (for V5 headers)
-			if (Metadata.HeaderSize >= BmpConstants.BitmapV5HeaderSize)
-				size += Metadata.ProfileSize;
-
-			// Custom metadata fields
-			foreach (var field in Metadata.CustomFields.Values)
-				size += field switch
-				{
-					string str   => System.Text.Encoding.UTF8.GetByteCount(str),
-					byte[] bytes => bytes.Length,
-					_            => 32 // Default estimate for other types
-				};
-
-			return size;
-		}
-	}
 
 	/// <inheritdoc />
 	public (uint Red, uint Green, uint Blue, uint Alpha) GetBitMasks()
@@ -305,7 +258,7 @@ public sealed class BmpRaster : Raster, IBmpRaster
 	/// <inheritdoc />
 	protected override async ValueTask DisposeAsyncCore()
 	{
-		if (HasLargeMetadata)
+		if (Metadata.HasLargeMetadata)
 		{
 			// For large BMP metadata, clear in stages with yielding
 			await Task.Yield();

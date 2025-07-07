@@ -11,7 +11,7 @@ public abstract class Raster : IRaster
 	public virtual int Height { get; set; }
 
 	/// <inheritdoc />
-	public virtual IMetadata? Metadata => null; // Base class has no metadata
+	public abstract IMetadata Metadata { get; }
 
 	/// <inheritdoc />
 	public void Dispose()

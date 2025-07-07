@@ -12,5 +12,5 @@ public interface IImage : IDisposable, IAsyncDisposable
 	int Height { get; set; }
 
 	/// <summary>Gets the metadata associated with this image.</summary>
-	IMetadata? Metadata { get; }
+	IMetadata Metadata { get; }
 }

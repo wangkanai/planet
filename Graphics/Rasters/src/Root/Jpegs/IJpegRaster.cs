@@ -15,7 +15,7 @@ public interface IJpegRaster : IRaster
 	JpegEncoding Encoding { get; }
 
 	/// <summary>Gets the metadata associated with the JPEG image.</summary>
-	JpegMetadata Metadata { get; }
+	new JpegMetadata Metadata { get; }
 
 	/// <summary>Gets the number of samples per pixel.</summary>
 	int SamplesPerPixel { get; }

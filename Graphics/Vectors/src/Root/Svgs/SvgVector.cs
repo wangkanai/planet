@@ -87,7 +87,7 @@ public class SvgVector : Vector, ISvgVector
 	}
 
 	/// <inheritdoc />
-	public override IMetadata? Metadata => _metadata;
+	public override IMetadata Metadata => _metadata;
 
 	/// <summary>Gets the SVG metadata.</summary>
 	ISvgMetadata ISvgVector.Metadata => _metadata;

@@ -19,8 +19,10 @@ public class TiffRaster : Raster, ITiffRaster
 	/// <inheritdoc />
 	public TiffCompression Compression { get; set; }
 
-	/// <inheritdoc />
-	public TiffMetadata Metadata { get; set; } = new();
+	private readonly TiffMetadata _metadata = new();
+
+	/// <summary>Gets the TIFF metadata.</summary>
+	public TiffMetadata TiffMetadata => _metadata;
 
 	/// <inheritdoc />
 	public int SamplesPerPixel { get; set; }
@@ -67,7 +69,10 @@ public class TiffRaster : Raster, ITiffRaster
 	}
 
 	/// <inheritdoc />
-	IMetadata? IImage.Metadata => Metadata;
+	public override IMetadata Metadata => _metadata;
+
+	/// <inheritdoc />
+	TiffMetadata ITiffRaster.Metadata => _metadata;
 
 	/// <inheritdoc />
 	public ReadOnlySpan<int> BitsPerSample
@@ -144,62 +149,62 @@ public class TiffRaster : Raster, ITiffRaster
 	/// <inheritdoc />
 	protected override async ValueTask DisposeAsyncCore()
 	{
-		if (Metadata?.HasLargeMetadata ?? false)
+		if (_metadata.HasLargeMetadata)
 		{
 			// For large TIFF metadata, clear in stages with yielding
 			await Task.Yield();
-			Metadata.ImageDescription = null;
+			_metadata.ImageDescription = null;
 
 			await Task.Yield();
-			Metadata.Make = null;
+			_metadata.Make = null;
 
 			await Task.Yield();
-			Metadata.Model = null;
+			_metadata.Model = null;
 
 			await Task.Yield();
-			Metadata.Software = null;
+			_metadata.Software = null;
 
 			await Task.Yield();
-			Metadata.Copyright = null;
+			_metadata.Copyright = null;
 
 			await Task.Yield();
-			Metadata.Artist = null;
+			_metadata.Artist = null;
 
 			await Task.Yield();
-			Metadata.CustomTags.Clear();
+			_metadata.CustomTags.Clear();
 
 			await Task.Yield();
 			_bitsPerSampleArray = null;
 
 			// Clear TIFF-specific arrays with yielding
 			await Task.Yield();
-			Metadata.StripOffsets    = null;
-			Metadata.StripByteCounts = null;
+			_metadata.StripOffsets    = null;
+			_metadata.StripByteCounts = null;
 
 			await Task.Yield();
-			Metadata.TileOffsets    = null;
-			Metadata.TileByteCounts = null;
+			_metadata.TileOffsets    = null;
+			_metadata.TileByteCounts = null;
 
 			await Task.Yield();
-			Metadata.ColorMap         = null;
-			Metadata.TransferFunction = null;
+			_metadata.ColorMap         = null;
+			_metadata.TransferFunction = null;
 
 			await Task.Yield();
-			Metadata.WhitePoint            = null;
-			Metadata.PrimaryChromaticities = null;
+			_metadata.WhitePoint            = null;
+			_metadata.PrimaryChromaticities = null;
 
 			await Task.Yield();
-			Metadata.YCbCrCoefficients   = null;
-			Metadata.ReferenceBlackWhite = null;
+			_metadata.YCbCrCoefficients   = null;
+			_metadata.ReferenceBlackWhite = null;
 
 			await Task.Yield();
-			Metadata.ExifIfd = null;
-			Metadata.GpsIfd  = null;
+			_metadata.ExifIfd = null;
+			_metadata.GpsIfd  = null;
 
 			await Task.Yield();
-			Metadata.IccProfile = null;
-			Metadata.XmpData    = null;
-			Metadata.IptcData   = null;
+			_metadata.IccProfile = null;
+			_metadata.XmpData    = null;
+			_metadata.IptcData   = null;
 
 			// Let the runtime handle garbage collection automatically
 		}
@@ -217,32 +222,32 @@ public class TiffRaster : Raster, ITiffRaster
 		{
 			// Clear TIFF-specific managed resources
 			_bitsPerSampleArray       = null;
-			Metadata.ImageDescription = null;
-			Metadata.Make             = null;
-			Metadata.Model            = null;
-			Metadata.Software         = null;
-			Metadata.Copyright        = null;
-			Metadata.Artist           = null;
-			Metadata.CustomTags.Clear();
+			_metadata.ImageDescription = null;
+			_metadata.Make             = null;
+			_metadata.Model            = null;
+			_metadata.Software         = null;
+			_metadata.Copyright        = null;
+			_metadata.Artist           = null;
+			_metadata.CustomTags.Clear();
 
 			// Clear TIFF-specific arrays
-			Metadata.StripOffsets          = null;
-			Metadata.StripByteCounts       = null;
-			Metadata.TileOffsets           = null;
-			Metadata.TileByteCounts        = null;
-			Metadata.ColorMap              = null;
-			Metadata.TransferFunction      = null;
-			Metadata.WhitePoint            = null;
-			Metadata.PrimaryChromaticities = null;
-			Metadata.YCbCrCoefficients     = null;
-			Metadata.ReferenceBlackWhite   = null;
+			_metadata.StripOffsets          = null;
+			_metadata.StripByteCounts       = null;
+			_metadata.TileOffsets           = null;
+			_metadata.TileByteCounts        = null;
+			_metadata.ColorMap              = null;
+			_metadata.TransferFunction      = null;
+			_metadata.WhitePoint            = null;
+			_metadata.PrimaryChromaticities = null;
+			_metadata.YCbCrCoefficients     = null;
+			_metadata.ReferenceBlackWhite   = null;
 
 			// Clear embedded metadata
-			Metadata.ExifIfd    = null;
-			Metadata.GpsIfd     = null;
-			Metadata.IccProfile = null;
-			Metadata.XmpData    = null;
-			Metadata.IptcData   = null;
+			_metadata.ExifIfd    = null;
+			_metadata.GpsIfd     = null;
+			_metadata.IccProfile = null;
+			_metadata.XmpData    = null;
+			_metadata.IptcData   = null;
 		}
 
 		// Call base class disposal

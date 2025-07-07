@@ -13,6 +13,8 @@ public class TiffRasterBaseline : ITiffRaster
 	/// <inheritdoc />
 	public int Height { get; set; }
 
+	IMetadata IImage.Metadata { get; }
+
 	/// <inheritdoc />
 	public TiffColorDepth ColorDepth { get; set; }
 
@@ -64,7 +66,7 @@ public class TiffRasterBaseline : ITiffRaster
 		{
 			// Baseline implementation - simple metadata size estimation
 			var size = 0L;
-			
+
 			// Add string metadata sizes (baseline approach)
 			if (!string.IsNullOrEmpty(Metadata.ImageDescription))
 				size += Metadata.ImageDescription.Length * 2; // Rough Unicode estimate
@@ -78,10 +80,10 @@ public class TiffRasterBaseline : ITiffRaster
 				size += Metadata.Copyright.Length * 2;
 			if (!string.IsNullOrEmpty(Metadata.Artist))
 				size += Metadata.Artist.Length * 2;
-			
+
 			// Add custom tags size (baseline approach)
 			size += Metadata.CustomTags.Count * 20; // Rough estimate per tag
-			
+
 			return size;
 		}
 	}
@@ -120,7 +122,7 @@ public class TiffRasterBaseline : ITiffRaster
 			// For baseline, just yield once for large metadata
 			await Task.Yield();
 		}
-		
+
 		Dispose();
 		GC.SuppressFinalize(this);
 	}

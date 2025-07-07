@@ -36,7 +36,7 @@ public interface IPngRaster : IRaster
 	int CompressionLevel { get; set; }
 
 	/// <summary>Gets the PNG metadata.</summary>
-	PngMetadata Metadata { get; }
+	new PngMetadata Metadata { get; }
 
 	/// <summary>Gets the palette data for indexed-color images.</summary>
 	ReadOnlyMemory<byte> PaletteData { get; set; }
