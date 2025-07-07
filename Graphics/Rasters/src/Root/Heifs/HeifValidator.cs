@@ -154,7 +154,7 @@ public static class HeifValidator
 		}
 
 		// Validate XMP data
-		if (metadata.XmpData != null && metadata.XmpData.Length > 0)
+		if (!string.IsNullOrEmpty(metadata.XmpData))
 		{
 			if (metadata.XmpData.Length < 10)
 				errors.Add("XMP data is too small to be valid.");
@@ -193,10 +193,10 @@ public static class HeifValidator
 				errors.Add("ISO sensitivity must be positive.");
 				
 			if (metadata.CameraMetadata.XResolution.HasValue && metadata.CameraMetadata.XResolution.Value <= 0)
-				errors.Add("X resolution must be positive.");
+				errors.Add("Pixel density must be positive.");
 				
 			if (metadata.CameraMetadata.YResolution.HasValue && metadata.CameraMetadata.YResolution.Value <= 0)
-				errors.Add("Y resolution must be positive.");
+				errors.Add("Pixel density must be positive.");
 		}
 
 		return errors.Count == 0 
