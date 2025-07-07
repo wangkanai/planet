@@ -74,15 +74,21 @@ if (bmp.HasTransparency)
 }
 ```
 
-### Creating an Indexed Color Image
+### Creating Indexed Color Images
 
 ```csharp
 // Create an 8-bit grayscale image
 var bmp = BmpExamples.CreateGrayscale8(800, 600);
-
-// The palette is automatically generated
 Console.WriteLine($"Palette colors: {bmp.Metadata.PaletteColors}");
 Console.WriteLine($"Palette size: {bmp.Metadata.PaletteSizeInBytes} bytes");
+
+// Create a 4-bit 16-color image
+var color16 = BmpExamples.Create16Color(800, 600);
+Console.WriteLine($"16-color palette: {color16.Metadata.PaletteColors} colors");
+
+// Create a 1-bit monochrome image
+var mono = BmpExamples.CreateMonochrome(800, 600);
+Console.WriteLine($"Monochrome: {mono.ColorDepth}");
 ```
 
 ### Custom Bit Masks for 16-bit Images
@@ -148,6 +154,35 @@ var bmp = BmpExamples.CreateWithV5Header(800, 600);
 Console.WriteLine($"Header: {bmp.Metadata.HeaderType}");
 ```
 
+### Web-Optimized BMPs
+
+```csharp
+// Create a BMP optimized for web usage with sRGB color space
+var webBmp = BmpExamples.CreateForWeb(800, 600);
+Console.WriteLine($"Web BMP: {webBmp.Metadata.HeaderType}, Color Space: {webBmp.Metadata.ColorSpaceType}");
+```
+
+### RLE Compression
+
+```csharp
+// Create an 8-bit BMP with RLE8 compression
+var rle8Bmp = BmpExamples.CreateRle8(800, 600);
+Console.WriteLine($"RLE8 Compression: {rle8Bmp.Compression}");
+```
+
+### Custom Bit Masks
+
+```csharp
+// Create a 16-bit BMP with custom color masks
+var customBmp = BmpExamples.CreateWithCustomMasks(800, 600, 
+    redMask: 0xF800,   // 5 bits
+    greenMask: 0x07E0, // 6 bits  
+    blueMask: 0x001F   // 5 bits
+);
+var (r, g, b, a) = customBmp.GetBitMasks();
+Console.WriteLine($"Custom masks - R:0x{r:X}, G:0x{g:X}, B:0x{b:X}");
+```
+
 ## Memory Management
 
 The BMP implementation follows the Graphics library's disposal patterns:
@@ -211,5 +246,61 @@ Common validation errors and their solutions:
 | Compression mismatch | Match compression type to color depth |
 | Missing palette | Provide palette for 1, 4, and 8-bit images |
 | Invalid bit masks | Ensure masks don't overlap for BI_BITFIELDS |
+
+## Available Factory Methods
+
+The `BmpExamples` class provides comprehensive factory methods for common BMP scenarios:
+
+### Basic Formats
+- `CreateRgb24(width, height)` - 24-bit true color RGB
+- `CreateArgb32(width, height)` - 32-bit ARGB with alpha channel
+- `CreateRgb565(width, height)` - 16-bit RGB565 high color
+- `CreateGrayscale8(width, height)` - 8-bit grayscale with palette
+- `CreateMonochrome(width, height)` - 1-bit black and white
+- `Create16Color(width, height)` - 4-bit with standard VGA palette
+
+### Specialized Formats
+- `CreateForWeb(width, height)` - Web-optimized with sRGB color space
+- `CreateWithV5Header(width, height)` - V5 header for ICC profiles
+- `CreateRle8(width, height)` - 8-bit with RLE8 compression
+- `CreateTopDown(width, height)` - Top-down format (negative height)
+- `CreateWithResolution(width, height, dpi)` - Custom DPI setting
+- `CreateWithCustomMasks(width, height, red, green, blue, alpha)` - Custom bit masks
+- `CreateMinimal()` - Smallest possible BMP (1x1 monochrome)
+
+### Demonstration
+- `DemonstrateOperations()` - Showcases all features with examples
+- `ValidateExample(bmp)` - Demonstrates validation with detailed output
+
+## API Reference
+
+### Core Classes
+- **`BmpRaster`** - Main BMP implementation
+- **`BmpMetadata`** - Comprehensive metadata for all header variants
+- **`BmpValidator`** - Format validation with detailed error reporting
+- **`BmpValidationResult`** - Validation results with errors and warnings
+- **`BmpConstants`** - All BMP format specifications and bit masks
+
+### Enumerations
+- **`BmpColorDepth`** - Supported color depths (1, 4, 8, 16, 24, 32-bit)
+- **`BmpCompression`** - Compression types (RGB, RLE4, RLE8, BITFIELDS, JPEG, PNG)
+
+### Key Properties
+- `Width`, `Height` - Image dimensions
+- `ColorDepth` - Color depth enumeration value
+- `Compression` - Compression method
+- `RowStride` - Row size in bytes (4-byte aligned)
+- `PixelDataSize` - Total pixel data size
+- `HasPalette` - Whether image uses indexed colors
+- `HasTransparency` - Whether image supports alpha channel
+- `IsTopDown` - Whether image is stored top-down
+
+### Key Methods
+- `SetBitMasks(red, green, blue, alpha)` - Configure custom color masks
+- `GetBitMasks()` - Retrieve current color masks
+- `ApplyPalette(paletteData)` - Set color palette for indexed images
+- `ConvertToRgb()` - Convert to uncompressed RGB format
+- `GetEstimatedFileSize()` - Calculate expected file size
+- `IsValid()` - Quick validation check
 
 For more examples and detailed usage, see `BmpExamples.cs`.

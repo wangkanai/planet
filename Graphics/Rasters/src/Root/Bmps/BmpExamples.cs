@@ -326,6 +326,26 @@ public static class BmpExamples
 		var monochrome = CreateMonochrome(800, 600);
 		Console.WriteLine($"1-bit Monochrome: {monochrome.Width}x{monochrome.Height}, {monochrome.GetEstimatedFileSize():N0} bytes");
 
+		var color16 = Create16Color(800, 600);
+		Console.WriteLine($"4-bit 16-color: {color16.Width}x{color16.Height}, {color16.GetEstimatedFileSize():N0} bytes");
+
+		var rgb565 = CreateRgb565(800, 600);
+		Console.WriteLine($"16-bit RGB565: {rgb565.Width}x{rgb565.Height}, {rgb565.GetEstimatedFileSize():N0} bytes");
+
+		// Demonstrate specialized formats
+		Console.WriteLine("\nSpecialized Formats:");
+		var webBmp = CreateForWeb(800, 600);
+		Console.WriteLine($"Web-optimized: {webBmp.Metadata.HeaderType}, sRGB color space");
+
+		var topDown = CreateTopDown(800, 600);
+		Console.WriteLine($"Top-down format: Height={topDown.Height} (negative), IsTopDown={topDown.IsTopDown}");
+
+		var highDpi = CreateWithResolution(800, 600, 300);
+		Console.WriteLine($"300 DPI: {highDpi.HorizontalResolution} pixels/meter");
+
+		var minimal = CreateMinimal();
+		Console.WriteLine($"Minimal: {minimal.Width}x{minimal.Height}, {minimal.GetEstimatedFileSize():N0} bytes");
+
 		// Demonstrate format conversion
 		Console.WriteLine("\nFormat Conversion:");
 		Console.WriteLine($"Before: {argb32.ColorDepth}, {argb32.Compression}");
@@ -342,5 +362,10 @@ public static class BmpExamples
 		Console.WriteLine($"Pixel Data Size: {rgb24.PixelDataSize:N0} bytes");
 		Console.WriteLine($"Has Palette: {rgb24.HasPalette}");
 		Console.WriteLine($"Has Transparency: {rgb24.HasTransparency}");
+
+		// Demonstrate bit masks
+		Console.WriteLine("\nBit Masks (RGB565):");
+		var (red, green, blue, alpha) = rgb565.GetBitMasks();
+		Console.WriteLine($"Red: 0x{red:X4}, Green: 0x{green:X4}, Blue: 0x{blue:X4}, Alpha: 0x{alpha:X4}");
 	}
 }
