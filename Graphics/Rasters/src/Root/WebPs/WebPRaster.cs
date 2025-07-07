@@ -375,13 +375,7 @@ public class WebPRaster : Raster, IWebPRaster
 			await Task.Yield();
 			Metadata.CustomChunks.Clear();
 
-			// Suggest garbage collection for large metadata cleanup
-			if (EstimatedMetadataSize > ImageConstants.VeryLargeMetadataThreshold)
-			{
-				GC.Collect();
-				GC.WaitForPendingFinalizers();
-				GC.Collect();
-			}
+			// Let the runtime handle garbage collection automatically
 		}
 		else
 		{

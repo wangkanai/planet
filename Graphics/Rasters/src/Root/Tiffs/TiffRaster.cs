@@ -288,13 +288,7 @@ public class TiffRaster : Raster, ITiffRaster
 			Metadata.XmpData = null;
 			Metadata.IptcData = null;
 
-			// Suggest GC for very large TIFF metadata
-			if (EstimatedMetadataSize > ImageConstants.VeryLargeMetadataThreshold)
-			{
-				GC.Collect();
-				GC.WaitForPendingFinalizers();
-				GC.Collect();
-			}
+			// Let the runtime handle garbage collection automatically
 		}
 		else
 		{
