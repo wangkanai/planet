@@ -1,7 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
 using System.Drawing;
-using Wangkanai.Graphics.Abstractions;
 
 namespace Wangkanai.Graphics.Rasters.Jpeg2000s;
 
@@ -194,8 +193,7 @@ public interface IJpeg2000Raster : IRaster
 	/// Tiling is beneficial for very large images as it enables efficient processing
 	/// and memory management by dividing the image into smaller, manageable blocks.
 	/// </remarks>
-	void ConvertToTiled(int tileWidth = Jpeg2000Constants.DefaultTileSize, 
-	                   int tileHeight = Jpeg2000Constants.DefaultTileSize);
+	void ConvertToTiled(int tileWidth = Jpeg2000Constants.DefaultTileSize, int tileHeight = Jpeg2000Constants.DefaultTileSize);
 }
 
 /// <summary>Encoding options for JPEG2000 compression.</summary>

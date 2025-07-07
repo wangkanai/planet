@@ -1,7 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
 using System.Drawing;
-using Wangkanai.Graphics.Abstractions;
 
 namespace Wangkanai.Graphics.Rasters.Jpeg2000s;
 
@@ -32,12 +31,12 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	{
 		if (width <= 0) throw new ArgumentException("Width must be positive.", nameof(width));
 		if (height <= 0) throw new ArgumentException("Height must be positive.", nameof(height));
-		if (components <= 0 || components > Jpeg2000Constants.MaxComponents) 
+		if (components <= 0 || components > Jpeg2000Constants.MaxComponents)
 			throw new ArgumentException($"Components must be between 1 and {Jpeg2000Constants.MaxComponents}.", nameof(components));
 
 		Width = width;
 		Height = height;
-		
+
 		Metadata = new Jpeg2000Metadata
 		{
 			Width = width,
@@ -66,8 +65,8 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		set
 		{
 			Metadata.IsLossless = value;
-			Metadata.WaveletTransform = value 
-				? Jpeg2000Constants.WaveletTransforms.Reversible53 
+			Metadata.WaveletTransform = value
+				? Jpeg2000Constants.WaveletTransforms.Reversible53
 				: Jpeg2000Constants.WaveletTransforms.Irreversible97;
 		}
 	}
@@ -165,9 +164,9 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	public bool SupportsTiling => TileWidth < Width || TileHeight < Height;
 
 	/// <summary>Indicates if geospatial metadata is present.</summary>
-	public bool HasGeospatialMetadata => 
-		Metadata.GeoTiffMetadata != null || 
-		!string.IsNullOrEmpty(Metadata.GmlData) || 
+	public bool HasGeospatialMetadata =>
+		Metadata.GeoTiffMetadata != null ||
+		!string.IsNullOrEmpty(Metadata.GmlData) ||
 		Metadata.GeoTransform != null;
 
 	/// <summary>Indicates if ICC color profile is embedded.</summary>
@@ -250,7 +249,7 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	public async Task DecodeAsync(byte[] data, int resolutionLevel = 0, int qualityLayer = -1)
 	{
 		ThrowIfDisposed();
-		
+
 		if (data == null || data.Length == 0)
 			throw new ArgumentException("JPEG2000 data cannot be null or empty.", nameof(data));
 
@@ -280,7 +279,7 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 
 		var bytesPerPixel = GetBytesPerPixel();
 		var regionDataSize = region.Width * region.Height * bytesPerPixel;
-		
+
 		// Scale for resolution level
 		var scaleFactor = 1 << resolutionLevel;
 		regionDataSize /= (scaleFactor * scaleFactor);
@@ -528,20 +527,20 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	{
 		// In a real implementation, this would parse the JP2 boxes and codestream
 		// For now, just extract basic information from the data size
-		
+
 		if (data.Length < 32)
 			throw new ArgumentException("Invalid JPEG2000 data - too small.");
 
 		// Update metadata based on parsed information
 		Metadata.ModificationTime = DateTime.UtcNow;
-		
+
 		// Calculate estimated dimensions based on data size
 		var estimatedPixels = data.Length * (IsLossless ? 3 : (int)CompressionRatio);
 		var estimatedDimension = (int)Math.Sqrt(estimatedPixels / GetBytesPerPixel());
-		
+
 		if (Width == 0) Width = estimatedDimension;
 		if (Height == 0) Height = estimatedDimension;
-		
+
 		Metadata.Width = Width;
 		Metadata.Height = Height;
 	}
