@@ -1,6 +1,7 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
 using System.Drawing;
+using Wangkanai.Graphics.Rasters.Metadatas;
 
 namespace Wangkanai.Graphics.Rasters.Heifs;
 
@@ -69,7 +70,7 @@ public interface IHeifRaster : IRaster
 	/// Sets HDR metadata for the image.
 	/// </summary>
 	/// <param name="hdrMetadata">The HDR metadata to apply.</param>
-	void SetHdrMetadata(Wangkanai.Graphics.Rasters.HdrMetadata hdrMetadata);
+	void SetHdrMetadata(HdrMetadata hdrMetadata);
 
 	/// <summary>
 	/// Gets the estimated file size for the current encoding settings.

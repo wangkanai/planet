@@ -2,6 +2,8 @@
 
 namespace Wangkanai.Graphics.Rasters.Heifs;
 
+using Wangkanai.Graphics.Rasters.Metadatas;
+
 /// <summary>
 /// Represents comprehensive metadata for HEIF images including EXIF, XMP, ICC profiles, and HDR information.
 /// </summary>
@@ -27,7 +29,7 @@ public sealed class HeifMetadata : IDisposable, IAsyncDisposable
 	/// <summary>
 	/// Gets or sets the HDR metadata.
 	/// </summary>
-	public Wangkanai.Graphics.Rasters.HdrMetadata? HdrMetadata { get; set; }
+	public HdrMetadata? HdrMetadata { get; set; }
 
 	/// <summary>
 	/// Gets or sets the image creation timestamp.
@@ -102,12 +104,12 @@ public sealed class HeifMetadata : IDisposable, IAsyncDisposable
 	/// <summary>
 	/// Gets or sets the GPS coordinates.
 	/// </summary>
-	public Wangkanai.Graphics.Rasters.GpsCoordinates? GpsCoordinates { get; set; }
+	public GpsCoordinates? GpsCoordinates { get; set; }
 
 	/// <summary>
 	/// Gets or sets the orientation of the image.
 	/// </summary>
-	public Wangkanai.Graphics.Rasters.ImageOrientation Orientation { get; set; } = Wangkanai.Graphics.Rasters.ImageOrientation.Normal;
+	public ImageOrientation Orientation { get; set; } = ImageOrientation.Normal;
 
 	/// <summary>
 	/// Gets or sets the pixel density in pixels per inch.

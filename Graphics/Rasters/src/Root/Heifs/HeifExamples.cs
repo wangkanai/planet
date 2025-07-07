@@ -2,6 +2,8 @@
 
 namespace Wangkanai.Graphics.Rasters.Heifs;
 
+using Wangkanai.Graphics.Rasters.Metadatas;
+
 /// <summary>
 /// Provides factory methods and examples for creating HEIF raster images with common configurations.
 /// </summary>
@@ -142,15 +144,15 @@ public static class HeifExamples
 		};
 
 		// Set HDR metadata
-		heif.SetHdrMetadata(new Wangkanai.Graphics.Rasters.HdrMetadata
+		heif.SetHdrMetadata(new HdrMetadata
 		{
 			MaxLuminance = HeifConstants.Hdr.Hdr10PeakBrightness,
 			MinLuminance = 0.005,
 			MaxContentLightLevel = 1000,
 			MaxFrameAverageLightLevel = 400,
-			ColorPrimaries = Wangkanai.Graphics.Rasters.HdrColorPrimaries.Bt2020,
-			TransferCharacteristics = Wangkanai.Graphics.Rasters.HdrTransferCharacteristics.Pq,
-			MatrixCoefficients = Wangkanai.Graphics.Rasters.HdrMatrixCoefficients.Bt2020Ncl
+			ColorPrimaries = HdrColorPrimaries.Bt2020,
+			TransferCharacteristics = HdrTransferCharacteristics.Pq,
+			MatrixCoefficients = HdrMatrixCoefficients.Bt2020Ncl
 		});
 
 		heif.Metadata.Software = "Wangkanai Graphics Library - HDR";
@@ -282,7 +284,7 @@ public static class HeifExamples
 		heif.Metadata.WhiteBalance = "Auto";
 
 		// Add GPS coordinates (Sydney Opera House)
-		heif.Metadata.GpsCoordinates = new Wangkanai.Graphics.Rasters.GpsCoordinates
+		heif.Metadata.GpsCoordinates = new GpsCoordinates
 		{
 			Latitude = -33.8568,
 			Longitude = 151.2153,

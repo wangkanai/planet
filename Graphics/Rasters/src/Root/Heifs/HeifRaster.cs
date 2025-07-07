@@ -1,6 +1,7 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
 using System.Drawing;
+using Wangkanai.Graphics.Rasters.Metadatas;
 
 namespace Wangkanai.Graphics.Rasters.Heifs;
 
@@ -177,7 +178,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	}
 
 	/// <inheritdoc />
-	public void SetHdrMetadata(Wangkanai.Graphics.Rasters.HdrMetadata hdrMetadata)
+	public void SetHdrMetadata(HdrMetadata hdrMetadata)
 	{
 		ThrowIfDisposed();
 		Metadata.HdrMetadata = hdrMetadata ?? throw new ArgumentNullException(nameof(hdrMetadata));

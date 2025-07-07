@@ -2,6 +2,7 @@
 
 using Wangkanai.Graphics.Rasters;
 using Wangkanai.Graphics.Rasters.Heifs;
+using Wangkanai.Graphics.Rasters.Metadatas;
 
 namespace Wangkanai.Graphics.Rasters.Tests.Unit.Heifs;
 
