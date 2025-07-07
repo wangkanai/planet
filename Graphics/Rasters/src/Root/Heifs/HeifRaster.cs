@@ -35,7 +35,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 		Profile = HeifProfile.Main;
 		EnableProgressiveDecoding = false;
 		GenerateThumbnails = true;
-		Metadata = new HeifMetadata();
+		HeifMetadata = new HeifMetadata();
 	}
 
 	/// <summary>
@@ -56,7 +56,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 		Profile = HeifProfile.Main;
 		EnableProgressiveDecoding = false;
 		GenerateThumbnails = true;
-		Metadata = new HeifMetadata();
+		HeifMetadata = new HeifMetadata();
 	}
 
 	/// <inheritdoc />
@@ -187,7 +187,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 		var compressedSize = (long)(baseSize * compressionRatio);
 
 		// Add overhead for container and metadata
-		var overhead = 8192 + Metadata.EstimatedMetadataSize;
+		var overhead = 8192 + HeifMetadata.EstimatedMetadataSize;
 
 		return compressedSize + overhead;
 	}
