@@ -153,7 +153,7 @@ Handle large images efficiently with tiling:
 
 ```csharp
 // Convert to tiled format
-jpeg2000.ConvertToTiled(512, 512);
+jpeg2000.SetTileSize(512, 512);
 
 // Access tile information
 Console.WriteLine($"Total tiles: {jpeg2000.TotalTiles}");
