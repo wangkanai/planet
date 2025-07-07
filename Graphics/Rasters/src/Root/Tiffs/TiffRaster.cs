@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace Wangkanai.Graphics.Rasters.Tiffs;
 
 /// <summary>Represents a TIFF raster image with format-specific properties.</summary>
-public class TiffRaster : Raster, ITiffRaster
+public sealed class TiffRaster : Raster, ITiffRaster
 {
 	/// <inheritdoc />
 	public override int Width { get; set; }

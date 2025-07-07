@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Rasters.Jpegs;
 
 /// <summary>Represents a JPEG raster image with format-specific properties.</summary>
-public class JpegRaster : Raster, IJpegRaster
+public sealed class JpegRaster : Raster, IJpegRaster
 {
 	/// <inheritdoc />
 	public override int Width { get; set; }

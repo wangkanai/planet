@@ -11,7 +11,7 @@ namespace Wangkanai.Graphics.Rasters.Avifs;
 /// AVIF is a modern image format based on the AV1 video codec, offering superior compression efficiency
 /// while maintaining high image quality. It supports HDR, wide color gamut, and alpha transparency.
 /// </remarks>
-public class AvifRaster : Raster, IAvifRaster
+public sealed class AvifRaster : Raster, IAvifRaster
 {
 	private byte[]? _encodedData;
 	private byte[]? _pixelData;
@@ -310,7 +310,7 @@ public class AvifRaster : Raster, IAvifRaster
 		ThrowIfDisposed();
 
 		var baseSize = (long)Width * Height * (HasAlpha ? 4 : 3);
-		
+
 		// Adjust for bit depth
 		if (BitDepth > 8)
 			baseSize = baseSize * BitDepth / 8;
@@ -489,7 +489,7 @@ public class AvifRaster : Raster, IAvifRaster
 
 		// Update metadata based on file size estimation
 		Metadata.ModificationTime = DateTime.UtcNow;
-		
+
 		// Simulate extraction of basic info
 		if (Width == 0 || Height == 0)
 		{

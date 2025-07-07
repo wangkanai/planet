@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Rasters.WebPs;
 
 /// <summary>Represents a WebP raster image implementation with high-performance optimizations.</summary>
-public class WebPRaster : Raster, IWebPRaster
+public sealed class WebPRaster : Raster, IWebPRaster
 {
 	private WebPFormat      _format               = WebPFormat.Simple;
 	private WebPCompression _compression          = WebPCompression.VP8;
@@ -29,7 +29,8 @@ public class WebPRaster : Raster, IWebPRaster
 	/// <summary>Initializes a new instance of the <see cref="WebPRaster"/> class with specified dimensions.</summary>
 	/// <param name="width">The width of the image in pixels.</param>
 	/// <param name="height">The height of the image in pixels.</param>
-	public WebPRaster(int width, int height) : this()
+	public WebPRaster(int width, int height)
+		: this()
 	{
 		Width  = Math.Clamp(width, (int)WebPConstants.MinWidth, (int)WebPConstants.MaxWidth);
 		Height = Math.Clamp(height, (int)WebPConstants.MinHeight, (int)WebPConstants.MaxHeight);
@@ -39,7 +40,8 @@ public class WebPRaster : Raster, IWebPRaster
 	/// <param name="width">The width of the image in pixels.</param>
 	/// <param name="height">The height of the image in pixels.</param>
 	/// <param name="quality">The quality level (0-100) for lossy compression.</param>
-	public WebPRaster(int width, int height, int quality) : this(width, height)
+	public WebPRaster(int width, int height, int quality)
+		: this(width, height)
 	{
 		Quality = quality;
 	}
@@ -135,7 +137,8 @@ public class WebPRaster : Raster, IWebPRaster
 	}
 
 	/// <inheritdoc />
-	public override bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
+	public override bool HasLargeMetadata
+		=> EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
 
 	/// <inheritdoc />
 	public override long EstimatedMetadataSize
@@ -157,11 +160,11 @@ public class WebPRaster : Raster, IWebPRaster
 				size += chunk.Length;
 
 			// Add estimated size of animation frames
-			if (Metadata.HasAnimation)
-			{
-				foreach (var frame in Metadata.AnimationFrames)
-					size += frame.Data.Length;
-			}
+			if (!Metadata.HasAnimation)
+				return size;
+
+			foreach (var frame in Metadata.AnimationFrames)
+				size += frame.Data.Length;
 
 			return size;
 		}
@@ -204,12 +207,12 @@ public class WebPRaster : Raster, IWebPRaster
 
 	/// <inheritdoc />
 	public bool IsValid()
-	{
-		return Width > 0 && Height > 0
-		                 && Width <= WebPConstants.MaxWidth && Height <= WebPConstants.MaxHeight
-		                 && Quality is >= WebPConstants.MinQuality and <= WebPConstants.MaxQuality
-		                 && CompressionLevel is >= WebPConstants.MinCompressionLevel and <= WebPConstants.MaxCompressionLevel;
-	}
+		=> Width > 0 &&
+		   Height > 0 &&
+		   Width <= WebPConstants.MaxWidth &&
+		   Height <= WebPConstants.MaxHeight &&
+		   Quality is >= WebPConstants.MinQuality and <= WebPConstants.MaxQuality &&
+		   CompressionLevel is >= WebPConstants.MinCompressionLevel and <= WebPConstants.MaxCompressionLevel;
 
 	/// <inheritdoc />
 	public long GetEstimatedFileSize()
@@ -361,7 +364,8 @@ public class WebPRaster : Raster, IWebPRaster
 				var batchSize = 50;
 				for (var i = 0; i < Metadata.AnimationFrames.Count; i += batchSize)
 				{
-					var endIndex                                                        = Math.Min(i + batchSize, Metadata.AnimationFrames.Count);
+					var endIndex = Math.Min(i + batchSize, Metadata.AnimationFrames.Count);
+
 					for (var j = i; j < endIndex; j++) Metadata.AnimationFrames[j].Data = ReadOnlyMemory<byte>.Empty;
 					// Yield control after each batch
 					await Task.Yield();
