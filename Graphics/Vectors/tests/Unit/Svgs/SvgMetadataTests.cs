@@ -1,8 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Graphics.Vectors.Svgs;
-
-namespace Wangkanai.Graphics.Vectors.Tests.Svgs;
+namespace Wangkanai.Graphics.Vectors.Svgs;
 
 public class SvgMetadataTests
 {
@@ -403,7 +401,7 @@ public class SvgMetadataTests
 	{
 		// Arrange
 		using var metadata = new SvgMetadata();
-		
+
 		// Set some non-default values
 		metadata.Version = "2.0";
 		metadata.ViewBox = new SvgViewBox(10, 20, 300, 400);

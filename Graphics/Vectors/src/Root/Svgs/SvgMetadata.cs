@@ -9,7 +9,8 @@ namespace Wangkanai.Graphics.Vectors.Svgs;
 /// </summary>
 public class SvgMetadata : ISvgMetadata
 {
-	private          bool                       _disposed;
+	private bool _disposed;
+
 	private readonly Dictionary<string, string> _namespaces;
 	private readonly Dictionary<string, object> _customProperties;
 
@@ -81,7 +82,8 @@ public class SvgMetadata : ISvgMetadata
 	public SvgColorSpace ColorSpace { get; set; }
 
 	/// <inheritdoc />
-	public Dictionary<string, object> CustomProperties => _customProperties;
+	public Dictionary<string, object> CustomProperties
+		=> _customProperties;
 
 	/// <inheritdoc />
 	public long CalculateEstimatedMemoryUsage()
@@ -162,13 +164,16 @@ public class SvgMetadata : ISvgMetadata
 	}
 
 	/// <summary>Gets whether this metadata represents a large SVG that benefits from optimization.</summary>
-	public bool IsLargeSvg => CalculateEstimatedMemoryUsage() > SvgConstants.LargeSvgThreshold;
+	public bool IsLargeSvg
+		=> CalculateEstimatedMemoryUsage() > SvgConstants.LargeSvgThreshold;
 
 	/// <summary>Gets whether this metadata represents a very large SVG requiring streaming.</summary>
-	public bool IsVeryLargeSvg => CalculateEstimatedMemoryUsage() > SvgConstants.VeryLargeSvgThreshold;
+	public bool IsVeryLargeSvg
+		=> CalculateEstimatedMemoryUsage() > SvgConstants.VeryLargeSvgThreshold;
 
 	/// <summary>Gets whether this SVG requires performance optimization based on element count.</summary>
-	public bool RequiresOptimization => ElementCount > SvgConstants.PerformanceOptimizationThreshold;
+	public bool RequiresOptimization
+		=> ElementCount > SvgConstants.PerformanceOptimizationThreshold;
 
 	/// <inheritdoc />
 	public void Dispose()
@@ -189,9 +194,7 @@ public class SvgMetadata : ISvgMetadata
 	{
 		// For large metadata, use async disposal with yielding
 		if (IsVeryLargeSvg)
-		{
 			return DisposeAsyncLarge();
-		}
 
 		// For smaller metadata, use synchronous disposal
 		Dispose(true);

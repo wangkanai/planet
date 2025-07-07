@@ -20,11 +20,6 @@ public class GeographicBounds
 	/// <summary>Gets or sets the maximum longitude (eastern boundary).</summary>
 	public double MaxLongitude { get; set; }
 
-	/// <summary>Initializes a new instance of the GeographicBounds class.</summary>
-	public GeographicBounds()
-	{
-	}
-
 	/// <summary>Initializes a new instance of the GeographicBounds class with specified bounds.</summary>
 	/// <param name="minLatitude">The minimum latitude (southern boundary).</param>
 	/// <param name="maxLatitude">The maximum latitude (northern boundary).</param>
@@ -32,39 +27,39 @@ public class GeographicBounds
 	/// <param name="maxLongitude">The maximum longitude (eastern boundary).</param>
 	public GeographicBounds(double minLatitude, double maxLatitude, double minLongitude, double maxLongitude)
 	{
-		MinLatitude = minLatitude;
-		MaxLatitude = maxLatitude;
+		MinLatitude  = minLatitude;
+		MaxLatitude  = maxLatitude;
 		MinLongitude = minLongitude;
 		MaxLongitude = maxLongitude;
 	}
 
 	/// <summary>Gets the width of the bounding box in degrees.</summary>
-	public double Width => MaxLongitude - MinLongitude;
+	public double Width
+		=> MaxLongitude - MinLongitude;
 
 	/// <summary>Gets the height of the bounding box in degrees.</summary>
-	public double Height => MaxLatitude - MinLatitude;
+	public double Height
+		=> MaxLatitude - MinLatitude;
 
 	/// <summary>Gets the center point of the bounding box.</summary>
-	public (double Latitude, double Longitude) Center => 
-		((MinLatitude + MaxLatitude) / 2, (MinLongitude + MaxLongitude) / 2);
+	public (double Latitude, double Longitude) Center
+		=> ((MinLatitude + MaxLatitude) / 2, (MinLongitude + MaxLongitude) / 2);
 
 	/// <summary>Determines whether the specified point is within this bounding box.</summary>
 	/// <param name="latitude">The latitude to check.</param>
 	/// <param name="longitude">The longitude to check.</param>
 	/// <returns>True if the point is within the bounds; otherwise, false.</returns>
 	public bool Contains(double latitude, double longitude)
-	{
-		return latitude >= MinLatitude && latitude <= MaxLatitude &&
-		       longitude >= MinLongitude && longitude <= MaxLongitude;
-	}
+		=> latitude >= MinLatitude && latitude <= MaxLatitude &&
+		   longitude >= MinLongitude && longitude <= MaxLongitude;
 
 	/// <summary>Expands the bounding box to include the specified point.</summary>
 	/// <param name="latitude">The latitude of the point to include.</param>
 	/// <param name="longitude">The longitude of the point to include.</param>
 	public void Expand(double latitude, double longitude)
 	{
-		MinLatitude = Math.Min(MinLatitude, latitude);
-		MaxLatitude = Math.Max(MaxLatitude, latitude);
+		MinLatitude  = Math.Min(MinLatitude, latitude);
+		MaxLatitude  = Math.Max(MaxLatitude, latitude);
 		MinLongitude = Math.Min(MinLongitude, longitude);
 		MaxLongitude = Math.Max(MaxLongitude, longitude);
 	}
@@ -72,19 +67,15 @@ public class GeographicBounds
 	/// <summary>Validates that the bounding box is correctly formed.</summary>
 	/// <returns>True if the bounds are valid; otherwise, false.</returns>
 	public bool IsValid()
-	{
-		return MinLatitude <= MaxLatitude && 
-		       MinLongitude <= MaxLongitude &&
-		       MinLatitude >= -90 && MaxLatitude <= 90 &&
-		       MinLongitude >= -180 && MaxLongitude <= 180;
-	}
+		=> MinLatitude <= MaxLatitude &&
+		   MinLongitude <= MaxLongitude &&
+		   MinLatitude >= -90 && MaxLatitude <= 90 &&
+		   MinLongitude >= -180 && MaxLongitude <= 180;
 
 	/// <summary>Returns a string representation of the geographic bounds.</summary>
 	/// <returns>A string in the format "MinLat,MinLon,MaxLat,MaxLon".</returns>
 	public override string ToString()
-	{
-		return $"{MinLatitude:F5},{MinLongitude:F5},{MaxLatitude:F5},{MaxLongitude:F5}";
-	}
+		=> $"{MinLatitude:F5},{MinLongitude:F5},{MaxLatitude:F5},{MaxLongitude:F5}";
 
 	/// <summary>Creates a GeographicBounds from a comma-separated string.</summary>
 	/// <param name="boundsString">A string in the format "MinLat,MinLon,MaxLat,MaxLon".</param>
@@ -111,8 +102,10 @@ public class GeographicBounds
 	}
 
 	/// <summary>World bounds covering the entire Earth.</summary>
-	public static GeographicBounds World => new(-90, 90, -180, 180);
+	public static GeographicBounds World
+		=> new(-90, 90, -180, 180);
 
 	/// <summary>Web Mercator bounds (the typical bounds for web mapping).</summary>
-	public static GeographicBounds WebMercator => new(-85.0511, 85.0511, -180, 180);
+	public static GeographicBounds WebMercator
+		=> new(-85.0511, 85.0511, -180, 180);
 }

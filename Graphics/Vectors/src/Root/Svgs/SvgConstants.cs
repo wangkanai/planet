@@ -85,20 +85,20 @@ public static class SvgConstants
 
 	/// <summary>Standard SVG namespace declarations.</summary>
 	public static readonly Dictionary<string, string> StandardNamespaces = new()
-	{
-		{ "svg", SvgNamespace },
-		{ "xlink", XLinkNamespace },
-		{ "xml", XmlNamespace }
-	};
+	                                                                       {
+		                                                                       { "svg", SvgNamespace },
+		                                                                       { "xlink", XLinkNamespace },
+		                                                                       { "xml", XmlNamespace }
+	                                                                       };
 
 	/// <summary>Common geospatial CRS definitions.</summary>
 	public static readonly Dictionary<string, string> CommonCrs = new()
-	{
-		{ "WGS84", "EPSG:4326" },
-		{ "WebMercator", "EPSG:3857" },
-		{ "UTM", "EPSG:32633" }, // Example UTM zone
-		{ "PlateCarree", "EPSG:4326" }
-	};
+	                                                              {
+		                                                              { "WGS84", "EPSG:4326" },
+		                                                              { "WebMercator", "EPSG:3857" },
+		                                                              { "UTM", "EPSG:32633" }, // Example UTM zone
+		                                                              { "PlateCarree", "EPSG:4326" }
+	                                                              };
 
 	/// <summary>Performance thresholds for different SVG complexities.</summary>
 	public static class PerformanceThresholds

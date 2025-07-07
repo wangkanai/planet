@@ -20,30 +20,35 @@ public readonly struct SvgViewBox : IEquatable<SvgViewBox>
 	/// <summary>Initializes a new instance of the SvgViewBox struct.</summary>
 	public SvgViewBox(double x, double y, double width, double height)
 	{
-		X = x;
-		Y = y;
-		Width = width;
+		X      = x;
+		Y      = y;
+		Width  = width;
 		Height = height;
 	}
 
 	/// <summary>Gets the default viewBox (0, 0, 100, 100).</summary>
-	public static SvgViewBox Default => new(0, 0, 100, 100);
+	public static SvgViewBox Default
+		=> new(0, 0, 100, 100);
 
 	/// <summary>Gets the aspect ratio of the viewBox.</summary>
-	public double AspectRatio => Height != 0 ? Width / Height : 0;
+	public double AspectRatio
+		=> Height != 0 ? Width / Height : 0;
 
 	/// <inheritdoc />
-	public bool Equals(SvgViewBox other) =>
-		X.Equals(other.X) && Y.Equals(other.Y) && Width.Equals(other.Width) && Height.Equals(other.Height);
+	public bool Equals(SvgViewBox other)
+		=> X.Equals(other.X) && Y.Equals(other.Y) && Width.Equals(other.Width) && Height.Equals(other.Height);
 
 	/// <inheritdoc />
-	public override bool Equals(object? obj) => obj is SvgViewBox other && Equals(other);
+	public override bool Equals(object? obj)
+		=> obj is SvgViewBox other && Equals(other);
 
 	/// <inheritdoc />
-	public override int GetHashCode() => HashCode.Combine(X, Y, Width, Height);
+	public override int GetHashCode()
+		=> HashCode.Combine(X, Y, Width, Height);
 
 	/// <inheritdoc />
-	public override string ToString() => $"{X} {Y} {Width} {Height}";
+	public override string ToString()
+		=> $"{X} {Y} {Width} {Height}";
 
 	/// <summary>Parses a viewBox string into an SvgViewBox.</summary>
 	public static SvgViewBox Parse(string viewBoxString)

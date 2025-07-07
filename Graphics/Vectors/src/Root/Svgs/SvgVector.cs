@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.IO.Compression;
+
 using Wangkanai.Spatial;
 using Wangkanai.Spatial.Coordinates;
 
@@ -20,10 +21,11 @@ namespace Wangkanai.Graphics.Vectors.Svgs;
 /// </remarks>
 public class SvgVector : Vector, ISvgVector
 {
-	private bool _disposed;
-	private XDocument? _document;
 	private readonly SvgMetadata _metadata;
-	private string? _sourceFilePath;
+
+	private bool       _disposed;
+	private XDocument? _document;
+	private string?    _sourceFilePath;
 
 	/// <summary>Initializes a new SVG vector with default settings.</summary>
 	public SvgVector() : this(100, 100) { }
@@ -34,11 +36,11 @@ public class SvgVector : Vector, ISvgVector
 	public SvgVector(int width, int height)
 	{
 		_metadata = new SvgMetadata
-		{
-			ViewportWidth = width,
-			ViewportHeight = height,
-			ViewBox = new SvgViewBox(0, 0, width, height)
-		};
+		            {
+			            ViewportWidth  = width,
+			            ViewportHeight = height,
+			            ViewBox        = new SvgViewBox(0, 0, width, height)
+		            };
 		_document = CreateEmptyDocument();
 	}
 
@@ -54,9 +56,10 @@ public class SvgVector : Vector, ISvgVector
 	/// <param name="filePath">Path to the SVG file.</param>
 	public SvgVector(string filePath, bool isFilePath)
 	{
-		if (!isFilePath) throw new ArgumentException("Use other constructor for SVG content", nameof(isFilePath));
+		if (!isFilePath)
+			throw new ArgumentException("Use other constructor for SVG content", nameof(isFilePath));
 
-		_metadata = new SvgMetadata();
+		_metadata       = new SvgMetadata();
 		_sourceFilePath = filePath;
 		LoadFromFile(filePath);
 	}
@@ -84,22 +87,28 @@ public class SvgVector : Vector, ISvgVector
 	}
 
 	/// <inheritdoc />
-	public override bool HasLargeMetadata => _metadata.IsVeryLargeSvg;
+	public override bool HasLargeMetadata
+		=> _metadata.IsVeryLargeSvg;
 
 	/// <inheritdoc />
-	public override long EstimatedMetadataSize => _metadata.CalculateEstimatedMemoryUsage();
+	public override long EstimatedMetadataSize
+		=> _metadata.CalculateEstimatedMemoryUsage();
 
 	/// <summary>Gets the SVG metadata.</summary>
-	public ISvgMetadata Metadata => _metadata;
+	public ISvgMetadata Metadata
+		=> _metadata;
 
 	/// <summary>Gets the SVG document as XDocument.</summary>
-	public XDocument? Document => _document;
+	public XDocument? Document
+		=> _document;
 
 	/// <summary>Gets whether the SVG is loaded from a compressed format.</summary>
-	public bool IsCompressed => _metadata.IsCompressed;
+	public bool IsCompressed
+		=> _metadata.IsCompressed;
 
 	/// <summary>Gets the source file path if loaded from file.</summary>
-	public string? SourceFilePath => _sourceFilePath;
+	public string? SourceFilePath
+		=> _sourceFilePath;
 
 	/// <summary>Gets the SVG content as XML string.</summary>
 	public string ToXmlString()
@@ -112,15 +121,16 @@ public class SvgVector : Vector, ISvgVector
 	public string ToFormattedXmlString()
 	{
 		ThrowIfDisposed();
-		if (_document == null) return string.Empty;
+		if (_document == null)
+			return string.Empty;
 
 		var settings = new XmlWriterSettings
-		{
-			Indent = true,
-			IndentChars = "  ",
-			Encoding = new UTF8Encoding(false), // No BOM
-			OmitXmlDeclaration = false
-		};
+		               {
+			               Indent             = true,
+			               IndentChars        = "  ",
+			               Encoding           = new UTF8Encoding(false), // No BOM
+			               OmitXmlDeclaration = false
+		               };
 
 		using var memoryStream = new MemoryStream();
 		using (var xmlWriter = XmlWriter.Create(memoryStream, settings))
@@ -128,6 +138,7 @@ public class SvgVector : Vector, ISvgVector
 			_document.WriteTo(xmlWriter);
 			xmlWriter.Flush();
 		}
+
 		return Encoding.UTF8.GetString(memoryStream.ToArray());
 	}
 
@@ -137,21 +148,18 @@ public class SvgVector : Vector, ISvgVector
 	public async Task SaveToFileAsync(string filePath, bool compressed = false)
 	{
 		ThrowIfDisposed();
-		if (_document == null) throw new InvalidOperationException("No SVG document loaded");
+		if (_document == null)
+			throw new InvalidOperationException("No SVG document loaded");
 
 		_metadata.ModificationDate = DateTime.UtcNow;
-		_metadata.IsCompressed = compressed;
+		_metadata.IsCompressed     = compressed;
 
 		var xmlContent = ToFormattedXmlString();
 
 		if (compressed)
-		{
 			await SaveCompressedAsync(filePath, xmlContent);
-		}
 		else
-		{
 			await File.WriteAllTextAsync(filePath, xmlContent, Encoding.UTF8);
-		}
 
 		_sourceFilePath = filePath;
 	}
@@ -163,18 +171,19 @@ public class SvgVector : Vector, ISvgVector
 		ThrowIfDisposed();
 		_sourceFilePath = filePath;
 
-		var extension = Path.GetExtension(filePath).ToLowerInvariant();
+		var extension    = Path.GetExtension(filePath).ToLowerInvariant();
 		var isCompressed = extension == SvgConstants.CompressedFileExtension;
 
 		string content;
 		if (isCompressed)
 		{
-			content = await LoadCompressedAsync(filePath);
+			content                = await LoadCompressedAsync(filePath);
 			_metadata.IsCompressed = true;
 		}
 		else
 		{
 			content = await File.ReadAllTextAsync(filePath, Encoding.UTF8);
+
 			_metadata.IsCompressed = false;
 		}
 
@@ -185,15 +194,16 @@ public class SvgVector : Vector, ISvgVector
 	public void Optimize()
 	{
 		ThrowIfDisposed();
-		if (_document?.Root == null) return;
+		if (_document?.Root == null)
+			return;
 
 		// Remove comments
 		_document.DescendantNodes().OfType<XComment>().Remove();
 
 		// Remove empty groups
 		var emptyGroups = _document.Root.Descendants()
-			.Where(e => e.Name.LocalName == "g" && !e.HasElements && string.IsNullOrWhiteSpace(e.Value))
-			.ToList();
+		                           .Where(e => e.Name.LocalName == "g" && !e.HasElements && string.IsNullOrWhiteSpace(e.Value))
+		                           .ToList();
 		emptyGroups.ForEach(g => g.Remove());
 
 		// Round coordinate values to reduce precision
@@ -214,7 +224,7 @@ public class SvgVector : Vector, ISvgVector
 	/// <summary>Creates an empty SVG document with default structure.</summary>
 	private XDocument CreateEmptyDocument()
 	{
-		var svgNamespace = XNamespace.Get(SvgConstants.SvgNamespace);
+		var svgNamespace   = XNamespace.Get(SvgConstants.SvgNamespace);
 		var xlinkNamespace = XNamespace.Get(SvgConstants.XLinkNamespace);
 
 		var svg = new XElement(svgNamespace + "svg",
@@ -249,18 +259,18 @@ public class SvgVector : Vector, ISvgVector
 	/// <summary>Loads SVG content from file synchronously.</summary>
 	private void LoadFromFile(string filePath)
 	{
-		var extension = Path.GetExtension(filePath).ToLowerInvariant();
+		var extension    = Path.GetExtension(filePath).ToLowerInvariant();
 		var isCompressed = extension == SvgConstants.CompressedFileExtension;
 
 		string content;
 		if (isCompressed)
 		{
-			content = LoadCompressed(filePath);
+			content                = LoadCompressed(filePath);
 			_metadata.IsCompressed = true;
 		}
 		else
 		{
-			content = File.ReadAllText(filePath, Encoding.UTF8);
+			content                = File.ReadAllText(filePath, Encoding.UTF8);
 			_metadata.IsCompressed = false;
 		}
 
@@ -291,8 +301,14 @@ public class SvgVector : Vector, ISvgVector
 		var viewBoxAttr = root.Attribute("viewBox")?.Value;
 		if (!string.IsNullOrEmpty(viewBoxAttr))
 		{
-			try { _metadata.ViewBox = SvgViewBox.Parse(viewBoxAttr); }
-			catch { _metadata.ViewBox = SvgViewBox.Default; }
+			try
+			{
+				_metadata.ViewBox = SvgViewBox.Parse(viewBoxAttr);
+			}
+			catch
+			{
+				_metadata.ViewBox = SvgViewBox.Default;
+			}
 		}
 
 		// Extract dimensions
@@ -302,7 +318,7 @@ public class SvgVector : Vector, ISvgVector
 			_metadata.ViewportHeight = height;
 
 		// Extract title and description
-		_metadata.Title = root.Element(XName.Get("title", SvgConstants.SvgNamespace))?.Value;
+		_metadata.Title       = root.Element(XName.Get("title", SvgConstants.SvgNamespace))?.Value;
 		_metadata.Description = root.Element(XName.Get("desc", SvgConstants.SvgNamespace))?.Value;
 
 		// Count elements
@@ -314,9 +330,7 @@ public class SvgVector : Vector, ISvgVector
 		// Extract namespaces
 		_metadata.Namespaces.Clear();
 		foreach (var attr in root.Attributes().Where(a => a.IsNamespaceDeclaration))
-		{
 			_metadata.Namespaces[attr.Name.LocalName] = attr.Value;
-		}
 
 		_metadata.ModificationDate = DateTime.UtcNow;
 	}
@@ -324,7 +338,7 @@ public class SvgVector : Vector, ISvgVector
 	/// <summary>Calculates the total path length for performance estimation.</summary>
 	private static double CalculateTotalPathLength(XElement root)
 	{
-		var totalLength = 0.0;
+		var totalLength  = 0.0;
 		var pathElements = root.Descendants().Where(e => e.Name.LocalName == "path");
 
 		foreach (var path in pathElements)
@@ -346,17 +360,11 @@ public class SvgVector : Vector, ISvgVector
 		var coordinateAttributes = new[] { "x", "y", "x1", "y1", "x2", "y2", "cx", "cy", "r", "rx", "ry" };
 
 		foreach (var attr in element.Attributes())
-		{
 			if (coordinateAttributes.Contains(attr.Name.LocalName) && double.TryParse(attr.Value, out var value))
-			{
 				attr.Value = Math.Round(value, precision).ToString();
-			}
-		}
 
 		foreach (var child in element.Elements())
-		{
 			RoundCoordinates(child, precision);
-		}
 	}
 
 	/// <summary>Saves compressed SVG content asynchronously.</summary>
@@ -364,7 +372,7 @@ public class SvgVector : Vector, ISvgVector
 	{
 		await using var fileStream = File.Create(filePath);
 		await using var gzipStream = new GZipStream(fileStream, CompressionLevel.Optimal);
-		await using var writer = new StreamWriter(gzipStream, Encoding.UTF8);
+		await using var writer     = new StreamWriter(gzipStream, Encoding.UTF8);
 		await writer.WriteAsync(content);
 	}
 
@@ -373,7 +381,7 @@ public class SvgVector : Vector, ISvgVector
 	{
 		await using var fileStream = File.OpenRead(filePath);
 		await using var gzipStream = new GZipStream(fileStream, CompressionMode.Decompress);
-		using var reader = new StreamReader(gzipStream, Encoding.UTF8);
+		using var       reader     = new StreamReader(gzipStream, Encoding.UTF8);
 		return await reader.ReadToEndAsync();
 	}
 
@@ -382,7 +390,7 @@ public class SvgVector : Vector, ISvgVector
 	{
 		using var fileStream = File.OpenRead(filePath);
 		using var gzipStream = new GZipStream(fileStream, CompressionMode.Decompress);
-		using var reader = new StreamReader(gzipStream, Encoding.UTF8);
+		using var reader     = new StreamReader(gzipStream, Encoding.UTF8);
 		return reader.ReadToEnd();
 	}
 
@@ -396,8 +404,10 @@ public class SvgVector : Vector, ISvgVector
 				_metadata?.Dispose();
 				_document = null;
 			}
+
 			_disposed = true;
 		}
+
 		base.Dispose(disposing);
 	}
 
@@ -406,7 +416,7 @@ public class SvgVector : Vector, ISvgVector
 	{
 		if (_metadata != null)
 			await _metadata.DisposeAsync().ConfigureAwait(false);
-		
+
 		_document = null;
 		_disposed = true;
 
@@ -414,7 +424,7 @@ public class SvgVector : Vector, ISvgVector
 	}
 
 	/// <summary>Throws ObjectDisposedException if the vector has been disposed.</summary>
-	new protected void ThrowIfDisposed()
+	protected new void ThrowIfDisposed()
 	{
 		if (_disposed)
 			throw new ObjectDisposedException(nameof(SvgVector));
@@ -427,17 +437,17 @@ public class SvgVector : Vector, ISvgVector
 	public Coordinate TransformToSvgSpace(Geodetic geodetic, GeographicBounds boundingBox)
 	{
 		ThrowIfDisposed();
-		
+
 		// Normalize the coordinate to 0-1 range within the bounding box
-		var normalizedX = (geodetic.Longitude - boundingBox.MinLongitude) / 
+		var normalizedX = (geodetic.Longitude - boundingBox.MinLongitude) /
 		                  (boundingBox.MaxLongitude - boundingBox.MinLongitude);
-		var normalizedY = (boundingBox.MaxLatitude - geodetic.Latitude) / 
+		var normalizedY = (boundingBox.MaxLatitude - geodetic.Latitude) /
 		                  (boundingBox.MaxLatitude - boundingBox.MinLatitude);
-		
+
 		// Transform to SVG coordinate space
 		var svgX = normalizedX * _metadata.ViewBox.Width + _metadata.ViewBox.X;
 		var svgY = normalizedY * _metadata.ViewBox.Height + _metadata.ViewBox.Y;
-		
+
 		return new Coordinate(svgX, svgY);
 	}
 
@@ -448,17 +458,17 @@ public class SvgVector : Vector, ISvgVector
 	public Geodetic TransformToGeographic(Coordinate svgCoordinate, GeographicBounds boundingBox)
 	{
 		ThrowIfDisposed();
-		
+
 		// Normalize SVG coordinate to 0-1 range
 		var normalizedX = (svgCoordinate.X - _metadata.ViewBox.X) / _metadata.ViewBox.Width;
 		var normalizedY = (svgCoordinate.Y - _metadata.ViewBox.Y) / _metadata.ViewBox.Height;
-		
+
 		// Transform to geographic coordinates
-		var longitude = boundingBox.MinLongitude + normalizedX * 
+		var longitude = boundingBox.MinLongitude + normalizedX *
 		                (boundingBox.MaxLongitude - boundingBox.MinLongitude);
-		var latitude = boundingBox.MaxLatitude - normalizedY * 
+		var latitude = boundingBox.MaxLatitude - normalizedY *
 		               (boundingBox.MaxLatitude - boundingBox.MinLatitude);
-		
+
 		return new Geodetic(latitude, longitude);
 	}
 
@@ -468,12 +478,10 @@ public class SvgVector : Vector, ISvgVector
 	{
 		ThrowIfDisposed();
 		_metadata.CoordinateReferenceSystem = crs;
-		
+
 		// Add CRS metadata to the SVG document
 		if (_document?.Root != null)
-		{
 			_document.Root.SetAttributeValue("data-crs", crs);
-		}
 	}
 
 	/// <summary>Transforms the entire SVG from one coordinate system to another.</summary>
@@ -484,10 +492,10 @@ public class SvgVector : Vector, ISvgVector
 	{
 		ThrowIfDisposed();
 		if (_document?.Root == null) return;
-		
+
 		// Update CRS metadata
 		SetCoordinateReferenceSystem(toCrs);
-		
+
 		// For now, we'll handle the most common transformations
 		if (fromCrs == "EPSG:4326" && toCrs == "EPSG:3857")
 		{
@@ -499,7 +507,7 @@ public class SvgVector : Vector, ISvgVector
 			// Transform from Web Mercator to WGS84
 			TransformFromWebMercator(boundingBox);
 		}
-		
+
 		_metadata.ModificationDate = DateTime.UtcNow;
 	}
 
@@ -507,20 +515,18 @@ public class SvgVector : Vector, ISvgVector
 	private void TransformToWebMercator(GeographicBounds bounds)
 	{
 		var mercator = new Mercator();
-		
+
 		// Transform bounding box corners
-		var topLeft = mercator.LatLonToMeters(bounds.MinLongitude, bounds.MaxLatitude);
+		var topLeft     = mercator.LatLonToMeters(bounds.MinLongitude, bounds.MaxLatitude);
 		var bottomRight = mercator.LatLonToMeters(bounds.MaxLongitude, bounds.MinLatitude);
-		
+
 		// Update viewBox to reflect Mercator coordinates
-		var newViewBox = new SvgViewBox(topLeft.X, topLeft.Y, 
+		var newViewBox = new SvgViewBox(topLeft.X, topLeft.Y,
 			bottomRight.X - topLeft.X, bottomRight.Y - topLeft.Y);
 		_metadata.ViewBox = newViewBox;
-		
+
 		if (_document?.Root != null)
-		{
 			_document.Root.SetAttributeValue("viewBox", newViewBox.ToString());
-		}
 	}
 
 	/// <summary>Transforms coordinates from Web Mercator to WGS84.</summary>
@@ -530,10 +536,8 @@ public class SvgVector : Vector, ISvgVector
 		var newViewBox = new SvgViewBox(bounds.MinLongitude, bounds.MinLatitude,
 			bounds.MaxLongitude - bounds.MinLongitude, bounds.MaxLatitude - bounds.MinLatitude);
 		_metadata.ViewBox = newViewBox;
-		
+
 		if (_document?.Root != null)
-		{
 			_document.Root.SetAttributeValue("viewBox", newViewBox.ToString());
-		}
 	}
 }
