@@ -47,7 +47,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains(expectedError, result.Errors);
+		Assert.Contains(expectedError + ".", result.Errors);
 	}
 
 	[Fact]
@@ -82,7 +82,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains($"Quality must be between {HeifConstants.MinQuality} and {HeifConstants.MaxQuality}", result.Errors);
+		Assert.Contains($"Quality must be between {HeifConstants.MinQuality} and {HeifConstants.MaxQuality}.", result.Errors);
 	}
 
 	[Theory]
@@ -98,7 +98,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains($"Speed must be between {HeifConstants.MinSpeed} and {HeifConstants.MaxSpeed}", result.Errors);
+		Assert.Contains($"Speed must be between {HeifConstants.MinSpeed} and {HeifConstants.MaxSpeed}.", result.Errors);
 	}
 
 	[Theory]
@@ -133,7 +133,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains("Bit depth must be 8, 10, 12, or 16", result.Errors);
+		Assert.Contains("Bit depth must be 8, 10, 12, or 16.", result.Errors);
 	}
 
 	[Fact]
@@ -469,7 +469,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains(expectedError, result.Errors);
+		Assert.Contains(expectedError + ".", result.Errors);
 	}
 
 	[Theory]
@@ -511,7 +511,7 @@ public class HeifValidatorTests
 
 		// Assert
 		Assert.False(result.IsValid);
-		Assert.Contains(expectedError, result.Errors);
+		Assert.Contains(expectedError + ".", result.Errors);
 	}
 
 	[Fact]
