@@ -116,14 +116,17 @@ public class SvgVector : Vector, ISvgVector
 		{
 			Indent = true,
 			IndentChars = "  ",
-			Encoding = Encoding.UTF8,
+			Encoding = new UTF8Encoding(false), // No BOM
 			OmitXmlDeclaration = false
 		};
 
-		using var stringWriter = new StringWriter();
-		using var xmlWriter = XmlWriter.Create(stringWriter, settings);
-		_document.WriteTo(xmlWriter);
-		return stringWriter.ToString();
+		using var memoryStream = new MemoryStream();
+		using (var xmlWriter = XmlWriter.Create(memoryStream, settings))
+		{
+			_document.WriteTo(xmlWriter);
+			xmlWriter.Flush();
+		}
+		return Encoding.UTF8.GetString(memoryStream.ToArray());
 	}
 
 	/// <summary>Saves the SVG to a file.</summary>
@@ -222,7 +225,7 @@ public class SvgVector : Vector, ISvgVector
 		);
 
 		return new XDocument(
-			new XDeclaration("1.0", "UTF-8", "no"),
+			new XDeclaration("1.0", "UTF-8", null),
 			svg
 		);
 	}
