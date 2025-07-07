@@ -1,8 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Graphics.Rasters.Avifs;
-
-namespace Wangkanai.Graphics.Rasters.UnitTests.Avifs;
+namespace Wangkanai.Graphics.Rasters.Avifs;
 
 public class AvifExamplesTests
 {
@@ -212,7 +210,7 @@ public class AvifExamplesTests
 		Assert.Equal(AvifConstants.QualityPresets.Professional, avif.Quality);
 	}
 
-	// Note: Removed tests for ApplyExifMetadata as the metadata properties 
+	// Note: Removed tests for ApplyExifMetadata as the metadata properties
 	// (CameraMake, CameraModel, etc.) don't exist in the actual implementation
 
 	[Fact]
@@ -370,7 +368,7 @@ public class AvifExamplesTests
 		using var avif1 = AvifExamples.CreateHdr10(100, 100, -1.0, 0.1);
 		using var avif2 = AvifExamples.CreateHdr10(100, 100, 1000.0, -1.0);
 		using var avif3 = AvifExamples.CreateHdr10(100, 100, 100.0, 200.0);
-		
+
 		Assert.NotNull(avif1);
 		Assert.NotNull(avif2);
 		Assert.NotNull(avif3);
@@ -382,7 +380,7 @@ public class AvifExamplesTests
 		// Implementation doesn't validate grainIntensity parameter, so these should still create valid objects
 		using var avif1 = AvifExamples.CreateWithFilmGrain(100, 100, -0.1f);
 		using var avif2 = AvifExamples.CreateWithFilmGrain(100, 100, 1.1f);
-		
+
 		Assert.NotNull(avif1);
 		Assert.NotNull(avif2);
 		Assert.True(avif1.EnableFilmGrain);

@@ -1,8 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Graphics.Rasters.Avifs;
-
-namespace Wangkanai.Graphics.Rasters.UnitTests.Avifs;
+namespace Wangkanai.Graphics.Rasters.Avifs;
 
 public class AvifEncodingOptionsTests
 {
@@ -243,7 +241,7 @@ public class AvifEncodingOptionsTests
 	{
 		var options = new AvifEncodingOptions();
 		var isValid = options.Validate(out var error);
-		
+
 		Assert.True(isValid);
 		Assert.Null(error);
 	}

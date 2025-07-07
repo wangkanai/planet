@@ -1,8 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Graphics.Rasters.Avifs;
-
-namespace Wangkanai.Graphics.Rasters.UnitTests.Avifs;
+namespace Wangkanai.Graphics.Rasters.Avifs;
 
 public class AvifConstantsTests
 {

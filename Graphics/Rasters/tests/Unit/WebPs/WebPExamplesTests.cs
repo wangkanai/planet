@@ -1,8 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Graphics.Rasters.WebPs;
-
-namespace Wangkanai.Graphics.Rasters.UnitTests.WebPs;
+namespace Wangkanai.Graphics.Rasters.WebPs;
 
 public class WebPExamplesTests
 {
@@ -208,7 +206,7 @@ public class WebPExamplesTests
 		Assert.Equal(WebPFormat.Extended, webp.Format);
 		Assert.Equal(85, webp.Quality);
 		Assert.Equal(WebPPreset.Photo, webp.Preset);
-		
+
 		// Check metadata
 		Assert.Equal("Wangkanai.Graphics.Rasters", webp.Metadata.Software);
 		Assert.Equal("Sample Artist", webp.Metadata.Artist);

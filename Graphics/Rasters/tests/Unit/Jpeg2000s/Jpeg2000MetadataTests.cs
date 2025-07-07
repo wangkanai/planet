@@ -1,9 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using System.Drawing;
-using Wangkanai.Graphics.Rasters.Jpeg2000s;
-
-namespace Wangkanai.Graphics.Rasters.UnitTests.Jpeg2000s;
+namespace Wangkanai.Graphics.Rasters.Jpeg2000s;
 
 public class Jpeg2000MetadataTests
 {

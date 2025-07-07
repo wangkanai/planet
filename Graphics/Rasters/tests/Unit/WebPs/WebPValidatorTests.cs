@@ -1,8 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Graphics.Rasters.WebPs;
-
-namespace Wangkanai.Graphics.Rasters.UnitTests.WebPs;
+namespace Wangkanai.Graphics.Rasters.WebPs;
 
 public class WebPValidatorTests
 {
@@ -119,7 +117,7 @@ public class WebPValidatorTests
 		// Arrange
 		// Note: WebPRaster auto-clamps quality values, so we validate against the result
 		var webp = new WebPRaster(800, 600) { Quality = quality };
-		
+
 		// Auto-clamping behavior: -1 becomes 0, 101 becomes 100
 		var expectedClamped = Math.Clamp(quality, 0, 100);
 
@@ -141,7 +139,7 @@ public class WebPValidatorTests
 		// Arrange
 		// Note: WebPRaster auto-clamps compression level values
 		var webp = new WebPRaster(800, 600) { CompressionLevel = level };
-		
+
 		// Auto-clamping behavior: -1 becomes 0, 10 becomes 9
 		var expectedClamped = Math.Clamp(level, 0, 9);
 
@@ -320,12 +318,12 @@ public class WebPValidatorTests
 		var webp = new WebPRaster(800, 600);
 		webp.EnableExtendedFeatures();
 		webp.Metadata.HasAnimation = true;
-		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame 
-		{ 
-			Width = 200, 
-			Height = 200, 
+		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame
+		{
+			Width = 200,
+			Height = 200,
 			OffsetX = 700, // This would exceed image width
-			OffsetY = 0 
+			OffsetY = 0
 		});
 
 		// Act
@@ -343,11 +341,11 @@ public class WebPValidatorTests
 		var webp = new WebPRaster(800, 600);
 		webp.EnableExtendedFeatures();
 		webp.Metadata.HasAnimation = true;
-		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame 
-		{ 
-			Width = 100, 
-			Height = 100, 
-			Duration = 0 
+		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame
+		{
+			Width = 100,
+			Height = 100,
+			Duration = 0
 		});
 
 		// Act
@@ -364,13 +362,13 @@ public class WebPValidatorTests
 		var webp = new WebPRaster(800, 600);
 		webp.EnableExtendedFeatures();
 		webp.Metadata.HasAnimation = true;
-		
+
 		// Add 101 frames
 		for (int i = 0; i < 101; i++)
 		{
-			webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame 
-			{ 
-				Width = 100, 
+			webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame
+			{
+				Width = 100,
 				Height = 100,
 				Duration = 100
 			});
@@ -437,8 +435,8 @@ public class WebPValidatorTests
 	public void IsValidWebPSignature_WithValidSignature_ShouldReturnTrue()
 	{
 		// Arrange
-		var data = new byte[] 
-		{ 
+		var data = new byte[]
+		{
 			0x52, 0x49, 0x46, 0x46, // "RIFF"
 			0x00, 0x00, 0x00, 0x00, // File size (4 bytes)
 			0x57, 0x45, 0x42, 0x50  // "WEBP"
@@ -455,8 +453,8 @@ public class WebPValidatorTests
 	public void IsValidWebPSignature_WithInvalidSignature_ShouldReturnFalse()
 	{
 		// Arrange
-		var data = new byte[] 
-		{ 
+		var data = new byte[]
+		{
 			0x89, 0x50, 0x4E, 0x47, // PNG signature
 			0x0D, 0x0A, 0x1A, 0x0A,
 			0x00, 0x00, 0x00, 0x0D

@@ -1,8 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Graphics.Rasters.Bmps;
-
-namespace Wangkanai.Graphics.Rasters.UnitTests.Bmps;
+namespace Wangkanai.Graphics.Rasters.Bmps;
 
 public class BmpConstantsTests
 {
