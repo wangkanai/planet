@@ -4,5 +4,5 @@ namespace Wangkanai.Graphics.Vectors;
 
 public static class VectorConstants
 {
-
+    // TODO: Add constants related to vector graphics here.
 }
