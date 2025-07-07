@@ -367,7 +367,7 @@ public static class Jpeg2000Validator
 			return "JP2";
 
 		// Look for File Type box
-		if (data.Length >= 20 && data.Slice(12, 4).SequenceEqual(Jpeg2000Constants.FileTypeBoxType.AsSpan()))
+		if (data.Length >= 24 && data.Slice(16, 4).SequenceEqual(Jpeg2000Constants.FileTypeBoxType.AsSpan()))
 		{
 			var brand = data.Slice(20, 4);
 			if (brand.SequenceEqual(Jpeg2000Constants.Jp2Brand.AsSpan()))

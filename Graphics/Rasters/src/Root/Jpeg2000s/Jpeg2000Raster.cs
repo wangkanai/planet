@@ -240,8 +240,8 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		else
 		{
 			// Small images can use single tile
-			TileWidth = Width;
-			TileHeight = Height;
+			TileWidth = Math.Max(Width, Jpeg2000Constants.DefaultTileSize);
+			TileHeight = Math.Max(Height, Jpeg2000Constants.DefaultTileSize);
 		}
 	}
 

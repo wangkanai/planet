@@ -209,6 +209,7 @@ public class Jpeg2000ValidatorTests
 	{
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
+		// Set invalid values directly in metadata to bypass property validation
 		jpeg2000.Metadata.TileWidth = tileWidth;
 		jpeg2000.Metadata.TileHeight = tileHeight;
 
@@ -486,7 +487,7 @@ public class Jpeg2000ValidatorTests
 	{
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
-		jpeg2000.Metadata.GeoTransform = new double[] { 1.0, 0.0, 3.0, 4.0, 0.0, 6.0 }; // Zero pixel sizes
+		jpeg2000.Metadata.GeoTransform = new double[] { 1.0, 0.0, 3.0, 4.0, 0.0, 0.0 }; // Both pixel sizes zero
 
 		// Act
 		var result = Jpeg2000Validator.Validate(jpeg2000);
