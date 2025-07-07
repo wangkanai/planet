@@ -178,20 +178,26 @@ public static class HeifValidator
 		}
 
 		// Validate camera settings
-		if (metadata.Aperture.HasValue && metadata.Aperture.Value <= 0)
-			errors.Add("Aperture value must be positive.");
+		if (metadata.CameraMetadata != null)
+		{
+			if (metadata.CameraMetadata.Aperture.HasValue && metadata.CameraMetadata.Aperture.Value <= 0)
+				errors.Add("Aperture value must be positive.");
 
-		if (metadata.ExposureTime.HasValue && metadata.ExposureTime.Value <= 0)
-			errors.Add("Exposure time must be positive.");
+			if (metadata.CameraMetadata.ExposureTime.HasValue && metadata.CameraMetadata.ExposureTime.Value <= 0)
+				errors.Add("Exposure time must be positive.");
 
-		if (metadata.FocalLength.HasValue && metadata.FocalLength.Value <= 0)
-			errors.Add("Focal length must be positive.");
+			if (metadata.CameraMetadata.FocalLength.HasValue && metadata.CameraMetadata.FocalLength.Value <= 0)
+				errors.Add("Focal length must be positive.");
 
-		if (metadata.IsoSensitivity.HasValue && metadata.IsoSensitivity.Value <= 0)
-			errors.Add("ISO sensitivity must be positive.");
-
-		if (metadata.PixelDensity.HasValue && metadata.PixelDensity.Value <= 0)
-			errors.Add("Pixel density must be positive.");
+			if (metadata.CameraMetadata.IsoSensitivity.HasValue && metadata.CameraMetadata.IsoSensitivity.Value <= 0)
+				errors.Add("ISO sensitivity must be positive.");
+				
+			if (metadata.CameraMetadata.XResolution.HasValue && metadata.CameraMetadata.XResolution.Value <= 0)
+				errors.Add("X resolution must be positive.");
+				
+			if (metadata.CameraMetadata.YResolution.HasValue && metadata.CameraMetadata.YResolution.Value <= 0)
+				errors.Add("Y resolution must be positive.");
+		}
 
 		return errors.Count == 0 
 			? HeifValidationResult.CreateSuccess() 

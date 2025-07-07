@@ -31,7 +31,7 @@ public static class HeifExamples
 		};
 
 		heif.Metadata.Software = "Wangkanai Graphics Library";
-		heif.Metadata.CreationTime = DateTimeOffset.UtcNow;
+		heif.Metadata.CreationTime = DateTime.UtcNow;
 
 		return heif;
 	}
@@ -59,7 +59,7 @@ public static class HeifExamples
 		};
 
 		heif.Metadata.Software = "Wangkanai Graphics Library - Professional";
-		heif.Metadata.CreationTime = DateTimeOffset.UtcNow;
+		heif.Metadata.CreationTime = DateTime.UtcNow;
 
 		return heif;
 	}
@@ -88,7 +88,7 @@ public static class HeifExamples
 		};
 
 		heif.Metadata.Software = "Wangkanai Graphics Library - Lossless";
-		heif.Metadata.CreationTime = DateTimeOffset.UtcNow;
+		heif.Metadata.CreationTime = DateTime.UtcNow;
 
 		return heif;
 	}
@@ -115,7 +115,7 @@ public static class HeifExamples
 		};
 
 		heif.Metadata.Software = "Wangkanai Graphics Library - Fast";
-		heif.Metadata.CreationTime = DateTimeOffset.UtcNow;
+		heif.Metadata.CreationTime = DateTime.UtcNow;
 
 		return heif;
 	}
@@ -156,7 +156,7 @@ public static class HeifExamples
 		});
 
 		heif.Metadata.Software = "Wangkanai Graphics Library - HDR";
-		heif.Metadata.CreationTime = DateTimeOffset.UtcNow;
+		heif.Metadata.CreationTime = DateTime.UtcNow;
 		heif.Metadata.ColorSpaceInfo = "BT.2100 PQ HDR";
 
 		return heif;
@@ -184,7 +184,7 @@ public static class HeifExamples
 		};
 
 		heif.Metadata.Software = "Wangkanai Graphics Library - Mobile";
-		heif.Metadata.CreationTime = DateTimeOffset.UtcNow;
+		heif.Metadata.CreationTime = DateTime.UtcNow;
 
 		return heif;
 	}
@@ -213,7 +213,7 @@ public static class HeifExamples
 		};
 
 		heif.Metadata.Software = "Wangkanai Graphics Library - Thumbnail";
-		heif.Metadata.CreationTime = DateTimeOffset.UtcNow;
+		heif.Metadata.CreationTime = DateTime.UtcNow;
 
 		return heif;
 	}
@@ -240,7 +240,7 @@ public static class HeifExamples
 		};
 
 		heif.Metadata.Software = "Wangkanai Graphics Library - AV1";
-		heif.Metadata.CreationTime = DateTimeOffset.UtcNow;
+		heif.Metadata.CreationTime = DateTime.UtcNow;
 
 		return heif;
 	}
@@ -267,19 +267,24 @@ public static class HeifExamples
 
 		// Add comprehensive demo metadata
 		heif.Metadata.Software = "Wangkanai Graphics Library - Demo";
-		heif.Metadata.CreationTime = DateTimeOffset.UtcNow;
+		heif.Metadata.CreationTime = DateTime.UtcNow;
 		heif.Metadata.Description = "Demonstration HEIF image created with Wangkanai Graphics Library";
 		heif.Metadata.Copyright = "© 2025 Wangkanai";
 		heif.Metadata.Author = "Graphics Library";
-		heif.Metadata.CameraMake = "Demo Camera";
-		heif.Metadata.CameraModel = "Model X";
-		heif.Metadata.LensMake = "Demo Lens";
-		heif.Metadata.LensModel = "50mm f/1.8";
-		heif.Metadata.FocalLength = 50.0;
-		heif.Metadata.Aperture = 1.8;
-		heif.Metadata.ExposureTime = 1.0 / 60.0;
-		heif.Metadata.IsoSensitivity = 100;
-		heif.Metadata.PixelDensity = 300.0;
+		heif.Metadata.CameraMetadata = new CameraMetadata
+		{
+			CameraMake = "Demo Camera",
+			CameraModel = "Model X",
+			LensMake = "Demo Lens",
+			LensModel = "50mm f/1.8",
+			FocalLength = 50.0,
+			Aperture = 1.8,
+			ExposureTime = 1.0 / 60.0,
+			IsoSensitivity = 100,
+			XResolution = 300.0,
+			YResolution = 300.0,
+			ResolutionUnit = 2 // Inches
+		};
 		heif.Metadata.ColorSpaceInfo = "sRGB";
 		heif.Metadata.WhiteBalance = "Auto";
 
