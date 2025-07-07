@@ -1,5 +1,7 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
+using System.Collections.Immutable;
+
 using Wangkanai.Graphics.Rasters.Jpeg2000s;
 
 namespace Wangkanai.Graphics.Rasters.UnitTests.Jpeg2000s;
@@ -285,7 +287,7 @@ public class Jpeg2000ConstantsTests
 			mutableArray[0] = (byte)'X'; // Modify the cloned array
 			originalSignature = ImmutableArray.Create(mutableArray); // Attempt to reassign
 		});
-		
+
 		// Assert - Verify the original array remains unchanged
 		Assert.True(originalSignature.IsDefaultOrEmpty == false);
 		Assert.NotEmpty(originalSignature);
