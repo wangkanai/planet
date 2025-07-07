@@ -1,19 +1,23 @@
 # BMP (Bitmap) Raster Support
 
-This directory contains the implementation of BMP (Windows Bitmap) format support for the Wangkanai Graphics Rasters library.
+This directory contains the implementation of BMP (Windows Bitmap) format support for the Wangkanai Graphics Rasters
+library.
 
 ## Overview
 
-BMP is a fundamental uncompressed raster format widely used in Windows environments. It serves as an excellent foundation for testing and basic image operations due to its simple structure and well-documented specification.
+BMP is a fundamental uncompressed raster format widely used in Windows environments. It serves as an excellent
+foundation for testing and basic image operations due to its simple structure and well-documented specification.
 
 ## Features
 
 ### Supported BMP Variants
+
 - **BITMAPINFOHEADER** (40 bytes) - Most common variant
-- **BITMAPV4HEADER** (108 bytes) - Extended with color space information  
+- **BITMAPV4HEADER** (108 bytes) - Extended with color space information
 - **BITMAPV5HEADER** (124 bytes) - Latest version with ICC color profiles
 
 ### Color Depth Support
+
 - **1-bit** - Monochrome (black and white)
 - **4-bit** - 16-color palette
 - **8-bit** - 256-color palette
@@ -22,6 +26,7 @@ BMP is a fundamental uncompressed raster format widely used in Windows environme
 - **32-bit** - True color with alpha channel (ARGB8888)
 
 ### Compression Types
+
 - **BI_RGB** - Uncompressed (most common)
 - **BI_RLE8** - 8-bit run-length encoding
 - **BI_RLE4** - 4-bit run-length encoding
@@ -174,9 +179,9 @@ Console.WriteLine($"RLE8 Compression: {rle8Bmp.Compression}");
 
 ```csharp
 // Create a 16-bit BMP with custom color masks
-var customBmp = BmpExamples.CreateWithCustomMasks(800, 600, 
+var customBmp = BmpExamples.CreateWithCustomMasks(800, 600,
     redMask: 0xF800,   // 5 bits
-    greenMask: 0x07E0, // 6 bits  
+    greenMask: 0x07E0, // 6 bits
     blueMask: 0x001F   // 5 bits
 );
 var (r, g, b, a) = customBmp.GetBitMasks();
@@ -198,12 +203,14 @@ await using var largeBmp = BmpExamples.CreateRgb24(10000, 10000);
 ## Performance Characteristics
 
 ### Memory Usage
+
 - **24-bit RGB**: 3 bytes per pixel + headers
-- **32-bit ARGB**: 4 bytes per pixel + headers  
+- **32-bit ARGB**: 4 bytes per pixel + headers
 - **8-bit indexed**: 1 byte per pixel + 1KB palette
 - **Row padding**: Aligned to 4-byte boundaries
 
 ### Processing Speed
+
 - **Fast reading/writing**: Simple uncompressed structure
 - **No decompression overhead**: For BI_RGB format
 - **RLE formats**: May require additional processing time
@@ -211,6 +218,7 @@ await using var largeBmp = BmpExamples.CreateRgb24(10000, 10000);
 ## Standards Compliance
 
 The implementation follows official Microsoft BMP specifications:
+
 - Windows Bitmap File Format specification
 - Device Independent Bitmap (DIB) header formats
 - Color space and ICC profile standards (V5 headers)
@@ -240,18 +248,19 @@ if (raster.HasLargeMetadata)
 
 Common validation errors and their solutions:
 
-| Error | Solution |
-|-------|----------|
+| Error                | Solution                                         |
+|----------------------|--------------------------------------------------|
 | Invalid width/height | Ensure dimensions are positive and within limits |
-| Compression mismatch | Match compression type to color depth |
-| Missing palette | Provide palette for 1, 4, and 8-bit images |
-| Invalid bit masks | Ensure masks don't overlap for BI_BITFIELDS |
+| Compression mismatch | Match compression type to color depth            |
+| Missing palette      | Provide palette for 1, 4, and 8-bit images       |
+| Invalid bit masks    | Ensure masks don't overlap for BI_BITFIELDS      |
 
 ## Available Factory Methods
 
 The `BmpExamples` class provides comprehensive factory methods for common BMP scenarios:
 
 ### Basic Formats
+
 - `CreateRgb24(width, height)` - 24-bit true color RGB
 - `CreateArgb32(width, height)` - 32-bit ARGB with alpha channel
 - `CreateRgb565(width, height)` - 16-bit RGB565 high color
@@ -260,6 +269,7 @@ The `BmpExamples` class provides comprehensive factory methods for common BMP sc
 - `Create16Color(width, height)` - 4-bit with standard VGA palette
 
 ### Specialized Formats
+
 - `CreateForWeb(width, height)` - Web-optimized with sRGB color space
 - `CreateWithV5Header(width, height)` - V5 header for ICC profiles
 - `CreateRle8(width, height)` - 8-bit with RLE8 compression
@@ -269,12 +279,14 @@ The `BmpExamples` class provides comprehensive factory methods for common BMP sc
 - `CreateMinimal()` - Smallest possible BMP (1x1 monochrome)
 
 ### Demonstration
+
 - `DemonstrateOperations()` - Showcases all features with examples
 - `ValidateExample(bmp)` - Demonstrates validation with detailed output
 
 ## API Reference
 
 ### Core Classes
+
 - **`BmpRaster`** - Main BMP implementation
 - **`BmpMetadata`** - Comprehensive metadata for all header variants
 - **`BmpValidator`** - Format validation with detailed error reporting
@@ -282,10 +294,12 @@ The `BmpExamples` class provides comprehensive factory methods for common BMP sc
 - **`BmpConstants`** - All BMP format specifications and bit masks
 
 ### Enumerations
+
 - **`BmpColorDepth`** - Supported color depths (1, 4, 8, 16, 24, 32-bit)
 - **`BmpCompression`** - Compression types (RGB, RLE4, RLE8, BITFIELDS, JPEG, PNG)
 
 ### Key Properties
+
 - `Width`, `Height` - Image dimensions
 - `ColorDepth` - Color depth enumeration value
 - `Compression` - Compression method
@@ -296,6 +310,7 @@ The `BmpExamples` class provides comprehensive factory methods for common BMP sc
 - `IsTopDown` - Whether image is stored top-down
 
 ### Key Methods
+
 - `SetBitMasks(red, green, blue, alpha)` - Configure custom color masks
 - `GetBitMasks()` - Retrieve current color masks
 - `ApplyPalette(paletteData)` - Set color palette for indexed images

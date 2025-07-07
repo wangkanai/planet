@@ -92,7 +92,7 @@ public class BmpMetadata
 	public bool HasPalette => BitsPerPixel <= 8;
 
 	/// <summary>Gets a value indicating whether the image has transparency (alpha channel).</summary>
-	public bool HasAlpha => BitsPerPixel == 32 || (Compression == BmpCompression.BitFields && AlphaMask != 0);
+	public bool HasAlpha => BitsPerPixel == 32 || Compression == BmpCompression.BitFields && AlphaMask != 0;
 
 	/// <summary>Gets a value indicating whether the image is top-down (negative height).</summary>
 	public bool IsTopDown => Height < 0;
@@ -115,13 +115,13 @@ public class BmpMetadata
 	/// <summary>Gets the bytes per pixel for the current color depth.</summary>
 	public int BytesPerPixel => BitsPerPixel switch
 	{
-		1 => 0, // Packed bits
-		4 => 0, // Packed bits
-		8 => 1,
+		1  => 0, // Packed bits
+		4  => 0, // Packed bits
+		8  => 1,
 		16 => 2,
 		24 => 3,
 		32 => 4,
-		_ => throw new NotSupportedException($"Unsupported bit depth: {BitsPerPixel}")
+		_  => throw new NotSupportedException($"Unsupported bit depth: {BitsPerPixel}")
 	};
 
 	/// <summary>Gets the row stride in bytes (including padding to 4-byte boundary).</summary>
@@ -129,8 +129,8 @@ public class BmpMetadata
 	{
 		get
 		{
-			var bitsPerRow = Width * BitsPerPixel;
-			var bytesPerRow = (bitsPerRow + 7) / 8; // Round up to nearest byte
+			var bitsPerRow  = Width * BitsPerPixel;
+			var bytesPerRow = (bitsPerRow + 7) / 8;                                                  // Round up to nearest byte
 			return (bytesPerRow + BmpConstants.RowAlignment - 1) & ~(BmpConstants.RowAlignment - 1); // Align to 4-byte boundary
 		}
 	}
@@ -142,8 +142,8 @@ public class BmpMetadata
 	public string HeaderType => HeaderSize switch
 	{
 		BmpConstants.BitmapInfoHeaderSize => "BITMAPINFOHEADER",
-		BmpConstants.BitmapV4HeaderSize => "BITMAPV4HEADER",
-		BmpConstants.BitmapV5HeaderSize => "BITMAPV5HEADER",
-		_ => $"Unknown ({HeaderSize} bytes)"
+		BmpConstants.BitmapV4HeaderSize   => "BITMAPV4HEADER",
+		BmpConstants.BitmapV5HeaderSize   => "BITMAPV5HEADER",
+		_                                 => $"Unknown ({HeaderSize} bytes)"
 	};
 }

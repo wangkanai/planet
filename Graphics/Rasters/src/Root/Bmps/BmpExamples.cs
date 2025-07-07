@@ -183,10 +183,10 @@ public static class BmpExamples
 		for (var i = 0; i < 256; i++)
 		{
 			var offset = i * BmpConstants.PaletteEntrySize;
-			palette[offset]     = (byte)(i & 0xFF);         // Blue
-			palette[offset + 1] = (byte)(i & 0xFF);         // Green
-			palette[offset + 2] = (byte)(i & 0xFF);         // Red
-			palette[offset + 3] = 0;                        // Reserved
+			palette[offset]     = (byte)(i & 0xFF); // Blue
+			palette[offset + 1] = (byte)(i & 0xFF); // Green
+			palette[offset + 2] = (byte)(i & 0xFF); // Red
+			palette[offset + 3] = 0;                // Reserved
 		}
 
 		bmp.ApplyPalette(palette);
@@ -204,24 +204,24 @@ public static class BmpExamples
 		// Create standard 16-color palette (VGA colors)
 		var palette = new byte[16 * BmpConstants.PaletteEntrySize];
 		var colors = new[]
-		{
-			(0, 0, 0),       // Black
-			(128, 0, 0),     // Dark Red
-			(0, 128, 0),     // Dark Green
-			(128, 128, 0),   // Dark Yellow
-			(0, 0, 128),     // Dark Blue
-			(128, 0, 128),   // Dark Magenta
-			(0, 128, 128),   // Dark Cyan
-			(192, 192, 192), // Light Gray
-			(128, 128, 128), // Dark Gray
-			(255, 0, 0),     // Red
-			(0, 255, 0),     // Green
-			(255, 255, 0),   // Yellow
-			(0, 0, 255),     // Blue
-			(255, 0, 255),   // Magenta
-			(0, 255, 255),   // Cyan
-			(255, 255, 255)  // White
-		};
+		             {
+			             (0, 0, 0),       // Black
+			             (128, 0, 0),     // Dark Red
+			             (0, 128, 0),     // Dark Green
+			             (128, 128, 0),   // Dark Yellow
+			             (0, 0, 128),     // Dark Blue
+			             (128, 0, 128),   // Dark Magenta
+			             (0, 128, 128),   // Dark Cyan
+			             (192, 192, 192), // Light Gray
+			             (128, 128, 128), // Dark Gray
+			             (255, 0, 0),     // Red
+			             (0, 255, 0),     // Green
+			             (255, 255, 0),   // Yellow
+			             (0, 0, 255),     // Blue
+			             (255, 0, 255),   // Magenta
+			             (0, 255, 255),   // Cyan
+			             (255, 255, 255)  // White
+		             };
 
 		for (var i = 0; i < 16; i++)
 		{
@@ -265,14 +265,14 @@ public static class BmpExamples
 	public static BmpRaster CreateForWeb(int width, int height)
 	{
 		var bmp = CreateRgb24(width, height);
-		
+
 		// Configure for sRGB and standard web resolution (96 DPI)
-		bmp.Metadata.HeaderSize = BmpConstants.BitmapV4HeaderSize;
+		bmp.Metadata.HeaderSize     = BmpConstants.BitmapV4HeaderSize;
 		bmp.Metadata.ColorSpaceType = BmpConstants.ColorSpace.LCS_sRGB;
-		
+
 		// Set standard web resolution (96 DPI)
-		bmp.HorizontalResolution = BmpConstants.DefaultHorizontalResolution;
-		bmp.VerticalResolution = BmpConstants.DefaultVerticalResolution;
+		bmp.HorizontalResolution     = BmpConstants.DefaultHorizontalResolution;
+		bmp.VerticalResolution       = BmpConstants.DefaultVerticalResolution;
 		bmp.Metadata.XPixelsPerMeter = BmpConstants.DefaultHorizontalResolution;
 		bmp.Metadata.YPixelsPerMeter = BmpConstants.DefaultVerticalResolution;
 

@@ -3,7 +3,4 @@
 namespace Wangkanai.Graphics.Rasters;
 
 /// <summary>Represents a raster image</summary>
-public interface IRaster : IImage
-{
-
-}
+public interface IRaster : IImage { }

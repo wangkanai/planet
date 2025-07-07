@@ -193,39 +193,45 @@ public static class WebPExamples
 	/// <summary>Demonstrates quality settings and their use cases.</summary>
 	/// <returns>A dictionary of quality settings with descriptions.</returns>
 	public static Dictionary<int, string> GetQualityRecommendations()
-		=> new()
-		   {
-			   { 100, "Near-lossless quality - excellent for archival, larger file size" },
-			   { 90, "Excellent quality - suitable for professional photography" },
-			   { 85, "High quality - good for detailed images and print" },
-			   { 75, "Good quality - default web quality, balanced size/quality" },
-			   { 60, "Medium quality - suitable for thumbnails and previews" },
-			   { 40, "Low quality - high compression, noticeable artifacts" },
-			   { 20, "Very low quality - maximum compression, significant artifacts" },
-			   { 0, "Minimum quality - smallest size, poor visual quality" }
-		   };
+	{
+		return new Dictionary<int, string>
+		       {
+			       { 100, "Near-lossless quality - excellent for archival, larger file size" },
+			       { 90, "Excellent quality - suitable for professional photography" },
+			       { 85, "High quality - good for detailed images and print" },
+			       { 75, "Good quality - default web quality, balanced size/quality" },
+			       { 60, "Medium quality - suitable for thumbnails and previews" },
+			       { 40, "Low quality - high compression, noticeable artifacts" },
+			       { 20, "Very low quality - maximum compression, significant artifacts" },
+			       { 0, "Minimum quality - smallest size, poor visual quality" }
+		       };
+	}
 
 	/// <summary>Demonstrates preset options and their effects.</summary>
 	/// <returns>A dictionary of presets with descriptions.</returns>
 	public static Dictionary<WebPPreset, string> GetPresetGuide()
-		=> new()
-		   {
-			   { WebPPreset.Default, "Balanced settings for general use" },
-			   { WebPPreset.Picture, "Optimized for natural images with good detail preservation" },
-			   { WebPPreset.Photo, "Best for photographic content with fine details" },
-			   { WebPPreset.Drawing, "Ideal for line art, drawings, and graphics" },
-			   { WebPPreset.Icon, "Perfect for icons and simple graphics with transparency" },
-			   { WebPPreset.Text, "Optimized for text content and screenshots" }
-		   };
+	{
+		return new Dictionary<WebPPreset, string>
+		       {
+			       { WebPPreset.Default, "Balanced settings for general use" },
+			       { WebPPreset.Picture, "Optimized for natural images with good detail preservation" },
+			       { WebPPreset.Photo, "Best for photographic content with fine details" },
+			       { WebPPreset.Drawing, "Ideal for line art, drawings, and graphics" },
+			       { WebPPreset.Icon, "Perfect for icons and simple graphics with transparency" },
+			       { WebPPreset.Text, "Optimized for text content and screenshots" }
+		       };
+	}
 
 	/// <summary>Demonstrates compression type benefits.</summary>
 	/// <returns>A dictionary of compression types with descriptions.</returns>
 	public static Dictionary<WebPCompression, string> GetCompressionGuide()
-		=> new()
-		   {
-			   { WebPCompression.VP8, "Lossy compression - smaller files, some quality loss" },
-			   { WebPCompression.VP8L, "Lossless compression - perfect quality, larger files" }
-		   };
+	{
+		return new Dictionary<WebPCompression, string>
+		       {
+			       { WebPCompression.VP8, "Lossy compression - smaller files, some quality loss" },
+			       { WebPCompression.VP8L, "Lossless compression - perfect quality, larger files" }
+		       };
+	}
 
 	/// <summary>Creates a performance-optimized WebP for large images.</summary>
 	/// <param name="width">The width of the image.</param>

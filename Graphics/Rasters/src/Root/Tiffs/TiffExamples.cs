@@ -25,7 +25,7 @@ public static class TiffExamples
 				                      DateTime         = DateTime.UtcNow,
 				                      XResolution      = 300.0,
 				                      YResolution      = 300.0,
-				                      ResolutionUnit   = 2// inches
+				                      ResolutionUnit   = 2 // inches
 			                      }
 		           };
 		tiff.SetBitsPerSample(BitsPerSampleArray);

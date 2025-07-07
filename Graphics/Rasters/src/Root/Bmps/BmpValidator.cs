@@ -175,10 +175,7 @@ public static class BmpValidator
 		{
 			// For non-bitfield compression, masks should be zero or default
 			var (red, green, blue, alpha) = bmp.GetBitMasks();
-			if ((red != 0 || green != 0 || blue != 0 || alpha != 0) && bmp.Compression != BmpCompression.Rgb)
-			{
-				result.AddWarning($"Bit masks defined for {bmp.Compression} compression may be ignored.");
-			}
+			if ((red != 0 || green != 0 || blue != 0 || alpha != 0) && bmp.Compression != BmpCompression.Rgb) result.AddWarning($"Bit masks defined for {bmp.Compression} compression may be ignored.");
 		}
 	}
 
@@ -197,9 +194,7 @@ public static class BmpValidator
 		if (metadata.HeaderSize != BmpConstants.BitmapInfoHeaderSize &&
 		    metadata.HeaderSize != BmpConstants.BitmapV4HeaderSize &&
 		    metadata.HeaderSize != BmpConstants.BitmapV5HeaderSize)
-		{
 			result.AddError($"Unsupported header size: {metadata.HeaderSize} bytes.");
-		}
 
 		// Validate dimensions consistency
 		if (metadata.Width != bmp.Width)
