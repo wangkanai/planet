@@ -3,6 +3,12 @@
     <File Path=".claude\settings.json" />
     <File Path="CLAUDE.md" />
   </Folder>
+  <Folder Name="/.docs/">
+    <File Path="docs\development-roadmap.md" />
+    <File Path="docs\technical-implementation-guide.md" />
+    <File Path="docs\scope-clarity-recommendations.md" />
+    <File Path="docs\README.md" />
+  </Folder>
   <Folder Name="/.github/">
     <File Path=".github\workflows\dotnet.yml" />
     <File Path=".github\FUNDING.yml" />
