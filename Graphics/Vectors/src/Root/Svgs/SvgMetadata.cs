@@ -86,6 +86,7 @@ public class SvgMetadata : ISvgMetadata
 	/// <inheritdoc />
 	public long CalculateEstimatedMemoryUsage()
 	{
+		ThrowIfDisposed();
 		var baseSize             = 1024; // Base SVG structure
 		var elementSize          = ElementCount * SvgConstants.MemoryPerElement;
 		var pathSize             = (long)(TotalPathLength * SvgConstants.MemoryPerPathSegment);
@@ -106,6 +107,7 @@ public class SvgMetadata : ISvgMetadata
 	/// <inheritdoc />
 	public bool ValidateCompliance()
 	{
+		ThrowIfDisposed();
 		// Validate SVG version
 		if (!SvgConstants.SupportedVersions.Contains(Version))
 			return false;
@@ -136,6 +138,7 @@ public class SvgMetadata : ISvgMetadata
 	/// <inheritdoc />
 	public void Clear()
 	{
+		ThrowIfDisposed();
 		Version                   = SvgConstants.DefaultVersion;
 		ViewBox                   = SvgViewBox.Default;
 		ViewportWidth             = 100;

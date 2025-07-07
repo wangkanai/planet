@@ -21,7 +21,6 @@ public class SvgVector : Vector, ISvgVector
 	private bool _disposed;
 	private XDocument? _document;
 	private readonly SvgMetadata _metadata;
-	private byte[]? _rawData;
 	private string? _sourceFilePath;
 
 	/// <summary>Initializes a new SVG vector with default settings.</summary>
@@ -32,8 +31,6 @@ public class SvgVector : Vector, ISvgVector
 	/// <param name="height">The viewport height.</param>
 	public SvgVector(int width, int height)
 	{
-		Width = width;
-		Height = height;
 		_metadata = new SvgMetadata
 		{
 			ViewportWidth = width,
@@ -212,12 +209,15 @@ public class SvgVector : Vector, ISvgVector
 	/// <summary>Creates an empty SVG document with default structure.</summary>
 	private XDocument CreateEmptyDocument()
 	{
-		var svg = new XElement(XName.Get("svg", SvgConstants.SvgNamespace),
+		var svgNamespace = XNamespace.Get(SvgConstants.SvgNamespace);
+		var xlinkNamespace = XNamespace.Get(SvgConstants.XLinkNamespace);
+
+		var svg = new XElement(svgNamespace + "svg",
 			new XAttribute("version", _metadata.Version),
 			new XAttribute("viewBox", _metadata.ViewBox.ToString()),
 			new XAttribute("width", _metadata.ViewportWidth),
 			new XAttribute("height", _metadata.ViewportHeight),
-			new XAttribute(XNamespace.Xmlns + "svg", SvgConstants.SvgNamespace),
+			new XAttribute("xmlns", SvgConstants.SvgNamespace),
 			new XAttribute(XNamespace.Xmlns + "xlink", SvgConstants.XLinkNamespace)
 		);
 
@@ -390,7 +390,6 @@ public class SvgVector : Vector, ISvgVector
 			{
 				_metadata?.Dispose();
 				_document = null;
-				_rawData = null;
 			}
 			_disposed = true;
 		}
@@ -402,9 +401,8 @@ public class SvgVector : Vector, ISvgVector
 	{
 		if (_metadata != null)
 			await _metadata.DisposeAsync().ConfigureAwait(false);
-
+		
 		_document = null;
-		_rawData = null;
 		_disposed = true;
 
 		await base.DisposeAsyncCore().ConfigureAwait(false);

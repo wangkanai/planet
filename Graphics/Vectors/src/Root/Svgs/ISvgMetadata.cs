@@ -28,8 +28,8 @@ public interface ISvgMetadata : IVectorMetadata
 	/// <summary>Gets or sets the coordinate reference system (CRS) for geospatial SVG.</summary>
 	string? CoordinateReferenceSystem { get; set; }
 
-	/// <summary>Gets or sets the XML namespace declarations.</summary>
-	Dictionary<string, string> Namespaces { get; set; }
+	/// <summary>Gets the XML namespace declarations.</summary>
+	Dictionary<string, string> Namespaces { get; }
 
 	/// <summary>Gets or sets the title of the SVG document.</summary>
 	string? Title { get; set; }
@@ -61,8 +61,8 @@ public interface ISvgMetadata : IVectorMetadata
 	/// <summary>Gets or sets the color space used in the SVG.</summary>
 	SvgColorSpace ColorSpace { get; set; }
 
-	/// <summary>Gets or sets custom metadata properties.</summary>
-	Dictionary<string, object> CustomProperties { get; set; }
+	/// <summary>Gets the custom metadata properties.</summary>
+	Dictionary<string, object> CustomProperties { get; }
 
 	/// <summary>Calculates the estimated memory usage based on SVG complexity.</summary>
 	long CalculateEstimatedMemoryUsage();
