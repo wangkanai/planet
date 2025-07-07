@@ -464,17 +464,16 @@ public class AvifRasterTests
 	}
 
 	[Fact]
-	public void AccessProperties_AfterDispose_ShouldStillAllowAccess()
+	public void AccessProperties_AfterDispose_ShouldThrowObjectDisposedException()
 	{
 		var avif = new AvifRaster(100, 100);
 		avif.Dispose();
 		
-		// Implementation doesn't throw ObjectDisposedException on property access
-		// Properties remain accessible after disposal
-		Assert.Equal(100, avif.Width);
-		Assert.Equal(100, avif.Height);
-		Assert.Equal(AvifConstants.DefaultQuality, avif.Quality);
-		Assert.Equal(8, avif.BitDepth);
+		// Implementation does throw ObjectDisposedException on property access
+		Assert.Throws<ObjectDisposedException>(() => avif.Width);
+		Assert.Throws<ObjectDisposedException>(() => avif.Height);
+		Assert.Throws<ObjectDisposedException>(() => avif.Quality);
+		Assert.Throws<ObjectDisposedException>(() => avif.BitDepth);
 	}
 
 	[Fact]
