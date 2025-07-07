@@ -231,17 +231,26 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		}
 
 		// Set tile size based on image dimensions
-		if (Width > 2048 || Height > 2048)
+		if (Width > 0 && Height > 0)
 		{
-			// Large images benefit from tiling
-			TileWidth = Math.Min(Jpeg2000Constants.DefaultTileSize, Width);
-			TileHeight = Math.Min(Jpeg2000Constants.DefaultTileSize, Height);
+			if (Width > 2048 || Height > 2048)
+			{
+				// Large images benefit from tiling
+				TileWidth = Math.Min(Jpeg2000Constants.DefaultTileSize, Width);
+				TileHeight = Math.Min(Jpeg2000Constants.DefaultTileSize, Height);
+			}
+			else
+			{
+				// Small images can use single tile (tile size = image size)
+				TileWidth = Width;
+				TileHeight = Height;
+			}
 		}
 		else
 		{
-			// Small images can use single tile
-			TileWidth = Math.Max(Width, Jpeg2000Constants.DefaultTileSize);
-			TileHeight = Math.Max(Height, Jpeg2000Constants.DefaultTileSize);
+			// Default tile size for uninitialized dimensions
+			Metadata.TileWidth = Jpeg2000Constants.DefaultTileSize;
+			Metadata.TileHeight = Jpeg2000Constants.DefaultTileSize;
 		}
 	}
 
