@@ -69,7 +69,7 @@ public interface IHeifRaster : IRaster
 	/// Sets HDR metadata for the image.
 	/// </summary>
 	/// <param name="hdrMetadata">The HDR metadata to apply.</param>
-	void SetHdrMetadata(HdrMetadata hdrMetadata);
+	void SetHdrMetadata(Wangkanai.Graphics.Rasters.HdrMetadata hdrMetadata);
 
 	/// <summary>
 	/// Gets the estimated file size for the current encoding settings.

@@ -177,7 +177,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	}
 
 	/// <inheritdoc />
-	public void SetHdrMetadata(HdrMetadata hdrMetadata)
+	public void SetHdrMetadata(Wangkanai.Graphics.Rasters.HdrMetadata hdrMetadata)
 	{
 		ThrowIfDisposed();
 		Metadata.HdrMetadata = hdrMetadata ?? throw new ArgumentNullException(nameof(hdrMetadata));
