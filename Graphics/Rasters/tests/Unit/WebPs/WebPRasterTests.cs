@@ -2,7 +2,7 @@
 
 using Wangkanai.Graphics.Rasters.WebPs;
 
-namespace Wangkanai.Graphics.Rasters.UnitTests.WebPs;
+namespace Wangkanai.Graphics.Rasters.WebPs;
 
 public class WebPRasterTests
 {
@@ -510,7 +510,7 @@ public class WebPRasterTests
 		// Arrange
 		var webp = new WebPRaster();
 		webp.Metadata.IccProfile = new byte[2_000_000]; // 2MB to trigger large metadata path
-		
+
 		// Add many animation frames to test batched cleanup
 		for (int i = 0; i < 150; i++)
 		{

@@ -2,7 +2,7 @@
 
 using Wangkanai.Graphics.Rasters.Tiffs;
 
-namespace Wangkanai.Graphics.Rasters.UnitTests.Tiffs;
+namespace Wangkanai.Graphics.Rasters.Tiffs;
 
 public class TiffRasterTests
 {
@@ -280,8 +280,8 @@ public class TiffRasterTests
 		var sizeWithCustomTags = tiffRaster.EstimatedMetadataSize;
 
 		// Assert
-		var expectedIncrease = System.Text.Encoding.UTF8.GetByteCount(testString) + 
-		                      testBytes.Length + 
+		var expectedIncrease = System.Text.Encoding.UTF8.GetByteCount(testString) +
+		                      testBytes.Length +
 		                      (testInts.Length * sizeof(int)) +
 		                      (3 * 12); // 3 directory entries, 12 bytes each
 		Assert.Equal(expectedIncrease, sizeWithCustomTags - initialSize);

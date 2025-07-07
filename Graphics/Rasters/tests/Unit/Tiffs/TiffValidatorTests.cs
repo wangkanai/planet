@@ -2,7 +2,7 @@
 
 using Wangkanai.Graphics.Rasters.Tiffs;
 
-namespace Wangkanai.Graphics.Rasters.UnitTests.Tiffs;
+namespace Wangkanai.Graphics.Rasters.Tiffs;
 
 public class TiffValidatorTests
 {

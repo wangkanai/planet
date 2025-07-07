@@ -2,7 +2,7 @@
 
 using Wangkanai.Graphics.Rasters.WebPs;
 
-namespace Wangkanai.Graphics.Rasters.UnitTests.WebPs;
+namespace Wangkanai.Graphics.Rasters.WebPs;
 
 public class WebPMetadataTests
 {
