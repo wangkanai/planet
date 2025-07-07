@@ -191,4 +191,135 @@ public class TiffRasterTests
 		var exception = Record.Exception(() => tiffRaster.Dispose());
 		Assert.Null(exception);
 	}
+
+	[Fact]
+	public void EstimatedMetadataSize_WithBasicMetadata_ShouldCalculateCorrectly()
+	{
+		// Arrange
+		var tiffRaster = new TiffRaster();
+
+		// Act
+		var initialSize = tiffRaster.EstimatedMetadataSize;
+
+		// Assert - Should include basic TIFF directory overhead
+		Assert.True(initialSize > 0);
+		Assert.True(initialSize < ImageConstants.LargeMetadataThreshold); // Basic metadata should be small
+	}
+
+	[Fact]
+	public void EstimatedMetadataSize_WithStringMetadata_ShouldIncludeStringSize()
+	{
+		// Arrange
+		var tiffRaster = new TiffRaster();
+		var testDescription = "Test image description with substantial text content";
+
+		// Act
+		var initialSize = tiffRaster.EstimatedMetadataSize;
+		tiffRaster.Metadata.ImageDescription = testDescription;
+		var sizeWithDescription = tiffRaster.EstimatedMetadataSize;
+
+		// Assert
+		var expectedIncrease = System.Text.Encoding.UTF8.GetByteCount(testDescription);
+		Assert.Equal(expectedIncrease, sizeWithDescription - initialSize);
+	}
+
+	[Fact]
+	public void EstimatedMetadataSize_WithStripData_ShouldIncludeArraySizes()
+	{
+		// Arrange
+		var tiffRaster = new TiffRaster();
+		var stripOffsets = new int[100];
+		var stripByteCounts = new int[100];
+
+		// Act
+		var initialSize = tiffRaster.EstimatedMetadataSize;
+		tiffRaster.Metadata.StripOffsets = stripOffsets;
+		tiffRaster.Metadata.StripByteCounts = stripByteCounts;
+		var sizeWithStrips = tiffRaster.EstimatedMetadataSize;
+
+		// Assert
+		var expectedIncrease = (stripOffsets.Length + stripByteCounts.Length) * sizeof(int);
+		Assert.Equal(expectedIncrease, sizeWithStrips - initialSize);
+	}
+
+	[Fact]
+	public void EstimatedMetadataSize_WithEmbeddedMetadata_ShouldIncludeByteArraySizes()
+	{
+		// Arrange
+		var tiffRaster = new TiffRaster();
+		var exifData = new byte[1000];
+		var iccProfile = new byte[2000];
+		var xmpData = new byte[500];
+
+		// Act
+		var initialSize = tiffRaster.EstimatedMetadataSize;
+		tiffRaster.Metadata.ExifIfd = exifData;
+		tiffRaster.Metadata.IccProfile = iccProfile;
+		tiffRaster.Metadata.XmpData = xmpData;
+		var sizeWithEmbedded = tiffRaster.EstimatedMetadataSize;
+
+		// Assert
+		var expectedIncrease = exifData.Length + iccProfile.Length + xmpData.Length;
+		Assert.Equal(expectedIncrease, sizeWithEmbedded - initialSize);
+	}
+
+	[Fact]
+	public void EstimatedMetadataSize_WithCustomTags_ShouldCalculateAccurately()
+	{
+		// Arrange
+		var tiffRaster = new TiffRaster();
+		var testString = "Custom tag value";
+		var testBytes = new byte[100];
+		var testInts = new int[10];
+
+		// Act
+		var initialSize = tiffRaster.EstimatedMetadataSize;
+		tiffRaster.Metadata.CustomTags[256] = testString;
+		tiffRaster.Metadata.CustomTags[257] = testBytes;
+		tiffRaster.Metadata.CustomTags[258] = testInts;
+		var sizeWithCustomTags = tiffRaster.EstimatedMetadataSize;
+
+		// Assert
+		var expectedIncrease = System.Text.Encoding.UTF8.GetByteCount(testString) + 
+		                      testBytes.Length + 
+		                      (testInts.Length * sizeof(int)) +
+		                      (3 * 12); // 3 directory entries, 12 bytes each
+		Assert.Equal(expectedIncrease, sizeWithCustomTags - initialSize);
+	}
+
+	[Fact]
+	public void HasLargeMetadata_WithLargeMetadata_ShouldReturnTrue()
+	{
+		// Arrange
+		var tiffRaster = new TiffRaster();
+		var largeData = new byte[ImageConstants.LargeMetadataThreshold + 1000];
+
+		// Act
+		tiffRaster.Metadata.IccProfile = largeData;
+
+		// Assert
+		Assert.True(tiffRaster.HasLargeMetadata);
+		Assert.True(tiffRaster.EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold);
+	}
+
+	[Fact]
+	public async Task DisposeAsync_WithLargeMetadata_ShouldClearAllMetadata()
+	{
+		// Arrange
+		var tiffRaster = new TiffRaster();
+		tiffRaster.Metadata.ImageDescription = "Test";
+		tiffRaster.Metadata.StripOffsets = new int[100];
+		tiffRaster.Metadata.IccProfile = new byte[ImageConstants.LargeMetadataThreshold + 1000];
+
+		// Verify we have large metadata
+		Assert.True(tiffRaster.HasLargeMetadata);
+
+		// Act
+		await tiffRaster.DisposeAsync();
+
+		// Assert - All metadata should be cleared
+		Assert.Null(tiffRaster.Metadata.ImageDescription);
+		Assert.Null(tiffRaster.Metadata.StripOffsets);
+		Assert.Null(tiffRaster.Metadata.IccProfile);
+	}
 }
