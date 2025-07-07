@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Rasters;
 
 /// <summary>Represents a raster image</summary>
-public class Raster : IRaster
+public abstract class Raster : IRaster
 {
 	private bool _disposed;
 
@@ -42,30 +42,14 @@ public class Raster : IRaster
 
 	/// <summary>Releases the managed and unmanaged resources used by the raster image.</summary>
 	/// <param name="disposing">
-	/// true to release both managed and unmanaged resources; 
+	/// true to release both managed and unmanaged resources;
 	/// false to release only unmanaged resources.
 	/// </param>
 	protected virtual void Dispose(bool disposing)
 	{
-		if (!_disposed)
-		{
-			if (disposing)
-			{
-				// Dispose managed resources here
-				// Derived classes should override this method to dispose their specific resources
-			}
-
-			// Dispose unmanaged resources here if any
-			// This should be done regardless of the disposing parameter
-
-			_disposed = true;
-		}
-	}
-
-	/// <summary>Throws an ObjectDisposedException if the object has been disposed.</summary>
-	protected void ThrowIfDisposed()
-	{
 		if (_disposed)
-			throw new ObjectDisposedException(GetType().Name);
+			return;
+
+		_disposed = true;
 	}
 }
