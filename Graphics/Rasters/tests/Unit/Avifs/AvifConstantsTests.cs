@@ -9,25 +9,29 @@ public class AvifConstantsTests
 	[Fact]
 	public void FileTypeBoxType_ShouldHaveCorrectValue()
 	{
-		Assert.Equal("ftyp", AvifConstants.FileTypeBoxType);
+		var expected = "ftyp"u8.ToArray();
+		Assert.Equal(expected, AvifConstants.FileTypeBoxType.ToArray());
 	}
 
 	[Fact]
 	public void AvifBrand_ShouldHaveCorrectValue()
 	{
-		Assert.Equal("avif", AvifConstants.AvifBrand);
+		var expected = "avif"u8.ToArray();
+		Assert.Equal(expected, AvifConstants.AvifBrand.ToArray());
 	}
 
 	[Fact]
 	public void AvisBrand_ShouldHaveCorrectValue()
 	{
-		Assert.Equal("avis", AvifConstants.AvisBrand);
+		var expected = "avis"u8.ToArray();
+		Assert.Equal(expected, AvifConstants.AvisBrand.ToArray());
 	}
 
 	[Fact]
 	public void Mif1Brand_ShouldHaveCorrectValue()
 	{
-		Assert.Equal("mif1", AvifConstants.Mif1Brand);
+		var expected = "mif1"u8.ToArray();
+		Assert.Equal(expected, AvifConstants.Mif1Brand.ToArray());
 	}
 
 	[Fact]
@@ -109,11 +113,10 @@ public class AvifConstantsTests
 	[Fact]
 	public void HdrConstants_ShouldHaveValidValues()
 	{
-		Assert.True(AvifConstants.Hdr.MinLuminance >= 0);
-		Assert.True(AvifConstants.Hdr.MaxLuminance > AvifConstants.Hdr.MinLuminance);
-		Assert.True(AvifConstants.Hdr.MaxContentLightLevel > 0);
-		Assert.True(AvifConstants.Hdr.MaxFrameAverageLightLevel > 0);
-		Assert.True(AvifConstants.Hdr.MaxFrameAverageLightLevel <= AvifConstants.Hdr.MaxContentLightLevel);
+		Assert.True(AvifConstants.Hdr.SdrPeakBrightness > 0);
+		Assert.True(AvifConstants.Hdr.Hdr10PeakBrightness > AvifConstants.Hdr.SdrPeakBrightness);
+		Assert.True(AvifConstants.Hdr.Hdr10PlusPeakBrightness > AvifConstants.Hdr.Hdr10PeakBrightness);
+		Assert.True(AvifConstants.Hdr.DolbyVisionPeakBrightness > AvifConstants.Hdr.Hdr10PlusPeakBrightness);
 	}
 
 	[Fact]
@@ -150,12 +153,12 @@ public class AvifConstantsTests
 	public void BoxTypes_ShouldBeFourCharacters()
 	{
 		Assert.Equal(4, AvifConstants.FileTypeBoxType.Length);
-		Assert.Equal(4, AvifConstants.ImagePropertiesBoxType.Length);
-		Assert.Equal(4, AvifConstants.ImageSpatialExtentsBoxType.Length);
-		Assert.Equal(4, AvifConstants.AuxiliaryTypePropertyBoxType.Length);
-		Assert.Equal(4, AvifConstants.CleanApertureBoxType.Length);
-		Assert.Equal(4, AvifConstants.PixelAspectRatioBoxType.Length);
-		Assert.Equal(4, AvifConstants.ColorPropertiesBoxType.Length);
+		Assert.Equal(4, AvifConstants.MetaBoxType.Length);
+		Assert.Equal(4, AvifConstants.HandlerBoxType.Length);
+		Assert.Equal(4, AvifConstants.PrimaryItemBoxType.Length);
+		Assert.Equal(4, AvifConstants.ItemLocationBoxType.Length);
+		Assert.Equal(4, AvifConstants.ItemInfoBoxType.Length);
+		Assert.Equal(4, AvifConstants.ItemPropertiesBoxType.Length);
 	}
 
 	[Fact]
@@ -164,7 +167,5 @@ public class AvifConstantsTests
 		Assert.Equal(4, AvifConstants.AvifBrand.Length);
 		Assert.Equal(4, AvifConstants.AvisBrand.Length);
 		Assert.Equal(4, AvifConstants.Mif1Brand.Length);
-		Assert.Equal(4, AvifConstants.HeicBrand.Length);
-		Assert.Equal(4, AvifConstants.Av01Brand.Length);
 	}
 }

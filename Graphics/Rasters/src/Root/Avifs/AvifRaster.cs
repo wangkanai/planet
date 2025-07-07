@@ -14,7 +14,6 @@ namespace Wangkanai.Graphics.Rasters.Avifs;
 public sealed class AvifRaster : Raster, IAvifRaster
 {
 	private byte[]? _encodedData;
-	private byte[]? _pixelData;
 	private bool _disposed;
 
 	/// <summary>Initializes a new instance of the AVIF raster with default settings.</summary>
@@ -504,7 +503,7 @@ public sealed class AvifRaster : Raster, IAvifRaster
 	}
 
 	/// <summary>Throws if the object has been disposed.</summary>
-	private new void ThrowIfDisposed()
+	private void ThrowIfDisposed()
 	{
 		if (_disposed)
 			throw new ObjectDisposedException(nameof(AvifRaster));
@@ -518,7 +517,6 @@ public sealed class AvifRaster : Raster, IAvifRaster
 			if (disposing)
 			{
 				_encodedData = null;
-				_pixelData = null;
 				Metadata?.Dispose();
 			}
 

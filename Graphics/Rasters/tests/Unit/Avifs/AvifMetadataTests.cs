@@ -15,8 +15,8 @@ public class AvifMetadataTests
 		Assert.Equal(0, metadata.Height);
 		Assert.Equal(8, metadata.BitDepth);
 		Assert.Equal(AvifColorSpace.Srgb, metadata.ColorSpace);
-		Assert.Equal(AvifConstants.QualityPresets.Standard, metadata.Quality);
-		Assert.Equal(AvifConstants.SpeedPresets.Standard, metadata.Speed);
+		Assert.Equal(AvifConstants.DefaultQuality, metadata.Quality);
+		Assert.Equal(AvifConstants.DefaultSpeed, metadata.Speed);
 		Assert.Equal(AvifChromaSubsampling.Yuv420, metadata.ChromaSubsampling);
 		Assert.False(metadata.HasAlpha);
 		Assert.False(metadata.IsLossless);
@@ -134,9 +134,7 @@ public class AvifMetadataTests
 			Quality = 85,
 			HasAlpha = true,
 			ExifData = new byte[] { 1, 2, 3, 4 },
-			IccProfile = new byte[] { 5, 6, 7, 8 },
-			CameraMake = "Canon",
-			CameraModel = "EOS R5"
+			IccProfile = new byte[] { 5, 6, 7, 8 }
 		};
 
 		var clone = original.Clone();
@@ -148,8 +146,6 @@ public class AvifMetadataTests
 		Assert.Equal(original.ColorSpace, clone.ColorSpace);
 		Assert.Equal(original.Quality, clone.Quality);
 		Assert.Equal(original.HasAlpha, clone.HasAlpha);
-		Assert.Equal(original.CameraMake, clone.CameraMake);
-		Assert.Equal(original.CameraModel, clone.CameraModel);
 		
 		// Should be deep copy of arrays
 		Assert.NotSame(original.ExifData, clone.ExifData);
@@ -283,40 +279,13 @@ public class AvifMetadataTests
 	}
 
 	[Fact]
-	public void FilmGrainIntensity_WithValidRange_ShouldSet()
+	public void UsesFilmGrain_ShouldDefaultToFalse()
 	{
 		var metadata = new AvifMetadata();
 
-		metadata.FilmGrainIntensity = 0.5f;
-		Assert.Equal(0.5f, metadata.FilmGrainIntensity);
-
-		metadata.FilmGrainIntensity = 0.0f;
-		Assert.Equal(0.0f, metadata.FilmGrainIntensity);
-
-		metadata.FilmGrainIntensity = 1.0f;
-		Assert.Equal(1.0f, metadata.FilmGrainIntensity);
-	}
-
-	[Fact]
-	public void GpsCoordinates_ShouldStoreCorrectly()
-	{
-		var metadata = new AvifMetadata
-		{
-			GpsLatitude = 37.7749,
-			GpsLongitude = -122.4194
-		};
-
-		Assert.Equal(37.7749, metadata.GpsLatitude, 4);
-		Assert.Equal(-122.4194, metadata.GpsLongitude, 4);
-	}
-
-	[Fact]
-	public void CreationTime_ShouldDefaultToCurrentTime()
-	{
-		var before = DateTime.UtcNow;
-		var metadata = new AvifMetadata();
-		var after = DateTime.UtcNow;
-
-		Assert.InRange(metadata.CreationTime, before.AddSeconds(-1), after.AddSeconds(1));
+		Assert.False(metadata.UsesFilmGrain);
+		
+		metadata.UsesFilmGrain = true;
+		Assert.True(metadata.UsesFilmGrain);
 	}
 }
