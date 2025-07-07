@@ -46,5 +46,3 @@ public class SvgVector : ISvgVector
 		Dispose(false);
 	}
 }
-
-public interface ISvgVector : IVector { }
