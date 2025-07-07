@@ -12,15 +12,15 @@ public static class BmpExamples
 	public static BmpRaster CreateRgb24(int width, int height)
 	{
 		var bmp = new BmpRaster(width, height, BmpColorDepth.TwentyFourBit)
-		{
-			Compression = BmpCompression.Rgb
-		};
+		          {
+			          Compression = BmpCompression.Rgb
+		          };
 
 		// Set up metadata
 		bmp.Metadata.BitsPerPixel = 24;
-		bmp.Metadata.Compression = BmpCompression.Rgb;
-		bmp.Metadata.Planes = BmpConstants.Planes;
-		
+		bmp.Metadata.Compression  = BmpCompression.Rgb;
+		bmp.Metadata.Planes       = BmpConstants.Planes;
+
 		return bmp;
 	}
 
@@ -31,9 +31,9 @@ public static class BmpExamples
 	public static BmpRaster CreateArgb32(int width, int height)
 	{
 		var bmp = new BmpRaster(width, height, BmpColorDepth.ThirtyTwoBit)
-		{
-			Compression = BmpCompression.BitFields
-		};
+		          {
+			          Compression = BmpCompression.BitFields
+		          };
 
 		// Set ARGB bit masks
 		bmp.SetBitMasks(
@@ -59,7 +59,7 @@ public static class BmpExamples
 		for (var i = 0; i < 256; i++)
 		{
 			var offset = i * BmpConstants.PaletteEntrySize;
-			palette[offset] = (byte)i;     // Blue
+			palette[offset]     = (byte)i; // Blue
 			palette[offset + 1] = (byte)i; // Green
 			palette[offset + 2] = (byte)i; // Red
 			palette[offset + 3] = 0;       // Reserved (Alpha)
@@ -79,12 +79,12 @@ public static class BmpExamples
 
 		// Create black and white palette
 		var palette = new byte[2 * BmpConstants.PaletteEntrySize];
-		
+
 		// Black (index 0)
-		palette[0] = 0;   // Blue
-		palette[1] = 0;   // Green
-		palette[2] = 0;   // Red
-		palette[3] = 0;   // Reserved
+		palette[0] = 0; // Blue
+		palette[1] = 0; // Green
+		palette[2] = 0; // Red
+		palette[3] = 0; // Reserved
 
 		// White (index 1)
 		palette[4] = 255; // Blue
@@ -121,9 +121,9 @@ public static class BmpExamples
 	public static BmpRaster CreateTopDown(int width, int height)
 	{
 		var bmp = CreateRgb24(width, height);
-		
+
 		// Make height negative for top-down format
-		bmp.Height = -Math.Abs(height);
+		bmp.Height          = -Math.Abs(height);
 		bmp.Metadata.Height = bmp.Height;
 
 		return bmp;
@@ -140,9 +140,9 @@ public static class BmpExamples
 
 		// Convert DPI to pixels per meter (1 inch = 0.0254 meters)
 		var pixelsPerMeter = (int)(dpi / 0.0254);
-		
-		bmp.HorizontalResolution = pixelsPerMeter;
-		bmp.VerticalResolution = pixelsPerMeter;
+
+		bmp.HorizontalResolution     = pixelsPerMeter;
+		bmp.VerticalResolution       = pixelsPerMeter;
 		bmp.Metadata.XPixelsPerMeter = pixelsPerMeter;
 		bmp.Metadata.YPixelsPerMeter = pixelsPerMeter;
 
@@ -158,9 +158,9 @@ public static class BmpExamples
 		var bmp = CreateRgb24(width, height);
 
 		// Configure for V5 header
-		bmp.Metadata.HeaderSize = BmpConstants.BitmapV5HeaderSize;
+		bmp.Metadata.HeaderSize     = BmpConstants.BitmapV5HeaderSize;
 		bmp.Metadata.ColorSpaceType = BmpConstants.ColorSpace.LCS_sRGB;
-		bmp.Metadata.Intent = BmpConstants.Intent.LCS_GM_IMAGES;
+		bmp.Metadata.Intent         = BmpConstants.Intent.LCS_GM_IMAGES;
 
 		return bmp;
 	}
@@ -172,9 +172,9 @@ public static class BmpExamples
 	public static BmpRaster CreateRle8(int width, int height)
 	{
 		var bmp = new BmpRaster(width, height, BmpColorDepth.EightBit)
-		{
-			Compression = BmpCompression.Rle8
-		};
+		          {
+			          Compression = BmpCompression.Rle8
+		          };
 
 		bmp.Metadata.Compression = BmpCompression.Rle8;
 
@@ -183,10 +183,10 @@ public static class BmpExamples
 		for (var i = 0; i < 256; i++)
 		{
 			var offset = i * BmpConstants.PaletteEntrySize;
-			palette[offset] = (byte)(i & 0xFF);         // Blue
-			palette[offset + 1] = (byte)((i >> 8) & 0xFF); // Green
+			palette[offset]     = (byte)(i & 0xFF);         // Blue
+			palette[offset + 1] = (byte)((i >> 8) & 0xFF);  // Green
 			palette[offset + 2] = (byte)((i >> 16) & 0xFF); // Red
-			palette[offset + 3] = 0;                    // Reserved
+			palette[offset + 3] = 0;                        // Reserved
 		}
 
 		bmp.ApplyPalette(palette);
@@ -203,7 +203,7 @@ public static class BmpExamples
 
 		// Display results
 		Console.WriteLine($"BMP Validation: {result.GetSummary()}");
-		
+
 		if (!result.IsValid)
 		{
 			Console.WriteLine("Errors:");

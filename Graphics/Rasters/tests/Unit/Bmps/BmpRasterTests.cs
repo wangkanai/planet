@@ -158,8 +158,8 @@ public class BmpRasterTests
 		// Act
 		var rowStride = bmp.RowStride;
 
-		// Assert - 100 * 24 bits = 300 bytes, aligned to 304
-		Assert.Equal(304, rowStride);
+		// Assert - 100 * 24 bits = 300 bytes, already aligned
+		Assert.Equal(300, rowStride);
 	}
 
 	[Fact]
@@ -171,8 +171,8 @@ public class BmpRasterTests
 		// Act
 		var pixelDataSize = bmp.PixelDataSize;
 
-		// Assert - Row stride 304 * 50 rows = 15200
-		Assert.Equal(15200u, pixelDataSize);
+		// Assert - Row stride 300 * 50 rows = 15000
+		Assert.Equal(15000u, pixelDataSize);
 	}
 
 	[Fact]

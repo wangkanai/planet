@@ -32,7 +32,7 @@ public class BmpRaster : Raster, IBmpRaster
 	/// <summary>Initializes a new instance of the <see cref="BmpRaster"/> class.</summary>
 	public BmpRaster()
 	{
-		ColorDepth = BmpColorDepth.TwentyFourBit;
+		ColorDepth  = BmpColorDepth.TwentyFourBit;
 		Compression = BmpCompression.Rgb;
 	}
 
@@ -41,9 +41,9 @@ public class BmpRaster : Raster, IBmpRaster
 	/// <param name="height">The height of the image.</param>
 	public BmpRaster(int width, int height) : this()
 	{
-		Width = width;
-		Height = height;
-		Metadata.Width = width;
+		Width           = width;
+		Height          = height;
+		Metadata.Width  = width;
 		Metadata.Height = height;
 	}
 
@@ -53,9 +53,9 @@ public class BmpRaster : Raster, IBmpRaster
 	/// <param name="colorDepth">The color depth of the image.</param>
 	public BmpRaster(int width, int height, BmpColorDepth colorDepth) : this(width, height)
 	{
-		ColorDepth = colorDepth;
+		ColorDepth            = colorDepth;
 		Metadata.BitsPerPixel = (ushort)colorDepth;
-		
+
 		// Initialize default bit masks for specific formats
 		InitializeDefaultBitMasks();
 	}
@@ -64,7 +64,7 @@ public class BmpRaster : Raster, IBmpRaster
 	public bool HasPalette => ColorDepth <= BmpColorDepth.EightBit;
 
 	/// <inheritdoc />
-	public bool HasTransparency => ColorDepth == BmpColorDepth.ThirtyTwoBit || 
+	public bool HasTransparency => ColorDepth == BmpColorDepth.ThirtyTwoBit ||
 	                               (Compression == BmpCompression.BitFields && Metadata.AlphaMask != 0);
 
 	/// <inheritdoc />
@@ -73,13 +73,13 @@ public class BmpRaster : Raster, IBmpRaster
 	/// <inheritdoc />
 	public int BytesPerPixel => (int)ColorDepth switch
 	{
-		1 => 0, // Packed bits
-		4 => 0, // Packed bits  
-		8 => 1,
+		1  => 0, // Packed bits
+		4  => 0, // Packed bits
+		8  => 1,
 		16 => 2,
 		24 => 3,
 		32 => 4,
-		_ => throw new NotSupportedException($"Unsupported color depth: {ColorDepth}")
+		_  => throw new NotSupportedException($"Unsupported color depth: {ColorDepth}")
 	};
 
 	/// <inheritdoc />
@@ -87,8 +87,8 @@ public class BmpRaster : Raster, IBmpRaster
 	{
 		get
 		{
-			var bitsPerRow = Width * (int)ColorDepth;
-			var bytesPerRow = (bitsPerRow + 7) / 8; // Round up to nearest byte
+			var bitsPerRow  = Width * (int)ColorDepth;
+			var bytesPerRow = (bitsPerRow + 7) / 8;                                                  // Round up to nearest byte
 			return (bytesPerRow + BmpConstants.RowAlignment - 1) & ~(BmpConstants.RowAlignment - 1); // Align to 4-byte boundary
 		}
 	}
@@ -97,7 +97,7 @@ public class BmpRaster : Raster, IBmpRaster
 	public uint PixelDataSize => (uint)(RowStride * Math.Abs(Height));
 
 	/// <inheritdoc />
-	public override bool HasLargeMetadata 
+	public override bool HasLargeMetadata
 	{
 		get
 		{
@@ -136,9 +136,9 @@ public class BmpRaster : Raster, IBmpRaster
 			{
 				size += field switch
 				{
-					string str => System.Text.Encoding.UTF8.GetByteCount(str),
+					string str   => System.Text.Encoding.UTF8.GetByteCount(str),
 					byte[] bytes => bytes.Length,
-					_ => 32 // Default estimate for other types
+					_            => 32 // Default estimate for other types
 				};
 			}
 
@@ -158,10 +158,10 @@ public class BmpRaster : Raster, IBmpRaster
 		// Return default masks based on color depth
 		return ColorDepth switch
 		{
-			BmpColorDepth.SixteenBit => (BmpConstants.RGB555Masks.Red, BmpConstants.RGB555Masks.Green, 
-			                           BmpConstants.RGB555Masks.Blue, BmpConstants.RGB555Masks.Alpha),
+			BmpColorDepth.SixteenBit => (BmpConstants.RGB555Masks.Red, BmpConstants.RGB555Masks.Green,
+				                            BmpConstants.RGB555Masks.Blue, BmpConstants.RGB555Masks.Alpha),
 			BmpColorDepth.ThirtyTwoBit => (BmpConstants.ARGB8888Masks.Red, BmpConstants.ARGB8888Masks.Green,
-			                              BmpConstants.ARGB8888Masks.Blue, BmpConstants.ARGB8888Masks.Alpha),
+				                              BmpConstants.ARGB8888Masks.Blue, BmpConstants.ARGB8888Masks.Alpha),
 			_ => (0, 0, 0, 0)
 		};
 	}
@@ -173,17 +173,17 @@ public class BmpRaster : Raster, IBmpRaster
 			return; // Already in RGB format
 
 		// Convert to 24-bit RGB
-		ColorDepth = BmpColorDepth.TwentyFourBit;
-		Compression = BmpCompression.Rgb;
+		ColorDepth            = BmpColorDepth.TwentyFourBit;
+		Compression           = BmpCompression.Rgb;
 		Metadata.BitsPerPixel = (ushort)ColorDepth;
-		Metadata.Compression = Compression;
-		
+		Metadata.Compression  = Compression;
+
 		// Clear bit masks and palette
-		Metadata.RedMask = 0;
+		Metadata.RedMask   = 0;
 		Metadata.GreenMask = 0;
-		Metadata.BlueMask = 0;
+		Metadata.BlueMask  = 0;
 		Metadata.AlphaMask = 0;
-		ColorPalette = null;
+		ColorPalette       = null;
 	}
 
 	/// <inheritdoc />
@@ -195,16 +195,16 @@ public class BmpRaster : Raster, IBmpRaster
 		if (palette.Length % BmpConstants.PaletteEntrySize != 0)
 			throw new ArgumentException($"Palette size must be a multiple of {BmpConstants.PaletteEntrySize} bytes (BGRA format).", nameof(palette));
 
-		var maxColors = Metadata.PaletteColors;
+		var maxColors      = Metadata.PaletteColors;
 		var providedColors = palette.Length / BmpConstants.PaletteEntrySize;
-		
+
 		if (providedColors > maxColors)
 			throw new ArgumentException($"Palette contains too many colors. Maximum for {ColorDepth}-bit is {maxColors}, provided {providedColors}.", nameof(palette));
 
 		ColorPalette = new byte[palette.Length];
 		Array.Copy(palette, ColorPalette, palette.Length);
 		Metadata.ColorPalette = ColorPalette;
-		Metadata.ColorsUsed = (uint)providedColors;
+		Metadata.ColorsUsed   = (uint)providedColors;
 	}
 
 	/// <inheritdoc />
@@ -213,12 +213,12 @@ public class BmpRaster : Raster, IBmpRaster
 		if (ColorDepth != BmpColorDepth.SixteenBit && ColorDepth != BmpColorDepth.ThirtyTwoBit)
 			throw new InvalidOperationException($"Bit masks are only supported for 16-bit and 32-bit images, not {ColorDepth}.");
 
-		Compression = BmpCompression.BitFields;
+		Compression          = BmpCompression.BitFields;
 		Metadata.Compression = Compression;
-		Metadata.RedMask = redMask;
-		Metadata.GreenMask = greenMask;
-		Metadata.BlueMask = blueMask;
-		Metadata.AlphaMask = alphaMask;
+		Metadata.RedMask     = redMask;
+		Metadata.GreenMask   = greenMask;
+		Metadata.BlueMask    = blueMask;
+		Metadata.AlphaMask   = alphaMask;
 	}
 
 	/// <inheritdoc />
@@ -286,17 +286,17 @@ public class BmpRaster : Raster, IBmpRaster
 		{
 			case BmpColorDepth.SixteenBit:
 				// Default to RGB555 format
-				Metadata.RedMask = BmpConstants.RGB555Masks.Red;
+				Metadata.RedMask   = BmpConstants.RGB555Masks.Red;
 				Metadata.GreenMask = BmpConstants.RGB555Masks.Green;
-				Metadata.BlueMask = BmpConstants.RGB555Masks.Blue;
+				Metadata.BlueMask  = BmpConstants.RGB555Masks.Blue;
 				Metadata.AlphaMask = BmpConstants.RGB555Masks.Alpha;
 				break;
 
 			case BmpColorDepth.ThirtyTwoBit:
 				// Default to ARGB8888 format
-				Metadata.RedMask = BmpConstants.ARGB8888Masks.Red;
+				Metadata.RedMask   = BmpConstants.ARGB8888Masks.Red;
 				Metadata.GreenMask = BmpConstants.ARGB8888Masks.Green;
-				Metadata.BlueMask = BmpConstants.ARGB8888Masks.Blue;
+				Metadata.BlueMask  = BmpConstants.ARGB8888Masks.Blue;
 				Metadata.AlphaMask = BmpConstants.ARGB8888Masks.Alpha;
 				break;
 		}
@@ -316,7 +316,7 @@ public class BmpRaster : Raster, IBmpRaster
 
 			await Task.Yield();
 			Metadata.CustomFields.Clear();
-			
+
 			// Let the runtime handle garbage collection automatically
 		}
 		else
@@ -332,7 +332,7 @@ public class BmpRaster : Raster, IBmpRaster
 		if (disposing)
 		{
 			// Clear BMP-specific managed resources
-			ColorPalette = null;
+			ColorPalette          = null;
 			Metadata.ColorPalette = null;
 			Metadata.CustomFields.Clear();
 		}

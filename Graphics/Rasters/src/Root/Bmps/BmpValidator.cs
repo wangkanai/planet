@@ -118,7 +118,7 @@ public static class BmpValidator
 	private static void ValidatePalette(IBmpRaster bmp, BmpValidationResult result)
 	{
 		var requiresPalette = bmp.HasPalette;
-		var hasPalette = bmp.ColorPalette != null && bmp.ColorPalette.Length > 0;
+		var hasPalette      = bmp.ColorPalette != null && bmp.ColorPalette.Length > 0;
 
 		if (requiresPalette && !hasPalette && bmp.Metadata.ColorsUsed > 0)
 			result.AddError($"Palette required for {bmp.ColorDepth}-bit image but not provided.");
@@ -129,14 +129,14 @@ public static class BmpValidator
 		if (hasPalette)
 		{
 			var palette = bmp.ColorPalette!;
-			
+
 			// Validate palette size alignment
 			if (palette.Length % BmpConstants.PaletteEntrySize != 0)
 				result.AddError($"Invalid palette size: {palette.Length} bytes. Must be multiple of {BmpConstants.PaletteEntrySize}.");
 
 			// Validate number of colors
 			var providedColors = palette.Length / BmpConstants.PaletteEntrySize;
-			var maxColors = bmp.Metadata.PaletteColors;
+			var maxColors      = bmp.Metadata.PaletteColors;
 
 			if (providedColors > maxColors)
 				result.AddError($"Too many palette colors: {providedColors} provided, maximum {maxColors} for {bmp.ColorDepth}-bit.");
@@ -281,14 +281,14 @@ public static class BmpValidator
 
 		// Read header size from DIB header (4 bytes after file header)
 		var headerSizeBytes = data.Slice(BmpConstants.FileHeaderSize, 4);
-		var headerSize = BitConverter.ToUInt32(headerSizeBytes);
+		var headerSize      = BitConverter.ToUInt32(headerSizeBytes);
 
 		return headerSize switch
 		{
 			BmpConstants.BitmapInfoHeaderSize => BmpConstants.BitmapInfoHeaderSize,
-			BmpConstants.BitmapV4HeaderSize => BmpConstants.BitmapV4HeaderSize,
-			BmpConstants.BitmapV5HeaderSize => BmpConstants.BitmapV5HeaderSize,
-			_ => 0 // Unknown or unsupported header type
+			BmpConstants.BitmapV4HeaderSize   => BmpConstants.BitmapV4HeaderSize,
+			BmpConstants.BitmapV5HeaderSize   => BmpConstants.BitmapV5HeaderSize,
+			_                                 => 0 // Unknown or unsupported header type
 		};
 	}
 }

@@ -178,8 +178,8 @@ public class BmpMetadataTests
 	}
 
 	[Theory]
-	[InlineData(100, 24, 304)] // (100 * 24 + 7) / 8 = 300, aligned to 304
-	[InlineData(101, 24, 308)] // (101 * 24 + 7) / 8 = 303, aligned to 304
+	[InlineData(100, 24, 300)] // (100 * 24 + 7) / 8 = 300, already aligned
+	[InlineData(101, 24, 304)] // (101 * 24 + 7) / 8 = 303, aligned to 304
 	[InlineData(100, 8, 100)]  // (100 * 8 + 7) / 8 = 100, already aligned
 	[InlineData(101, 8, 104)]  // (101 * 8 + 7) / 8 = 101, aligned to 104
 	public void RowStride_ShouldAlignTo4ByteBoundary(int width, ushort bitsPerPixel, int expectedStride)
@@ -212,8 +212,8 @@ public class BmpMetadataTests
 		// Act
 		var size = metadata.PixelDataSize;
 
-		// Assert - 100 pixels * 24 bits = 300 bytes, aligned to 304, * 50 rows = 15200
-		Assert.Equal(15200u, size);
+		// Assert - 100 pixels * 24 bits = 300 bytes, already aligned, * 50 rows = 15000
+		Assert.Equal(15000u, size);
 	}
 
 	[Fact]
@@ -231,7 +231,7 @@ public class BmpMetadataTests
 		var size = metadata.PixelDataSize;
 
 		// Assert - Should use absolute height
-		Assert.Equal(15200u, size);
+		Assert.Equal(15000u, size);
 	}
 
 	[Theory]
