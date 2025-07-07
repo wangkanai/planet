@@ -351,7 +351,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 			return;
 
 		_encodedData = null;
-		if (Metadata?.HasLargeData == true)
+		if (Metadata?.HasLargeMetadata == true)
 			await Metadata.DisposeAsync();
 
 		_disposed = true;
