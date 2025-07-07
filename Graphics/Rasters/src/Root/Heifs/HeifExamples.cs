@@ -174,7 +174,7 @@ public static class HeifExamples
 		var heif = new HeifRaster(width, height, hasAlpha)
 		{
 			Quality = HeifConstants.QualityPresets.Mobile,
-			Speed = HeifConstants.SpeedPresets.Fast,
+			Speed = HeifConstants.SpeedPresets.MediumFast,
 			ChromaSubsampling = HeifChromaSubsampling.Yuv420,
 			Compression = HeifCompression.Hevc,
 			BitDepth = 8,
@@ -229,8 +229,8 @@ public static class HeifExamples
 	{
 		var heif = new HeifRaster(width, height, hasAlpha)
 		{
-			Quality = HeifConstants.QualityPresets.High,
-			Speed = HeifConstants.SpeedPresets.Medium,
+			Quality = HeifConstants.QualityPresets.NearLossless,
+			Speed = HeifConstants.SpeedPresets.MediumSlow,
 			ChromaSubsampling = HeifChromaSubsampling.Yuv420,
 			Compression = HeifCompression.Av1,
 			BitDepth = 10,

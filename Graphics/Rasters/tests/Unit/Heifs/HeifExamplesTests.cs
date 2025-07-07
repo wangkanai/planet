@@ -160,7 +160,7 @@ public class HeifExamplesTests
 		Assert.Equal(1920, heif.Height);
 		Assert.True(heif.HasAlpha);
 		Assert.Equal(HeifConstants.QualityPresets.Mobile, heif.Quality);
-		Assert.Equal(HeifConstants.SpeedPresets.Fast, heif.Speed);
+		Assert.Equal(HeifConstants.SpeedPresets.MediumFast, heif.Speed);
 		Assert.Equal(HeifChromaSubsampling.Yuv420, heif.ChromaSubsampling);
 		Assert.Equal(HeifCompression.Hevc, heif.Compression);
 		Assert.Equal(8, heif.BitDepth);
@@ -216,8 +216,8 @@ public class HeifExamplesTests
 		Assert.Equal(1920, heif.Width);
 		Assert.Equal(1080, heif.Height);
 		Assert.True(heif.HasAlpha);
-		Assert.Equal(HeifConstants.QualityPresets.High, heif.Quality);
-		Assert.Equal(HeifConstants.SpeedPresets.Medium, heif.Speed);
+		Assert.Equal(HeifConstants.QualityPresets.NearLossless, heif.Quality);
+		Assert.Equal(HeifConstants.SpeedPresets.MediumSlow, heif.Speed);
 		Assert.Equal(HeifChromaSubsampling.Yuv420, heif.ChromaSubsampling);
 		Assert.Equal(HeifCompression.Av1, heif.Compression);
 		Assert.Equal(10, heif.BitDepth);
