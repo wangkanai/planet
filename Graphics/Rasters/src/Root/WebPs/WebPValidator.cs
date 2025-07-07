@@ -97,9 +97,9 @@ public static class WebPValidator
 	{
 		var expectedChannels = webp.ColorMode switch
 		{
-			WebPColorMode.Rgb => WebPConstants.RgbChannels,
+			WebPColorMode.Rgb  => WebPConstants.RgbChannels,
 			WebPColorMode.Rgba => WebPConstants.RgbaChannels,
-			_ => 0
+			_                  => 0
 		};
 
 		if (expectedChannels == 0)
@@ -132,7 +132,6 @@ public static class WebPValidator
 
 		if (webp.IsAnimated)
 		{
-
 			// Validate each frame
 			for (var i = 0; i < webp.Metadata.AnimationFrames.Count; i++)
 			{
@@ -178,7 +177,7 @@ public static class WebPValidator
 			result.AddWarning("HasXmp is true but XmpData is empty.");
 
 		// Validate extended features requirement
-		if ((metadata.HasIccProfile || metadata.HasExif || metadata.HasXmp || metadata.HasAnimation) 
+		if ((metadata.HasIccProfile || metadata.HasExif || metadata.HasXmp || metadata.HasAnimation)
 		    && webp.Format != WebPFormat.Extended)
 		{
 			result.AddWarning("Metadata features require Extended format for optimal compatibility.");
@@ -209,11 +208,11 @@ public static class WebPValidator
 			return false;
 
 		// Check RIFF header
-		if (!data[..4].SequenceEqual(WebPConstants.Signature))
+		if (!data[..4].SequenceEqual(WebPConstants.Signature.AsSpan()))
 			return false;
 
 		// Check WEBP format identifier
-		return data.Slice(8, 4).SequenceEqual(WebPConstants.FormatId);
+		return data.Slice(8, 4).SequenceEqual(WebPConstants.FormatId.AsSpan());
 	}
 
 	/// <summary>Gets the WebP format type from file data.</summary>
@@ -229,13 +228,13 @@ public static class WebPValidator
 
 		var chunkId = data.Slice(WebPConstants.RiffHeaderSize, 4);
 
-		if (chunkId.SequenceEqual(WebPConstants.VP8ChunkId))
+		if (chunkId.SequenceEqual(WebPConstants.VP8ChunkId.AsSpan()))
 			return WebPFormat.Simple;
 
-		if (chunkId.SequenceEqual(WebPConstants.VP8LChunkId))
+		if (chunkId.SequenceEqual(WebPConstants.VP8LChunkId.AsSpan()))
 			return WebPFormat.Lossless;
 
-		if (chunkId.SequenceEqual(WebPConstants.VP8XChunkId))
+		if (chunkId.SequenceEqual(WebPConstants.VP8XChunkId.AsSpan()))
 			return WebPFormat.Extended;
 
 		return WebPFormat.Simple;
