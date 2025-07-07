@@ -2,11 +2,13 @@
 
 **Namespace:** `Wangkanai.Graphics`
 
-The core abstractions and interfaces for the Wangkanai Graphics library, providing fundamental contracts for image processing operations across all graphics components. This foundational layer establishes the common interfaces and base types that enable consistent and extensible image manipulation capabilities throughout the graphics ecosystem.
+The core abstractions and interfaces for the Wangkanai Graphics library, providing fundamental contracts for image processing operations across all graphics components.
+This foundational layer establishes the common interfaces and base types that enable consistent and extensible image manipulation capabilities throughout the graphics ecosystem.
 
 ## Project Overview
 
-Graphics Abstractions serves as the foundational layer for the entire graphics processing system, defining the core interfaces and contracts that all graphics components must implement. This ensures consistency, interoperability, and extensibility across raster, vector, and other image processing operations.
+Graphics serves as the foundational layer for the entire graphics processing system, defining the core interfaces and contracts that all graphics components must implement.
+This ensures consistency, interoperability, and extensibility across raster, vector, and other image processing operations.
 
 ## Technical Specifications
 
