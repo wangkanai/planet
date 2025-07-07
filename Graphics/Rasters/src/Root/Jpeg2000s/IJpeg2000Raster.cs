@@ -186,14 +186,14 @@ public interface IJpeg2000Raster : IRaster
 	/// <returns>The tile index containing the specified coordinates.</returns>
 	int GetTileIndex(int x, int y);
 
-	/// <summary>Converts the image to use tiled organization.</summary>
+	/// <summary>Sets the tile size for tiled image organization.</summary>
 	/// <param name="tileWidth">The desired tile width.</param>
 	/// <param name="tileHeight">The desired tile height.</param>
 	/// <remarks>
 	/// Tiling is beneficial for very large images as it enables efficient processing
 	/// and memory management by dividing the image into smaller, manageable blocks.
 	/// </remarks>
-	void ConvertToTiled(int tileWidth = Jpeg2000Constants.DefaultTileSize, int tileHeight = Jpeg2000Constants.DefaultTileSize);
+	void SetTileSize(int tileWidth = Jpeg2000Constants.DefaultTileSize, int tileHeight = Jpeg2000Constants.DefaultTileSize);
 }
 
 /// <summary>Encoding options for JPEG2000 compression.</summary>

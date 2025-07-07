@@ -628,13 +628,13 @@ public class Jpeg2000RasterTests
 	}
 
 	[Fact]
-	public void ConvertToTiled_ShouldUpdateTileSettings()
+	public void SetTileSize_ShouldUpdateTileSettings()
 	{
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(2048, 1536, 3);
 
 		// Act
-		jpeg2000.ConvertToTiled(512, 512);
+		jpeg2000.SetTileSize(512, 512);
 
 		// Assert
 		Assert.Equal(512, jpeg2000.TileWidth);

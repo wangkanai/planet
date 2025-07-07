@@ -44,7 +44,7 @@ public static class Jpeg2000Examples
 		// Use optimal tile size for large images
 		if (width > 4096 || height > 4096)
 		{
-			jpeg2000.ConvertToTiled(1024, 1024);
+			jpeg2000.SetTileSize(1024, 1024);
 		}
 
 		return jpeg2000;
@@ -103,7 +103,7 @@ public static class Jpeg2000Examples
 		// Use tiling for large geospatial datasets
 		if (width > 2048 || height > 2048)
 		{
-			jpeg2000.ConvertToTiled(512, 512);
+			jpeg2000.SetTileSize(512, 512);
 		}
 
 		return jpeg2000;
@@ -166,7 +166,7 @@ public static class Jpeg2000Examples
 		// Use larger tiles for multi-spectral data
 		if (width > 1024 || height > 1024)
 		{
-			jpeg2000.ConvertToTiled(512, 512);
+			jpeg2000.SetTileSize(512, 512);
 		}
 
 		return jpeg2000;
@@ -226,7 +226,7 @@ public static class Jpeg2000Examples
 		// Use optimal tile size for large images
 		if (width > 2048 || height > 2048)
 		{
-			jpeg2000.ConvertToTiled(1024, 1024);
+			jpeg2000.SetTileSize(1024, 1024);
 		}
 
 		return jpeg2000;
@@ -254,7 +254,7 @@ public static class Jpeg2000Examples
 		// Use smaller tiles to reduce memory usage
 		if (width > 512 || height > 512)
 		{
-			jpeg2000.ConvertToTiled(256, 256);
+			jpeg2000.SetTileSize(256, 256);
 		}
 
 		return jpeg2000;
@@ -283,7 +283,7 @@ public static class Jpeg2000Examples
 		jpeg2000.Metadata.BitDepth = bitDepth;
 
 		// Use large tiles for print workflows
-		jpeg2000.ConvertToTiled(2048, 2048);
+		jpeg2000.SetTileSize(2048, 2048);
 
 		return jpeg2000;
 	}

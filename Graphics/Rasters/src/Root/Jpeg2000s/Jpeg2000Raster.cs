@@ -11,7 +11,6 @@ namespace Wangkanai.Graphics.Rasters.Jpeg2000s;
 /// </remarks>
 public class Jpeg2000Raster : Raster, IJpeg2000Raster
 {
-	private byte[]? _pixelData;
 	private byte[]? _encodedData;
 	private bool _disposed;
 
@@ -28,8 +27,10 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	/// <param name="components">Number of color components (1=grayscale, 3=RGB, 4=RGBA).</param>
 	public Jpeg2000Raster(int width, int height, int components = 3)
 	{
-		if (width <= 0) throw new ArgumentException("Width must be positive.", nameof(width));
-		if (height <= 0) throw new ArgumentException("Height must be positive.", nameof(height));
+		if (width <= 0)
+			throw new ArgumentException("Width must be positive.", nameof(width));
+		if (height <= 0)
+			throw new ArgumentException("Height must be positive.", nameof(height));
 		if (components <= 0 || components > Jpeg2000Constants.MaxComponents)
 			throw new ArgumentException($"Components must be between 1 and {Jpeg2000Constants.MaxComponents}.", nameof(components));
 
@@ -47,33 +48,33 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	}
 
 	/// <summary>Gets or sets the width of the image.</summary>
-	public override int Width 
-	{ 
-		get 
-		{ 
-			ThrowIfDisposed(); 
-			return base.Width; 
-		} 
-		set 
-		{ 
-			ThrowIfDisposed(); 
-			base.Width = value; 
-		} 
+	public override int Width
+	{
+		get
+		{
+			ThrowIfDisposed();
+			return base.Width;
+		}
+		set
+		{
+			ThrowIfDisposed();
+			base.Width = value;
+		}
 	}
 
 	/// <summary>Gets or sets the height of the image.</summary>
-	public override int Height 
-	{ 
-		get 
-		{ 
-			ThrowIfDisposed(); 
-			return base.Height; 
-		} 
-		set 
-		{ 
-			ThrowIfDisposed(); 
-			base.Height = value; 
-		} 
+	public override int Height
+	{
+		get
+		{
+			ThrowIfDisposed();
+			return base.Height;
+		}
+		set
+		{
+			ThrowIfDisposed();
+			base.Height = value;
+		}
 	}
 
 	/// <summary>Comprehensive JPEG2000 metadata including JP2 boxes and codestream parameters.</summary>
@@ -494,8 +495,8 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 		return tileY * Metadata.TilesAcross + tileX;
 	}
 
-	/// <summary>Converts the image to use tiled organization.</summary>
-	public void ConvertToTiled(int tileWidth = Jpeg2000Constants.DefaultTileSize, int tileHeight = Jpeg2000Constants.DefaultTileSize)
+	/// <summary>Sets the tile size for tiled image organization.</summary>
+	public void SetTileSize(int tileWidth = Jpeg2000Constants.DefaultTileSize, int tileHeight = Jpeg2000Constants.DefaultTileSize)
 	{
 		ThrowIfDisposed();
 
@@ -525,7 +526,7 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 
 		if (options.EnableTiling)
 		{
-			ConvertToTiled(options.TileWidth, options.TileHeight);
+			SetTileSize(options.TileWidth, options.TileHeight);
 		}
 
 		if (options.RegionOfInterest.HasValue)
@@ -596,7 +597,6 @@ public class Jpeg2000Raster : Raster, IJpeg2000Raster
 	{
 		if (!_disposed && disposing)
 		{
-			_pixelData = null;
 			_encodedData = null;
 			_disposed = true;
 		}
