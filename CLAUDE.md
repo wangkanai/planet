@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Coding Guidelines
 
 - Always use a descriptive variable name
+- Use expression bodies for single-line methods when possible
 - Use PascalCase for public members and camelCase for private members
 - Use `var` for local variables when the type is obvious
 - Use `async`/`await` for asynchronous methods
