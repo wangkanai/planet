@@ -12,9 +12,9 @@ public class SvgCoordinateTransformationTests
 	public void TransformToSvgSpace_WithGeodeticCoordinate_ShouldReturnCorrectSvgCoordinate()
 	{
 		// Arrange
-		using var svg = new SvgVector(100, 100);
-		var geodetic = new Geodetic(45.0, 10.0); // Lat, Lon
-		var bounds = new GeographicBounds(40.0, 50.0, 0.0, 20.0); // MinLat, MaxLat, MinLon, MaxLon
+		using var svg      = new SvgVector(100, 100);
+		var       geodetic = new Geodetic(45.0, 10.0);                    // Lat, Lon
+		var       bounds   = new GeographicBounds(40.0, 50.0, 0.0, 20.0); // MinLat, MaxLat, MinLon, MaxLon
 
 		// Act
 		var svgCoord = svg.TransformToSvgSpace(geodetic, bounds);
@@ -30,9 +30,9 @@ public class SvgCoordinateTransformationTests
 	public void TransformToGeographic_WithSvgCoordinate_ShouldReturnCorrectGeodeticCoordinate()
 	{
 		// Arrange
-		using var svg = new SvgVector(100, 100);
-		var svgCoord = new Coordinate(50.0, 50.0);
-		var bounds = new GeographicBounds(40.0, 50.0, 0.0, 20.0);
+		using var svg      = new SvgVector(100, 100);
+		var       svgCoord = new Coordinate(50.0, 50.0);
+		var       bounds   = new GeographicBounds(40.0, 50.0, 0.0, 20.0);
 
 		// Act
 		var geodetic = svg.TransformToGeographic(svgCoord, bounds);
@@ -49,7 +49,7 @@ public class SvgCoordinateTransformationTests
 	{
 		// Arrange
 		using var svg = new SvgVector(100, 100);
-		var crs = "EPSG:4326";
+		var       crs = "EPSG:4326";
 
 		// Act
 		svg.SetCoordinateReferenceSystem(crs);
@@ -63,9 +63,9 @@ public class SvgCoordinateTransformationTests
 	public void TransformCoordinateSystem_FromWgs84ToWebMercator_ShouldUpdateViewBox()
 	{
 		// Arrange
-		using var svg = new SvgVector(100, 100);
-		var bounds = new GeographicBounds(-85.0, 85.0, -180.0, 180.0);
-		var originalViewBox = svg.Metadata.ViewBox;
+		using var svg             = new SvgVector(100, 100);
+		var       bounds          = new GeographicBounds(-85.0, 85.0, -180.0, 180.0);
+		var       originalViewBox = svg.Metadata.ViewBox;
 
 		// Act
 		svg.TransformCoordinateSystem("EPSG:4326", "EPSG:3857", bounds);
@@ -81,12 +81,12 @@ public class SvgCoordinateTransformationTests
 	public void TransformCoordinateSystem_FromWebMercatorToWgs84_ShouldUpdateViewBox()
 	{
 		// Arrange
-		using var svg = new SvgVector(100, 100);
-		var bounds = new GeographicBounds(-85.0, 85.0, -180.0, 180.0);
-		
+		using var svg    = new SvgVector(100, 100);
+		var       bounds = new GeographicBounds(-85.0, 85.0, -180.0, 180.0);
+
 		// First transform to Web Mercator
 		svg.TransformCoordinateSystem("EPSG:4326", "EPSG:3857", bounds);
-		
+
 		// Act - Transform back to WGS84
 		svg.TransformCoordinateSystem("EPSG:3857", "EPSG:4326", bounds);
 
@@ -103,9 +103,9 @@ public class SvgCoordinateTransformationTests
 		using var svg = new SvgVector(100, 100);
 		// Set a custom viewBox with offset
 		svg.Metadata.ViewBox = new SvgViewBox(10, 20, 100, 100);
-		
+
 		var geodetic = new Geodetic(45.0, 10.0);
-		var bounds = new GeographicBounds(40.0, 50.0, 0.0, 20.0);
+		var bounds   = new GeographicBounds(40.0, 50.0, 0.0, 20.0);
 
 		// Act
 		var svgCoord = svg.TransformToSvgSpace(geodetic, bounds);
@@ -123,7 +123,7 @@ public class SvgCoordinateTransformationTests
 		var svg = new SvgVector(100, 100);
 		svg.Dispose();
 		var geodetic = new Geodetic(45.0, 10.0);
-		var bounds = new GeographicBounds(40.0, 50.0, 0.0, 20.0);
+		var bounds   = new GeographicBounds(40.0, 50.0, 0.0, 20.0);
 
 		// Act & Assert
 		Assert.Throws<ObjectDisposedException>(() => svg.TransformToSvgSpace(geodetic, bounds));
@@ -136,7 +136,7 @@ public class SvgCoordinateTransformationTests
 		var svg = new SvgVector(100, 100);
 		svg.Dispose();
 		var svgCoord = new Coordinate(50.0, 50.0);
-		var bounds = new GeographicBounds(40.0, 50.0, 0.0, 20.0);
+		var bounds   = new GeographicBounds(40.0, 50.0, 0.0, 20.0);
 
 		// Act & Assert
 		Assert.Throws<ObjectDisposedException>(() => svg.TransformToGeographic(svgCoord, bounds));
@@ -162,23 +162,23 @@ public class SvgCoordinateTransformationTests
 		var bounds = new GeographicBounds(-85.0, 85.0, -180.0, 180.0);
 
 		// Act & Assert
-		Assert.Throws<ObjectDisposedException>(() => 
+		Assert.Throws<ObjectDisposedException>(() =>
 			svg.TransformCoordinateSystem("EPSG:4326", "EPSG:3857", bounds));
 	}
 
 	[Theory]
-	[InlineData(0.0, 0.0, 10.0, 30.0)] // Bottom-left corner
-	[InlineData(90.0, 180.0, 90.0, 30.0)] // Top-right corner
-	[InlineData(45.0, 90.0, 50.0, 30.0)] // Center
+	[InlineData(0.0, 0.0, 0.0, 100.0)]     // Bottom-left corner
+	[InlineData(90.0, 180.0, 100.0, 0.0)]  // Top-right corner
+	[InlineData(45.0, 90.0, 50.0, 50.0)]   // Center
 	public void TransformRoundTrip_ShouldPreserveOriginalCoordinates(double lat, double lon, double expectedX, double expectedY)
 	{
 		// Arrange
-		using var svg = new SvgVector(100, 100);
-		var originalGeodetic = new Geodetic(lat, lon);
-		var bounds = new GeographicBounds(0.0, 90.0, 0.0, 180.0);
+		using var svg              = new SvgVector(100, 100);
+		var       originalGeodetic = new Geodetic(lat, lon);
+		var       bounds           = new GeographicBounds(0.0, 90.0, 0.0, 180.0);
 
 		// Act
-		var svgCoord = svg.TransformToSvgSpace(originalGeodetic, bounds);
+		var svgCoord          = svg.TransformToSvgSpace(originalGeodetic, bounds);
 		var roundTripGeodetic = svg.TransformToGeographic(svgCoord, bounds);
 
 		// Assert

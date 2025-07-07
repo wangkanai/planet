@@ -107,14 +107,14 @@ public class GeographicBoundsTests
 	}
 
 	[Theory]
-	[InlineData(10, 20, 30, 40, true)]   // Valid bounds
+	[InlineData(10, 20, 30, 40, true)]     // Valid bounds
 	[InlineData(-90, 90, -180, 180, true)] // World bounds
-	[InlineData(20, 10, 30, 40, false)]  // Invalid lat order
-	[InlineData(10, 20, 40, 30, false)]  // Invalid lon order
-	[InlineData(-100, 20, 30, 40, false)] // Invalid lat range
-	[InlineData(10, 100, 30, 40, false)] // Invalid lat range
-	[InlineData(10, 20, -200, 40, false)] // Invalid lon range
-	[InlineData(10, 20, 30, 200, false)] // Invalid lon range
+	[InlineData(20, 10, 30, 40, false)]    // Invalid lat order
+	[InlineData(10, 20, 40, 30, false)]    // Invalid lon order
+	[InlineData(-100, 20, 30, 40, false)]  // Invalid lat range
+	[InlineData(10, 100, 30, 40, false)]   // Invalid lat range
+	[InlineData(10, 20, -200, 40, false)]  // Invalid lon range
+	[InlineData(10, 20, 30, 200, false)]   // Invalid lon range
 	public void IsValid_WithBounds_ShouldReturnExpectedResult(double minLat, double maxLat, double minLon, double maxLon, bool expected)
 	{
 		// Arrange

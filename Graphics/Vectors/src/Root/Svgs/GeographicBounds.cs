@@ -20,6 +20,9 @@ public class GeographicBounds
 	/// <summary>Gets or sets the maximum longitude (eastern boundary).</summary>
 	public double MaxLongitude { get; set; }
 
+	/// <summary>Initializes a new instance of the GeographicBounds class.</summary>
+	public GeographicBounds() { }
+
 	/// <summary>Initializes a new instance of the GeographicBounds class with specified bounds.</summary>
 	/// <param name="minLatitude">The minimum latitude (southern boundary).</param>
 	/// <param name="maxLatitude">The maximum latitude (northern boundary).</param>
