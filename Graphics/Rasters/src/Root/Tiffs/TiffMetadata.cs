@@ -124,8 +124,18 @@ public class TiffMetadata : RasterMetadataBase
 			size += EstimateByteArraySize(GpsIfd);
 			size += EstimateByteArraySize(IptcData);
 
-			// Add custom tags size
-			size += EstimateDictionaryObjectSize(CustomTags);
+			// Add custom tags size - TIFF uses a more specific calculation
+			foreach (var tag in CustomTags.Values)
+				size += tag switch
+				{
+					string str => EstimateStringSize(str),
+					byte[] bytes => bytes.Length,
+					int[] ints => ints.Length * sizeof(int),
+					ushort[] ushorts => ushorts.Length * sizeof(ushort),
+					double[] doubles => doubles.Length * sizeof(double),
+					float[] floats => floats.Length * sizeof(float),
+					_ => 16 // Default estimate for other types
+				};
 
 			// Add TIFF directory entry overhead
 			var estimatedTagCount = 20; // Standard TIFF tags

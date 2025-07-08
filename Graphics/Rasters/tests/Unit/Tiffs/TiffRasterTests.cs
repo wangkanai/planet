@@ -243,7 +243,7 @@ public class TiffRasterTests
 		var tiffRaster = new TiffRaster();
 		var exifData = new byte[1000];
 		var iccProfile = new byte[2000];
-		var xmpData = new byte[500];
+		var xmpData = new string('X', 500); // XMP is now a string
 
 		// Act
 		var initialSize = tiffRaster.TiffMetadata.EstimatedMetadataSize;
@@ -253,7 +253,7 @@ public class TiffRasterTests
 		var sizeWithEmbedded = tiffRaster.TiffMetadata.EstimatedMetadataSize;
 
 		// Assert
-		var expectedIncrease = exifData.Length + iccProfile.Length + xmpData.Length;
+		var expectedIncrease = exifData.Length + iccProfile.Length + System.Text.Encoding.UTF8.GetByteCount(xmpData);
 		Assert.Equal(expectedIncrease, sizeWithEmbedded - initialSize);
 	}
 

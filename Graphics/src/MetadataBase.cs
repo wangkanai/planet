@@ -10,6 +10,7 @@ namespace Wangkanai.Graphics;
 public abstract class MetadataBase : IMetadata
 {
 	private bool _disposed;
+	private const int DefaultObjectEstimate = 16;
 
 	/// <inheritdoc />
 	public virtual bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
