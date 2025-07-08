@@ -13,7 +13,7 @@ public class TiffRasterBaseline : ITiffRaster
 	/// <inheritdoc />
 	public int Height { get; set; }
 
-	IMetadata IImage.Metadata { get; }
+	IMetadata IImage.Metadata => Metadata;
 
 	/// <inheritdoc />
 	public TiffColorDepth ColorDepth { get; set; }

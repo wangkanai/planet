@@ -84,8 +84,8 @@ public class AvifMetadata : IAsyncDisposable, IDisposable
 	/// <summary>Gets or sets additional metadata properties.</summary>
 	public Dictionary<string, object> ExtendedProperties { get; set; } = new();
 
-	/// <summary>Gets the estimated memory usage of the metadata in bytes.</summary>
-	public long EstimatedMemoryUsage
+	/// <summary>Gets the estimated metadata size in bytes.</summary>
+	public long EstimatedMetadataSize
 	{
 		get
 		{
@@ -110,7 +110,7 @@ public class AvifMetadata : IAsyncDisposable, IDisposable
 	}
 
 	/// <summary>Gets whether this metadata contains large data that benefits from async disposal.</summary>
-	public bool HasLargeMetadata => EstimatedMemoryUsage > ImageConstants.LargeMetadataThreshold;
+	public bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
 
 	/// <summary>Creates a deep copy of the metadata.</summary>
 	public AvifMetadata Clone()

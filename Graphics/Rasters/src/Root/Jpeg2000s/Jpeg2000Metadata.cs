@@ -142,8 +142,8 @@ public class Jpeg2000Metadata : IAsyncDisposable, IDisposable
 		UuidBoxes.Values.Any(data => data.Length > 1024 * 1024) ||
 		TotalTiles > 10000;
 
-	/// <summary>Gets the estimated memory usage of this metadata in bytes.</summary>
-	public long EstimatedMemoryUsage
+	/// <summary>Gets the estimated metadata size in bytes.</summary>
+	public long EstimatedMetadataSize
 	{
 		get
 		{
