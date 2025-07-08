@@ -50,7 +50,8 @@ public class SvgVectorTests
 		// Assert
 		Assert.Equal(150, svg.Width);
 		Assert.Equal(250, svg.Height);
-		Assert.True(svg.Metadata.ElementCount > 0);
+		var metadata = (SvgMetadata)svg.Metadata;
+		Assert.True(metadata.ElementCount > 0);
 		Assert.NotNull(svg.Document);
 	}
 

@@ -91,9 +91,10 @@ public class SvgCoordinateTransformationTests
 		svg.TransformCoordinateSystem("EPSG:3857", "EPSG:4326", bounds);
 
 		// Assert
-		Assert.Equal("EPSG:4326", svg.Metadata.CoordinateReferenceSystem);
+		var transformedMetadata = (SvgMetadata)svg.Metadata;
+		Assert.Equal("EPSG:4326", transformedMetadata.CoordinateReferenceSystem);
 		// ViewBox should be back to geographic coordinates
-		Assert.True(Math.Abs(svg.Metadata.ViewBox.Width) < 1000);
+		Assert.True(Math.Abs(transformedMetadata.ViewBox.Width) < 1000);
 	}
 
 	[Fact]
