@@ -233,7 +233,7 @@ public class WebPValidatorTests
 		{
 			Format = WebPFormat.Extended
 		};
-		webp.Metadata.IsExtended = false;
+		webp.WebPMetadata.IsExtended = false;
 
 		// Act
 		var result = webp.Validate();
@@ -267,8 +267,8 @@ public class WebPValidatorTests
 		{
 			Format = WebPFormat.Simple
 		};
-		webp.Metadata.HasAnimation = true;
-		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame { Width = 100, Height = 100 });
+		webp.WebPMetadata.HasAnimation = true;
+		webp.WebPMetadata.AnimationFrames.Add(new WebPAnimationFrame { Width = 100, Height = 100 });
 
 		// Act
 		var result = webp.Validate();
@@ -284,7 +284,7 @@ public class WebPValidatorTests
 		// Arrange
 		var webp = new WebPRaster(800, 600);
 		webp.EnableExtendedFeatures();
-		webp.Metadata.HasAnimation = true;
+		webp.WebPMetadata.HasAnimation = true;
 
 		// Act
 		var result = webp.Validate();
@@ -300,8 +300,8 @@ public class WebPValidatorTests
 		// Arrange
 		var webp = new WebPRaster(800, 600);
 		webp.EnableExtendedFeatures();
-		webp.Metadata.HasAnimation = true;
-		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame { Width = 0, Height = 100 });
+		webp.WebPMetadata.HasAnimation = true;
+		webp.WebPMetadata.AnimationFrames.Add(new WebPAnimationFrame { Width = 0, Height = 100 });
 
 		// Act
 		var result = webp.Validate();
@@ -317,8 +317,8 @@ public class WebPValidatorTests
 		// Arrange
 		var webp = new WebPRaster(800, 600);
 		webp.EnableExtendedFeatures();
-		webp.Metadata.HasAnimation = true;
-		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame
+		webp.WebPMetadata.HasAnimation = true;
+		webp.WebPMetadata.AnimationFrames.Add(new WebPAnimationFrame
 		{
 			Width = 200,
 			Height = 200,
@@ -340,8 +340,8 @@ public class WebPValidatorTests
 		// Arrange
 		var webp = new WebPRaster(800, 600);
 		webp.EnableExtendedFeatures();
-		webp.Metadata.HasAnimation = true;
-		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame
+		webp.WebPMetadata.HasAnimation = true;
+		webp.WebPMetadata.AnimationFrames.Add(new WebPAnimationFrame
 		{
 			Width = 100,
 			Height = 100,
@@ -361,12 +361,12 @@ public class WebPValidatorTests
 		// Arrange
 		var webp = new WebPRaster(800, 600);
 		webp.EnableExtendedFeatures();
-		webp.Metadata.HasAnimation = true;
+		webp.WebPMetadata.HasAnimation = true;
 
 		// Add 101 frames
 		for (int i = 0; i < 101; i++)
 		{
-			webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame
+			webp.WebPMetadata.AnimationFrames.Add(new WebPAnimationFrame
 			{
 				Width = 100,
 				Height = 100,
@@ -386,9 +386,9 @@ public class WebPValidatorTests
 	{
 		// Arrange
 		var webp = new WebPRaster(800, 600);
-		webp.Metadata.HasIccProfile = true;
-		webp.Metadata.HasExif = true;
-		webp.Metadata.HasXmp = true;
+		webp.WebPMetadata.HasIccProfile = true;
+		webp.WebPMetadata.HasExif = true;
+		webp.WebPMetadata.HasXmp = true;
 		// But leave the data empty
 
 		// Act
@@ -405,7 +405,7 @@ public class WebPValidatorTests
 	{
 		// Arrange
 		var webp = new WebPRaster(800, 600);
-		webp.Metadata.CustomChunks.Add("TOOLONG", new byte[10]);
+		webp.WebPMetadata.CustomChunks.Add("TOOLONG", new byte[10]);
 
 		// Act
 		var result = webp.Validate();
@@ -420,9 +420,9 @@ public class WebPValidatorTests
 	{
 		// Arrange
 		var webp = new WebPRaster(800, 600);
-		webp.Metadata.IccProfile = new byte[500_000];
-		webp.Metadata.ExifData = new byte[400_000];
-		webp.Metadata.XmpData = new byte[200_000];
+		webp.WebPMetadata.IccProfile = new byte[500_000];
+		webp.WebPMetadata.ExifData = new byte[400_000];
+		webp.WebPMetadata.XmpData = new byte[200_000];
 
 		// Act
 		var result = webp.Validate();

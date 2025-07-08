@@ -25,11 +25,11 @@ public class JpegExamplesTests
 		Assert.Equal(JpegEncoding.Baseline, jpeg.Encoding);
 		Assert.True(jpeg.IsOptimized);
 		Assert.False(jpeg.IsProgressive);
-		Assert.Equal("Wangkanai.Graphics.Rasters", jpeg.Metadata.Software);
-		Assert.Equal(2, jpeg.Metadata.ResolutionUnit);
-		Assert.Equal(72.0, jpeg.Metadata.XResolution);
-		Assert.Equal(72.0, jpeg.Metadata.YResolution);
-		Assert.NotNull(jpeg.Metadata.CaptureDateTime);
+		Assert.Equal("Wangkanai.Graphics.Rasters", jpeg.JpegMetadata.Software);
+		Assert.Equal(2, jpeg.JpegMetadata.ResolutionUnit);
+		Assert.Equal(72.0, jpeg.JpegMetadata.XResolution);
+		Assert.Equal(72.0, jpeg.JpegMetadata.YResolution);
+		Assert.NotNull(jpeg.JpegMetadata.CaptureDateTime);
 		Assert.True(jpeg.IsValid());
 	}
 
@@ -64,10 +64,10 @@ public class JpegExamplesTests
 		Assert.Equal(JpegEncoding.Baseline, jpeg.Encoding);
 		Assert.False(jpeg.IsOptimized);
 		Assert.False(jpeg.IsProgressive);
-		Assert.Equal("Wangkanai.Graphics.Rasters", jpeg.Metadata.Software);
-		Assert.Equal(2, jpeg.Metadata.ResolutionUnit);
-		Assert.Equal(300.0, jpeg.Metadata.XResolution);
-		Assert.Equal(300.0, jpeg.Metadata.YResolution);
+		Assert.Equal("Wangkanai.Graphics.Rasters", jpeg.JpegMetadata.Software);
+		Assert.Equal(2, jpeg.JpegMetadata.ResolutionUnit);
+		Assert.Equal(300.0, jpeg.JpegMetadata.XResolution);
+		Assert.Equal(300.0, jpeg.JpegMetadata.YResolution);
 		Assert.True(jpeg.IsValid());
 	}
 
@@ -102,10 +102,10 @@ public class JpegExamplesTests
 		Assert.Equal(JpegEncoding.Progressive, jpeg.Encoding);
 		Assert.True(jpeg.IsProgressive);
 		Assert.True(jpeg.IsOptimized);
-		Assert.Equal("Wangkanai.Graphics.Rasters", jpeg.Metadata.Software);
-		Assert.Equal(2, jpeg.Metadata.ResolutionUnit);
-		Assert.Equal(72.0, jpeg.Metadata.XResolution);
-		Assert.Equal(72.0, jpeg.Metadata.YResolution);
+		Assert.Equal("Wangkanai.Graphics.Rasters", jpeg.JpegMetadata.Software);
+		Assert.Equal(2, jpeg.JpegMetadata.ResolutionUnit);
+		Assert.Equal(72.0, jpeg.JpegMetadata.XResolution);
+		Assert.Equal(72.0, jpeg.JpegMetadata.YResolution);
 		Assert.True(jpeg.IsValid());
 	}
 
@@ -139,12 +139,12 @@ public class JpegExamplesTests
 		Assert.Equal(JpegEncoding.Baseline, jpeg.Encoding);
 		Assert.True(jpeg.IsOptimized);
 		Assert.False(jpeg.IsProgressive);
-		Assert.Equal("Wangkanai.Graphics.Rasters", jpeg.Metadata.Software);
-		Assert.Equal(2, jpeg.Metadata.ResolutionUnit);
-		Assert.Equal(300.0, jpeg.Metadata.XResolution);
-		Assert.Equal(300.0, jpeg.Metadata.YResolution);
-		Assert.Equal("Photographer", jpeg.Metadata.Artist);
-		Assert.Equal(1, jpeg.Metadata.ColorSpace);
+		Assert.Equal("Wangkanai.Graphics.Rasters", jpeg.JpegMetadata.Software);
+		Assert.Equal(2, jpeg.JpegMetadata.ResolutionUnit);
+		Assert.Equal(300.0, jpeg.JpegMetadata.XResolution);
+		Assert.Equal(300.0, jpeg.JpegMetadata.YResolution);
+		Assert.Equal("Photographer", jpeg.JpegMetadata.Artist);
+		Assert.Equal(1, jpeg.JpegMetadata.ColorSpace);
 		Assert.True(jpeg.IsValid());
 	}
 
@@ -168,11 +168,11 @@ public class JpegExamplesTests
 		Assert.Equal(JpegEncoding.Baseline, jpeg.Encoding);
 		Assert.True(jpeg.IsOptimized);
 		Assert.False(jpeg.IsProgressive);
-		Assert.Equal("Wangkanai.Graphics.Rasters", jpeg.Metadata.Software);
-		Assert.Equal(2, jpeg.Metadata.ResolutionUnit);
-		Assert.Equal(300.0, jpeg.Metadata.XResolution);
-		Assert.Equal(300.0, jpeg.Metadata.YResolution);
-		Assert.Equal(65535, jpeg.Metadata.ColorSpace);
+		Assert.Equal("Wangkanai.Graphics.Rasters", jpeg.JpegMetadata.Software);
+		Assert.Equal(2, jpeg.JpegMetadata.ResolutionUnit);
+		Assert.Equal(300.0, jpeg.JpegMetadata.XResolution);
+		Assert.Equal(300.0, jpeg.JpegMetadata.YResolution);
+		Assert.Equal(65535, jpeg.JpegMetadata.ColorSpace);
 		Assert.True(jpeg.IsValid());
 	}
 
@@ -192,11 +192,11 @@ public class JpegExamplesTests
 		Assert.Equal(JpegEncoding.Baseline, jpeg.Encoding);
 		Assert.True(jpeg.IsOptimized);
 		Assert.False(jpeg.IsProgressive);
-		Assert.Equal("Wangkanai.Graphics.Rasters", jpeg.Metadata.Software);
-		Assert.Equal(2, jpeg.Metadata.ResolutionUnit);
-		Assert.Equal(72.0, jpeg.Metadata.XResolution);
-		Assert.Equal(72.0, jpeg.Metadata.YResolution);
-		Assert.Equal("Thumbnail", jpeg.Metadata.ImageDescription);
+		Assert.Equal("Wangkanai.Graphics.Rasters", jpeg.JpegMetadata.Software);
+		Assert.Equal(2, jpeg.JpegMetadata.ResolutionUnit);
+		Assert.Equal(72.0, jpeg.JpegMetadata.XResolution);
+		Assert.Equal(72.0, jpeg.JpegMetadata.YResolution);
+		Assert.Equal("Thumbnail", jpeg.JpegMetadata.ImageDescription);
 		Assert.True(jpeg.IsValid());
 	}
 
@@ -234,30 +234,30 @@ public class JpegExamplesTests
 		Assert.Equal(JpegEncoding.Baseline, jpeg.Encoding);
 
 		// Assert metadata
-		Assert.Equal("Canon", jpeg.Metadata.Make);
-		Assert.Equal("EOS R5", jpeg.Metadata.Model);
-		Assert.Equal("Wangkanai.Graphics.Rasters", jpeg.Metadata.Software);
-		Assert.Equal("John Doe", jpeg.Metadata.Artist);
-		Assert.Equal("Copyright 2025", jpeg.Metadata.Copyright);
-		Assert.Equal("Sample image with EXIF data", jpeg.Metadata.ImageDescription);
+		Assert.Equal("Canon", jpeg.JpegMetadata.Make);
+		Assert.Equal("EOS R5", jpeg.JpegMetadata.Model);
+		Assert.Equal("Wangkanai.Graphics.Rasters", jpeg.JpegMetadata.Software);
+		Assert.Equal("John Doe", jpeg.JpegMetadata.Artist);
+		Assert.Equal("Copyright 2025", jpeg.JpegMetadata.Copyright);
+		Assert.Equal("Sample image with EXIF data", jpeg.JpegMetadata.ImageDescription);
 
 		// Assert camera settings
-		Assert.Equal(1.0 / 125.0, jpeg.Metadata.ExposureTime);
-		Assert.Equal(5.6, jpeg.Metadata.FNumber);
-		Assert.Equal(400, jpeg.Metadata.IsoSpeedRating);
-		Assert.Equal(85.0, jpeg.Metadata.FocalLength);
-		Assert.Equal(0, jpeg.Metadata.WhiteBalance);
+		Assert.Equal(1.0 / 125.0, jpeg.JpegMetadata.ExposureTime);
+		Assert.Equal(5.6, jpeg.JpegMetadata.FNumber);
+		Assert.Equal(400, jpeg.JpegMetadata.IsoSpeedRating);
+		Assert.Equal(85.0, jpeg.JpegMetadata.FocalLength);
+		Assert.Equal(0, jpeg.JpegMetadata.WhiteBalance);
 
 		// Assert GPS data
-		Assert.Equal(35.6762, jpeg.Metadata.GpsLatitude);
-		Assert.Equal(139.6503, jpeg.Metadata.GpsLongitude);
+		Assert.Equal(35.6762, jpeg.JpegMetadata.GpsLatitude);
+		Assert.Equal(139.6503, jpeg.JpegMetadata.GpsLongitude);
 
 		// Assert resolution and color space
-		Assert.Equal(2, jpeg.Metadata.ResolutionUnit);
-		Assert.Equal(300.0, jpeg.Metadata.XResolution);
-		Assert.Equal(300.0, jpeg.Metadata.YResolution);
-		Assert.Equal(1, jpeg.Metadata.ColorSpace);
-		Assert.Equal(1, jpeg.Metadata.Orientation);
+		Assert.Equal(2, jpeg.JpegMetadata.ResolutionUnit);
+		Assert.Equal(300.0, jpeg.JpegMetadata.XResolution);
+		Assert.Equal(300.0, jpeg.JpegMetadata.YResolution);
+		Assert.Equal(1, jpeg.JpegMetadata.ColorSpace);
+		Assert.Equal(1, jpeg.JpegMetadata.Orientation);
 
 		Assert.True(jpeg.IsValid());
 	}

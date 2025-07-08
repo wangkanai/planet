@@ -29,8 +29,8 @@ public class AvifValidatorTests
 	public void Validate_WithInvalidDimensions_ShouldReturnErrors(int width, int height)
 	{
 		using var avif = new AvifRaster();
-		avif.Metadata.Width = width;
-		avif.Metadata.Height = height;
+		avif.AvifMetadata.Width = width;
+		avif.AvifMetadata.Height = height;
 
 		var result = AvifValidator.Validate(avif);
 
@@ -47,8 +47,8 @@ public class AvifValidatorTests
 
 		// To test "exceeds maximum", we need to set the raster properties, not just metadata
 		// But this test is actually testing the metadata mismatch scenario
-		avif.Metadata.Width = AvifConstants.MaxDimension + 1;
-		avif.Metadata.Height = AvifConstants.MaxDimension + 1;
+		avif.AvifMetadata.Width = AvifConstants.MaxDimension + 1;
+		avif.AvifMetadata.Height = AvifConstants.MaxDimension + 1;
 
 		var result = AvifValidator.Validate(avif);
 
@@ -90,7 +90,7 @@ public class AvifValidatorTests
 		{
 			BitDepth = 8 // Set valid first
 		};
-		avif.Metadata.BitDepth = bitDepth; // Then set invalid directly in metadata
+		avif.AvifMetadata.BitDepth = bitDepth; // Then set invalid directly in metadata
 
 		var result = AvifValidator.Validate(avif);
 
@@ -114,7 +114,7 @@ public class AvifValidatorTests
 		});
 
 		// Manually set bit depth back to 8 after HDR sets it to 10
-		avif.Metadata.BitDepth = 8;
+		avif.AvifMetadata.BitDepth = 8;
 
 		var result = AvifValidator.Validate(avif);
 
@@ -143,7 +143,7 @@ public class AvifValidatorTests
 	public void Validate_WithInvalidQuality_ShouldReturnErrors(int quality)
 	{
 		using var avif = new AvifRaster(100, 100);
-		avif.Metadata.Quality = quality;
+		avif.AvifMetadata.Quality = quality;
 
 		var result = AvifValidator.Validate(avif);
 
@@ -157,7 +157,7 @@ public class AvifValidatorTests
 	public void Validate_WithInvalidSpeed_ShouldReturnErrors(int speed)
 	{
 		using var avif = new AvifRaster(100, 100);
-		avif.Metadata.Speed = speed;
+		avif.AvifMetadata.Speed = speed;
 
 		var result = AvifValidator.Validate(avif);
 
@@ -286,7 +286,7 @@ public class AvifValidatorTests
 	public void Validate_WithDimensionMismatch_ShouldReturnErrors()
 	{
 		using var avif = new AvifRaster(100, 100);
-		avif.Metadata.Width = 200; // Different from raster width
+		avif.AvifMetadata.Width = 200; // Different from raster width
 
 		var result = AvifValidator.Validate(avif);
 
@@ -298,7 +298,7 @@ public class AvifValidatorTests
 	public void Validate_WithSmallExifData_ShouldReturnWarnings()
 	{
 		using var avif = new AvifRaster(100, 100);
-		avif.Metadata.ExifData = new byte[4]; // Too small
+		avif.AvifMetadata.ExifData = new byte[4]; // Too small
 
 		var result = AvifValidator.Validate(avif);
 
@@ -310,7 +310,7 @@ public class AvifValidatorTests
 	public void Validate_WithSmallIccProfile_ShouldReturnWarnings()
 	{
 		using var avif = new AvifRaster(100, 100);
-		avif.Metadata.IccProfile = new byte[64]; // Too small
+		avif.AvifMetadata.IccProfile = new byte[64]; // Too small
 
 		var result = AvifValidator.Validate(avif);
 
@@ -322,7 +322,7 @@ public class AvifValidatorTests
 	public void Validate_WithInvalidRotation_ShouldReturnErrors()
 	{
 		using var avif = new AvifRaster(100, 100);
-		avif.Metadata.Rotation = 45; // Invalid rotation
+		avif.AvifMetadata.Rotation = 45; // Invalid rotation
 
 		var result = AvifValidator.Validate(avif);
 
