@@ -17,7 +17,6 @@ public sealed class WebPRaster : Raster, IWebPRaster
 	/// <summary>Initializes a new instance of the <see cref="WebPRaster"/> class.</summary>
 	public WebPRaster()
 	{
-		Metadata         = new WebPMetadata();
 		Format           = WebPFormat.Simple;
 		Compression      = WebPCompression.VP8;
 		ColorMode        = WebPColorMode.Rgb;
@@ -117,6 +116,9 @@ public sealed class WebPRaster : Raster, IWebPRaster
 
 	/// <inheritdoc />
 	WebPMetadata IWebPRaster.Metadata => _metadata;
+
+	/// <summary>Gets the WebP-specific metadata.</summary>
+	public WebPMetadata WebPMetadata => _metadata;
 
 	/// <inheritdoc />
 	public int Channels

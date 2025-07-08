@@ -102,8 +102,8 @@ public static class PngExamples
 		          };
 
 		// Set metadata for high-quality images
-		png.Metadata.Software = "Wangkanai Graphics Rasters";
-		png.Metadata.Created  = DateTime.UtcNow;
+		png.PngMetadata.Software = "Wangkanai Graphics Rasters";
+		png.PngMetadata.Created  = DateTime.UtcNow;
 
 		return png;
 	}
@@ -125,8 +125,8 @@ public static class PngExamples
 		          };
 
 		// Set web-appropriate metadata
-		png.Metadata.Software            = "Wangkanai Graphics Rasters";
-		png.Metadata.SrgbRenderingIntent = 0; // Perceptual rendering
+		png.PngMetadata.Software            = "Wangkanai Graphics Rasters";
+		png.PngMetadata.SrgbRenderingIntent = 0; // Perceptual rendering
 
 		return png;
 	}

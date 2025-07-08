@@ -97,6 +97,9 @@ public sealed class PngRaster : Raster, IPngRaster
 	/// <summary>Gets the PNG metadata.</summary>
 	PngMetadata IPngRaster.Metadata => _metadata;
 
+	/// <summary>Gets the PNG-specific metadata.</summary>
+	public PngMetadata PngMetadata => _metadata;
+
 	/// <summary>Gets the palette data for indexed-color images.</summary>
 	public ReadOnlyMemory<byte> PaletteData { get; set; }
 

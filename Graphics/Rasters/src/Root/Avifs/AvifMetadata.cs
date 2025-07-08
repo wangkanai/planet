@@ -5,7 +5,7 @@ namespace Wangkanai.Graphics.Rasters.Avifs;
 /// <summary>
 /// Represents comprehensive metadata for an AVIF image including color, HDR, and auxiliary information.
 /// </summary>
-public class AvifMetadata : IAsyncDisposable, IDisposable
+public class AvifMetadata : IMetadata
 {
 	private bool _disposed;
 

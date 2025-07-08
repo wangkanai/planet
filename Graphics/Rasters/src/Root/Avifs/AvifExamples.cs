@@ -225,7 +225,7 @@ public static class AvifExamples
 			BitDepth = 8
 		};
 
-		avif.Metadata.AlphaPremultiplied = premultipliedAlpha;
+		avif.AvifMetadata.AlphaPremultiplied = premultipliedAlpha;
 		return avif;
 	}
 
@@ -264,7 +264,7 @@ public static class AvifExamples
 		// Note: In a full implementation, camera make, model, lens, and GPS data
 		// would be properly encoded into EXIF format and stored in metadata
 		
-		avif.Metadata.ExifData = exifData.ToArray();
+		avif.AvifMetadata.ExifData = exifData.ToArray();
 	}
 
 	/// <summary>Demonstrates encoding an AVIF image with various quality presets.</summary>

@@ -17,7 +17,6 @@ public sealed class Jpeg2000Raster : Raster, IJpeg2000Raster
 	/// <summary>Initializes a new JPEG2000 raster with default settings.</summary>
 	public Jpeg2000Raster()
 	{
-		Metadata = new Jpeg2000Metadata();
 		InitializeDefaults();
 	}
 
@@ -37,12 +36,9 @@ public sealed class Jpeg2000Raster : Raster, IJpeg2000Raster
 		Width  = width;
 		Height = height;
 
-		Metadata = new Jpeg2000Metadata
-		           {
-			           Width      = width,
-			           Height     = height,
-			           Components = components
-		           };
+		_metadata.Width      = width;
+		_metadata.Height     = height;
+		_metadata.Components = components;
 
 		InitializeDefaults();
 	}
@@ -88,6 +84,9 @@ public sealed class Jpeg2000Raster : Raster, IJpeg2000Raster
 		get => _metadata;
 		set => _metadata = value;
 	}
+
+	/// <summary>Gets the JPEG2000-specific metadata.</summary>
+	public Jpeg2000Metadata Jpeg2000Metadata => _metadata;
 
 	/// <summary>Indicates if the image uses lossless compression.</summary>
 	public bool IsLossless

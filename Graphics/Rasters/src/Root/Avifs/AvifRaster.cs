@@ -20,7 +20,6 @@ public sealed class AvifRaster : Raster, IAvifRaster
 	/// <summary>Initializes a new instance of the AVIF raster with default settings.</summary>
 	public AvifRaster()
 	{
-		_metadata = new AvifMetadata();
 		InitializeDefaults();
 	}
 
@@ -89,6 +88,9 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		get => _metadata;
 		set => _metadata = value;
 	}
+
+	/// <summary>Gets the AVIF-specific metadata.</summary>
+	public AvifMetadata AvifMetadata => _metadata;
 
 	/// <inheritdoc />
 	public int BitDepth

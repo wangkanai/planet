@@ -19,11 +19,11 @@ public static class JpegExamples
 		jpeg.IsOptimized       = true;
 
 		// Set common metadata
-		jpeg.Metadata.Software        = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.CaptureDateTime = DateTime.Now;
-		jpeg.Metadata.ResolutionUnit  = 2; // Inches
-		jpeg.Metadata.XResolution     = 72.0;
-		jpeg.Metadata.YResolution     = 72.0;
+		jpeg.JpegMetadata.Software        = "Wangkanai.Graphics.Rasters";
+		jpeg.JpegMetadata.CaptureDateTime = DateTime.Now;
+		jpeg.JpegMetadata.ResolutionUnit  = 2; // Inches
+		jpeg.JpegMetadata.XResolution     = 72.0;
+		jpeg.JpegMetadata.YResolution     = 72.0;
 
 		return jpeg;
 	}
@@ -41,11 +41,11 @@ public static class JpegExamples
 		jpeg.Encoding          = JpegEncoding.Baseline;
 
 		// Set metadata
-		jpeg.Metadata.Software        = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.CaptureDateTime = DateTime.Now;
-		jpeg.Metadata.ResolutionUnit  = 2;     // Inches
-		jpeg.Metadata.XResolution     = 300.0; // High resolution for grayscale
-		jpeg.Metadata.YResolution     = 300.0;
+		jpeg.JpegMetadata.Software        = "Wangkanai.Graphics.Rasters";
+		jpeg.JpegMetadata.CaptureDateTime = DateTime.Now;
+		jpeg.JpegMetadata.ResolutionUnit  = 2;     // Inches
+		jpeg.JpegMetadata.XResolution     = 300.0; // High resolution for grayscale
+		jpeg.JpegMetadata.YResolution     = 300.0;
 
 		return jpeg;
 	}
@@ -65,11 +65,11 @@ public static class JpegExamples
 		jpeg.IsOptimized       = true;
 
 		// Web-optimized metadata
-		jpeg.Metadata.Software        = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.CaptureDateTime = DateTime.Now;
-		jpeg.Metadata.ResolutionUnit  = 2;    // Inches
-		jpeg.Metadata.XResolution     = 72.0; // Web standard
-		jpeg.Metadata.YResolution     = 72.0;
+		jpeg.JpegMetadata.Software        = "Wangkanai.Graphics.Rasters";
+		jpeg.JpegMetadata.CaptureDateTime = DateTime.Now;
+		jpeg.JpegMetadata.ResolutionUnit  = 2;    // Inches
+		jpeg.JpegMetadata.XResolution     = 72.0; // Web standard
+		jpeg.JpegMetadata.YResolution     = 72.0;
 
 		return jpeg;
 	}
@@ -87,13 +87,13 @@ public static class JpegExamples
 		jpeg.IsOptimized       = true;
 
 		// Photography metadata
-		jpeg.Metadata.Software        = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.CaptureDateTime = DateTime.Now;
-		jpeg.Metadata.ResolutionUnit  = 2;     // Inches
-		jpeg.Metadata.XResolution     = 300.0; // Print quality
-		jpeg.Metadata.YResolution     = 300.0;
-		jpeg.Metadata.Artist          = "Photographer";
-		jpeg.Metadata.ColorSpace      = 1; // sRGB
+		jpeg.JpegMetadata.Software        = "Wangkanai.Graphics.Rasters";
+		jpeg.JpegMetadata.CaptureDateTime = DateTime.Now;
+		jpeg.JpegMetadata.ResolutionUnit  = 2;     // Inches
+		jpeg.JpegMetadata.XResolution     = 300.0; // Print quality
+		jpeg.JpegMetadata.YResolution     = 300.0;
+		jpeg.JpegMetadata.Artist          = "Photographer";
+		jpeg.JpegMetadata.ColorSpace      = 1; // sRGB
 
 		return jpeg;
 	}
@@ -111,12 +111,12 @@ public static class JpegExamples
 		jpeg.IsOptimized       = true;
 
 		// Print metadata
-		jpeg.Metadata.Software        = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.CaptureDateTime = DateTime.Now;
-		jpeg.Metadata.ResolutionUnit  = 2;     // Inches
-		jpeg.Metadata.XResolution     = 300.0; // Print resolution
-		jpeg.Metadata.YResolution     = 300.0;
-		jpeg.Metadata.ColorSpace      = 65535; // Uncalibrated/CMYK
+		jpeg.JpegMetadata.Software        = "Wangkanai.Graphics.Rasters";
+		jpeg.JpegMetadata.CaptureDateTime = DateTime.Now;
+		jpeg.JpegMetadata.ResolutionUnit  = 2;     // Inches
+		jpeg.JpegMetadata.XResolution     = 300.0; // Print resolution
+		jpeg.JpegMetadata.YResolution     = 300.0;
+		jpeg.JpegMetadata.ColorSpace      = 65535; // Uncalibrated/CMYK
 
 		return jpeg;
 	}
@@ -134,12 +134,12 @@ public static class JpegExamples
 		jpeg.IsOptimized       = true;
 
 		// Thumbnail metadata
-		jpeg.Metadata.Software         = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.CaptureDateTime  = DateTime.Now;
-		jpeg.Metadata.ResolutionUnit   = 2;    // Inches
-		jpeg.Metadata.XResolution      = 72.0; // Screen resolution
-		jpeg.Metadata.YResolution      = 72.0;
-		jpeg.Metadata.ImageDescription = "Thumbnail";
+		jpeg.JpegMetadata.Software         = "Wangkanai.Graphics.Rasters";
+		jpeg.JpegMetadata.CaptureDateTime  = DateTime.Now;
+		jpeg.JpegMetadata.ResolutionUnit   = 2;    // Inches
+		jpeg.JpegMetadata.XResolution      = 72.0; // Screen resolution
+		jpeg.JpegMetadata.YResolution      = 72.0;
+		jpeg.JpegMetadata.ImageDescription = "Thumbnail";
 
 		return jpeg;
 	}
@@ -156,31 +156,31 @@ public static class JpegExamples
 		jpeg.Encoding          = JpegEncoding.Baseline;
 
 		// Comprehensive EXIF metadata
-		jpeg.Metadata.Make             = "Canon";
-		jpeg.Metadata.Model            = "EOS R5";
-		jpeg.Metadata.Software         = "Wangkanai.Graphics.Rasters";
-		jpeg.Metadata.CaptureDateTime  = DateTime.Now;
-		jpeg.Metadata.Artist           = "John Doe";
-		jpeg.Metadata.Copyright        = "Copyright 2025";
-		jpeg.Metadata.ImageDescription = "Sample image with EXIF data";
+		jpeg.JpegMetadata.Make             = "Canon";
+		jpeg.JpegMetadata.Model            = "EOS R5";
+		jpeg.JpegMetadata.Software         = "Wangkanai.Graphics.Rasters";
+		jpeg.JpegMetadata.CaptureDateTime  = DateTime.Now;
+		jpeg.JpegMetadata.Artist           = "John Doe";
+		jpeg.JpegMetadata.Copyright        = "Copyright 2025";
+		jpeg.JpegMetadata.ImageDescription = "Sample image with EXIF data";
 
 		// Camera settings
-		jpeg.Metadata.ExposureTime   = 1.0 / 125.0; // 1/125 second
-		jpeg.Metadata.FNumber        = 5.6;
-		jpeg.Metadata.IsoSpeedRating = 400;
-		jpeg.Metadata.FocalLength    = 85.0; // 85mm
-		jpeg.Metadata.WhiteBalance   = 0;    // Auto
+		jpeg.JpegMetadata.ExposureTime   = 1.0 / 125.0; // 1/125 second
+		jpeg.JpegMetadata.FNumber        = 5.6;
+		jpeg.JpegMetadata.IsoSpeedRating = 400;
+		jpeg.JpegMetadata.FocalLength    = 85.0; // 85mm
+		jpeg.JpegMetadata.WhiteBalance   = 0;    // Auto
 
 		// GPS coordinates (example: Tokyo, Japan)
-		jpeg.Metadata.GpsLatitude  = 35.6762;
-		jpeg.Metadata.GpsLongitude = 139.6503;
+		jpeg.JpegMetadata.GpsLatitude  = 35.6762;
+		jpeg.JpegMetadata.GpsLongitude = 139.6503;
 
 		// Resolution
-		jpeg.Metadata.ResolutionUnit = 2; // Inches
-		jpeg.Metadata.XResolution    = 300.0;
-		jpeg.Metadata.YResolution    = 300.0;
-		jpeg.Metadata.ColorSpace     = 1; // sRGB
-		jpeg.Metadata.Orientation    = 1; // Normal
+		jpeg.JpegMetadata.ResolutionUnit = 2; // Inches
+		jpeg.JpegMetadata.XResolution    = 300.0;
+		jpeg.JpegMetadata.YResolution    = 300.0;
+		jpeg.JpegMetadata.ColorSpace     = 1; // sRGB
+		jpeg.JpegMetadata.Orientation    = 1; // Normal
 
 		return jpeg;
 	}
