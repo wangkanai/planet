@@ -11,11 +11,11 @@ public class AvifExamplesTests
 
 		Assert.Equal(1920, avif.Width);
 		Assert.Equal(1080, avif.Height);
-		Assert.Equal(AvifConstants.QualityPresets.Web, avif.Quality); // Actually returns Web (75), not Standard (85)
-		Assert.Equal(AvifConstants.SpeedPresets.Fast, avif.Speed);
-		Assert.Equal(AvifChromaSubsampling.Yuv420, avif.ChromaSubsampling);
-		Assert.Equal(AvifColorSpace.Srgb, avif.ColorSpace);
-		Assert.Equal(8, avif.BitDepth);
+		Assert.Equal(AvifConstants.QualityPresets.Web, avif.Metadata.Quality); // Actually returns Web (75), not Standard (85)
+		Assert.Equal(AvifConstants.SpeedPresets.Fast, avif.Metadata.Speed);
+		Assert.Equal(AvifChromaSubsampling.Yuv420, avif.Metadata.ChromaSubsampling);
+		Assert.Equal(AvifColorSpace.Srgb, avif.Metadata.ColorSpace);
+		Assert.Equal(8, avif.Metadata.BitDepth);
 		Assert.False(avif.HasAlpha);
 	}
 
@@ -34,11 +34,11 @@ public class AvifExamplesTests
 
 		Assert.Equal(3840, avif.Width);
 		Assert.Equal(2160, avif.Height);
-		Assert.Equal(AvifConstants.QualityPresets.Professional, avif.Quality);
-		Assert.Equal(AvifConstants.SpeedPresets.Slow, avif.Speed);
-		Assert.Equal(AvifChromaSubsampling.Yuv444, avif.ChromaSubsampling);
-		Assert.Equal(AvifColorSpace.DisplayP3, avif.ColorSpace);
-		Assert.Equal(10, avif.BitDepth);
+		Assert.Equal(AvifConstants.QualityPresets.Professional, avif.Metadata.Quality);
+		Assert.Equal(AvifConstants.SpeedPresets.Slow, avif.Metadata.Speed);
+		Assert.Equal(AvifChromaSubsampling.Yuv444, avif.Metadata.ChromaSubsampling);
+		Assert.Equal(AvifColorSpace.DisplayP3, avif.Metadata.ColorSpace);
+		Assert.Equal(10, avif.Metadata.BitDepth);
 		Assert.False(avif.HasAlpha);
 	}
 
@@ -47,10 +47,10 @@ public class AvifExamplesTests
 	{
 		using var avif = AvifExamples.CreateLossless(1920, 1080);
 
-		Assert.True(avif.IsLossless);
-		Assert.Equal(AvifConstants.SpeedPresets.Slow, avif.Speed);
-		Assert.Equal(AvifColorSpace.Srgb, avif.ColorSpace);
-		Assert.Equal(8, avif.BitDepth);
+		Assert.True(avif.Metadata.IsLossless);
+		Assert.Equal(AvifConstants.SpeedPresets.Slow, avif.Metadata.Speed);
+		Assert.Equal(AvifColorSpace.Srgb, avif.Metadata.ColorSpace);
+		Assert.Equal(8, avif.Metadata.BitDepth);
 	}
 
 	[Fact]
@@ -59,7 +59,7 @@ public class AvifExamplesTests
 		using var avif = AvifExamples.CreateLossless(1920, 1080, true);
 
 		Assert.True(avif.HasAlpha);
-		Assert.Equal(10, avif.BitDepth);
+		Assert.Equal(10, avif.Metadata.BitDepth);
 	}
 
 	[Fact]
@@ -69,8 +69,8 @@ public class AvifExamplesTests
 
 		Assert.Equal(3840, avif.Width);
 		Assert.Equal(2160, avif.Height);
-		Assert.Equal(AvifColorSpace.Bt2100Pq, avif.ColorSpace);
-		Assert.Equal(10, avif.BitDepth);
+		Assert.Equal(AvifColorSpace.Bt2100Pq, avif.Metadata.ColorSpace);
+		Assert.Equal(10, avif.Metadata.BitDepth);
 		Assert.True(avif.HasHdrMetadata);
 		Assert.NotNull(avif.AvifMetadata.HdrInfo);
 		Assert.Equal(HdrFormat.Hdr10, avif.AvifMetadata.HdrInfo.Format);
@@ -90,8 +90,8 @@ public class AvifExamplesTests
 	{
 		using var avif = AvifExamples.CreateHlg(3840, 2160);
 
-		Assert.Equal(AvifColorSpace.Bt2100Hlg, avif.ColorSpace);
-		Assert.Equal(10, avif.BitDepth);
+		Assert.Equal(AvifColorSpace.Bt2100Hlg, avif.Metadata.ColorSpace);
+		Assert.Equal(10, avif.Metadata.BitDepth);
 		Assert.True(avif.HasHdrMetadata);
 		Assert.Equal(HdrFormat.Hlg, avif.AvifMetadata.HdrInfo!.Format);
 	}
@@ -103,7 +103,7 @@ public class AvifExamplesTests
 
 		// Note: SystemGamma property doesn't exist in HdrMetadata
 		// This test would need to be updated based on actual HdrMetadata implementation
-		Assert.Equal(AvifColorSpace.Bt2100Hlg, avif.ColorSpace);
+		Assert.Equal(AvifColorSpace.Bt2100Hlg, avif.Metadata.ColorSpace);
 		Assert.Equal(HdrFormat.Hlg, avif.AvifMetadata.HdrInfo!.Format);
 	}
 
@@ -150,9 +150,9 @@ public class AvifExamplesTests
 
 		Assert.Equal(width, avif.Width);
 		Assert.Equal(height, avif.Height);
-		Assert.Equal(AvifConstants.QualityPresets.Thumbnail, avif.Quality);
-		Assert.Equal(AvifConstants.SpeedPresets.Fast, avif.Speed);
-		Assert.Equal(8, avif.BitDepth);
+		Assert.Equal(AvifConstants.QualityPresets.Thumbnail, avif.Metadata.Quality);
+		Assert.Equal(AvifConstants.SpeedPresets.Fast, avif.Metadata.Speed);
+		Assert.Equal(8, avif.Metadata.BitDepth);
 	}
 
 	[Theory]
@@ -170,9 +170,9 @@ public class AvifExamplesTests
 	{
 		using var avif = AvifExamples.CreateWideGamut(1920, 1080, colorSpace);
 
-		Assert.Equal(colorSpace, avif.ColorSpace);
-		Assert.Equal(10, avif.BitDepth);
-		Assert.Equal(AvifChromaSubsampling.Yuv444, avif.ChromaSubsampling);
+		Assert.Equal(colorSpace, avif.Metadata.ColorSpace);
+		Assert.Equal(10, avif.Metadata.BitDepth);
+		Assert.Equal(AvifChromaSubsampling.Yuv444, avif.Metadata.ChromaSubsampling);
 	}
 
 	[Fact]
@@ -188,7 +188,7 @@ public class AvifExamplesTests
 
 		Assert.True(avif.HasAlpha);
 		Assert.False(avif.AvifMetadata.AlphaPremultiplied);
-		Assert.Equal(AvifChromaSubsampling.Yuv444, avif.ChromaSubsampling);
+		Assert.Equal(AvifChromaSubsampling.Yuv444, avif.Metadata.ChromaSubsampling);
 	}
 
 	[Fact]
@@ -204,10 +204,10 @@ public class AvifExamplesTests
 	{
 		using var avif = AvifExamples.CreateTwelveBit(1920, 1080);
 
-		Assert.Equal(12, avif.BitDepth);
-		Assert.Equal(AvifColorSpace.Bt2020Ncl, avif.ColorSpace);
-		Assert.Equal(AvifChromaSubsampling.Yuv444, avif.ChromaSubsampling);
-		Assert.Equal(AvifConstants.QualityPresets.Professional, avif.Quality);
+		Assert.Equal(12, avif.Metadata.BitDepth);
+		Assert.Equal(AvifColorSpace.Bt2020Ncl, avif.Metadata.ColorSpace);
+		Assert.Equal(AvifChromaSubsampling.Yuv444, avif.Metadata.ChromaSubsampling);
+		Assert.Equal(AvifConstants.QualityPresets.Professional, avif.Metadata.Quality);
 	}
 
 	// Note: Removed tests for ApplyExifMetadata as the metadata properties
