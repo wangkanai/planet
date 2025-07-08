@@ -89,8 +89,13 @@ public sealed class PngRaster : Raster, IPngRaster
 		set => _compressionLevel = Math.Clamp(value, 0, 9);
 	}
 
+	private readonly PngMetadata _metadata = new();
+
+	/// <inheritdoc />
+	public override IMetadata Metadata => _metadata;
+
 	/// <summary>Gets the PNG metadata.</summary>
-	public PngMetadata Metadata { get; } = new();
+	PngMetadata IPngRaster.Metadata => _metadata;
 
 	/// <summary>Gets the palette data for indexed-color images.</summary>
 	public ReadOnlyMemory<byte> PaletteData { get; set; }
@@ -131,7 +136,7 @@ public sealed class PngRaster : Raster, IPngRaster
 		// Add overhead for PNG chunks and headers
 		var overhead = PngConstants.SignatureLength +
 		               PngConstants.CriticalChunksOverhead +
-		               (Metadata.TextChunks.Count + Metadata.CompressedTextChunks.Count + Metadata.InternationalTextChunks.Count) * 50;
+		               (_metadata.TextChunks.Count + _metadata.CompressedTextChunks.Count + _metadata.InternationalTextChunks.Count) * 50;
 
 		return compressedDataSize + overhead;
 	}
@@ -187,7 +192,7 @@ public sealed class PngRaster : Raster, IPngRaster
 	/// <inheritdoc />
 	protected override async ValueTask DisposeAsyncCore()
 	{
-		if (Metadata.HasLargeMetadata)
+		if (_metadata.HasLargeMetadata)
 		{
 			// For large PNG metadata, clear in stages with yielding
 			await Task.Yield();
@@ -197,16 +202,16 @@ public sealed class PngRaster : Raster, IPngRaster
 			TransparencyData = ReadOnlyMemory<byte>.Empty;
 
 			await Task.Yield();
-			Metadata.TextChunks.Clear();
+			_metadata.TextChunks.Clear();
 
 			await Task.Yield();
-			Metadata.CompressedTextChunks.Clear();
+			_metadata.CompressedTextChunks.Clear();
 
 			await Task.Yield();
-			Metadata.InternationalTextChunks.Clear();
+			_metadata.InternationalTextChunks.Clear();
 
 			await Task.Yield();
-			Metadata.CustomChunks.Clear();
+			_metadata.CustomChunks.Clear();
 		}
 		else
 		{
@@ -223,10 +228,10 @@ public sealed class PngRaster : Raster, IPngRaster
 			// Clear PNG-specific managed resources
 			PaletteData      = ReadOnlyMemory<byte>.Empty;
 			TransparencyData = ReadOnlyMemory<byte>.Empty;
-			Metadata.TextChunks.Clear();
-			Metadata.CompressedTextChunks.Clear();
-			Metadata.InternationalTextChunks.Clear();
-			Metadata.CustomChunks.Clear();
+			_metadata.TextChunks.Clear();
+			_metadata.CompressedTextChunks.Clear();
+			_metadata.InternationalTextChunks.Clear();
+			_metadata.CustomChunks.Clear();
 		}
 
 		// Call base class disposal

@@ -20,6 +20,9 @@ public sealed class BmpRaster : Raster, IBmpRaster
 	/// <inheritdoc />
 	public override IMetadata Metadata => BmpMetadata;
 
+	/// <summary>Gets the BMP-specific metadata.</summary>
+	BmpMetadata IBmpRaster.Metadata => BmpMetadata;
+
 	/// <summary>Gets or sets the BMP-specific metadata.</summary>
 	public BmpMetadata BmpMetadata { get; set; } = new();
 

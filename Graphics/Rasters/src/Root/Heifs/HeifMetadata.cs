@@ -73,11 +73,11 @@ public sealed class HeifMetadata : RasterMetadataBase
 	/// <summary>
 	/// Gets the total estimated memory usage of all metadata in bytes.
 	/// </summary>
-	public override long EstimatedMemoryUsage
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
-			var size = base.EstimatedMemoryUsage;
+			var size = base.EstimatedMetadataSize;
 			
 			if (ThumbnailData != null) size += ThumbnailData.Length;
 			if (PreviewData != null) size += PreviewData.Length;
