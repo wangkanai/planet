@@ -170,7 +170,7 @@ public abstract class MetadataBase : IMetadata
 				ushort[] ushorts => ushorts.Length * sizeof(ushort),
 				double[] doubles => doubles.Length * sizeof(double),
 				float[] floats => floats.Length * sizeof(float),
-				_ => 16 // Default estimate for other types
+				_ => DefaultObjectEstimate // Default estimate for other types
 			};
 		}
 
