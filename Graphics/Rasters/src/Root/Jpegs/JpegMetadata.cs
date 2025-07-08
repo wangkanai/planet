@@ -7,7 +7,13 @@ namespace Wangkanai.Graphics.Rasters.Jpegs;
 /// <summary>Represents metadata information for JPEG images.</summary>
 public class JpegMetadata : RasterMetadataBase
 {
-	// Note: ImageDescription is inherited from base class as Description
+	/// <summary>Gets or sets the image description.</summary>
+	/// <remarks>Maps to the Description property from base class for backward compatibility.</remarks>
+	public string? ImageDescription
+	{
+		get => Description;
+		set => Description = value;
+	}
 
 	/// <summary>Gets or sets the camera make.</summary>
 	public string? Make { get; set; }
@@ -15,7 +21,13 @@ public class JpegMetadata : RasterMetadataBase
 	/// <summary>Gets or sets the camera model.</summary>
 	public string? Model { get; set; }
 
-	// Note: Software, Copyright, and Artist (as Author) are inherited from base class
+	/// <summary>Gets or sets the artist/photographer.</summary>
+	/// <remarks>Maps to the Author property from base class for backward compatibility.</remarks>
+	public string? Artist
+	{
+		get => Author;
+		set => Author = value;
+	}
 
 	/// <summary>Gets or sets the JPEG-specific capture date and time.</summary>
 	public DateTime? CaptureDateTime

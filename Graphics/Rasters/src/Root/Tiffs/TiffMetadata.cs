@@ -7,7 +7,13 @@ namespace Wangkanai.Graphics.Rasters.Tiffs;
 /// <summary>Represents metadata information for TIFF images.</summary>
 public class TiffMetadata : RasterMetadataBase
 {
-	// Note: ImageDescription is inherited from base class as Description
+	/// <summary>Gets or sets the image description.</summary>
+	/// <remarks>Maps to the Description property from base class for backward compatibility.</remarks>
+	public string? ImageDescription
+	{
+		get => Description;
+		set => Description = value;
+	}
 
 	/// <summary>Gets or sets the camera make.</summary>
 	public string? Make { get; set; }
@@ -15,7 +21,13 @@ public class TiffMetadata : RasterMetadataBase
 	/// <summary>Gets or sets the camera model.</summary>
 	public string? Model { get; set; }
 
-	// Note: Software, Copyright, and Artist (as Author) are inherited from base class
+	/// <summary>Gets or sets the artist/photographer.</summary>
+	/// <remarks>Maps to the Author property from base class for backward compatibility.</remarks>
+	public string? Artist
+	{
+		get => Author;
+		set => Author = value;
+	}
 
 	/// <summary>Gets or sets the TIFF-specific creation date and time.</summary>
 	public DateTime? DateTime

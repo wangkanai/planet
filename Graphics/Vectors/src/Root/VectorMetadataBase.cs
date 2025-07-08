@@ -78,7 +78,7 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 
 			// Add basic property sizes
 			size += sizeof(double) * 4; // ViewBox coordinates
-			size += sizeof(DateTime) * 2; // Creation and modification dates
+			size += 16 * 2; // Creation and modification dates (estimated)
 
 			return size;
 		}

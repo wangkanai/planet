@@ -227,14 +227,20 @@ public class PngMetadata : RasterMetadataBase
 	}
 
 	/// <inheritdoc />
-	public void Dispose()
+	protected override void DisposeManagedResources()
 	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
+		base.DisposeManagedResources();
+		
+		// Clear PNG-specific resources
+		TransparencyData = ReadOnlyMemory<byte>.Empty;
+		TextChunks.Clear();
+		CompressedTextChunks.Clear();
+		InternationalTextChunks.Clear();
+		CustomChunks.Clear();
 	}
 
 	/// <inheritdoc />
-	public async ValueTask DisposeAsync()
+	public override async ValueTask DisposeAsync()
 	{
 		if (HasLargeMetadata)
 		{
@@ -262,18 +268,62 @@ public class PngMetadata : RasterMetadataBase
 		GC.SuppressFinalize(this);
 	}
 
-	/// <summary>Releases unmanaged and - optionally - managed resources.</summary>
-	/// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
-	protected virtual void Dispose(bool disposing)
+	/// <inheritdoc />
+	public override IRasterMetadata Clone()
 	{
-		if (disposing)
-		{
-			// Clear managed resources
-			TransparencyData = ReadOnlyMemory<byte>.Empty;
-			TextChunks.Clear();
-			CompressedTextChunks.Clear();
-			InternationalTextChunks.Clear();
-			CustomChunks.Clear();
-		}
+		var clone = new PngMetadata();
+		CopyBaseTo(clone);
+		
+		// Copy PNG-specific properties
+		clone.Title = Title;
+		clone.Comment = Comment;
+		clone.Gamma = Gamma;
+		clone.XResolution = XResolution;
+		clone.YResolution = YResolution;
+		clone.ResolutionUnit = ResolutionUnit;
+		clone.BackgroundColor = BackgroundColor;
+		clone.WhitePoint = WhitePoint;
+		clone.RedPrimary = RedPrimary;
+		clone.GreenPrimary = GreenPrimary;
+		clone.BluePrimary = BluePrimary;
+		clone.SrgbRenderingIntent = SrgbRenderingIntent;
+		clone.TransparencyData = TransparencyData;
+		
+		// Deep copy collections
+		foreach (var kvp in TextChunks)
+			clone.TextChunks[kvp.Key] = kvp.Value;
+		foreach (var kvp in CompressedTextChunks)
+			clone.CompressedTextChunks[kvp.Key] = kvp.Value;
+		foreach (var kvp in InternationalTextChunks)
+			clone.InternationalTextChunks[kvp.Key] = kvp.Value;
+		foreach (var kvp in CustomChunks)
+			clone.CustomChunks[kvp.Key] = kvp.Value.ToArray();
+		
+		return clone;
+	}
+	
+	/// <inheritdoc />
+	public override void Clear()
+	{
+		base.Clear();
+		
+		// Clear PNG-specific properties
+		Title = null;
+		Comment = null;
+		Gamma = null;
+		XResolution = null;
+		YResolution = null;
+		ResolutionUnit = null;
+		BackgroundColor = null;
+		WhitePoint = null;
+		RedPrimary = null;
+		GreenPrimary = null;
+		BluePrimary = null;
+		SrgbRenderingIntent = null;
+		TransparencyData = ReadOnlyMemory<byte>.Empty;
+		TextChunks.Clear();
+		CompressedTextChunks.Clear();
+		InternationalTextChunks.Clear();
+		CustomChunks.Clear();
 	}
 }
