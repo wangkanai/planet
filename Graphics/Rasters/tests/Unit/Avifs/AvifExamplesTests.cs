@@ -72,8 +72,8 @@ public class AvifExamplesTests
 		Assert.Equal(AvifColorSpace.Bt2100Pq, avif.ColorSpace);
 		Assert.Equal(10, avif.BitDepth);
 		Assert.True(avif.HasHdrMetadata);
-		Assert.NotNull(avif.Metadata.HdrInfo);
-		Assert.Equal(HdrFormat.Hdr10, avif.Metadata.HdrInfo.Format);
+		Assert.NotNull(avif.AvifMetadata.HdrInfo);
+		Assert.Equal(HdrFormat.Hdr10, avif.AvifMetadata.HdrInfo.Format);
 	}
 
 	[Fact]
@@ -81,8 +81,8 @@ public class AvifExamplesTests
 	{
 		using var avif = AvifExamples.CreateHdr10(3840, 2160, 1000.0, 0.005);
 
-		Assert.Equal(1000.0, avif.Metadata.HdrInfo!.MaxLuminance);
-		Assert.Equal(0.005, avif.Metadata.HdrInfo.MinLuminance);
+		Assert.Equal(1000.0, avif.AvifMetadata.HdrInfo!.MaxLuminance);
+		Assert.Equal(0.005, avif.AvifMetadata.HdrInfo.MinLuminance);
 	}
 
 	[Fact]
@@ -93,7 +93,7 @@ public class AvifExamplesTests
 		Assert.Equal(AvifColorSpace.Bt2100Hlg, avif.ColorSpace);
 		Assert.Equal(10, avif.BitDepth);
 		Assert.True(avif.HasHdrMetadata);
-		Assert.Equal(HdrFormat.Hlg, avif.Metadata.HdrInfo!.Format);
+		Assert.Equal(HdrFormat.Hlg, avif.AvifMetadata.HdrInfo!.Format);
 	}
 
 	[Fact]
@@ -104,7 +104,7 @@ public class AvifExamplesTests
 		// Note: SystemGamma property doesn't exist in HdrMetadata
 		// This test would need to be updated based on actual HdrMetadata implementation
 		Assert.Equal(AvifColorSpace.Bt2100Hlg, avif.ColorSpace);
-		Assert.Equal(HdrFormat.Hlg, avif.Metadata.HdrInfo!.Format);
+		Assert.Equal(HdrFormat.Hlg, avif.AvifMetadata.HdrInfo!.Format);
 	}
 
 	[Fact]
@@ -127,7 +127,7 @@ public class AvifExamplesTests
 		Assert.True(avif.EnableFilmGrain);
 		// Note: FilmGrainIntensity property doesn't exist in AvifMetadata
 		// The actual implementation uses UsesFilmGrain boolean
-		Assert.True(avif.Metadata.UsesFilmGrain);
+		Assert.True(avif.AvifMetadata.UsesFilmGrain);
 	}
 
 	[Fact]
@@ -137,7 +137,7 @@ public class AvifExamplesTests
 
 		// Note: Adjusted test to match actual implementation
 		Assert.True(avif.EnableFilmGrain);
-		Assert.True(avif.Metadata.UsesFilmGrain);
+		Assert.True(avif.AvifMetadata.UsesFilmGrain);
 	}
 
 	[Theory]
@@ -187,7 +187,7 @@ public class AvifExamplesTests
 		using var avif = AvifExamples.CreateWithAlpha(1920, 1080);
 
 		Assert.True(avif.HasAlpha);
-		Assert.False(avif.Metadata.AlphaPremultiplied);
+		Assert.False(avif.AvifMetadata.AlphaPremultiplied);
 		Assert.Equal(AvifChromaSubsampling.Yuv444, avif.ChromaSubsampling);
 	}
 
@@ -196,7 +196,7 @@ public class AvifExamplesTests
 	{
 		using var avif = AvifExamples.CreateWithAlpha(1920, 1080, true);
 
-		Assert.True(avif.Metadata.AlphaPremultiplied);
+		Assert.True(avif.AvifMetadata.AlphaPremultiplied);
 	}
 
 	[Fact]

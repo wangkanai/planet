@@ -87,7 +87,7 @@ public class HeifMetadataTests
 		};
 
 		// Act & Assert
-		Assert.False(metadata.HasLargeData);
+		Assert.False(metadata.HasLargeMetadata);
 	}
 
 	[Fact]
@@ -101,7 +101,7 @@ public class HeifMetadataTests
 		};
 
 		// Act & Assert
-		Assert.True(metadata.HasLargeData);
+		Assert.True(metadata.HasLargeMetadata);
 	}
 
 	[Fact]

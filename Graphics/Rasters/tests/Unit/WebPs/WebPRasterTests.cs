@@ -320,9 +320,9 @@ public class WebPRasterTests
 		var webp2 = new WebPRaster(800, 600);
 
 		// Add metadata to webp2
-		webp2.Metadata.IccProfile = new byte[1000];
-		webp2.Metadata.ExifData = new byte[500];
-		webp2.Metadata.XmpData = new byte[300];
+		webp2.WebPMetadata.IccProfile = new byte[1000];
+		webp2.WebPMetadata.ExifData = new byte[500];
+		webp2.WebPMetadata.XmpData = new byte[300];
 
 		// Act
 		var size1 = webp1.GetEstimatedFileSize();
