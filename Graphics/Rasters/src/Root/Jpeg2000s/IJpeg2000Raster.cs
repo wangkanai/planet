@@ -13,7 +13,7 @@ namespace Wangkanai.Graphics.Rasters.Jpeg2000s;
 public interface IJpeg2000Raster : IRaster
 {
 	/// <summary>Comprehensive JPEG2000 metadata including JP2 boxes and codestream parameters.</summary>
-	Jpeg2000Metadata Metadata { get; set; }
+	new Jpeg2000Metadata Metadata { get; set; }
 
 	/// <summary>Indicates if the image uses lossless compression.</summary>
 	/// <remarks>

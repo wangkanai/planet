@@ -11,9 +11,6 @@ public interface IImage : IDisposable, IAsyncDisposable
 	/// <summary>Gets and sets the height of the image.</summary>
 	int Height { get; set; }
 
-	/// <summary>Gets a value indicating whether the image has large metadata that benefits from async disposal.</summary>
-	bool HasLargeMetadata { get; }
-
-	/// <summary>Gets the estimated size of metadata in bytes.</summary>
-	long EstimatedMetadataSize { get; }
+	/// <summary>Gets the metadata associated with this image.</summary>
+	IMetadata Metadata { get; }
 }

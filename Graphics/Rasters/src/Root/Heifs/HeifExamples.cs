@@ -30,8 +30,8 @@ public static class HeifExamples
 			EnableProgressiveDecoding = true
 		};
 
-		heif.Metadata.Software = "Wangkanai Graphics Library";
-		heif.Metadata.CreationTime = DateTime.UtcNow;
+		heif.HeifMetadata.Software = "Wangkanai Graphics Library";
+		heif.HeifMetadata.CreationTime = DateTime.UtcNow;
 
 		return heif;
 	}
@@ -58,8 +58,8 @@ public static class HeifExamples
 			EnableProgressiveDecoding = false
 		};
 
-		heif.Metadata.Software = "Wangkanai Graphics Library - Professional";
-		heif.Metadata.CreationTime = DateTime.UtcNow;
+		heif.HeifMetadata.Software = "Wangkanai Graphics Library - Professional";
+		heif.HeifMetadata.CreationTime = DateTime.UtcNow;
 
 		return heif;
 	}
@@ -87,8 +87,8 @@ public static class HeifExamples
 			EnableProgressiveDecoding = false
 		};
 
-		heif.Metadata.Software = "Wangkanai Graphics Library - Lossless";
-		heif.Metadata.CreationTime = DateTime.UtcNow;
+		heif.HeifMetadata.Software = "Wangkanai Graphics Library - Lossless";
+		heif.HeifMetadata.CreationTime = DateTime.UtcNow;
 
 		return heif;
 	}
@@ -114,8 +114,8 @@ public static class HeifExamples
 			EnableProgressiveDecoding = false
 		};
 
-		heif.Metadata.Software = "Wangkanai Graphics Library - Fast";
-		heif.Metadata.CreationTime = DateTime.UtcNow;
+		heif.HeifMetadata.Software = "Wangkanai Graphics Library - Fast";
+		heif.HeifMetadata.CreationTime = DateTime.UtcNow;
 
 		return heif;
 	}
@@ -155,9 +155,9 @@ public static class HeifExamples
 			MatrixCoefficients = HdrMatrixCoefficients.Bt2020Ncl
 		});
 
-		heif.Metadata.Software = "Wangkanai Graphics Library - HDR";
-		heif.Metadata.CreationTime = DateTime.UtcNow;
-		heif.Metadata.ColorSpaceInfo = "BT.2100 PQ HDR";
+		heif.HeifMetadata.Software = "Wangkanai Graphics Library - HDR";
+		heif.HeifMetadata.CreationTime = DateTime.UtcNow;
+		heif.HeifMetadata.ColorSpaceInfo = "BT.2100 PQ HDR";
 
 		return heif;
 	}
@@ -183,8 +183,8 @@ public static class HeifExamples
 			EnableProgressiveDecoding = true
 		};
 
-		heif.Metadata.Software = "Wangkanai Graphics Library - Mobile";
-		heif.Metadata.CreationTime = DateTime.UtcNow;
+		heif.HeifMetadata.Software = "Wangkanai Graphics Library - Mobile";
+		heif.HeifMetadata.CreationTime = DateTime.UtcNow;
 
 		return heif;
 	}
@@ -212,8 +212,8 @@ public static class HeifExamples
 			EnableProgressiveDecoding = false
 		};
 
-		heif.Metadata.Software = "Wangkanai Graphics Library - Thumbnail";
-		heif.Metadata.CreationTime = DateTime.UtcNow;
+		heif.HeifMetadata.Software = "Wangkanai Graphics Library - Thumbnail";
+		heif.HeifMetadata.CreationTime = DateTime.UtcNow;
 
 		return heif;
 	}
@@ -239,8 +239,8 @@ public static class HeifExamples
 			EnableProgressiveDecoding = true
 		};
 
-		heif.Metadata.Software = "Wangkanai Graphics Library - AV1";
-		heif.Metadata.CreationTime = DateTime.UtcNow;
+		heif.HeifMetadata.Software = "Wangkanai Graphics Library - AV1";
+		heif.HeifMetadata.CreationTime = DateTime.UtcNow;
 
 		return heif;
 	}
@@ -256,7 +256,7 @@ public static class HeifExamples
 		var heif = CreateHighQuality(width, height, false);
 
 		// Professional camera metadata
-		heif.Metadata.CameraMetadata = new CameraMetadata
+		heif.HeifMetadata.CameraMetadata = new CameraMetadata
 		{
 			CameraMake = "Canon",
 			CameraModel = "EOS R5",
@@ -289,9 +289,9 @@ public static class HeifExamples
 			LensSpecification = new[] { 85.0, 85.0, 1.2, 1.2 } // 85mm f/1.2
 		};
 
-		heif.Metadata.Copyright = "© Professional Photographer";
-		heif.Metadata.Author = "John Doe Photography";
-		heif.Metadata.Description = "Portrait photography with shallow depth of field";
+		heif.HeifMetadata.Copyright = "© Professional Photographer";
+		heif.HeifMetadata.Author = "John Doe Photography";
+		heif.HeifMetadata.Description = "Portrait photography with shallow depth of field";
 
 		return heif;
 	}
@@ -317,12 +317,12 @@ public static class HeifExamples
 		};
 
 		// Add comprehensive demo metadata
-		heif.Metadata.Software = "Wangkanai Graphics Library - Demo";
-		heif.Metadata.CreationTime = DateTime.UtcNow;
-		heif.Metadata.Description = "Demonstration HEIF image created with Wangkanai Graphics Library";
-		heif.Metadata.Copyright = "© 2025 Wangkanai";
-		heif.Metadata.Author = "Graphics Library";
-		heif.Metadata.CameraMetadata = new CameraMetadata
+		heif.HeifMetadata.Software = "Wangkanai Graphics Library - Demo";
+		heif.HeifMetadata.CreationTime = DateTime.UtcNow;
+		heif.HeifMetadata.Description = "Demonstration HEIF image created with Wangkanai Graphics Library";
+		heif.HeifMetadata.Copyright = "© 2025 Wangkanai";
+		heif.HeifMetadata.Author = "Graphics Library";
+		heif.HeifMetadata.CameraMetadata = new CameraMetadata
 		{
 			CameraMake = "Demo Camera",
 			CameraModel = "Model X",
@@ -359,12 +359,12 @@ public static class HeifExamples
 			GpsAltitude = 5.0,
 			GpsTimestamp = DateTime.UtcNow
 		};
-		heif.Metadata.ColorSpaceInfo = "sRGB";
-		heif.Metadata.WhiteBalance = "Auto";
+		heif.HeifMetadata.ColorSpaceInfo = "sRGB";
+		heif.HeifMetadata.WhiteBalance = "Auto";
 
 		// GPS coordinates can also be stored separately in HeifMetadata
 		// This provides a more detailed GPS structure with timestamp
-		heif.Metadata.GpsCoordinates = new GpsCoordinates
+		heif.HeifMetadata.GpsCoordinates = new GpsCoordinates
 		{
 			Latitude = -33.8568,
 			Longitude = 151.2153,

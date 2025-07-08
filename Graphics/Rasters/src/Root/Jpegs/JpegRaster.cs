@@ -20,8 +20,10 @@ public sealed class JpegRaster : Raster, IJpegRaster
 	/// <inheritdoc />
 	public JpegEncoding Encoding { get; set; }
 
-	/// <inheritdoc />
-	public JpegMetadata Metadata { get; set; } = new();
+	private readonly JpegMetadata _metadata = new();
+
+	/// <summary>Gets the JPEG metadata.</summary>
+	public JpegMetadata JpegMetadata => _metadata;
 
 	/// <inheritdoc />
 	public int SamplesPerPixel { get; set; }
@@ -42,33 +44,10 @@ public sealed class JpegRaster : Raster, IJpegRaster
 	public double CompressionRatio { get; set; }
 
 	/// <inheritdoc />
-	public override bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
+	public override IMetadata Metadata => _metadata;
 
 	/// <inheritdoc />
-	public override long EstimatedMetadataSize
-	{
-		get
-		{
-			var size = 0L;
-
-			// Add ICC profile size
-			if (Metadata.IccProfile != null)
-				size += Metadata.IccProfile.Length;
-
-			// Add custom EXIF tags size
-			size += Metadata.CustomExifTags.Count * 16; // Estimate 16 bytes per tag
-
-			// Add IPTC tags size
-			foreach (var tag in Metadata.IptcTags.Values)
-				size += System.Text.Encoding.UTF8.GetByteCount(tag);
-
-			// Add XMP tags size
-			foreach (var tag in Metadata.XmpTags.Values)
-				size += System.Text.Encoding.UTF8.GetByteCount(tag);
-
-			return size;
-		}
-	}
+	JpegMetadata IJpegRaster.Metadata => _metadata;
 
 	/// <summary>Initializes a new instance of the <see cref="JpegRaster"/> class.</summary>
 	public JpegRaster()
@@ -171,20 +150,20 @@ public sealed class JpegRaster : Raster, IJpegRaster
 	/// <inheritdoc />
 	protected override async ValueTask DisposeAsyncCore()
 	{
-		if (HasLargeMetadata)
+		if (_metadata.HasLargeMetadata)
 		{
 			// For large metadata, clear in stages with yielding
 			await Task.Yield();
-			Metadata.IccProfile = [];
+			_metadata.IccProfile = [];
 
 			await Task.Yield();
-			Metadata.CustomExifTags.Clear();
+			_metadata.CustomExifTags.Clear();
 
 			await Task.Yield();
-			Metadata.IptcTags.Clear();
+			_metadata.IptcTags.Clear();
 
 			await Task.Yield();
-			Metadata.XmpTags.Clear();
+			_metadata.XmpTags.Clear();
 		}
 		else
 		{
@@ -199,10 +178,10 @@ public sealed class JpegRaster : Raster, IJpegRaster
 		if (disposing)
 		{
 			// Clear JPEG-specific managed resources
-			Metadata.IccProfile = null;
-			Metadata.CustomExifTags.Clear();
-			Metadata.IptcTags.Clear();
-			Metadata.XmpTags.Clear();
+			_metadata.IccProfile = null;
+			_metadata.CustomExifTags.Clear();
+			_metadata.IptcTags.Clear();
+			_metadata.XmpTags.Clear();
 		}
 
 		// Call base class disposal

@@ -86,7 +86,7 @@ public class SvgMetadata : ISvgMetadata
 		=> _customProperties;
 
 	/// <inheritdoc />
-	public long CalculateEstimatedMemoryUsage()
+	public long CalculateEstimatedMetadataSize()
 	{
 		ThrowIfDisposed();
 		var baseSize             = 1024; // Base SVG structure
@@ -165,15 +165,24 @@ public class SvgMetadata : ISvgMetadata
 
 	/// <summary>Gets whether this metadata represents a large SVG that benefits from optimization.</summary>
 	public bool IsLargeSvg
-		=> CalculateEstimatedMemoryUsage() > SvgConstants.LargeSvgThreshold;
+		=> CalculateEstimatedMetadataSize() > SvgConstants.LargeSvgThreshold;
 
 	/// <summary>Gets whether this metadata represents a very large SVG requiring streaming.</summary>
 	public bool IsVeryLargeSvg
-		=> CalculateEstimatedMemoryUsage() > SvgConstants.VeryLargeSvgThreshold;
+		=> CalculateEstimatedMetadataSize() > SvgConstants.VeryLargeSvgThreshold;
 
 	/// <summary>Gets whether this SVG requires performance optimization based on element count.</summary>
 	public bool RequiresOptimization
 		=> ElementCount > SvgConstants.PerformanceOptimizationThreshold;
+
+	/// <inheritdoc />
+	public bool HasLargeMetadata => IsVeryLargeSvg;
+
+	/// <inheritdoc />
+	public long EstimatedMetadataSize => CalculateEstimatedMetadataSize();
+
+	/// <inheritdoc />
+	public long CalculateEstimatedMemoryUsage() => CalculateEstimatedMetadataSize();
 
 	/// <inheritdoc />
 	public void Dispose()
@@ -243,7 +252,7 @@ public class SvgMetadata : ISvgMetadata
 		}
 
 		// Suggest garbage collection for very large metadata
-		if (CalculateEstimatedMemoryUsage() > 10_000_000) // > 10MB
+		if (CalculateEstimatedMetadataSize() > 10_000_000) // > 10MB
 		{
 			GC.Collect();
 			GC.WaitForPendingFinalizers();

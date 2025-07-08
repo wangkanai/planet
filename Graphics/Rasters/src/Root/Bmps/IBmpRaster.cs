@@ -12,7 +12,7 @@ public interface IBmpRaster : IRaster
 	BmpCompression Compression { get; }
 
 	/// <summary>Gets the metadata associated with the BMP image.</summary>
-	BmpMetadata Metadata { get; }
+	new BmpMetadata Metadata { get; }
 
 	/// <summary>Gets the horizontal resolution in pixels per meter.</summary>
 	int HorizontalResolution { get; }

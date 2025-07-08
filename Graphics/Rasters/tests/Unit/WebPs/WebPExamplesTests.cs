@@ -20,8 +20,8 @@ public class WebPExamplesTests
 		Assert.Equal(WebPColorMode.Rgb, webp.ColorMode);
 		Assert.Equal(WebPPreset.Default, webp.Preset);
 		Assert.False(webp.IsLossless);
-		Assert.Equal("Wangkanai.Graphics.Rasters", webp.Metadata.Software);
-		Assert.NotNull(webp.Metadata.CreationDateTime);
+		Assert.Equal("Wangkanai.Graphics.Rasters", webp.WebPMetadata.Software);
+		Assert.NotNull(webp.WebPMetadata.CreationDateTime);
 		Assert.True(webp.IsValid());
 	}
 
@@ -42,7 +42,7 @@ public class WebPExamplesTests
 		Assert.True(webp.IsLossless);
 		Assert.Equal(WebPFormat.Lossless, webp.Format);
 		Assert.Equal(WebPCompression.VP8L, webp.Compression);
-		Assert.Equal("Wangkanai.Graphics.Rasters", webp.Metadata.Software);
+		Assert.Equal("Wangkanai.Graphics.Rasters", webp.WebPMetadata.Software);
 		Assert.True(webp.IsValid());
 	}
 
@@ -63,7 +63,7 @@ public class WebPExamplesTests
 		Assert.Equal(4, webp.Channels);
 		Assert.Equal(WebPFormat.Extended, webp.Format);
 		Assert.Equal(WebPPreset.Picture, webp.Preset);
-		Assert.True(webp.Metadata.HasAlpha);
+		Assert.True(webp.WebPMetadata.HasAlpha);
 		Assert.True(webp.IsValid());
 	}
 
@@ -81,7 +81,7 @@ public class WebPExamplesTests
 		Assert.Equal(90, webp.Quality);
 		Assert.Equal(WebPPreset.Photo, webp.Preset);
 		Assert.Equal(WebPColorMode.Rgb, webp.ColorMode);
-		Assert.Equal("High-quality photographic image", webp.Metadata.Description);
+		Assert.Equal("High-quality photographic image", webp.WebPMetadata.Description);
 		Assert.True(webp.IsValid());
 	}
 
@@ -102,7 +102,7 @@ public class WebPExamplesTests
 		// Note: ConfigureLossless() in the Drawing preset overrides EnableExtendedFeatures()
 		// Auto-synchronization sets format to Lossless when VP8L compression is used
 		Assert.Equal(WebPFormat.Lossless, webp.Format);
-		Assert.Equal("Vector graphics or drawing", webp.Metadata.Description);
+		Assert.Equal("Vector graphics or drawing", webp.WebPMetadata.Description);
 		Assert.True(webp.IsValid());
 	}
 
@@ -127,8 +127,8 @@ public class WebPExamplesTests
 		// Note: ConfigureLossless() in the Icon preset overrides EnableExtendedFeatures()
 		// Auto-synchronization sets format to Lossless when VP8L compression is used
 		Assert.Equal(WebPFormat.Lossless, webp.Format);
-		Assert.Equal($"Icon {size}x{size}", webp.Metadata.Description);
-		Assert.Equal("Application Icon", webp.Metadata.Title);
+		Assert.Equal($"Icon {size}x{size}", webp.WebPMetadata.Description);
+		Assert.Equal("Application Icon", webp.WebPMetadata.Title);
 		Assert.True(webp.IsValid());
 	}
 
@@ -157,7 +157,7 @@ public class WebPExamplesTests
 		Assert.Equal(WebPPreset.Text, webp.Preset);
 		Assert.True(webp.IsLossless);
 		Assert.Equal(WebPColorMode.Rgb, webp.ColorMode);
-		Assert.Equal("Text-based image content", webp.Metadata.Description);
+		Assert.Equal("Text-based image content", webp.WebPMetadata.Description);
 		Assert.True(webp.IsValid());
 	}
 
@@ -175,10 +175,10 @@ public class WebPExamplesTests
 		Assert.Equal(height, webp.Height);
 		Assert.Equal(WebPFormat.Extended, webp.Format);
 		Assert.Equal(WebPColorMode.Rgba, webp.ColorMode);
-		Assert.True(webp.Metadata.HasAnimation);
-		Assert.Equal(loops, webp.Metadata.AnimationLoops);
-		Assert.Equal(0x00000000u, webp.Metadata.BackgroundColor);
-		Assert.Equal("Animated WebP image", webp.Metadata.Description);
+		Assert.True(webp.WebPMetadata.HasAnimation);
+		Assert.Equal(loops, webp.WebPMetadata.AnimationLoops);
+		Assert.Equal(0x00000000u, webp.WebPMetadata.BackgroundColor);
+		Assert.Equal("Animated WebP image", webp.WebPMetadata.Description);
 		Assert.True(webp.IsValid());
 	}
 
@@ -189,7 +189,7 @@ public class WebPExamplesTests
 		var webp = WebPExamples.CreateAnimated(800, 600);
 
 		// Assert
-		Assert.Equal(0, webp.Metadata.AnimationLoops);
+		Assert.Equal(0, webp.WebPMetadata.AnimationLoops);
 	}
 
 	[Theory]
@@ -208,15 +208,15 @@ public class WebPExamplesTests
 		Assert.Equal(WebPPreset.Photo, webp.Preset);
 
 		// Check metadata
-		Assert.Equal("Wangkanai.Graphics.Rasters", webp.Metadata.Software);
-		Assert.Equal("Sample Artist", webp.Metadata.Artist);
-		Assert.Equal("Copyright 2025", webp.Metadata.Copyright);
-		Assert.Equal("Sample WebP Image", webp.Metadata.Title);
-		Assert.Equal("Sample image with comprehensive metadata", webp.Metadata.Description);
-		Assert.True(webp.Metadata.HasExif);
-		Assert.True(webp.Metadata.HasXmp);
-		Assert.True(webp.Metadata.HasIccProfile);
-		Assert.NotNull(webp.Metadata.CreationDateTime);
+		Assert.Equal("Wangkanai.Graphics.Rasters", webp.WebPMetadata.Software);
+		Assert.Equal("Sample Artist", webp.WebPMetadata.Artist);
+		Assert.Equal("Copyright 2025", webp.WebPMetadata.Copyright);
+		Assert.Equal("Sample WebP Image", webp.WebPMetadata.Title);
+		Assert.Equal("Sample image with comprehensive metadata", webp.WebPMetadata.Description);
+		Assert.True(webp.WebPMetadata.HasExif);
+		Assert.True(webp.WebPMetadata.HasXmp);
+		Assert.True(webp.WebPMetadata.HasIccProfile);
+		Assert.NotNull(webp.WebPMetadata.CreationDateTime);
 		Assert.True(webp.IsValid());
 	}
 
@@ -282,7 +282,7 @@ public class WebPExamplesTests
 		Assert.Equal(WebPColorMode.Rgb, webp.ColorMode);
 		Assert.Equal(WebPPreset.Default, webp.Preset);
 		Assert.False(webp.IsLossless);
-		Assert.Equal("Wangkanai.Graphics.Rasters", webp.Metadata.Software);
+		Assert.Equal("Wangkanai.Graphics.Rasters", webp.WebPMetadata.Software);
 
 		var pixelCount = width * height;
 		if (pixelCount > 4_000_000)
@@ -326,7 +326,7 @@ public class WebPExamplesTests
 			Assert.True(webp.Width > 0);
 			Assert.True(webp.Height > 0);
 			Assert.NotNull(webp.Metadata);
-			Assert.NotNull(webp.Metadata.Software);
+			Assert.NotNull(webp.WebPMetadata.Software);
 		}
 	}
 }

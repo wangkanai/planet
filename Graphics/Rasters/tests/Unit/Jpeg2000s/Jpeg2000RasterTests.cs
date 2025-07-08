@@ -29,9 +29,9 @@ public class Jpeg2000RasterTests
 		// Assert
 		Assert.Equal(width, jpeg2000.Width);
 		Assert.Equal(height, jpeg2000.Height);
-		Assert.Equal(width, jpeg2000.Metadata.Width);
-		Assert.Equal(height, jpeg2000.Metadata.Height);
-		Assert.Equal(components, jpeg2000.Metadata.Components);
+		Assert.Equal(width, jpeg2000.Jpeg2000Metadata.Width);
+		Assert.Equal(height, jpeg2000.Jpeg2000Metadata.Height);
+		Assert.Equal(components, jpeg2000.Jpeg2000Metadata.Components);
 	}
 
 	[Theory]
@@ -66,7 +66,7 @@ public class Jpeg2000RasterTests
 
 		// Assert
 		Assert.True(jpeg2000.IsLossless);
-		Assert.Equal(Jpeg2000Constants.WaveletTransforms.Reversible53, jpeg2000.Metadata.WaveletTransform);
+		Assert.Equal(Jpeg2000Constants.WaveletTransforms.Reversible53, jpeg2000.Jpeg2000Metadata.WaveletTransform);
 	}
 
 	[Fact]
@@ -80,7 +80,7 @@ public class Jpeg2000RasterTests
 
 		// Assert
 		Assert.False(jpeg2000.IsLossless);
-		Assert.Equal(Jpeg2000Constants.WaveletTransforms.Irreversible97, jpeg2000.Metadata.WaveletTransform);
+		Assert.Equal(Jpeg2000Constants.WaveletTransforms.Irreversible97, jpeg2000.Jpeg2000Metadata.WaveletTransform);
 	}
 
 	[Theory]
@@ -98,7 +98,7 @@ public class Jpeg2000RasterTests
 
 		// Assert
 		Assert.Equal(ratio, jpeg2000.CompressionRatio);
-		Assert.Equal(ratio, jpeg2000.Metadata.CompressionRatio);
+		Assert.Equal(ratio, jpeg2000.Jpeg2000Metadata.CompressionRatio);
 	}
 
 	[Theory]
@@ -130,7 +130,7 @@ public class Jpeg2000RasterTests
 
 		// Assert
 		Assert.Equal(levels, jpeg2000.DecompositionLevels);
-		Assert.Equal(levels, jpeg2000.Metadata.DecompositionLevels);
+		Assert.Equal(levels, jpeg2000.Jpeg2000Metadata.DecompositionLevels);
 	}
 
 	[Theory]
@@ -159,7 +159,7 @@ public class Jpeg2000RasterTests
 
 		// Assert
 		Assert.Equal(tileWidth, jpeg2000.TileWidth);
-		Assert.Equal(tileWidth, jpeg2000.Metadata.TileWidth);
+		Assert.Equal(tileWidth, jpeg2000.Jpeg2000Metadata.TileWidth);
 	}
 
 	[Theory]
@@ -188,7 +188,7 @@ public class Jpeg2000RasterTests
 
 		// Assert
 		Assert.Equal(layers, jpeg2000.QualityLayers);
-		Assert.Equal(layers, jpeg2000.Metadata.QualityLayers);
+		Assert.Equal(layers, jpeg2000.Jpeg2000Metadata.QualityLayers);
 	}
 
 	[Theory]
@@ -240,7 +240,7 @@ public class Jpeg2000RasterTests
 	{
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600);
-		jpeg2000.Metadata.GeoTransform = new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
+		jpeg2000.Jpeg2000Metadata.GeoTransform = new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
 
 		// Act
 		var hasGeospatial = jpeg2000.HasGeospatialMetadata;
@@ -254,8 +254,8 @@ public class Jpeg2000RasterTests
 	{
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600);
-		jpeg2000.Metadata.HasIccProfile = true;
-		jpeg2000.Metadata.IccProfile = new byte[1024];
+		jpeg2000.Jpeg2000Metadata.HasIccProfile = true;
+		jpeg2000.Jpeg2000Metadata.IccProfile = new byte[1024];
 
 		// Act
 		var hasIccProfile = jpeg2000.HasIccProfile;
@@ -277,7 +277,7 @@ public class Jpeg2000RasterTests
 
 		// Assert
 		Assert.Equal(4, totalTiles); // 2x2 tiles
-		Assert.Equal(jpeg2000.Metadata.TotalTiles, totalTiles);
+		Assert.Equal(jpeg2000.Jpeg2000Metadata.TotalTiles, totalTiles);
 	}
 
 	[Fact]
@@ -509,9 +509,9 @@ public class Jpeg2000RasterTests
 		jpeg2000.ApplyGeospatialMetadata(geoTransform, coordinateSystem, geoTiffTags);
 
 		// Assert
-		Assert.Equal(geoTransform, jpeg2000.Metadata.GeoTransform);
-		Assert.Equal(coordinateSystem, jpeg2000.Metadata.CoordinateReferenceSystem);
-		Assert.Equal(geoTiffTags, jpeg2000.Metadata.GeoTiffMetadata);
+		Assert.Equal(geoTransform, jpeg2000.Jpeg2000Metadata.GeoTransform);
+		Assert.Equal(coordinateSystem, jpeg2000.Jpeg2000Metadata.CoordinateReferenceSystem);
+		Assert.Equal(geoTiffTags, jpeg2000.Jpeg2000Metadata.GeoTiffMetadata);
 		Assert.True(jpeg2000.HasGeospatialMetadata);
 	}
 
@@ -538,8 +538,8 @@ public class Jpeg2000RasterTests
 		jpeg2000.ApplyIccProfile(profileData);
 
 		// Assert
-		Assert.Equal(profileData, jpeg2000.Metadata.IccProfile);
-		Assert.True(jpeg2000.Metadata.HasIccProfile);
+		Assert.Equal(profileData, jpeg2000.Jpeg2000Metadata.IccProfile);
+		Assert.True(jpeg2000.Jpeg2000Metadata.HasIccProfile);
 		Assert.True(jpeg2000.HasIccProfile);
 	}
 
@@ -567,8 +567,8 @@ public class Jpeg2000RasterTests
 		jpeg2000.AddUuidMetadata(uuid, data);
 
 		// Assert
-		Assert.True(jpeg2000.Metadata.UuidBoxes.ContainsKey(uuid));
-		Assert.Equal(data, jpeg2000.Metadata.UuidBoxes[uuid]);
+		Assert.True(jpeg2000.Jpeg2000Metadata.UuidBoxes.ContainsKey(uuid));
+		Assert.Equal(data, jpeg2000.Jpeg2000Metadata.UuidBoxes[uuid]);
 	}
 
 	[Fact]
@@ -582,7 +582,7 @@ public class Jpeg2000RasterTests
 		jpeg2000.AddXmlMetadata(xmlContent);
 
 		// Assert
-		Assert.Contains(xmlContent, jpeg2000.Metadata.XmlMetadata);
+		Assert.Contains(xmlContent, jpeg2000.Jpeg2000Metadata.XmlMetadata);
 	}
 
 	[Theory]
@@ -674,7 +674,7 @@ public class Jpeg2000RasterTests
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
 		// Set up large metadata to trigger async disposal
-		jpeg2000.Metadata.IccProfile = new byte[2 * 1024 * 1024];
+		jpeg2000.Jpeg2000Metadata.IccProfile = new byte[2 * 1024 * 1024];
 
 		// Act
 		await jpeg2000.DisposeAsync();

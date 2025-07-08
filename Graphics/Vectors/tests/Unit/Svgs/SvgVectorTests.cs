@@ -29,9 +29,10 @@ public class SvgVectorTests
 		// Assert
 		Assert.Equal(200, svg.Width);
 		Assert.Equal(300, svg.Height);
-		Assert.Equal(200, svg.Metadata.ViewportWidth);
-		Assert.Equal(300, svg.Metadata.ViewportHeight);
-		Assert.Equal(new SvgViewBox(0, 0, 200, 300), svg.Metadata.ViewBox);
+		var metadata = (SvgMetadata)svg.Metadata;
+		Assert.Equal(200, metadata.ViewportWidth);
+		Assert.Equal(300, metadata.ViewportHeight);
+		Assert.Equal(new SvgViewBox(0, 0, 200, 300), metadata.ViewBox);
 	}
 
 	[Fact]
@@ -50,7 +51,8 @@ public class SvgVectorTests
 		// Assert
 		Assert.Equal(150, svg.Width);
 		Assert.Equal(250, svg.Height);
-		Assert.True(svg.Metadata.ElementCount > 0);
+		var metadata = (SvgMetadata)svg.Metadata;
+		Assert.True(metadata.ElementCount > 0);
 		Assert.NotNull(svg.Document);
 	}
 
@@ -70,8 +72,9 @@ public class SvgVectorTests
 		// Assert
 		Assert.Equal(width, svg.Width);
 		Assert.Equal(height, svg.Height);
-		Assert.Equal(width, svg.Metadata.ViewportWidth);
-		Assert.Equal(height, svg.Metadata.ViewportHeight);
+		var metadata = (SvgMetadata)svg.Metadata;
+		Assert.Equal(width, metadata.ViewportWidth);
+		Assert.Equal(height, metadata.ViewportHeight);
 		Assert.Equal(width.ToString(), svg.Document?.Root?.Attribute("width")?.Value);
 		Assert.Equal(height.ToString(), svg.Document?.Root?.Attribute("height")?.Value);
 	}
@@ -243,9 +246,10 @@ public class SvgVectorTests
 			// Assert
 			Assert.Equal(200, svg.Width);
 			Assert.Equal(150, svg.Height);
-			Assert.Equal("Test SVG", svg.Metadata.Title);
-			Assert.Equal("A test SVG file", svg.Metadata.Description);
-			Assert.True(svg.Metadata.ElementCount > 0);
+			var metadata = (SvgMetadata)svg.Metadata;
+			Assert.Equal("Test SVG", metadata.Title);
+			Assert.Equal("A test SVG file", metadata.Description);
+			Assert.True(metadata.ElementCount > 0);
 		}
 		finally
 		{
@@ -261,7 +265,7 @@ public class SvgVectorTests
 		using var svg = new SvgVector(100, 100);
 
 		// Act & Assert
-		Assert.False(svg.HasLargeMetadata);
+		Assert.False(svg.Metadata.HasLargeMetadata);
 	}
 
 	[Fact]
@@ -271,7 +275,7 @@ public class SvgVectorTests
 		using var svg = new SvgVector(100, 100);
 
 		// Act
-		var size = svg.EstimatedMetadataSize;
+		var size = svg.Metadata.EstimatedMetadataSize;
 
 		// Assert
 		Assert.True(size > 0);

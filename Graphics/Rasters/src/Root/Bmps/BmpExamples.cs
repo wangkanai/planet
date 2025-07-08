@@ -17,9 +17,9 @@ public static class BmpExamples
 		          };
 
 		// Set up metadata
-		bmp.Metadata.BitsPerPixel = 24;
-		bmp.Metadata.Compression  = BmpCompression.Rgb;
-		bmp.Metadata.Planes       = BmpConstants.Planes;
+		bmp.BmpMetadata.BitsPerPixel = 24;
+		bmp.BmpMetadata.Compression  = BmpCompression.Rgb;
+		bmp.BmpMetadata.Planes       = BmpConstants.Planes;
 
 		return bmp;
 	}
@@ -124,7 +124,7 @@ public static class BmpExamples
 
 		// Make height negative for top-down format
 		bmp.Height          = -Math.Abs(height);
-		bmp.Metadata.Height = bmp.Height;
+		bmp.BmpMetadata.Height = bmp.Height;
 
 		return bmp;
 	}
@@ -143,8 +143,8 @@ public static class BmpExamples
 
 		bmp.HorizontalResolution     = pixelsPerMeter;
 		bmp.VerticalResolution       = pixelsPerMeter;
-		bmp.Metadata.XPixelsPerMeter = pixelsPerMeter;
-		bmp.Metadata.YPixelsPerMeter = pixelsPerMeter;
+		bmp.BmpMetadata.XPixelsPerMeter = pixelsPerMeter;
+		bmp.BmpMetadata.YPixelsPerMeter = pixelsPerMeter;
 
 		return bmp;
 	}
@@ -158,9 +158,9 @@ public static class BmpExamples
 		var bmp = CreateRgb24(width, height);
 
 		// Configure for V5 header
-		bmp.Metadata.HeaderSize     = BmpConstants.BitmapV5HeaderSize;
-		bmp.Metadata.ColorSpaceType = BmpConstants.ColorSpace.LCS_sRGB;
-		bmp.Metadata.Intent         = BmpConstants.Intent.LCS_GM_IMAGES;
+		bmp.BmpMetadata.HeaderSize     = BmpConstants.BitmapV5HeaderSize;
+		bmp.BmpMetadata.ColorSpaceType = BmpConstants.ColorSpace.LCS_sRGB;
+		bmp.BmpMetadata.Intent         = BmpConstants.Intent.LCS_GM_IMAGES;
 
 		return bmp;
 	}
@@ -176,7 +176,7 @@ public static class BmpExamples
 			          Compression = BmpCompression.Rle8
 		          };
 
-		bmp.Metadata.Compression = BmpCompression.Rle8;
+		bmp.BmpMetadata.Compression = BmpCompression.Rle8;
 
 		// Create a simple 256-color palette
 		var palette = new byte[256 * BmpConstants.PaletteEntrySize];
@@ -267,14 +267,14 @@ public static class BmpExamples
 		var bmp = CreateRgb24(width, height);
 
 		// Configure for sRGB and standard web resolution (96 DPI)
-		bmp.Metadata.HeaderSize     = BmpConstants.BitmapV4HeaderSize;
-		bmp.Metadata.ColorSpaceType = BmpConstants.ColorSpace.LCS_sRGB;
+		bmp.BmpMetadata.HeaderSize     = BmpConstants.BitmapV4HeaderSize;
+		bmp.BmpMetadata.ColorSpaceType = BmpConstants.ColorSpace.LCS_sRGB;
 
 		// Set standard web resolution (96 DPI)
 		bmp.HorizontalResolution     = BmpConstants.DefaultHorizontalResolution;
 		bmp.VerticalResolution       = BmpConstants.DefaultVerticalResolution;
-		bmp.Metadata.XPixelsPerMeter = BmpConstants.DefaultHorizontalResolution;
-		bmp.Metadata.YPixelsPerMeter = BmpConstants.DefaultVerticalResolution;
+		bmp.BmpMetadata.XPixelsPerMeter = BmpConstants.DefaultHorizontalResolution;
+		bmp.BmpMetadata.YPixelsPerMeter = BmpConstants.DefaultVerticalResolution;
 
 		return bmp;
 	}
@@ -335,7 +335,7 @@ public static class BmpExamples
 		// Demonstrate specialized formats
 		Console.WriteLine("\nSpecialized Formats:");
 		var webBmp = CreateForWeb(800, 600);
-		Console.WriteLine($"Web-optimized: {webBmp.Metadata.HeaderType}, sRGB color space");
+		Console.WriteLine($"Web-optimized: {webBmp.BmpMetadata.HeaderType}, sRGB color space");
 
 		var topDown = CreateTopDown(800, 600);
 		Console.WriteLine($"Top-down format: Height={topDown.Height} (negative), IsTopDown={topDown.IsTopDown}");

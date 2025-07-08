@@ -76,7 +76,7 @@ public class Jpeg2000ValidatorTests
 	{
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
-		jpeg2000.Metadata.Components = components;
+		jpeg2000.Jpeg2000Metadata.Components = components;
 
 		// Act
 		var result = Jpeg2000Validator.Validate(jpeg2000);
@@ -94,7 +94,7 @@ public class Jpeg2000ValidatorTests
 	{
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
-		jpeg2000.Metadata.BitDepth = bitDepth;
+		jpeg2000.Jpeg2000Metadata.BitDepth = bitDepth;
 
 		// Act
 		var result = Jpeg2000Validator.Validate(jpeg2000);
@@ -109,7 +109,7 @@ public class Jpeg2000ValidatorTests
 	{
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 4);
-		jpeg2000.Metadata.BitDepth = 24; // High bit depth with 4 components
+		jpeg2000.Jpeg2000Metadata.BitDepth = 24; // High bit depth with 4 components
 
 		// Act
 		var result = Jpeg2000Validator.Validate(jpeg2000);
@@ -124,7 +124,7 @@ public class Jpeg2000ValidatorTests
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
 		jpeg2000.IsLossless = true;
-		jpeg2000.Metadata.WaveletTransform = Jpeg2000Constants.WaveletTransforms.Irreversible97; // Wrong for lossless
+		jpeg2000.Jpeg2000Metadata.WaveletTransform = Jpeg2000Constants.WaveletTransforms.Irreversible97; // Wrong for lossless
 
 		// Act
 		var result = Jpeg2000Validator.Validate(jpeg2000);
@@ -143,7 +143,7 @@ public class Jpeg2000ValidatorTests
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
 		jpeg2000.IsLossless = false;
-		jpeg2000.Metadata.CompressionRatio = ratio;
+		jpeg2000.Jpeg2000Metadata.CompressionRatio = ratio;
 
 		// Act
 		var result = Jpeg2000Validator.Validate(jpeg2000);
@@ -175,7 +175,7 @@ public class Jpeg2000ValidatorTests
 	{
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
-		jpeg2000.Metadata.DecompositionLevels = levels;
+		jpeg2000.Jpeg2000Metadata.DecompositionLevels = levels;
 
 		// Act
 		var result = Jpeg2000Validator.Validate(jpeg2000);
@@ -209,8 +209,8 @@ public class Jpeg2000ValidatorTests
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
 		// Set invalid values directly in metadata to bypass property validation
-		jpeg2000.Metadata.TileWidth = tileWidth;
-		jpeg2000.Metadata.TileHeight = tileHeight;
+		jpeg2000.Jpeg2000Metadata.TileWidth = tileWidth;
+		jpeg2000.Jpeg2000Metadata.TileHeight = tileHeight;
 
 		// Act
 		var result = Jpeg2000Validator.Validate(jpeg2000);
@@ -317,7 +317,7 @@ public class Jpeg2000ValidatorTests
 	{
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
-		jpeg2000.Metadata.QualityLayers = layers;
+		jpeg2000.Jpeg2000Metadata.QualityLayers = layers;
 
 		// Act
 		var result = Jpeg2000Validator.Validate(jpeg2000);
@@ -398,7 +398,7 @@ public class Jpeg2000ValidatorTests
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
 		jpeg2000.RegionOfInterest = new Rectangle(100, 100, 200, 200);
-		jpeg2000.Metadata.RoiQualityFactor = qualityFactor;
+		jpeg2000.Jpeg2000Metadata.RoiQualityFactor = qualityFactor;
 
 		// Act
 		var result = Jpeg2000Validator.Validate(jpeg2000);
@@ -456,7 +456,7 @@ public class Jpeg2000ValidatorTests
 	{
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
-		jpeg2000.Metadata.Width = 900; // Mismatch
+		jpeg2000.Jpeg2000Metadata.Width = 900; // Mismatch
 
 		// Act
 		var result = Jpeg2000Validator.Validate(jpeg2000);
@@ -471,7 +471,7 @@ public class Jpeg2000ValidatorTests
 	{
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
-		jpeg2000.Metadata.GeoTransform = new double[] { 1.0, 2.0 }; // Wrong length
+		jpeg2000.Jpeg2000Metadata.GeoTransform = new double[] { 1.0, 2.0 }; // Wrong length
 
 		// Act
 		var result = Jpeg2000Validator.Validate(jpeg2000);
@@ -486,7 +486,7 @@ public class Jpeg2000ValidatorTests
 	{
 		// Arrange
 		var jpeg2000 = new Jpeg2000Raster(800, 600, 3);
-		jpeg2000.Metadata.GeoTransform = new double[] { 1.0, 0.0, 3.0, 4.0, 0.0, 0.0 }; // Both pixel sizes zero
+		jpeg2000.Jpeg2000Metadata.GeoTransform = new double[] { 1.0, 0.0, 3.0, 4.0, 0.0, 0.0 }; // Both pixel sizes zero
 
 		// Act
 		var result = Jpeg2000Validator.Validate(jpeg2000);

@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Rasters.Tiffs;
 
 /// <summary>Represents metadata information for TIFF images.</summary>
-public class TiffMetadata
+public class TiffMetadata : IMetadata
 {
 	/// <summary>Gets or sets the image description.</summary>
 	public string? ImageDescription { get; set; }
@@ -82,4 +82,119 @@ public class TiffMetadata
 
 	/// <summary>Gets or sets IPTC metadata as a byte array.</summary>
 	public byte[]? IptcData { get; set; }
+
+	/// <inheritdoc />
+	public bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
+
+	/// <inheritdoc />
+	public long EstimatedMetadataSize
+	{
+		get
+		{
+			var size = 0L;
+
+			// Add string metadata sizes
+			if (!string.IsNullOrEmpty(ImageDescription))
+				size += System.Text.Encoding.UTF8.GetByteCount(ImageDescription);
+			if (!string.IsNullOrEmpty(Make))
+				size += System.Text.Encoding.UTF8.GetByteCount(Make);
+			if (!string.IsNullOrEmpty(Model))
+				size += System.Text.Encoding.UTF8.GetByteCount(Model);
+			if (!string.IsNullOrEmpty(Software))
+				size += System.Text.Encoding.UTF8.GetByteCount(Software);
+			if (!string.IsNullOrEmpty(Copyright))
+				size += System.Text.Encoding.UTF8.GetByteCount(Copyright);
+			if (!string.IsNullOrEmpty(Artist))
+				size += System.Text.Encoding.UTF8.GetByteCount(Artist);
+
+			// Add TIFF-specific array data sizes
+			if (StripOffsets != null)
+				size += StripOffsets.Length * sizeof(int);
+			if (StripByteCounts != null)
+				size += StripByteCounts.Length * sizeof(int);
+			if (TileOffsets != null)
+				size += TileOffsets.Length * sizeof(int);
+			if (TileByteCounts != null)
+				size += TileByteCounts.Length * sizeof(int);
+
+			// Add color data sizes
+			if (ColorMap != null)
+				size += ColorMap.Length * sizeof(ushort);
+			if (TransferFunction != null)
+				size += TransferFunction.Length * sizeof(ushort);
+
+			// Add chromaticity and color space data
+			if (WhitePoint != null)
+				size += WhitePoint.Length * sizeof(double);
+			if (PrimaryChromaticities != null)
+				size += PrimaryChromaticities.Length * sizeof(double);
+			if (YCbCrCoefficients != null)
+				size += YCbCrCoefficients.Length * sizeof(double);
+			if (ReferenceBlackWhite != null)
+				size += ReferenceBlackWhite.Length * sizeof(double);
+
+			// Add embedded metadata sizes
+			if (ExifIfd != null)
+				size += ExifIfd.Length;
+			if (GpsIfd != null)
+				size += GpsIfd.Length;
+			if (IccProfile != null)
+				size += IccProfile.Length;
+			if (XmpData != null)
+				size += XmpData.Length;
+			if (IptcData != null)
+				size += IptcData.Length;
+
+			// Add custom tags size
+			foreach (var tag in CustomTags.Values)
+				size += tag switch
+				{
+					string str => System.Text.Encoding.UTF8.GetByteCount(str),
+					byte[] bytes => bytes.Length,
+					int[] ints => ints.Length * sizeof(int),
+					ushort[] ushorts => ushorts.Length * sizeof(ushort),
+					double[] doubles => doubles.Length * sizeof(double),
+					float[] floats => floats.Length * sizeof(float),
+					_ => 16 // Default estimate for other types
+				};
+
+			// Add TIFF directory entry overhead
+			var estimatedTagCount = 20; // Standard TIFF tags
+			if (CustomTags.Count > 0)
+				estimatedTagCount += CustomTags.Count;
+
+			size += estimatedTagCount * 12; // 12 bytes per directory entry
+			size += 6; // IFD header
+
+			return size;
+		}
+	}
+
+	/// <inheritdoc />
+	public void Dispose()
+	{
+		// Clear large arrays
+		StripOffsets = null;
+		StripByteCounts = null;
+		TileOffsets = null;
+		TileByteCounts = null;
+		ColorMap = null;
+		TransferFunction = null;
+		WhitePoint = null;
+		PrimaryChromaticities = null;
+		YCbCrCoefficients = null;
+		ReferenceBlackWhite = null;
+		ExifIfd = null;
+		GpsIfd = null;
+		IccProfile = null;
+		XmpData = null;
+		IptcData = null;
+		CustomTags.Clear();
+	}
+
+	/// <inheritdoc />
+	public async ValueTask DisposeAsync()
+	{
+		await Task.Run(() => Dispose()).ConfigureAwait(false);
+	}
 }

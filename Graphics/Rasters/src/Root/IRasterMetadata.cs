@@ -2,9 +2,7 @@
 
 namespace Wangkanai.Graphics.Rasters;
 
-/// <summary>
-/// Defines the contract for raster image metadata across all image formats.
-/// </summary>
+/// <summary>Defines the contract for raster image metadata across all image formats.</summary>
 public interface IRasterMetadata : IMetadata
 {
 	/// <summary>Gets or sets the image width in pixels.</summary>
@@ -42,12 +40,6 @@ public interface IRasterMetadata : IMetadata
 
 	/// <summary>Gets or sets the author or artist name.</summary>
 	string? Author { get; set; }
-
-	/// <summary>Gets the estimated memory usage of the metadata in bytes.</summary>
-	long EstimatedMemoryUsage { get; }
-
-	/// <summary>Gets whether this metadata contains large data that benefits from async disposal.</summary>
-	bool HasLargeMetadata { get; }
 
 	/// <summary>Creates a deep copy of the metadata.</summary>
 	/// <returns>A new instance with the same values.</returns>

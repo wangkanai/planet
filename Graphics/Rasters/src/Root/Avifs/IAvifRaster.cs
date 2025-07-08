@@ -16,7 +16,7 @@ public interface IAvifRaster : IRaster
 	int Quality { get; set; }
 
 	/// <summary>Gets or sets the comprehensive metadata for the AVIF image.</summary>
-	AvifMetadata Metadata { get; set; }
+	new AvifMetadata Metadata { get; set; }
 
 	/// <summary>Gets or sets the bit depth per channel (8, 10, or 12).</summary>
 	int BitDepth { get; set; }

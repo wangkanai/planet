@@ -12,7 +12,7 @@ public interface ITiffRaster : IRaster
 	TiffCompression Compression { get; }
 
 	/// <summary>Gets the metadata associated with the TIFF image.</summary>
-	TiffMetadata Metadata { get; }
+	new TiffMetadata Metadata { get; }
 
 	/// <summary>Gets the number of samples per pixel.</summary>
 	int SamplesPerPixel { get; }

@@ -17,7 +17,6 @@ public sealed class WebPRaster : Raster, IWebPRaster
 	/// <summary>Initializes a new instance of the <see cref="WebPRaster"/> class.</summary>
 	public WebPRaster()
 	{
-		Metadata         = new WebPMetadata();
 		Format           = WebPFormat.Simple;
 		Compression      = WebPCompression.VP8;
 		ColorMode        = WebPColorMode.Rgb;
@@ -110,8 +109,16 @@ public sealed class WebPRaster : Raster, IWebPRaster
 		}
 	}
 
+	private WebPMetadata _metadata = new();
+
 	/// <inheritdoc />
-	public WebPMetadata Metadata { get; set; }
+	public override IMetadata Metadata => _metadata;
+
+	/// <inheritdoc />
+	WebPMetadata IWebPRaster.Metadata => _metadata;
+
+	/// <summary>Gets the WebP-specific metadata.</summary>
+	public WebPMetadata WebPMetadata => _metadata;
 
 	/// <inheritdoc />
 	public int Channels
@@ -119,7 +126,7 @@ public sealed class WebPRaster : Raster, IWebPRaster
 
 	/// <inheritdoc />
 	public bool HasAlpha
-		=> ColorMode == WebPColorMode.Rgba || Metadata.HasAlpha;
+		=> ColorMode == WebPColorMode.Rgba || _metadata.HasAlpha;
 
 	/// <inheritdoc />
 	public bool IsLossless
@@ -127,7 +134,7 @@ public sealed class WebPRaster : Raster, IWebPRaster
 
 	/// <inheritdoc />
 	public bool IsAnimated
-		=> Metadata is { HasAnimation: true, AnimationFrames.Count: > 0 };
+		=> _metadata.HasAnimation && _metadata.AnimationFrames.Count > 0;
 
 	/// <inheritdoc />
 	public double CompressionRatio
@@ -136,46 +143,13 @@ public sealed class WebPRaster : Raster, IWebPRaster
 		set => _compressionRatio = Math.Max(1.0, value);
 	}
 
-	/// <inheritdoc />
-	public override bool HasLargeMetadata
-		=> EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
-
-	/// <inheritdoc />
-	public override long EstimatedMetadataSize
-	{
-		get
-		{
-			var size = 0L;
-
-			// Add size of metadata components
-			if (!Metadata.IccProfile.IsEmpty)
-				size += Metadata.IccProfile.Length;
-			if (!Metadata.ExifData.IsEmpty)
-				size += Metadata.ExifData.Length;
-			if (!Metadata.XmpData.IsEmpty)
-				size += Metadata.XmpData.Length;
-
-			// Add size of custom chunks
-			foreach (var chunk in Metadata.CustomChunks.Values)
-				size += chunk.Length;
-
-			// Add estimated size of animation frames
-			if (!Metadata.HasAnimation)
-				return size;
-
-			foreach (var frame in Metadata.AnimationFrames)
-				size += frame.Data.Length;
-
-			return size;
-		}
-	}
 
 	/// <summary>Sets the color mode and updates related properties for performance.</summary>
 	/// <param name="colorMode">The color mode to set.</param>
 	public void SetColorMode(WebPColorMode colorMode)
 	{
 		_colorMode        = colorMode;
-		Metadata.HasAlpha = colorMode == WebPColorMode.Rgba;
+		_metadata.HasAlpha = colorMode == WebPColorMode.Rgba;
 		UpdateDependentProperties();
 	}
 
@@ -202,7 +176,7 @@ public sealed class WebPRaster : Raster, IWebPRaster
 	public void EnableExtendedFeatures()
 	{
 		Format              = WebPFormat.Extended;
-		Metadata.IsExtended = true;
+		_metadata.IsExtended = true;
 	}
 
 	/// <inheritdoc />
@@ -232,18 +206,18 @@ public sealed class WebPRaster : Raster, IWebPRaster
 		var overhead = WebPConstants.ContainerOverhead;
 
 		// Add metadata overhead
-		if (!Metadata.IccProfile.IsEmpty)
-			overhead += Metadata.IccProfile.Length + WebPConstants.ChunkHeaderSize;
-		if (!Metadata.ExifData.IsEmpty)
-			overhead += Metadata.ExifData.Length + WebPConstants.ChunkHeaderSize;
-		if (!Metadata.XmpData.IsEmpty)
-			overhead += Metadata.XmpData.Length + WebPConstants.ChunkHeaderSize;
+		if (!_metadata.IccProfile.IsEmpty)
+			overhead += _metadata.IccProfile.Length + WebPConstants.ChunkHeaderSize;
+		if (!_metadata.ExifData.IsEmpty)
+			overhead += _metadata.ExifData.Length + WebPConstants.ChunkHeaderSize;
+		if (!_metadata.XmpData.IsEmpty)
+			overhead += _metadata.XmpData.Length + WebPConstants.ChunkHeaderSize;
 
 		// Add animation overhead if applicable
 		if (IsAnimated)
 		{
 			overhead += WebPConstants.AnimChunkSize + WebPConstants.ChunkHeaderSize;
-			overhead += Metadata.AnimationFrames.Count * (WebPConstants.ChunkHeaderSize + 16); // ANMF headers
+			overhead += _metadata.AnimationFrames.Count * (WebPConstants.ChunkHeaderSize + 16); // ANMF headers
 		}
 
 		return compressedDataSize + overhead;
@@ -270,8 +244,8 @@ public sealed class WebPRaster : Raster, IWebPRaster
 				_format = WebPFormat.Simple;
 
 			// Update metadata flags
-			Metadata.HasAlpha   = HasAlpha;
-			Metadata.IsExtended = Format == WebPFormat.Extended;
+			_metadata.HasAlpha   = HasAlpha;
+			_metadata.IsExtended = Format == WebPFormat.Extended;
 
 			// Update compression ratio based on settings
 			_compressionRatio = IsLossless
@@ -337,46 +311,46 @@ public sealed class WebPRaster : Raster, IWebPRaster
 	/// <inheritdoc />
 	protected override async ValueTask DisposeAsyncCore()
 	{
-		if (HasLargeMetadata)
+		if (_metadata.HasLargeMetadata)
 		{
 			// For large WebP metadata, clear in stages with yielding
-			if (!Metadata.IccProfile.IsEmpty)
+			if (!_metadata.IccProfile.IsEmpty)
 			{
 				await Task.Yield();
-				Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
+				_metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
 			}
 
-			if (!Metadata.ExifData.IsEmpty)
+			if (!_metadata.ExifData.IsEmpty)
 			{
 				await Task.Yield();
-				Metadata.ExifData = ReadOnlyMemory<byte>.Empty;
+				_metadata.ExifData = ReadOnlyMemory<byte>.Empty;
 			}
 
-			if (!Metadata.XmpData.IsEmpty)
+			if (!_metadata.XmpData.IsEmpty)
 			{
 				await Task.Yield();
-				Metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+				_metadata.XmpData = ReadOnlyMemory<byte>.Empty;
 			}
 
 			// Clear animation frames in batches for large collections
-			if (Metadata.AnimationFrames.Count > ImageConstants.DisposalBatchSize)
+			if (_metadata.AnimationFrames.Count > ImageConstants.DisposalBatchSize)
 			{
 				var batchSize = 50;
-				for (var i = 0; i < Metadata.AnimationFrames.Count; i += batchSize)
+				for (var i = 0; i < _metadata.AnimationFrames.Count; i += batchSize)
 				{
-					var endIndex = Math.Min(i + batchSize, Metadata.AnimationFrames.Count);
+					var endIndex = Math.Min(i + batchSize, _metadata.AnimationFrames.Count);
 
-					for (var j = i; j < endIndex; j++) Metadata.AnimationFrames[j].Data = ReadOnlyMemory<byte>.Empty;
+					for (var j = i; j < endIndex; j++) _metadata.AnimationFrames[j].Data = ReadOnlyMemory<byte>.Empty;
 					// Yield control after each batch
 					await Task.Yield();
 				}
 			}
 
 			await Task.Yield();
-			Metadata.AnimationFrames.Clear();
+			_metadata.AnimationFrames.Clear();
 
 			await Task.Yield();
-			Metadata.CustomChunks.Clear();
+			_metadata.CustomChunks.Clear();
 
 			// Let the runtime handle garbage collection automatically
 		}
@@ -393,11 +367,11 @@ public sealed class WebPRaster : Raster, IWebPRaster
 		if (disposing)
 		{
 			// Clear WebP-specific managed resources
-			Metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
-			Metadata.ExifData   = ReadOnlyMemory<byte>.Empty;
-			Metadata.XmpData    = ReadOnlyMemory<byte>.Empty;
-			Metadata.CustomChunks.Clear();
-			Metadata.AnimationFrames.Clear();
+			_metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
+			_metadata.ExifData   = ReadOnlyMemory<byte>.Empty;
+			_metadata.XmpData    = ReadOnlyMemory<byte>.Empty;
+			_metadata.CustomChunks.Clear();
+			_metadata.AnimationFrames.Clear();
 		}
 
 		// Call base class disposal

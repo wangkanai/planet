@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Rasters.Bmps;
 
 /// <summary>Represents metadata information for BMP images.</summary>
-public class BmpMetadata
+public class BmpMetadata : IMetadata
 {
 	/// <summary>Gets or sets the file signature (should be "BM").</summary>
 	public string? FileSignature { get; set; } = "BM";
@@ -146,4 +146,91 @@ public class BmpMetadata
 		BmpConstants.BitmapV5HeaderSize   => "BITMAPV5HEADER",
 		_                                 => $"Unknown ({HeaderSize} bytes)"
 	};
+
+	/// <inheritdoc />
+	public bool HasLargeMetadata
+	{
+		get
+		{
+			// Consider BMP as having large metadata if:
+			// 1. It has a large color palette (256+ colors)
+			// 2. The total file size is large
+			// 3. It has ICC profile data (V5 headers)
+			var estimatedSize = EstimatedMetadataSize;
+			return estimatedSize > ImageConstants.LargeMetadataThreshold;
+		}
+	}
+
+	/// <inheritdoc />
+	public long EstimatedMetadataSize
+	{
+		get
+		{
+			var size = 0L;
+
+			// File header
+			size += BmpConstants.FileHeaderSize;
+
+			// DIB header
+			size += HeaderSize;
+
+			// Color palette
+			if (HasPalette && ColorPalette != null)
+				size += ColorPalette.Length;
+
+			// ICC profile data (for V5 headers)
+			if (HeaderSize >= BmpConstants.BitmapV5HeaderSize)
+				size += ProfileSize;
+
+			// Custom metadata fields
+			foreach (var field in CustomFields.Values)
+				size += field switch
+				{
+					string str   => System.Text.Encoding.UTF8.GetByteCount(str),
+					byte[] bytes => bytes.Length,
+					_            => 32 // Default estimate for other types
+				};
+
+			return size;
+		}
+	}
+
+	/// <inheritdoc />
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
+	/// <inheritdoc />
+	public async ValueTask DisposeAsync()
+	{
+		if (HasLargeMetadata)
+		{
+			// For large BMP metadata, clear in stages with yielding
+			await Task.Yield();
+			ColorPalette = null;
+
+			await Task.Yield();
+			CustomFields.Clear();
+		}
+		else
+		{
+			// For small metadata, use synchronous disposal
+			Dispose(true);
+		}
+		GC.SuppressFinalize(this);
+	}
+
+	/// <summary>Releases unmanaged and - optionally - managed resources.</summary>
+	/// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+	protected virtual void Dispose(bool disposing)
+	{
+		if (disposing)
+		{
+			// Clear managed resources
+			ColorPalette = null;
+			CustomFields.Clear();
+		}
+	}
 }

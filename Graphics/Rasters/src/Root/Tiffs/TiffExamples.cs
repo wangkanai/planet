@@ -17,17 +17,16 @@ public static class TiffExamples
 			           Compression               = TiffCompression.Lzw,
 			           PhotometricInterpretation = PhotometricInterpretation.Rgb,
 			           SamplesPerPixel           = 3,
-			           HasAlpha                  = false,
-			           Metadata = new TiffMetadata
-			                      {
-				                      ImageDescription = "Sample RGB Image",
-				                      Software         = "Wangkanai Planet",
-				                      DateTime         = DateTime.UtcNow,
-				                      XResolution      = 300.0,
-				                      YResolution      = 300.0,
-				                      ResolutionUnit   = 2 // inches
-			                      }
+			           HasAlpha                  = false
 		           };
+		
+		tiff.TiffMetadata.ImageDescription = "Sample RGB Image";
+		tiff.TiffMetadata.Software         = "Wangkanai Planet";
+		tiff.TiffMetadata.DateTime         = DateTime.UtcNow;
+		tiff.TiffMetadata.XResolution      = 300.0;
+		tiff.TiffMetadata.YResolution      = 300.0;
+		tiff.TiffMetadata.ResolutionUnit   = 2; // inches
+		
 		tiff.SetBitsPerSample(BitsPerSampleArray);
 
 		return tiff;
@@ -42,14 +41,13 @@ public static class TiffExamples
 			           Compression               = TiffCompression.None,
 			           PhotometricInterpretation = PhotometricInterpretation.BlackIsZero,
 			           SamplesPerPixel           = 1,
-			           HasAlpha                  = false,
-			           Metadata = new TiffMetadata
-			                      {
-				                      ImageDescription = "High-precision grayscale image",
-				                      Make             = "Professional Camera",
-				                      Model            = "Model X"
-			                      }
+			           HasAlpha                  = false
 		           };
+		
+		tiff.TiffMetadata.ImageDescription = "High-precision grayscale image";
+		tiff.TiffMetadata.Make             = "Professional Camera";
+		tiff.TiffMetadata.Model            = "Model X";
+		
 		tiff.SetBitsPerSample(BitsPerSampleSingle);
 
 		return tiff;
@@ -64,14 +62,13 @@ public static class TiffExamples
 			           Compression               = TiffCompression.PackBits,
 			           PhotometricInterpretation = PhotometricInterpretation.Cmyk,
 			           SamplesPerPixel           = 4,
-			           HasAlpha                  = false,
-			           Metadata = new TiffMetadata
-			                      {
-				                      ImageDescription = "Print-ready CMYK image",
-				                      Software         = "Professional Publishing Suite",
-				                      Copyright        = "© 2025 Company Name"
-			                      }
+			           HasAlpha                  = false
 		           };
+		
+		tiff.TiffMetadata.ImageDescription = "Print-ready CMYK image";
+		tiff.TiffMetadata.Software         = "Professional Publishing Suite";
+		tiff.TiffMetadata.Copyright        = "© 2025 Company Name";
+		
 		tiff.SetBitsPerSample(BitsPerSampleArray);
 
 		return tiff;

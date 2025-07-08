@@ -118,7 +118,7 @@ public class WebPRasterTests
 		Assert.Equal(colorMode, webp.ColorMode);
 		Assert.Equal(expectedChannels, webp.Channels);
 		Assert.Equal(expectedAlpha, webp.HasAlpha);
-		Assert.Equal(expectedAlpha, webp.Metadata.HasAlpha);
+		Assert.Equal(expectedAlpha, webp.WebPMetadata.HasAlpha);
 	}
 
 	[Fact]
@@ -167,7 +167,7 @@ public class WebPRasterTests
 
 		// Assert
 		Assert.Equal(WebPFormat.Extended, webp.Format);
-		Assert.True(webp.Metadata.IsExtended);
+		Assert.True(webp.WebPMetadata.IsExtended);
 	}
 
 	[Theory]
@@ -320,9 +320,9 @@ public class WebPRasterTests
 		var webp2 = new WebPRaster(800, 600);
 
 		// Add metadata to webp2
-		webp2.Metadata.IccProfile = new byte[1000];
-		webp2.Metadata.ExifData = new byte[500];
-		webp2.Metadata.XmpData = new byte[300];
+		webp2.WebPMetadata.IccProfile = new byte[1000];
+		webp2.WebPMetadata.ExifData = new byte[500];
+		webp2.WebPMetadata.XmpData = new byte[300];
 
 		// Act
 		var size1 = webp1.GetEstimatedFileSize();
@@ -383,8 +383,8 @@ public class WebPRasterTests
 	{
 		// Arrange
 		var webp = new WebPRaster();
-		webp.Metadata.HasAnimation = true;
-		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame { Width = 100, Height = 100 });
+		webp.WebPMetadata.HasAnimation = true;
+		webp.WebPMetadata.AnimationFrames.Add(new WebPAnimationFrame { Width = 100, Height = 100 });
 
 		// Act & Assert
 		Assert.True(webp.IsAnimated);
@@ -395,7 +395,7 @@ public class WebPRasterTests
 	{
 		// Arrange
 		var webp = new WebPRaster();
-		webp.Metadata.HasAnimation = true;
+		webp.WebPMetadata.HasAnimation = true;
 
 		// Act & Assert
 		Assert.False(webp.IsAnimated);
@@ -406,21 +406,21 @@ public class WebPRasterTests
 	{
 		// Arrange
 		var webp = new WebPRaster();
-		webp.Metadata.IccProfile = new byte[100];
-		webp.Metadata.ExifData = new byte[100];
-		webp.Metadata.XmpData = new byte[100];
-		webp.Metadata.CustomChunks.Add("TEST", new byte[50]);
-		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame());
+		webp.WebPMetadata.IccProfile = new byte[100];
+		webp.WebPMetadata.ExifData = new byte[100];
+		webp.WebPMetadata.XmpData = new byte[100];
+		webp.WebPMetadata.CustomChunks.Add("TEST", new byte[50]);
+		webp.WebPMetadata.AnimationFrames.Add(new WebPAnimationFrame());
 
 		// Act
 		webp.Dispose();
 
 		// Assert
-		Assert.True(webp.Metadata.IccProfile.IsEmpty);
-		Assert.True(webp.Metadata.ExifData.IsEmpty);
-		Assert.True(webp.Metadata.XmpData.IsEmpty);
-		Assert.Empty(webp.Metadata.CustomChunks);
-		Assert.Empty(webp.Metadata.AnimationFrames);
+		Assert.True(webp.WebPMetadata.IccProfile.IsEmpty);
+		Assert.True(webp.WebPMetadata.ExifData.IsEmpty);
+		Assert.True(webp.WebPMetadata.XmpData.IsEmpty);
+		Assert.Empty(webp.WebPMetadata.CustomChunks);
+		Assert.Empty(webp.WebPMetadata.AnimationFrames);
 	}
 
 	[Fact]
@@ -428,21 +428,21 @@ public class WebPRasterTests
 	{
 		// Arrange
 		var webp = new WebPRaster();
-		webp.Metadata.IccProfile = new byte[100];
-		webp.Metadata.ExifData = new byte[100];
-		webp.Metadata.XmpData = new byte[100];
-		webp.Metadata.CustomChunks.Add("TEST", new byte[50]);
-		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame());
+		webp.WebPMetadata.IccProfile = new byte[100];
+		webp.WebPMetadata.ExifData = new byte[100];
+		webp.WebPMetadata.XmpData = new byte[100];
+		webp.WebPMetadata.CustomChunks.Add("TEST", new byte[50]);
+		webp.WebPMetadata.AnimationFrames.Add(new WebPAnimationFrame());
 
 		// Act
 		await webp.DisposeAsync();
 
 		// Assert
-		Assert.True(webp.Metadata.IccProfile.IsEmpty);
-		Assert.True(webp.Metadata.ExifData.IsEmpty);
-		Assert.True(webp.Metadata.XmpData.IsEmpty);
-		Assert.Empty(webp.Metadata.CustomChunks);
-		Assert.Empty(webp.Metadata.AnimationFrames);
+		Assert.True(webp.WebPMetadata.IccProfile.IsEmpty);
+		Assert.True(webp.WebPMetadata.ExifData.IsEmpty);
+		Assert.True(webp.WebPMetadata.XmpData.IsEmpty);
+		Assert.Empty(webp.WebPMetadata.CustomChunks);
+		Assert.Empty(webp.WebPMetadata.AnimationFrames);
 	}
 
 	[Fact]
@@ -450,11 +450,11 @@ public class WebPRasterTests
 	{
 		// Arrange
 		var webp = new WebPRaster();
-		webp.Metadata.IccProfile = new byte[1000]; // 1KB
-		webp.Metadata.ExifData = new byte[500];    // 500 bytes
+		webp.WebPMetadata.IccProfile = new byte[1000]; // 1KB
+		webp.WebPMetadata.ExifData = new byte[500];    // 500 bytes
 
 		// Act & Assert
-		Assert.False(webp.HasLargeMetadata);
+		Assert.False(webp.WebPMetadata.HasLargeMetadata);
 	}
 
 	[Fact]
@@ -462,10 +462,10 @@ public class WebPRasterTests
 	{
 		// Arrange
 		var webp = new WebPRaster();
-		webp.Metadata.IccProfile = new byte[2_000_000]; // 2MB
+		webp.WebPMetadata.IccProfile = new byte[2_000_000]; // 2MB
 
 		// Act & Assert
-		Assert.True(webp.HasLargeMetadata);
+		Assert.True(webp.WebPMetadata.HasLargeMetadata);
 	}
 
 	[Fact]
@@ -473,14 +473,14 @@ public class WebPRasterTests
 	{
 		// Arrange
 		var webp = new WebPRaster();
-		webp.Metadata.IccProfile = new byte[1000];
-		webp.Metadata.ExifData = new byte[500];
-		webp.Metadata.XmpData = new byte[300];
-		webp.Metadata.CustomChunks.Add("TEST1", new byte[200]);
-		webp.Metadata.CustomChunks.Add("TEST2", new byte[100]);
+		webp.WebPMetadata.IccProfile = new byte[1000];
+		webp.WebPMetadata.ExifData = new byte[500];
+		webp.WebPMetadata.XmpData = new byte[300];
+		webp.WebPMetadata.CustomChunks.Add("TEST1", new byte[200]);
+		webp.WebPMetadata.CustomChunks.Add("TEST2", new byte[100]);
 
 		// Act
-		var size = webp.EstimatedMetadataSize;
+		var size = webp.WebPMetadata.EstimatedMetadataSize;
 
 		// Assert
 		Assert.Equal(2100, size); // 1000 + 500 + 300 + 200 + 100
@@ -491,12 +491,12 @@ public class WebPRasterTests
 	{
 		// Arrange
 		var webp = new WebPRaster();
-		webp.Metadata.HasAnimation = true;
-		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame { Data = new byte[500] });
-		webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame { Data = new byte[300] });
+		webp.WebPMetadata.HasAnimation = true;
+		webp.WebPMetadata.AnimationFrames.Add(new WebPAnimationFrame { Data = new byte[500] });
+		webp.WebPMetadata.AnimationFrames.Add(new WebPAnimationFrame { Data = new byte[300] });
 
 		// Act
-		var size = webp.EstimatedMetadataSize;
+		var size = webp.WebPMetadata.EstimatedMetadataSize;
 
 		// Assert
 		Assert.Equal(800, size); // 500 + 300
@@ -507,25 +507,25 @@ public class WebPRasterTests
 	{
 		// Arrange
 		var webp = new WebPRaster();
-		webp.Metadata.IccProfile = new byte[2_000_000]; // 2MB to trigger large metadata path
+		webp.WebPMetadata.IccProfile = new byte[2_000_000]; // 2MB to trigger large metadata path
 
 		// Add many animation frames to test batched cleanup
 		for (int i = 0; i < 150; i++)
 		{
-			webp.Metadata.AnimationFrames.Add(new WebPAnimationFrame { Data = new byte[1000] });
+			webp.WebPMetadata.AnimationFrames.Add(new WebPAnimationFrame { Data = new byte[1000] });
 		}
-		webp.Metadata.HasAnimation = true;
+		webp.WebPMetadata.HasAnimation = true;
 
 		// Verify we have large metadata
-		Assert.True(webp.HasLargeMetadata);
-		Assert.True(webp.EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold);
+		Assert.True(webp.WebPMetadata.HasLargeMetadata);
+		Assert.True(webp.WebPMetadata.EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold);
 
 		// Act
 		await webp.DisposeAsync();
 
 		// Assert
-		Assert.True(webp.Metadata.IccProfile.IsEmpty);
-		Assert.Empty(webp.Metadata.AnimationFrames);
+		Assert.True(webp.WebPMetadata.IccProfile.IsEmpty);
+		Assert.Empty(webp.WebPMetadata.AnimationFrames);
 	}
 
 	[Fact]
@@ -533,18 +533,18 @@ public class WebPRasterTests
 	{
 		// Arrange
 		var webp = new WebPRaster();
-		webp.Metadata.IccProfile = new byte[1000]; // Small metadata
-		webp.Metadata.ExifData = new byte[500];
+		webp.WebPMetadata.IccProfile = new byte[1000]; // Small metadata
+		webp.WebPMetadata.ExifData = new byte[500];
 
 		// Verify we have small metadata
-		Assert.False(webp.HasLargeMetadata);
+		Assert.False(webp.WebPMetadata.HasLargeMetadata);
 
 		// Act
 		await webp.DisposeAsync();
 
 		// Assert
-		Assert.True(webp.Metadata.IccProfile.IsEmpty);
-		Assert.True(webp.Metadata.ExifData.IsEmpty);
+		Assert.True(webp.WebPMetadata.IccProfile.IsEmpty);
+		Assert.True(webp.WebPMetadata.ExifData.IsEmpty);
 	}
 
 	[Fact]
@@ -554,8 +554,8 @@ public class WebPRasterTests
 		var webp = new WebPRaster();
 
 		// Act & Assert
-		Assert.Equal(0, webp.EstimatedMetadataSize);
-		Assert.False(webp.HasLargeMetadata);
+		Assert.Equal(0, webp.WebPMetadata.EstimatedMetadataSize);
+		Assert.False(webp.WebPMetadata.HasLargeMetadata);
 	}
 
 	[Fact]
@@ -563,7 +563,7 @@ public class WebPRasterTests
 	{
 		// Arrange
 		var webp = new WebPRaster();
-		webp.Metadata.IccProfile = new byte[100];
+		webp.WebPMetadata.IccProfile = new byte[100];
 
 		// Act & Assert - Should not throw
 		await webp.DisposeAsync();
@@ -575,7 +575,7 @@ public class WebPRasterTests
 	{
 		// Arrange
 		var webp = new WebPRaster();
-		webp.Metadata.IccProfile = new byte[100];
+		webp.WebPMetadata.IccProfile = new byte[100];
 
 		// Act & Assert - Should not throw
 		webp.Dispose();

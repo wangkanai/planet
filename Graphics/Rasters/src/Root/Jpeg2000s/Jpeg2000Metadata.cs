@@ -5,7 +5,7 @@ using System.Drawing;
 namespace Wangkanai.Graphics.Rasters.Jpeg2000s;
 
 /// <summary>Comprehensive metadata for JPEG2000 images including JP2 boxes and codestream parameters.</summary>
-public class Jpeg2000Metadata : IAsyncDisposable, IDisposable
+public class Jpeg2000Metadata : IMetadata
 {
 	private bool _disposed;
 
@@ -142,8 +142,8 @@ public class Jpeg2000Metadata : IAsyncDisposable, IDisposable
 		UuidBoxes.Values.Any(data => data.Length > 1024 * 1024) ||
 		TotalTiles > 10000;
 
-	/// <summary>Gets the estimated memory usage of this metadata in bytes.</summary>
-	public long EstimatedMemoryUsage
+	/// <summary>Gets the estimated metadata size in bytes.</summary>
+	public long EstimatedMetadataSize
 	{
 		get
 		{

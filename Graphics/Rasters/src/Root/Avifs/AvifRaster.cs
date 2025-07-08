@@ -15,11 +15,11 @@ public sealed class AvifRaster : Raster, IAvifRaster
 {
 	private byte[]? _encodedData;
 	private bool _disposed;
+	private AvifMetadata _metadata = new();
 
 	/// <summary>Initializes a new instance of the AVIF raster with default settings.</summary>
 	public AvifRaster()
 	{
-		Metadata = new AvifMetadata();
 		InitializeDefaults();
 	}
 
@@ -37,12 +37,9 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		Width = width;
 		Height = height;
 
-		Metadata = new AvifMetadata
-		{
-			Width = width,
-			Height = height,
-			HasAlpha = hasAlpha
-		};
+		_metadata.Width = width;
+		_metadata.Height = height;
+		_metadata.HasAlpha = hasAlpha;
 
 		InitializeDefaults();
 	}
@@ -53,12 +50,12 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		get
 		{
 			ThrowIfDisposed();
-			return Metadata.ColorSpace;
+			return _metadata.ColorSpace;
 		}
 		set
 		{
 			ThrowIfDisposed();
-			Metadata.ColorSpace = value;
+			_metadata.ColorSpace = value;
 		}
 	}
 
@@ -68,19 +65,29 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		get
 		{
 			ThrowIfDisposed();
-			return Metadata.Quality;
+			return _metadata.Quality;
 		}
 		set
 		{
 			ThrowIfDisposed();
 			if (value < AvifConstants.MinQuality || value > AvifConstants.MaxQuality)
 				throw new ArgumentException($"Quality must be between {AvifConstants.MinQuality} and {AvifConstants.MaxQuality}.");
-			Metadata.Quality = value;
+			_metadata.Quality = value;
 		}
 	}
 
 	/// <inheritdoc />
-	public AvifMetadata Metadata { get; set; }
+	public override IMetadata Metadata => _metadata;
+
+	/// <inheritdoc />
+	AvifMetadata IAvifRaster.Metadata
+	{
+		get => _metadata;
+		set => _metadata = value;
+	}
+
+	/// <summary>Gets the AVIF-specific metadata.</summary>
+	public AvifMetadata AvifMetadata => _metadata;
 
 	/// <inheritdoc />
 	public int BitDepth
@@ -88,14 +95,14 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		get
 		{
 			ThrowIfDisposed();
-			return Metadata.BitDepth;
+			return _metadata.BitDepth;
 		}
 		set
 		{
 			ThrowIfDisposed();
 			if (value != 8 && value != 10 && value != 12)
 				throw new ArgumentException("Bit depth must be 8, 10, or 12.");
-			Metadata.BitDepth = value;
+			_metadata.BitDepth = value;
 		}
 	}
 
@@ -105,12 +112,12 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		get
 		{
 			ThrowIfDisposed();
-			return Metadata.HasAlpha;
+			return _metadata.HasAlpha;
 		}
 		set
 		{
 			ThrowIfDisposed();
-			Metadata.HasAlpha = value;
+			_metadata.HasAlpha = value;
 		}
 	}
 
@@ -120,12 +127,12 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		get
 		{
 			ThrowIfDisposed();
-			return Metadata.ChromaSubsampling;
+			return _metadata.ChromaSubsampling;
 		}
 		set
 		{
 			ThrowIfDisposed();
-			Metadata.ChromaSubsampling = value;
+			_metadata.ChromaSubsampling = value;
 		}
 	}
 
@@ -135,14 +142,14 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		get
 		{
 			ThrowIfDisposed();
-			return Metadata.Speed;
+			return _metadata.Speed;
 		}
 		set
 		{
 			ThrowIfDisposed();
 			if (value < AvifConstants.MinSpeed || value > AvifConstants.MaxSpeed)
 				throw new ArgumentException($"Speed must be between {AvifConstants.MinSpeed} and {AvifConstants.MaxSpeed}.");
-			Metadata.Speed = value;
+			_metadata.Speed = value;
 		}
 	}
 
@@ -152,16 +159,16 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		get
 		{
 			ThrowIfDisposed();
-			return Metadata.IsLossless;
+			return _metadata.IsLossless;
 		}
 		set
 		{
 			ThrowIfDisposed();
-			Metadata.IsLossless = value;
+			_metadata.IsLossless = value;
 			if (value)
 			{
-				Metadata.Quality = AvifConstants.QualityPresets.Lossless;
-				Metadata.ChromaSubsampling = AvifChromaSubsampling.Yuv444;
+				_metadata.Quality = AvifConstants.QualityPresets.Lossless;
+				_metadata.ChromaSubsampling = AvifChromaSubsampling.Yuv444;
 			}
 		}
 	}
@@ -172,7 +179,7 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		get
 		{
 			ThrowIfDisposed();
-			return Metadata.HdrInfo != null;
+			return _metadata.HdrInfo != null;
 		}
 	}
 
@@ -185,20 +192,15 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		get
 		{
 			ThrowIfDisposed();
-			return Metadata.UsesFilmGrain;
+			return _metadata.UsesFilmGrain;
 		}
 		set
 		{
 			ThrowIfDisposed();
-			Metadata.UsesFilmGrain = value;
+			_metadata.UsesFilmGrain = value;
 		}
 	}
 
-	/// <inheritdoc />
-	public override bool HasLargeMetadata => Metadata.HasLargeMetadata || base.HasLargeMetadata;
-
-	/// <inheritdoc />
-	public override long EstimatedMetadataSize => Metadata.EstimatedMemoryUsage + base.EstimatedMetadataSize;
 
 	/// <summary>Initializes default settings for the AVIF raster.</summary>
 	private void InitializeDefaults()
@@ -288,7 +290,7 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		if (hdrMetadata == null)
 			throw new ArgumentNullException(nameof(hdrMetadata));
 
-		Metadata.HdrInfo = hdrMetadata;
+		_metadata.HdrInfo = hdrMetadata;
 
 		// Update color space for HDR
 		if (hdrMetadata.Format == HdrFormat.Hdr10)
@@ -411,7 +413,7 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		if (iccProfile == null || iccProfile.Length == 0)
 			throw new ArgumentException("ICC profile cannot be null or empty.", nameof(iccProfile));
 
-		Metadata.IccProfile = iccProfile;
+		_metadata.IccProfile = iccProfile;
 	}
 
 	/// <inheritdoc />
@@ -487,7 +489,7 @@ public sealed class AvifRaster : Raster, IAvifRaster
 			throw new ArgumentException("Invalid AVIF data - too small.");
 
 		// Update metadata based on file size estimation
-		Metadata.ModificationTime = DateTime.UtcNow;
+		_metadata.ModificationTime = DateTime.UtcNow;
 
 		// Simulate extraction of basic info
 		if (Width == 0 || Height == 0)
@@ -497,8 +499,8 @@ public sealed class AvifRaster : Raster, IAvifRaster
 			var dimension = (int)Math.Sqrt(estimatedPixels);
 			Width = dimension;
 			Height = dimension;
-			Metadata.Width = Width;
-			Metadata.Height = Height;
+			_metadata.Width = Width;
+			_metadata.Height = Height;
 		}
 	}
 
@@ -517,7 +519,7 @@ public sealed class AvifRaster : Raster, IAvifRaster
 			if (disposing)
 			{
 				_encodedData = null;
-				Metadata?.Dispose();
+				_metadata?.Dispose();
 			}
 
 			_disposed = true;
@@ -529,9 +531,9 @@ public sealed class AvifRaster : Raster, IAvifRaster
 	/// <inheritdoc />
 	protected override async ValueTask DisposeAsyncCore()
 	{
-		if (HasLargeMetadata && Metadata != null)
+		if (_metadata?.HasLargeMetadata == true)
 		{
-			await Metadata.DisposeAsync().ConfigureAwait(false);
+			await _metadata.DisposeAsync().ConfigureAwait(false);
 		}
 
 		await base.DisposeAsyncCore().ConfigureAwait(false);

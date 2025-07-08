@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics.Rasters.Jpegs;
 
 /// <summary>Represents metadata information for JPEG images.</summary>
-public class JpegMetadata
+public class JpegMetadata : IMetadata
 {
 	/// <summary>Gets or sets the image description.</summary>
 	public string? ImageDescription { get; set; }
@@ -73,4 +73,62 @@ public class JpegMetadata
 
 	/// <summary>Gets or sets ICC color profile information.</summary>
 	public byte[]? IccProfile { get; set; }
+
+	/// <inheritdoc />
+	public bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
+
+	/// <inheritdoc />
+	public long EstimatedMetadataSize
+	{
+		get
+		{
+			var size = 0L;
+
+			// Add ICC profile size
+			if (IccProfile != null)
+				size += IccProfile.Length;
+
+			// Add custom EXIF tags size
+			size += CustomExifTags.Count * 16; // Estimate 16 bytes per tag
+
+			// Add IPTC tags size
+			foreach (var tag in IptcTags.Values)
+				size += System.Text.Encoding.UTF8.GetByteCount(tag);
+
+			// Add XMP tags size
+			foreach (var tag in XmpTags.Values)
+				size += System.Text.Encoding.UTF8.GetByteCount(tag);
+
+			// Add standard string properties
+			if (!string.IsNullOrEmpty(ImageDescription))
+				size += System.Text.Encoding.UTF8.GetByteCount(ImageDescription);
+			if (!string.IsNullOrEmpty(Make))
+				size += System.Text.Encoding.UTF8.GetByteCount(Make);
+			if (!string.IsNullOrEmpty(Model))
+				size += System.Text.Encoding.UTF8.GetByteCount(Model);
+			if (!string.IsNullOrEmpty(Software))
+				size += System.Text.Encoding.UTF8.GetByteCount(Software);
+			if (!string.IsNullOrEmpty(Copyright))
+				size += System.Text.Encoding.UTF8.GetByteCount(Copyright);
+			if (!string.IsNullOrEmpty(Artist))
+				size += System.Text.Encoding.UTF8.GetByteCount(Artist);
+
+			return size;
+		}
+	}
+
+	/// <inheritdoc />
+	public void Dispose()
+	{
+		IccProfile = null;
+		CustomExifTags.Clear();
+		IptcTags.Clear();
+		XmpTags.Clear();
+	}
+
+	/// <inheritdoc />
+	public async ValueTask DisposeAsync()
+	{
+		await Task.Run(() => Dispose()).ConfigureAwait(false);
+	}
 }

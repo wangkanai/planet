@@ -6,7 +6,7 @@ namespace Wangkanai.Graphics.Vectors.Svgs;
 public interface ISvgVector : IVector
 {
 	/// <summary>Gets the SVG metadata.</summary>
-	ISvgMetadata Metadata { get; }
+	new ISvgMetadata Metadata { get; }
 
 	/// <summary>Gets whether the SVG is compressed.</summary>
 	bool IsCompressed { get; }

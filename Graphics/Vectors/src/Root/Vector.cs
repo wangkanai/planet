@@ -11,10 +11,7 @@ public abstract class Vector : IVector
 	public virtual int Height { get; set; }
 
 	/// <inheritdoc />
-	public virtual bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
-
-	/// <inheritdoc />
-	public virtual long EstimatedMetadataSize => 0; // Base vector class has no metadata
+	public abstract IMetadata Metadata { get; }
 
 	/// <inheritdoc />
 	public void Dispose()

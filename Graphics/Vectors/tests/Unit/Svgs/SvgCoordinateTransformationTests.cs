@@ -55,7 +55,8 @@ public class SvgCoordinateTransformationTests
 		svg.SetCoordinateReferenceSystem(crs);
 
 		// Assert
-		Assert.Equal(crs, svg.Metadata.CoordinateReferenceSystem);
+		var metadata = (SvgMetadata)svg.Metadata;
+		Assert.Equal(crs, metadata.CoordinateReferenceSystem);
 		Assert.Contains("data-crs=\"EPSG:4326\"", svg.ToXmlString());
 	}
 
@@ -65,16 +66,18 @@ public class SvgCoordinateTransformationTests
 		// Arrange
 		using var svg             = new SvgVector(100, 100);
 		var       bounds          = new GeographicBounds(-85.0, 85.0, -180.0, 180.0);
-		var       originalViewBox = svg.Metadata.ViewBox;
+		var metadata = (SvgMetadata)svg.Metadata;
+		var       originalViewBox = metadata.ViewBox;
 
 		// Act
 		svg.TransformCoordinateSystem("EPSG:4326", "EPSG:3857", bounds);
 
 		// Assert
-		Assert.Equal("EPSG:3857", svg.Metadata.CoordinateReferenceSystem);
-		Assert.NotEqual(originalViewBox, svg.Metadata.ViewBox);
+		var transformedMetadata = (SvgMetadata)svg.Metadata;
+		Assert.Equal("EPSG:3857", transformedMetadata.CoordinateReferenceSystem);
+		Assert.NotEqual(originalViewBox, transformedMetadata.ViewBox);
 		// ViewBox should now contain Mercator coordinates (much larger numbers)
-		Assert.True(Math.Abs(svg.Metadata.ViewBox.Width) > 1000000);
+		Assert.True(Math.Abs(transformedMetadata.ViewBox.Width) > 1000000);
 	}
 
 	[Fact]
@@ -91,9 +94,10 @@ public class SvgCoordinateTransformationTests
 		svg.TransformCoordinateSystem("EPSG:3857", "EPSG:4326", bounds);
 
 		// Assert
-		Assert.Equal("EPSG:4326", svg.Metadata.CoordinateReferenceSystem);
+		var transformedMetadata = (SvgMetadata)svg.Metadata;
+		Assert.Equal("EPSG:4326", transformedMetadata.CoordinateReferenceSystem);
 		// ViewBox should be back to geographic coordinates
-		Assert.True(Math.Abs(svg.Metadata.ViewBox.Width) < 1000);
+		Assert.True(Math.Abs(transformedMetadata.ViewBox.Width) < 1000);
 	}
 
 	[Fact]
@@ -102,7 +106,8 @@ public class SvgCoordinateTransformationTests
 		// Arrange
 		using var svg = new SvgVector(100, 100);
 		// Set a custom viewBox with offset
-		svg.Metadata.ViewBox = new SvgViewBox(10, 20, 100, 100);
+		var metadata = (SvgMetadata)svg.Metadata;
+		metadata.ViewBox = new SvgViewBox(10, 20, 100, 100);
 
 		var geodetic = new Geodetic(45.0, 10.0);
 		var bounds   = new GeographicBounds(40.0, 50.0, 0.0, 20.0);

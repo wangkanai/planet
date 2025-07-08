@@ -67,7 +67,7 @@ public static class Jpeg2000Examples
 		               };
 
 		// Set progression order for quality-first streaming
-		jpeg2000.Metadata.ProgressionOrder = Jpeg2000Progression.LayerResolutionComponentPosition;
+		jpeg2000.Jpeg2000Metadata.ProgressionOrder = Jpeg2000Progression.LayerResolutionComponentPosition;
 
 		return jpeg2000;
 	}
@@ -126,7 +126,7 @@ public static class Jpeg2000Examples
 		               };
 
 		// Set spatial progression for efficient ROI access
-		jpeg2000.Metadata.ProgressionOrder = Jpeg2000Progression.PositionComponentResolutionLayer;
+		jpeg2000.Jpeg2000Metadata.ProgressionOrder = Jpeg2000Progression.PositionComponentResolutionLayer;
 
 		// Configure region of interest
 		jpeg2000.SetRegionOfInterest(roiRegion, roiQualityFactor);
@@ -154,8 +154,8 @@ public static class Jpeg2000Examples
 		               };
 
 		// Set component-first progression for spectral analysis
-		jpeg2000.Metadata.ProgressionOrder = Jpeg2000Progression.ComponentPositionResolutionLayer;
-		jpeg2000.Metadata.BitDepth         = bitDepth;
+		jpeg2000.Jpeg2000Metadata.ProgressionOrder = Jpeg2000Progression.ComponentPositionResolutionLayer;
+		jpeg2000.Jpeg2000Metadata.BitDepth         = bitDepth;
 
 		// Use larger tiles for multi-spectral data
 		if (width > 1024 || height > 1024) jpeg2000.SetTileSize(512, 512);
@@ -184,7 +184,7 @@ public static class Jpeg2000Examples
 		               };
 
 		// Set resolution-first progression for fast thumbnail access
-		jpeg2000.Metadata.ProgressionOrder = Jpeg2000Progression.ResolutionLayerComponentPosition;
+		jpeg2000.Jpeg2000Metadata.ProgressionOrder = Jpeg2000Progression.ResolutionLayerComponentPosition;
 
 		return jpeg2000;
 	}
@@ -262,7 +262,7 @@ public static class Jpeg2000Examples
 			               QualityLayers       = bitDepth > 8 ? 1 : 3
 		               };
 
-		jpeg2000.Metadata.BitDepth = bitDepth;
+		jpeg2000.Jpeg2000Metadata.BitDepth = bitDepth;
 
 		// Use large tiles for print workflows
 		jpeg2000.SetTileSize(2048, 2048);
@@ -283,12 +283,12 @@ public static class Jpeg2000Examples
 		{
 			var summary = $"✓ Valid JPEG2000 configuration\n";
 			summary += $"  Dimensions: {jpeg2000.Width}×{jpeg2000.Height}\n";
-			summary += $"  Components: {jpeg2000.Metadata.Components}\n";
+			summary += $"  Components: {jpeg2000.Jpeg2000Metadata.Components}\n";
 			summary += $"  Compression: {(jpeg2000.IsLossless ? "Lossless" : $"Lossy ({jpeg2000.CompressionRatio:F1}:1)")}\n";
 			summary += $"  Decomposition Levels: {jpeg2000.DecompositionLevels}\n";
 			summary += $"  Quality Layers: {jpeg2000.QualityLayers}\n";
 			summary += $"  Tiling: {(jpeg2000.SupportsTiling ? $"{jpeg2000.TileWidth}×{jpeg2000.TileHeight}" : "Single tile")}\n";
-			summary += $"  Progression: {jpeg2000.Metadata.ProgressionOrder.GetDescription()}\n";
+			summary += $"  Progression: {jpeg2000.Jpeg2000Metadata.ProgressionOrder.GetDescription()}\n";
 			summary += $"  Estimated Size: {jpeg2000.GetEstimatedFileSize() / 1024:F1} KB";
 
 			if (validation.Warnings.Any())

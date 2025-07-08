@@ -24,7 +24,7 @@ public interface IWebPRaster : IRaster
 	WebPPreset Preset { get; }
 
 	/// <summary>Gets the metadata associated with the WebP image.</summary>
-	WebPMetadata Metadata { get; }
+	new WebPMetadata Metadata { get; }
 
 	/// <summary>Gets the number of color channels.</summary>
 	int Channels { get; }

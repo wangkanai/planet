@@ -43,7 +43,7 @@ public class HeifMetadataTests
 		var metadata = new HeifMetadata();
 
 		// Act
-		var size = metadata.EstimatedMemoryUsage;
+		var size = metadata.EstimatedMetadataSize;
 
 		// Assert
 		Assert.True(size >= 1024); // Base estimate for text properties and HDR metadata
@@ -70,7 +70,7 @@ public class HeifMetadataTests
 		};
 
 		// Act
-		var size = metadata.EstimatedMemoryUsage;
+		var size = metadata.EstimatedMetadataSize;
 
 		// Assert
 		// Size should include all the byte arrays plus base size and string data
@@ -87,7 +87,7 @@ public class HeifMetadataTests
 		};
 
 		// Act & Assert
-		Assert.False(metadata.HasLargeData);
+		Assert.False(metadata.HasLargeMetadata);
 	}
 
 	[Fact]
@@ -101,7 +101,7 @@ public class HeifMetadataTests
 		};
 
 		// Act & Assert
-		Assert.True(metadata.HasLargeData);
+		Assert.True(metadata.HasLargeMetadata);
 	}
 
 	[Fact]

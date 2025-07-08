@@ -73,11 +73,11 @@ public sealed class HeifMetadata : RasterMetadataBase
 	/// <summary>
 	/// Gets the total estimated memory usage of all metadata in bytes.
 	/// </summary>
-	public override long EstimatedMemoryUsage
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
-			var size = base.EstimatedMemoryUsage;
+			var size = base.EstimatedMetadataSize;
 			
 			if (ThumbnailData != null) size += ThumbnailData.Length;
 			if (PreviewData != null) size += PreviewData.Length;
@@ -99,7 +99,7 @@ public sealed class HeifMetadata : RasterMetadataBase
 	/// <summary>
 	/// Gets whether this metadata contains large data that might benefit from async disposal.
 	/// </summary>
-	public bool HasLargeData => EstimatedMemoryUsage > HeifConstants.Memory.DefaultMetadataBufferSizeMB * 1024 * 1024;
+	public override bool HasLargeMetadata => EstimatedMetadataSize > HeifConstants.Memory.DefaultMetadataBufferSizeMB * 1024 * 1024;
 
 	/// <summary>
 	/// Creates a copy of this metadata instance.
@@ -173,7 +173,7 @@ public sealed class HeifMetadata : RasterMetadataBase
 	public override async ValueTask DisposeAsync()
 	{
 		// For large metadata, we might want to do async cleanup
-		if (HasLargeData)
+		if (HasLargeMetadata)
 		{
 			await Task.Run(() => Dispose(true)).ConfigureAwait(false);
 		}

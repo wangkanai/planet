@@ -35,7 +35,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 		Profile = HeifProfile.Main;
 		EnableProgressiveDecoding = false;
 		GenerateThumbnails = true;
-		Metadata = new HeifMetadata();
+		HeifMetadata = new HeifMetadata();
 	}
 
 	/// <summary>
@@ -56,7 +56,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 		Profile = HeifProfile.Main;
 		EnableProgressiveDecoding = false;
 		GenerateThumbnails = true;
-		Metadata = new HeifMetadata();
+		HeifMetadata = new HeifMetadata();
 	}
 
 	/// <inheritdoc />
@@ -66,7 +66,17 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	public int Quality { get; set; }
 
 	/// <inheritdoc />
-	public HeifMetadata Metadata { get; set; }
+	public override IMetadata Metadata => HeifMetadata;
+
+	/// <inheritdoc />
+	HeifMetadata IHeifRaster.Metadata
+	{
+		get => HeifMetadata;
+		set => HeifMetadata = value;
+	}
+
+	/// <summary>Gets or sets the HEIF-specific metadata.</summary>
+	public HeifMetadata HeifMetadata { get; set; }
 
 	/// <inheritdoc />
 	public int BitDepth { get; set; }
@@ -87,7 +97,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	public bool IsLossless { get; set; }
 
 	/// <inheritdoc />
-	public bool HasHdrMetadata => Metadata.HdrMetadata != null;
+	public bool HasHdrMetadata => HeifMetadata.HdrMetadata != null;
 
 	/// <inheritdoc />
 	public int ThreadCount { get; set; }
@@ -101,23 +111,6 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	/// <inheritdoc />
 	public bool GenerateThumbnails { get; set; }
 
-	/// <inheritdoc />
-	public override long EstimatedMetadataSize
-	{
-		get
-		{
-			var size = 0L;
-			if (Metadata.ExifData?.Length > 0)
-				size += Metadata.ExifData.Length;
-			if (Metadata.XmpData?.Length > 0)
-				size += Metadata.XmpData.Length;
-			if (Metadata.IccProfile?.Length > 0)
-				size += Metadata.IccProfile.Length;
-			if (Metadata.HdrMetadata != null)
-				size += 1024; // Estimated HDR metadata size
-			return size;
-		}
-	}
 
 	/// <inheritdoc />
 	public async Task<byte[]> EncodeAsync(HeifEncodingOptions? options = null)
@@ -181,7 +174,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	public void SetHdrMetadata(HdrMetadata hdrMetadata)
 	{
 		ThrowIfDisposed();
-		Metadata.HdrMetadata = hdrMetadata ?? throw new ArgumentNullException(nameof(hdrMetadata));
+		HeifMetadata.HdrMetadata = hdrMetadata ?? throw new ArgumentNullException(nameof(hdrMetadata));
 	}
 
 	/// <inheritdoc />
@@ -201,7 +194,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 		var compressedSize = (long)(baseSize * compressionRatio);
 
 		// Add overhead for container and metadata
-		var overhead = 8192 + EstimatedMetadataSize;
+		var overhead = 8192 + HeifMetadata.EstimatedMetadataSize;
 
 		return compressedSize + overhead;
 	}
@@ -259,7 +252,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	public void ApplyColorProfile(byte[] iccProfile)
 	{
 		ThrowIfDisposed();
-		Metadata.IccProfile = iccProfile ?? throw new ArgumentNullException(nameof(iccProfile));
+		HeifMetadata.IccProfile = iccProfile ?? throw new ArgumentNullException(nameof(iccProfile));
 	}
 
 	/// <inheritdoc />
@@ -289,7 +282,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 			throw new ArgumentNullException(nameof(codecParameters));
 
 		// Store codec parameters in metadata
-		Metadata.CodecParameters = new Dictionary<string, object>(codecParameters);
+		HeifMetadata.CodecParameters = new Dictionary<string, object>(codecParameters);
 	}
 
 	/// <inheritdoc />
@@ -331,9 +324,9 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	private int EstimateBoxCount()
 	{
 		var count = 5; // ftyp, meta, hdlr, pitm, iloc
-		if (Metadata.ExifData?.Length > 0) count++;
-		if (Metadata.XmpData?.Length > 0) count++;
-		if (Metadata.IccProfile?.Length > 0) count++;
+		if (HeifMetadata.ExifData?.Length > 0) count++;
+		if (HeifMetadata.XmpData?.Length > 0) count++;
+		if (HeifMetadata.IccProfile?.Length > 0) count++;
 		if (HasHdrMetadata) count++;
 		if (GenerateThumbnails) count += 2;
 		return count;
@@ -368,8 +361,8 @@ public sealed class HeifRaster : Raster, IHeifRaster
 			return;
 
 		_encodedData = null;
-		if (Metadata != null)
-			await Metadata.DisposeAsync();
+		if (HeifMetadata?.HasLargeMetadata == true)
+			await HeifMetadata.DisposeAsync();
 
 		_disposed = true;
 	}
