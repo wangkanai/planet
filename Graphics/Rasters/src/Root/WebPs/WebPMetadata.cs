@@ -145,10 +145,10 @@ public class WebPMetadata : RasterMetadataBase
 				ExifData = ReadOnlyMemory<byte>.Empty;
 			}
 
-			if (!XmpData.IsEmpty)
+			if (!XmpDataBytes.IsEmpty)
 			{
 				await Task.Yield();
-				XmpData = ReadOnlyMemory<byte>.Empty;
+				XmpDataBytes = ReadOnlyMemory<byte>.Empty;
 			}
 
 			// Clear animation frames in batches for large collections
@@ -188,7 +188,7 @@ public class WebPMetadata : RasterMetadataBase
 			// Clear WebP-specific managed resources
 			IccProfile = ReadOnlyMemory<byte>.Empty;
 			ExifData   = ReadOnlyMemory<byte>.Empty;
-			XmpData    = ReadOnlyMemory<byte>.Empty;
+			XmpDataBytes = ReadOnlyMemory<byte>.Empty;
 			CustomChunks.Clear();
 			AnimationFrames.Clear();
 		}
