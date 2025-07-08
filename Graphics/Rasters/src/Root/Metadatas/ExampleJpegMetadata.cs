@@ -31,11 +31,11 @@ internal class ExampleJpegMetadata : RasterMetadataBase
 	public Dictionary<string, string> IptcTags { get; set; } = new();
 
 	/// <inheritdoc />
-	public override long EstimatedMemoryUsage
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
-			long size = base.EstimatedMemoryUsage;
+			long size = base.EstimatedMetadataSize;
 
 			// Add format-specific memory usage
 			size += CustomExifTags.Count * 64;

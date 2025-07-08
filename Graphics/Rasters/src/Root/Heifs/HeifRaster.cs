@@ -69,7 +69,11 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	public override IMetadata Metadata => HeifMetadata;
 
 	/// <inheritdoc />
-	HeifMetadata IHeifRaster.Metadata => HeifMetadata;
+	HeifMetadata IHeifRaster.Metadata
+	{
+		get => HeifMetadata;
+		set => HeifMetadata = value;
+	}
 
 	/// <summary>Gets or sets the HEIF-specific metadata.</summary>
 	public HeifMetadata HeifMetadata { get; set; }

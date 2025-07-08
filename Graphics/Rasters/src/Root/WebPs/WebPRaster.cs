@@ -116,11 +116,7 @@ public sealed class WebPRaster : Raster, IWebPRaster
 	public override IMetadata Metadata => _metadata;
 
 	/// <inheritdoc />
-	WebPMetadata IWebPRaster.Metadata
-	{
-		get => _metadata;
-		set => _metadata = value;
-	}
+	WebPMetadata IWebPRaster.Metadata => _metadata;
 
 	/// <inheritdoc />
 	public int Channels
