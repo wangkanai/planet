@@ -91,7 +91,7 @@ public class HeifRasterTests
 		heif.SetHdrMetadata(hdrMetadata);
 
 		// Assert
-		Assert.Equal(hdrMetadata, heif.Metadata.HdrMetadata);
+		Assert.Equal(hdrMetadata, heif.HeifMetadata.HdrMetadata);
 		Assert.True(heif.HasHdrMetadata);
 	}
 
@@ -323,7 +323,7 @@ public class HeifRasterTests
 		heif.ApplyColorProfile(iccProfile);
 
 		// Assert
-		Assert.Equal(iccProfile, heif.Metadata.IccProfile);
+		Assert.Equal(iccProfile, heif.HeifMetadata.IccProfile);
 	}
 
 	[Fact]
@@ -368,7 +368,7 @@ public class HeifRasterTests
 		heif.SetCodecParameters(parameters);
 
 		// Assert
-		Assert.Equal(parameters, heif.Metadata.CodecParameters);
+		Assert.Equal(parameters, heif.HeifMetadata.CodecParameters);
 	}
 
 	[Fact]
@@ -407,7 +407,7 @@ public class HeifRasterTests
 		var heif = new HeifRaster(1920, 1080);
 
 		// Act
-		var size = heif.Metadata.EstimatedMetadataSize;
+		var size = heif.HeifMetadata.EstimatedMetadataSize;
 
 		// Assert
 		Assert.Equal(0, size);
@@ -418,12 +418,12 @@ public class HeifRasterTests
 	{
 		// Arrange
 		var heif = new HeifRaster(1920, 1080);
-		heif.Metadata.ExifData = new byte[1024];
-		heif.Metadata.XmpData = "<x:xmpmeta>test metadata</x:xmpmeta>";
+		heif.HeifMetadata.ExifData = new byte[1024];
+		heif.HeifMetadata.XmpData = "<x:xmpmeta>test metadata</x:xmpmeta>";
 		heif.SetHdrMetadata(new HdrMetadata());
 
 		// Act
-		var size = heif.Metadata.EstimatedMetadataSize;
+		var size = heif.HeifMetadata.EstimatedMetadataSize;
 
 		// Assert
 		Assert.True(size >= 1024); // Just check it's reasonable

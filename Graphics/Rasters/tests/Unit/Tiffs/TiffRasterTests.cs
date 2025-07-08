@@ -305,19 +305,19 @@ public class TiffRasterTests
 	{
 		// Arrange
 		var tiffRaster = new TiffRaster();
-		tiffRaster.Metadata.ImageDescription = "Test";
-		tiffRaster.Metadata.StripOffsets = new int[100];
-		tiffRaster.Metadata.IccProfile = new byte[ImageConstants.LargeMetadataThreshold + 1000];
+		tiffRaster.TiffMetadata.ImageDescription = "Test";
+		tiffRaster.TiffMetadata.StripOffsets = new int[100];
+		tiffRaster.TiffMetadata.IccProfile = new byte[ImageConstants.LargeMetadataThreshold + 1000];
 
 		// Verify we have large metadata
-		Assert.True(tiffRaster.Metadata.HasLargeMetadata);
+		Assert.True(tiffRaster.TiffMetadata.HasLargeMetadata);
 
 		// Act
 		await tiffRaster.DisposeAsync();
 
 		// Assert - All metadata should be cleared
-		Assert.Null(tiffRaster.Metadata.ImageDescription);
-		Assert.Null(tiffRaster.Metadata.StripOffsets);
-		Assert.Null(tiffRaster.Metadata.IccProfile);
+		Assert.Null(tiffRaster.TiffMetadata.ImageDescription);
+		Assert.Null(tiffRaster.TiffMetadata.StripOffsets);
+		Assert.Null(tiffRaster.TiffMetadata.IccProfile);
 	}
 }

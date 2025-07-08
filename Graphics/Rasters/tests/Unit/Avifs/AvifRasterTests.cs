@@ -429,10 +429,10 @@ public class AvifRasterTests
 	{
 		using var avif = new AvifRaster(1920, 1080);
 
-		var estimatedSize = avif.Metadata.EstimatedMetadataSize;
+		var estimatedSize = avif.AvifMetadata.EstimatedMetadataSize;
 
 		Assert.True(estimatedSize > 0);
-		Assert.True(estimatedSize >= avif.Metadata.EstimatedMemoryUsage);
+		Assert.True(estimatedSize >= avif.AvifMetadata.EstimatedMemoryUsage);
 	}
 
 	[Fact]

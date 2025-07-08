@@ -169,8 +169,8 @@ public class PngExamplesTests
 		Assert.True(png.IsValid());
 
 		// Check metadata
-		Assert.Equal("Wangkanai Graphics Rasters", png.Metadata.Software);
-		Assert.NotNull(png.Metadata.Created);
+		Assert.Equal("Wangkanai Graphics Rasters", png.PngMetadata.Software);
+		Assert.NotNull(png.PngMetadata.Created);
 	}
 
 	[Theory]
@@ -203,8 +203,8 @@ public class PngExamplesTests
 		Assert.True(png.IsValid());
 
 		// Check web-appropriate metadata
-		Assert.Equal("Wangkanai Graphics Rasters", png.Metadata.Software);
-		Assert.Equal((byte)0, png.Metadata.SrgbRenderingIntent);// Perceptual rendering
+		Assert.Equal("Wangkanai Graphics Rasters", png.PngMetadata.Software);
+		Assert.Equal((byte)0, png.PngMetadata.SrgbRenderingIntent);// Perceptual rendering
 	}
 
 	[Fact]
