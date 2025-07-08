@@ -1,33 +1,58 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
+using Wangkanai.Graphics.Rasters.Metadatas;
+
 namespace Wangkanai.Graphics.Rasters.WebPs;
 
 /// <summary>Represents metadata information for WebP images.</summary>
-public class WebPMetadata : IMetadata
+public class WebPMetadata : RasterMetadataBase
 {
-	/// <summary>Gets or sets the ICC color profile data.</summary>
-	public ReadOnlyMemory<byte> IccProfile { get; set; }
+	/// <summary>Gets or sets the WebP-specific ICC profile data.</summary>
+	public new ReadOnlyMemory<byte> IccProfile { get; set; }
 
-	/// <summary>Gets or sets the EXIF metadata.</summary>
-	public ReadOnlyMemory<byte> ExifData { get; set; }
+	/// <summary>Gets or sets the ICC profile as byte array for base class compatibility.</summary>
+	byte[]? IRasterMetadata.IccProfile
+	{
+		get => IccProfile.IsEmpty ? null : IccProfile.ToArray();
+		set => IccProfile = value ?? ReadOnlyMemory<byte>.Empty;
+	}
 
-	/// <summary>Gets or sets the XMP metadata.</summary>
-	public ReadOnlyMemory<byte> XmpData { get; set; }
+	/// <summary>Gets or sets the WebP-specific EXIF data.</summary>
+	public new ReadOnlyMemory<byte> ExifData { get; set; }
 
-	/// <summary>Gets or sets the creation date and time.</summary>
-	public DateTime? CreationDateTime { get; set; }
+	/// <summary>Gets or sets the EXIF data as byte array for base class compatibility.</summary>
+	byte[]? IRasterMetadata.ExifData
+	{
+		get => ExifData.IsEmpty ? null : ExifData.ToArray();
+		set => ExifData = value ?? ReadOnlyMemory<byte>.Empty;
+	}
 
-	/// <summary>Gets or sets the software that created the image.</summary>
-	public string? Software { get; set; }
+	/// <summary>Gets or sets the WebP-specific XMP data.</summary>
+	public ReadOnlyMemory<byte> XmpDataBytes { get; set; }
 
-	/// <summary>Gets or sets the image description.</summary>
-	public string? Description { get; set; }
+	/// <summary>Gets or sets the XMP data as string for base class compatibility.</summary>
+	public override string? XmpData
+	{
+		get => XmpDataBytes.IsEmpty ? null : System.Text.Encoding.UTF8.GetString(XmpDataBytes.Span);
+		set => XmpDataBytes = value == null ? ReadOnlyMemory<byte>.Empty : System.Text.Encoding.UTF8.GetBytes(value);
+	}
 
-	/// <summary>Gets or sets the copyright information.</summary>
-	public string? Copyright { get; set; }
+	/// <summary>Gets or sets the WebP-specific creation date and time.</summary>
+	public DateTime? CreationDateTime
+	{
+		get => CreationTime;
+		set => CreationTime = value;
+	}
+
+	// Note: Software, Description, Copyright are inherited from base class
 
 	/// <summary>Gets or sets the artist or creator name.</summary>
-	public string? Artist { get; set; }
+	/// <remarks>Maps to the Author property from base class for backward compatibility.</remarks>
+	public string? Artist
+	{
+		get => Author;
+		set => Author = value;
+	}
 
 	/// <summary>Gets or sets the image title.</summary>
 	public string? Title { get; set; }
@@ -63,33 +88,33 @@ public class WebPMetadata : IMetadata
 	public bool HasXmp { get; set; }
 
 	/// <inheritdoc />
-	public bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
-
-	/// <inheritdoc />
-	public long EstimatedMetadataSize
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
-			var size = 0L;
+			var size = base.EstimatedMetadataSize;
 
-			// Add size of metadata components
+			// Add size of WebP-specific metadata components
 			if (!IccProfile.IsEmpty)
 				size += IccProfile.Length;
 			if (!ExifData.IsEmpty)
 				size += ExifData.Length;
-			if (!XmpData.IsEmpty)
-				size += XmpData.Length;
+			if (!XmpDataBytes.IsEmpty)
+				size += XmpDataBytes.Length;
 
 			// Add size of custom chunks
 			foreach (var chunk in CustomChunks.Values)
 				size += chunk.Length;
 
 			// Add estimated size of animation frames
-			if (!HasAnimation)
-				return size;
-
-			foreach (var frame in AnimationFrames)
-				size += frame.Data.Length;
+			if (HasAnimation)
+			{
+				foreach (var frame in AnimationFrames)
+					size += frame.Data.Length;
+			}
+			
+			// Add text metadata
+			size += EstimateStringSize(Title);
 
 			return size;
 		}

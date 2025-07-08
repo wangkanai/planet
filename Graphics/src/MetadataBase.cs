@@ -10,75 +10,22 @@ namespace Wangkanai.Graphics;
 public abstract class MetadataBase : IMetadata
 {
 	private bool _disposed;
-	private const int DefaultObjectEstimate = 16;
 
-	/// <inheritdoc />
-	public virtual bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
+	private const int DefaultObjectEstimate = 16;
 
 	/// <inheritdoc />
 	public abstract long EstimatedMetadataSize { get; }
 
-	/// <summary>
-	/// Throws an ObjectDisposedException if this instance has been disposed.
-	/// </summary>
-	protected void ThrowIfDisposed()
-	{
-		if (_disposed)
-			throw new ObjectDisposedException(GetType().Name);
-	}
-
 	/// <inheritdoc />
-	public void Dispose()
-	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
-	}
-
-	/// <inheritdoc />
-	public virtual async ValueTask DisposeAsync()
-	{
-		if (HasLargeMetadata)
-		{
-			await Task.Run(() => Dispose(true)).ConfigureAwait(false);
-		}
-		else
-		{
-			Dispose(true);
-		}
-		GC.SuppressFinalize(this);
-	}
-
-	/// <summary>
-	/// Releases unmanaged and - optionally - managed resources.
-	/// </summary>
-	/// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
-	protected virtual void Dispose(bool disposing)
-	{
-		if (_disposed)
-			return;
-
-		if (disposing)
-		{
-			DisposeManagedResources();
-		}
-
-		_disposed = true;
-	}
-
-	/// <summary>
-	/// When overridden in a derived class, releases managed resources.
-	/// </summary>
-	protected abstract void DisposeManagedResources();
+	public virtual bool HasLargeMetadata
+		=> EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
 
 	/// <summary>
 	/// Gets the base memory size for the metadata object.
 	/// </summary>
 	/// <returns>Base size in bytes.</returns>
 	protected virtual long GetBaseMemorySize()
-	{
-		// Base object size estimate
-		return 256;
-	}
+		=> 256; // Base object size estimate
 
 	/// <summary>
 	/// Estimates the memory size of a string using UTF-8 encoding.
@@ -100,9 +47,7 @@ public abstract class MetadataBase : IMetadata
 	/// <param name="array">The byte array to estimate.</param>
 	/// <returns>Size in bytes.</returns>
 	protected static long EstimateByteArraySize(byte[]? array)
-	{
-		return array?.Length ?? 0;
-	}
+		=> array?.Length ?? 0;
 
 	/// <summary>
 	/// Estimates the memory size of an array.
@@ -112,9 +57,7 @@ public abstract class MetadataBase : IMetadata
 	/// <param name="elementSize">Size of each element in bytes.</param>
 	/// <returns>Size in bytes.</returns>
 	protected static long EstimateArraySize<T>(T[]? array, int elementSize)
-	{
-		return array != null ? array.Length * elementSize : 0;
-	}
+		=> array != null ? array.Length * elementSize : 0;
 
 	/// <summary>
 	/// Estimates the memory size of a dictionary containing string values.
@@ -165,16 +108,63 @@ public abstract class MetadataBase : IMetadata
 		{
 			size += value switch
 			{
-				string str => EstimateStringSize(str),
-				byte[] bytes => bytes.Length,
-				int[] ints => ints.Length * sizeof(int),
+				string str       => EstimateStringSize(str),
+				byte[] bytes     => bytes.Length,
+				int[] ints       => ints.Length * sizeof(int),
 				ushort[] ushorts => ushorts.Length * sizeof(ushort),
 				double[] doubles => doubles.Length * sizeof(double),
-				float[] floats => floats.Length * sizeof(float),
-				_ => DefaultObjectEstimate // Default estimate for other types
+				float[] floats   => floats.Length * sizeof(float),
+				_                => DefaultObjectEstimate // Default estimate for other types
 			};
 		}
 
 		return size;
 	}
+
+	/// <summary>
+	/// Throws an ObjectDisposedException if this instance has been disposed.
+	/// </summary>
+	protected void ThrowIfDisposed()
+	{
+		if (_disposed)
+			throw new ObjectDisposedException(GetType().Name);
+	}
+
+	/// <inheritdoc />
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
+	/// <inheritdoc />
+	public virtual async ValueTask DisposeAsync()
+	{
+		if (HasLargeMetadata)
+			await Task.Run(() => Dispose(true)).ConfigureAwait(false);
+		else
+			Dispose(true);
+
+		GC.SuppressFinalize(this);
+	}
+
+	/// <summary>
+	/// Releases unmanaged and - optionally - managed resources.
+	/// </summary>
+	/// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+	protected virtual void Dispose(bool disposing)
+	{
+		if (_disposed)
+			return;
+
+		if (disposing)
+			DisposeManagedResources();
+
+		_disposed = true;
+	}
+
+	/// <summary>
+	/// When overridden in a derived class, releases managed resources.
+	/// </summary>
+	protected abstract void DisposeManagedResources();
 }
