@@ -7,34 +7,76 @@ namespace Wangkanai.Graphics.Rasters.WebPs;
 /// <summary>Represents metadata information for WebP images.</summary>
 public class WebPMetadata : RasterMetadataBase
 {
-	/// <summary>Gets or sets the WebP-specific ICC profile data.</summary>
-	public ReadOnlyMemory<byte> IccProfileMemory { get; set; }
-
-	/// <summary>Gets or sets the ICC profile as byte array for base class compatibility.</summary>
-	public override byte[]? IccProfile
+	private ReadOnlyMemory<byte> _iccProfileMemory;
+	
+	/// <summary>Gets or sets the ICC profile data.</summary>
+	public new byte[]? IccProfile
 	{
-		get => IccProfileMemory.IsEmpty ? null : IccProfileMemory.ToArray();
-		set => IccProfileMemory = value ?? ReadOnlyMemory<byte>.Empty;
+		get => _iccProfileMemory.IsEmpty ? null : _iccProfileMemory.ToArray();
+		set
+		{
+			_iccProfileMemory = value ?? ReadOnlyMemory<byte>.Empty;
+			base.IccProfile = value;
+		}
+	}
+	
+	/// <summary>Gets or sets the ICC profile as ReadOnlyMemory for WebP operations.</summary>
+	internal ReadOnlyMemory<byte> IccProfileMemory
+	{
+		get => _iccProfileMemory;
+		set
+		{
+			_iccProfileMemory = value;
+			base.IccProfile = value.IsEmpty ? null : value.ToArray();
+		}
 	}
 
-	/// <summary>Gets or sets the WebP-specific EXIF data.</summary>
-	public ReadOnlyMemory<byte> ExifDataMemory { get; set; }
-
-	/// <summary>Gets or sets the EXIF data as byte array for base class compatibility.</summary>
-	public override byte[]? ExifData
+	private ReadOnlyMemory<byte> _exifDataMemory;
+	
+	/// <summary>Gets or sets the EXIF data.</summary>
+	public new byte[]? ExifData
 	{
-		get => ExifDataMemory.IsEmpty ? null : ExifDataMemory.ToArray();
-		set => ExifDataMemory = value ?? ReadOnlyMemory<byte>.Empty;
+		get => _exifDataMemory.IsEmpty ? null : _exifDataMemory.ToArray();
+		set
+		{
+			_exifDataMemory = value ?? ReadOnlyMemory<byte>.Empty;
+			base.ExifData = value;
+		}
+	}
+	
+	/// <summary>Gets or sets the EXIF data as ReadOnlyMemory for WebP operations.</summary>
+	internal ReadOnlyMemory<byte> ExifDataMemory
+	{
+		get => _exifDataMemory;
+		set
+		{
+			_exifDataMemory = value;
+			base.ExifData = value.IsEmpty ? null : value.ToArray();
+		}
 	}
 
-	/// <summary>Gets or sets the WebP-specific XMP data.</summary>
-	public ReadOnlyMemory<byte> XmpDataBytes { get; set; }
-
-	/// <summary>Gets or sets the XMP data as string for base class compatibility.</summary>
-	public override string? XmpData
+	private ReadOnlyMemory<byte> _xmpDataMemory;
+	
+	/// <summary>Gets or sets the XMP data.</summary>
+	public new string? XmpData
 	{
-		get => XmpDataBytes.IsEmpty ? null : System.Text.Encoding.UTF8.GetString(XmpDataBytes.Span);
-		set => XmpDataBytes = value == null ? ReadOnlyMemory<byte>.Empty : System.Text.Encoding.UTF8.GetBytes(value);
+		get => _xmpDataMemory.IsEmpty ? null : System.Text.Encoding.UTF8.GetString(_xmpDataMemory.Span);
+		set
+		{
+			_xmpDataMemory = value == null ? ReadOnlyMemory<byte>.Empty : System.Text.Encoding.UTF8.GetBytes(value);
+			base.XmpData = value;
+		}
+	}
+	
+	/// <summary>Gets or sets the XMP data as ReadOnlyMemory for WebP operations.</summary>
+	internal ReadOnlyMemory<byte> XmpDataMemory
+	{
+		get => _xmpDataMemory;
+		set
+		{
+			_xmpDataMemory = value;
+			base.XmpData = value.IsEmpty ? null : System.Text.Encoding.UTF8.GetString(value.Span);
+		}
 	}
 
 	/// <summary>Gets or sets the WebP-specific creation date and time.</summary>
@@ -95,12 +137,12 @@ public class WebPMetadata : RasterMetadataBase
 			var size = base.EstimatedMetadataSize;
 
 			// Add size of WebP-specific metadata components
-			if (!IccProfile.IsEmpty)
-				size += IccProfile.Length;
-			if (!ExifData.IsEmpty)
-				size += ExifData.Length;
-			if (!XmpDataBytes.IsEmpty)
-				size += XmpDataBytes.Length;
+			if (!_iccProfileMemory.IsEmpty)
+				size += _iccProfileMemory.Length;
+			if (!_exifDataMemory.IsEmpty)
+				size += _exifDataMemory.Length;
+			if (!_xmpDataMemory.IsEmpty)
+				size += _xmpDataMemory.Length;
 
 			// Add size of custom chunks
 			foreach (var chunk in CustomChunks.Values)
@@ -126,9 +168,9 @@ public class WebPMetadata : RasterMetadataBase
 		base.DisposeManagedResources();
 		
 		// Clear WebP-specific resources
-		IccProfile = ReadOnlyMemory<byte>.Empty;
-		ExifData = ReadOnlyMemory<byte>.Empty;
-		XmpDataBytes = ReadOnlyMemory<byte>.Empty;
+		_iccProfileMemory = ReadOnlyMemory<byte>.Empty;
+		_exifDataMemory = ReadOnlyMemory<byte>.Empty;
+		_xmpDataMemory = ReadOnlyMemory<byte>.Empty;
 		CustomChunks.Clear();
 		AnimationFrames.Clear();
 	}
@@ -139,22 +181,22 @@ public class WebPMetadata : RasterMetadataBase
 		if (HasLargeMetadata)
 		{
 			// For large WebP metadata, clear in stages with yielding
-			if (!IccProfile.IsEmpty)
+			if (!_iccProfileMemory.IsEmpty)
 			{
 				await Task.Yield();
-				IccProfile = ReadOnlyMemory<byte>.Empty;
+				_iccProfileMemory = ReadOnlyMemory<byte>.Empty;
 			}
 
-			if (!ExifData.IsEmpty)
+			if (!_exifDataMemory.IsEmpty)
 			{
 				await Task.Yield();
-				ExifData = ReadOnlyMemory<byte>.Empty;
+				_exifDataMemory = ReadOnlyMemory<byte>.Empty;
 			}
 
-			if (!XmpDataBytes.IsEmpty)
+			if (!_xmpDataMemory.IsEmpty)
 			{
 				await Task.Yield();
-				XmpDataBytes = ReadOnlyMemory<byte>.Empty;
+				_xmpDataMemory = ReadOnlyMemory<byte>.Empty;
 			}
 
 			// Clear animation frames in batches for large collections
@@ -192,9 +234,9 @@ public class WebPMetadata : RasterMetadataBase
 		CopyBaseTo(clone);
 		
 		// Copy WebP-specific properties
-		clone.IccProfile = IccProfile;
-		clone.ExifData = ExifData;
-		clone.XmpDataBytes = XmpDataBytes;
+		clone.IccProfileMemory = IccProfileMemory;
+		clone.ExifDataMemory = ExifDataMemory;
+		clone.XmpDataMemory = XmpDataMemory;
 		clone.Title = Title;
 		clone.HasAnimation = HasAnimation;
 		clone.AnimationLoops = AnimationLoops;
@@ -220,9 +262,9 @@ public class WebPMetadata : RasterMetadataBase
 		base.Clear();
 		
 		// Clear WebP-specific properties
-		IccProfile = ReadOnlyMemory<byte>.Empty;
-		ExifData = ReadOnlyMemory<byte>.Empty;
-		XmpDataBytes = ReadOnlyMemory<byte>.Empty;
+		_iccProfileMemory = ReadOnlyMemory<byte>.Empty;
+		_exifDataMemory = ReadOnlyMemory<byte>.Empty;
+		_xmpDataMemory = ReadOnlyMemory<byte>.Empty;
 		Title = null;
 		HasAnimation = false;
 		AnimationLoops = 0;

@@ -164,13 +164,13 @@ public static class WebPValidator
 		var metadata = webp.Metadata;
 
 		// Validate metadata consistency flags
-		if (metadata.HasIccProfile && metadata.IccProfile.IsEmpty)
+		if (metadata.HasIccProfile && (metadata.IccProfile == null || metadata.IccProfile.Length == 0))
 			result.AddWarning("HasIccProfile is true but IccProfile data is empty.");
 
-		if (metadata.HasExif && metadata.ExifData.IsEmpty)
+		if (metadata.HasExif && (metadata.ExifData == null || metadata.ExifData.Length == 0))
 			result.AddWarning("HasExif is true but ExifData is empty.");
 
-		if (metadata.HasXmp && metadata.XmpData.IsEmpty)
+		if (metadata.HasXmp && string.IsNullOrEmpty(metadata.XmpData))
 			result.AddWarning("HasXmp is true but XmpData is empty.");
 
 		// Validate extended features requirement
