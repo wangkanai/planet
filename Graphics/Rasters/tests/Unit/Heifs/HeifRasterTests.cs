@@ -401,7 +401,7 @@ public class HeifRasterTests
 	}
 
 	[Fact]
-	public void EstimatedMetadataSize_WithoutMetadata_ReturnsZero()
+	public void EstimatedMetadataSize_WithoutMetadata_ReturnsBaseSize()
 	{
 		// Arrange
 		var heif = new HeifRaster(1920, 1080);
@@ -410,7 +410,8 @@ public class HeifRasterTests
 		var size = heif.HeifMetadata.EstimatedMetadataSize;
 
 		// Assert
-		Assert.Equal(0, size);
+		// Base size (256) + HEIF-specific overhead (1024) = 1280
+		Assert.Equal(1280, size);
 	}
 
 	[Fact]
