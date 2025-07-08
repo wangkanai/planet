@@ -77,7 +77,7 @@ public static class AsyncDisposalDemo
 			var webp = new WebPRaster(4096, 4096);
 			webp.WebPMetadata.IccProfile = new byte[2_000_000]; // 2MB
 			webp.WebPMetadata.ExifData = new byte[500_000];     // 500KB
-			webp.WebPMetadata.XmpData = new byte[300_000];      // 300KB
+			webp.WebPMetadata.XmpData = new string('X', 300_000);      // 300KB
 			webp.Dispose();
 		}
 		sw.Stop();
@@ -89,7 +89,7 @@ public static class AsyncDisposalDemo
 			var webp = new WebPRaster(4096, 4096);
 			webp.WebPMetadata.IccProfile = new byte[2_000_000]; // 2MB
 			webp.WebPMetadata.ExifData = new byte[500_000];     // 500KB
-			webp.WebPMetadata.XmpData = new byte[300_000];      // 300KB
+			webp.WebPMetadata.XmpData = new string('X', 300_000);      // 300KB
 			await webp.DisposeAsync();
 		}
 		sw.Stop();

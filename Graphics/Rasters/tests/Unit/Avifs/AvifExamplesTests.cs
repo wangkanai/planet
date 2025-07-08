@@ -112,10 +112,10 @@ public class AvifExamplesTests
 	{
 		using var avif = AvifExamples.CreateFastEncoding(1920, 1080);
 
-		Assert.Equal(AvifConstants.QualityPresets.Standard, avif.Quality); // Actually returns Standard (85), not Web (75)
-		Assert.Equal(AvifConstants.SpeedPresets.Fastest, avif.Speed);
-		Assert.Equal(AvifChromaSubsampling.Yuv420, avif.ChromaSubsampling);
-		Assert.Equal(8, avif.BitDepth);
+		Assert.Equal(AvifConstants.QualityPresets.Standard, avif.Metadata.Quality); // Actually returns Standard (85), not Web (75)
+		Assert.Equal(AvifConstants.SpeedPresets.Fastest, avif.Metadata.Speed);
+		Assert.Equal(AvifChromaSubsampling.Yuv420, avif.Metadata.ChromaSubsampling);
+		Assert.Equal(8, avif.Metadata.BitDepth);
 		Assert.Equal(Environment.ProcessorCount, avif.ThreadCount);
 	}
 

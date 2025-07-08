@@ -284,8 +284,8 @@ public class Jpeg2000Metadata : RasterMetadataBase
 		GmlData = null;
 		GeoTransform = null;
 		CoordinateReferenceSystem = null;
-		WaveletTransform = Jpeg2000WaveletTransform.Irreversible97;
-		ErrorResilience = false;
+		WaveletTransform = Jpeg2000Constants.WaveletTransforms.Reversible53;
+		ErrorResilience = Jpeg2000Constants.ErrorResilience.None;
 		RegionOfInterest = null;
 		RoiQualityFactor = 1.0f;
 		PaletteData = null;
