@@ -184,24 +184,20 @@ public class JpegRasterTests
 	{
 		// Arrange
 		var jpegRaster = new JpegRaster();
-		var metadata = new JpegMetadata
-		{
-			ImageDescription = "Test JPEG Image",
-			Make = "Test Camera",
-			Model = "Test Model",
-			Software = "Test Software",
-			Artist = "Test Artist"
-		};
 
 		// Act
-		jpegRaster.Metadata = metadata;
+		jpegRaster.JpegMetadata.ImageDescription = "Test JPEG Image";
+		jpegRaster.JpegMetadata.Make = "Test Camera";
+		jpegRaster.JpegMetadata.Model = "Test Model";
+		jpegRaster.JpegMetadata.Software = "Test Software";
+		jpegRaster.JpegMetadata.Artist = "Test Artist";
 
 		// Assert
-		Assert.Equal("Test JPEG Image", jpegRaster.Metadata.ImageDescription);
-		Assert.Equal("Test Camera", jpegRaster.Metadata.Make);
-		Assert.Equal("Test Model", jpegRaster.Metadata.Model);
-		Assert.Equal("Test Software", jpegRaster.Metadata.Software);
-		Assert.Equal("Test Artist", jpegRaster.Metadata.Artist);
+		Assert.Equal("Test JPEG Image", jpegRaster.JpegMetadata.ImageDescription);
+		Assert.Equal("Test Camera", jpegRaster.JpegMetadata.Make);
+		Assert.Equal("Test Model", jpegRaster.JpegMetadata.Model);
+		Assert.Equal("Test Software", jpegRaster.JpegMetadata.Software);
+		Assert.Equal("Test Artist", jpegRaster.JpegMetadata.Artist);
 	}
 
 	[Fact]

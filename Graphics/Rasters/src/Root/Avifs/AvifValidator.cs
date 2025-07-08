@@ -263,7 +263,7 @@ public static class AvifValidator
 			result.AddWarning($"Large image size ({pixelMemory / (1024 * 1024)} MB) may cause memory issues.");
 
 		// Check metadata size
-		var metadataSize = avif.Metadata.EstimatedMemoryUsage;
+		var metadataSize = avif.Metadata.EstimatedMetadataSize;
 		if (metadataSize > ImageConstants.VeryLargeMetadataThreshold)
 			result.AddWarning($"Very large metadata size ({metadataSize / (1024 * 1024)} MB) may impact performance.");
 

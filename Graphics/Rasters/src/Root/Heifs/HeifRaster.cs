@@ -97,7 +97,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	public bool IsLossless { get; set; }
 
 	/// <inheritdoc />
-	public bool HasHdrMetadata => Metadata.HdrMetadata != null;
+	public bool HasHdrMetadata => HeifMetadata.HdrMetadata != null;
 
 	/// <inheritdoc />
 	public int ThreadCount { get; set; }
@@ -174,7 +174,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	public void SetHdrMetadata(HdrMetadata hdrMetadata)
 	{
 		ThrowIfDisposed();
-		Metadata.HdrMetadata = hdrMetadata ?? throw new ArgumentNullException(nameof(hdrMetadata));
+		HeifMetadata.HdrMetadata = hdrMetadata ?? throw new ArgumentNullException(nameof(hdrMetadata));
 	}
 
 	/// <inheritdoc />
@@ -252,7 +252,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	public void ApplyColorProfile(byte[] iccProfile)
 	{
 		ThrowIfDisposed();
-		Metadata.IccProfile = iccProfile ?? throw new ArgumentNullException(nameof(iccProfile));
+		HeifMetadata.IccProfile = iccProfile ?? throw new ArgumentNullException(nameof(iccProfile));
 	}
 
 	/// <inheritdoc />
@@ -282,7 +282,7 @@ public sealed class HeifRaster : Raster, IHeifRaster
 			throw new ArgumentNullException(nameof(codecParameters));
 
 		// Store codec parameters in metadata
-		Metadata.CodecParameters = new Dictionary<string, object>(codecParameters);
+		HeifMetadata.CodecParameters = new Dictionary<string, object>(codecParameters);
 	}
 
 	/// <inheritdoc />
@@ -324,9 +324,9 @@ public sealed class HeifRaster : Raster, IHeifRaster
 	private int EstimateBoxCount()
 	{
 		var count = 5; // ftyp, meta, hdlr, pitm, iloc
-		if (Metadata.ExifData?.Length > 0) count++;
-		if (Metadata.XmpData?.Length > 0) count++;
-		if (Metadata.IccProfile?.Length > 0) count++;
+		if (HeifMetadata.ExifData?.Length > 0) count++;
+		if (HeifMetadata.XmpData?.Length > 0) count++;
+		if (HeifMetadata.IccProfile?.Length > 0) count++;
 		if (HasHdrMetadata) count++;
 		if (GenerateThumbnails) count += 2;
 		return count;

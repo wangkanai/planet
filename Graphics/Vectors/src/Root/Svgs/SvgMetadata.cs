@@ -182,6 +182,9 @@ public class SvgMetadata : ISvgMetadata
 	public long EstimatedMetadataSize => CalculateEstimatedMetadataSize();
 
 	/// <inheritdoc />
+	public long CalculateEstimatedMemoryUsage() => CalculateEstimatedMetadataSize();
+
+	/// <inheritdoc />
 	public void Dispose()
 	{
 		Dispose(true);

@@ -322,7 +322,7 @@ public static class Jpeg2000Validator
 	private static void ValidateMemoryConstraints(IJpeg2000Raster jpeg2000, Jpeg2000ValidationResult result)
 	{
 		// Estimate memory usage
-		var estimatedMemory = jpeg2000.Metadata.EstimatedMemoryUsage;
+		var estimatedMemory = jpeg2000.Metadata.EstimatedMetadataSize;
 		if (estimatedMemory > 1024 * 1024 * 1024) // 1 GB
 			result.AddWarning($"Large metadata size ({estimatedMemory / (1024 * 1024):N0} MB) may impact performance.");
 

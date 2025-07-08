@@ -44,7 +44,7 @@ public static class AsyncDisposalDemo
 		for (int i = 0; i < iterations; i++)
 		{
 			var webp = new WebPRaster(800, 600);
-			webp.Metadata.IccProfile = new byte[1000]; // 1KB
+			webp.WebPMetadata.IccProfile = new byte[1000]; // 1KB
 			webp.Dispose();
 		}
 		sw.Stop();
@@ -54,7 +54,7 @@ public static class AsyncDisposalDemo
 		for (int i = 0; i < iterations; i++)
 		{
 			var webp = new WebPRaster(800, 600);
-			webp.Metadata.IccProfile = new byte[1000]; // 1KB
+			webp.WebPMetadata.IccProfile = new byte[1000]; // 1KB
 			await webp.DisposeAsync();
 		}
 		sw.Stop();
@@ -75,9 +75,9 @@ public static class AsyncDisposalDemo
 		for (int i = 0; i < iterations; i++)
 		{
 			var webp = new WebPRaster(4096, 4096);
-			webp.Metadata.IccProfile = new byte[2_000_000]; // 2MB
-			webp.Metadata.ExifData = new byte[500_000];     // 500KB
-			webp.Metadata.XmpData = new byte[300_000];      // 300KB
+			webp.WebPMetadata.IccProfile = new byte[2_000_000]; // 2MB
+			webp.WebPMetadata.ExifData = new byte[500_000];     // 500KB
+			webp.WebPMetadata.XmpData = new byte[300_000];      // 300KB
 			webp.Dispose();
 		}
 		sw.Stop();
@@ -87,9 +87,9 @@ public static class AsyncDisposalDemo
 		for (int i = 0; i < iterations; i++)
 		{
 			var webp = new WebPRaster(4096, 4096);
-			webp.Metadata.IccProfile = new byte[2_000_000]; // 2MB
-			webp.Metadata.ExifData = new byte[500_000];     // 500KB
-			webp.Metadata.XmpData = new byte[300_000];      // 300KB
+			webp.WebPMetadata.IccProfile = new byte[2_000_000]; // 2MB
+			webp.WebPMetadata.ExifData = new byte[500_000];     // 500KB
+			webp.WebPMetadata.XmpData = new byte[300_000];      // 300KB
 			await webp.DisposeAsync();
 		}
 		sw.Stop();
@@ -105,10 +105,10 @@ public static class AsyncDisposalDemo
 		for (int i = 0; i < iterations; i++)
 		{
 			var tiff = new TiffRaster(4096, 4096);
-			tiff.Metadata.ImageDescription = new string('A', 500_000); // 500KB
+			tiff.TiffMetadata.ImageDescription = new string('A', 500_000); // 500KB
 			for (int j = 0; j < 1000; j++)
 			{
-				tiff.Metadata.CustomTags.Add(j, $"Tag {j}");
+				tiff.TiffMetadata.CustomTags.Add(j, $"Tag {j}");
 			}
 			tiff.Dispose();
 		}
@@ -119,10 +119,10 @@ public static class AsyncDisposalDemo
 		for (int i = 0; i < iterations; i++)
 		{
 			var tiff = new TiffRaster(4096, 4096);
-			tiff.Metadata.ImageDescription = new string('A', 500_000); // 500KB
+			tiff.TiffMetadata.ImageDescription = new string('A', 500_000); // 500KB
 			for (int j = 0; j < 1000; j++)
 			{
-				tiff.Metadata.CustomTags.Add(j, $"Tag {j}");
+				tiff.TiffMetadata.CustomTags.Add(j, $"Tag {j}");
 			}
 			await tiff.DisposeAsync();
 		}
@@ -146,23 +146,23 @@ public static class AsyncDisposalDemo
 			if (i % 4 == 0)
 			{
 				var webp = new WebPRaster(2048, 2048);
-				webp.Metadata.IccProfile = new byte[1_000_000]; // 1MB
+				webp.WebPMetadata.IccProfile = new byte[1_000_000]; // 1MB
 				images.Add(webp);
 			}
 			else if (i % 4 == 1)
 			{
 				var jpeg = new JpegRaster(2048, 2048);
-				jpeg.Metadata.IccProfile = new byte[800_000]; // 800KB
+				jpeg.JpegMetadata.IccProfile = new byte[800_000]; // 800KB
 				for (int j = 0; j < 1000; j++)
 				{
-					jpeg.Metadata.CustomExifTags.Add(j, $"EXIF {j}");
+					jpeg.JpegMetadata.CustomExifTags.Add(j, $"EXIF {j}");
 				}
 				images.Add(jpeg);
 			}
 			else if (i % 4 == 2)
 			{
 				var tiff = new TiffRaster(2048, 2048);
-				tiff.Metadata.ImageDescription = new string('B', 300_000); // 300KB
+				tiff.TiffMetadata.ImageDescription = new string('B', 300_000); // 300KB
 				images.Add(tiff);
 			}
 			else
@@ -170,7 +170,7 @@ public static class AsyncDisposalDemo
 				var png = new PngRaster(2048, 2048);
 				for (int j = 0; j < 1000; j++)
 				{
-					png.Metadata.TextChunks.Add($"key{j}", new string('C', 100));
+					png.PngMetadata.TextChunks.Add($"key{j}", new string('C', 100));
 				}
 				images.Add(png);
 			}
@@ -212,7 +212,7 @@ public static class AsyncDisposalDemo
 			else if (i % 4 == 1)
 			{
 				var jpeg = new JpegRaster(2048, 2048);
-				jpeg.Metadata.IccProfile = new byte[800_000];
+				jpeg.JpegMetadata.IccProfile = new byte[800_000];
 				images.Add(jpeg);
 			}
 			else if (i % 4 == 2)
@@ -226,7 +226,7 @@ public static class AsyncDisposalDemo
 				var png = new PngRaster(2048, 2048);
 				for (int j = 0; j < 1000; j++)
 				{
-					png.Metadata.TextChunks.Add($"key{j}", new string('C', 100));
+					png.PngMetadata.TextChunks.Add($"key{j}", new string('C', 100));
 				}
 				images.Add(png);
 			}
