@@ -551,7 +551,7 @@ public sealed class Jpeg2000Raster : Raster, IJpeg2000Raster
 		if (string.IsNullOrEmpty(xmlContent))
 			throw new ArgumentException("XML content cannot be null or empty.");
 
-		_metadata.Xml_metadata.Add(xmlContent);
+		_metadata.XmlMetadata.Add(xmlContent);
 	}
 
 	/// <summary>Gets tile bounds for the specified tile index.</summary>

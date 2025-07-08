@@ -37,12 +37,9 @@ public sealed class AvifRaster : Raster, IAvifRaster
 		Width = width;
 		Height = height;
 
-		_metadata = new AvifMetadata
-		{
-			Width = width,
-			Height = height,
-			HasAlpha = hasAlpha
-		};
+		_metadata.Width = width;
+		_metadata.Height = height;
+		_metadata.HasAlpha = hasAlpha;
 
 		InitializeDefaults();
 	}

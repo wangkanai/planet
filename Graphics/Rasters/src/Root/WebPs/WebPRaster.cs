@@ -134,7 +134,7 @@ public sealed class WebPRaster : Raster, IWebPRaster
 
 	/// <inheritdoc />
 	public bool IsAnimated
-		=> Metadata is { HasAnimation: true, AnimationFrames.Count: > 0 };
+		=> _metadata.HasAnimation && _metadata.AnimationFrames.Count > 0;
 
 	/// <inheritdoc />
 	public double CompressionRatio
