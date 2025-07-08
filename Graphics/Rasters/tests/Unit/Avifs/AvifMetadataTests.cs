@@ -81,7 +81,7 @@ public class AvifMetadataTests
 	}
 
 	[Fact]
-	public void EstimatedMemoryUsage_ShouldCalculateCorrectly()
+	public void EstimatedMetadataSize_ShouldCalculateCorrectly()
 	{
 		var metadata = new AvifMetadata
 		{
@@ -93,7 +93,7 @@ public class AvifMetadataTests
 			IccProfile = new byte[128 * 1024] // 128KB
 		};
 
-		var estimatedSize = metadata.EstimatedMemoryUsage;
+		var estimatedSize = metadata.EstimatedMetadataSize;
 
 		// Should include pixel data, metadata, EXIF, and ICC profile
 		Assert.True(estimatedSize > 0);
@@ -104,7 +104,7 @@ public class AvifMetadataTests
 	[InlineData(1920, 1080, 8, false, false)]
 	[InlineData(3840, 2160, 10, true, false)]
 	[InlineData(7680, 4320, 12, true, false)] // Dimensions don't affect metadata size
-	public void EstimatedMemoryUsage_WithDifferentConfigurations_ShouldVary(int width, int height, int bitDepth, bool hasAlpha, bool expectLarge)
+	public void EstimatedMetadataSize_WithDifferentConfigurations_ShouldVary(int width, int height, int bitDepth, bool hasAlpha, bool expectLarge)
 	{
 		var metadata = new AvifMetadata
 		{
@@ -114,7 +114,7 @@ public class AvifMetadataTests
 			HasAlpha = hasAlpha
 		};
 
-		var estimatedSize = metadata.EstimatedMemoryUsage;
+		var estimatedSize = metadata.EstimatedMetadataSize;
 
 		Assert.True(estimatedSize > 0);
 
@@ -168,7 +168,7 @@ public class AvifMetadataTests
 		metadata.HdrInfo = hdrInfo;
 
 		Assert.Same(hdrInfo, metadata.HdrInfo);
-		Assert.True(metadata.EstimatedMemoryUsage > 0);
+		Assert.True(metadata.EstimatedMetadataSize > 0);
 	}
 
 	[Fact]

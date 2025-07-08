@@ -269,7 +269,7 @@ public class PngRasterTests
 		var png = new PngRaster();
 		png.PaletteData                   = new byte[] { 1, 2, 3 };
 		png.TransparencyData              = new byte[] { 4, 5 };
-		png.Metadata.CustomChunks["test"] = new byte[] { 6, 7, 8 };
+		png.PngMetadata.CustomChunks["test"] = new byte[] { 6, 7, 8 };
 
 		// Act
 		png.Dispose();
@@ -277,7 +277,7 @@ public class PngRasterTests
 		// Assert
 		Assert.True(png.PaletteData.IsEmpty);
 		Assert.True(png.TransparencyData.IsEmpty);
-		Assert.Empty(png.Metadata.CustomChunks);
+		Assert.Empty(png.PngMetadata.CustomChunks);
 	}
 
 	[Theory]

@@ -364,13 +364,13 @@ public class JpegExamplesTests
 		var jpegWithExif = JpegExamples.CreateJpegWithExifData(800, 600);
 
 		// Assert
-		Assert.Equal("Wangkanai.Graphics.Rasters", rgbJpeg.Metadata.Software);
-		Assert.Equal("Wangkanai.Graphics.Rasters", grayscaleJpeg.Metadata.Software);
-		Assert.Equal("Wangkanai.Graphics.Rasters", progressiveJpeg.Metadata.Software);
-		Assert.Equal("Wangkanai.Graphics.Rasters", photographyJpeg.Metadata.Software);
-		Assert.Equal("Wangkanai.Graphics.Rasters", cmykJpeg.Metadata.Software);
-		Assert.Equal("Wangkanai.Graphics.Rasters", thumbnailJpeg.Metadata.Software);
-		Assert.Equal("Wangkanai.Graphics.Rasters", jpegWithExif.Metadata.Software);
+		Assert.Equal("Wangkanai.Graphics.Rasters", rgbJpeg.JpegMetadata.Software);
+		Assert.Equal("Wangkanai.Graphics.Rasters", grayscaleJpeg.JpegMetadata.Software);
+		Assert.Equal("Wangkanai.Graphics.Rasters", progressiveJpeg.JpegMetadata.Software);
+		Assert.Equal("Wangkanai.Graphics.Rasters", photographyJpeg.JpegMetadata.Software);
+		Assert.Equal("Wangkanai.Graphics.Rasters", cmykJpeg.JpegMetadata.Software);
+		Assert.Equal("Wangkanai.Graphics.Rasters", thumbnailJpeg.JpegMetadata.Software);
+		Assert.Equal("Wangkanai.Graphics.Rasters", jpegWithExif.JpegMetadata.Software);
 	}
 
 	[Fact]

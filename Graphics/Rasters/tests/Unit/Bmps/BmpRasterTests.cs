@@ -32,8 +32,8 @@ public class BmpRasterTests
 		// Assert
 		Assert.Equal(width, bmp.Width);
 		Assert.Equal(height, bmp.Height);
-		Assert.Equal(width, bmp.Metadata.Width);
-		Assert.Equal(height, bmp.Metadata.Height);
+		Assert.Equal(width, bmp.BmpMetadata.Width);
+		Assert.Equal(height, bmp.BmpMetadata.Height);
 	}
 
 	[Fact]
@@ -49,7 +49,7 @@ public class BmpRasterTests
 
 		// Assert
 		Assert.Equal(colorDepth, bmp.ColorDepth);
-		Assert.Equal((ushort)colorDepth, bmp.Metadata.BitsPerPixel);
+		Assert.Equal((ushort)colorDepth, bmp.BmpMetadata.BitsPerPixel);
 	}
 
 	[Theory]
@@ -106,7 +106,7 @@ public class BmpRasterTests
 	{
 		// Arrange
 		var bmp = new BmpRaster(100, 100);
-		bmp.Metadata.Height = -100;
+		bmp.BmpMetadata.Height = -100;
 
 		// Act
 		var isTopDown = bmp.IsTopDown;
@@ -249,10 +249,10 @@ public class BmpRasterTests
 		// Assert
 		Assert.Equal(BmpColorDepth.TwentyFourBit, bmp.ColorDepth);
 		Assert.Equal(BmpCompression.Rgb, bmp.Compression);
-		Assert.Equal(0u, bmp.Metadata.RedMask);
-		Assert.Equal(0u, bmp.Metadata.GreenMask);
-		Assert.Equal(0u, bmp.Metadata.BlueMask);
-		Assert.Equal(0u, bmp.Metadata.AlphaMask);
+		Assert.Equal(0u, bmp.BmpMetadata.RedMask);
+		Assert.Equal(0u, bmp.BmpMetadata.GreenMask);
+		Assert.Equal(0u, bmp.BmpMetadata.BlueMask);
+		Assert.Equal(0u, bmp.BmpMetadata.AlphaMask);
 	}
 
 	[Fact]
@@ -268,7 +268,7 @@ public class BmpRasterTests
 		// Assert
 		Assert.NotNull(bmp.ColorPalette);
 		Assert.Equal(palette.Length, bmp.ColorPalette.Length);
-		Assert.Equal(256u, bmp.Metadata.ColorsUsed);
+		Assert.Equal(256u, bmp.BmpMetadata.ColorsUsed);
 	}
 
 	[Fact]
@@ -364,7 +364,7 @@ public class BmpRasterTests
 		var bmp = new BmpRaster(100, 100);
 
 		// Act
-		var hasLargeMetadata = bmp.Metadata.HasLargeMetadata;
+		var hasLargeMetadata = bmp.BmpMetadata.HasLargeMetadata;
 
 		// Assert
 		Assert.False(hasLargeMetadata);
@@ -377,10 +377,10 @@ public class BmpRasterTests
 		var bmp = new BmpRaster(100, 100, BmpColorDepth.EightBit);
 		var palette = new byte[256 * 4];
 		bmp.ApplyPalette(palette);
-		bmp.Metadata.CustomFields["test"] = "test value";
+		bmp.BmpMetadata.CustomFields["test"] = "test value";
 
 		// Act
-		var metadataSize = bmp.Metadata.EstimatedMetadataSize;
+		var metadataSize = bmp.BmpMetadata.EstimatedMetadataSize;
 
 		// Assert
 		Assert.True(metadataSize > 0);

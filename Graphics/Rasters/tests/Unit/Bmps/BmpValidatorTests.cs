@@ -45,9 +45,9 @@ public class BmpValidatorTests
 		// Using large values that multiply to exceed int.MaxValue but are individually within limits
 		bmp.Width = 100000;
 		bmp.Height = 100000;  // 100000 * 100000 = 10,000,000,000 > int.MaxValue (2,147,483,647)
-		bmp.Metadata.Width = 100000;
-		bmp.Metadata.Height = 100000;
-		bmp.Metadata.BitsPerPixel = (ushort)BmpColorDepth.TwentyFourBit;
+		bmp.BmpMetadata.Width = 100000;
+		bmp.BmpMetadata.Height = 100000;
+		bmp.BmpMetadata.BitsPerPixel = (ushort)BmpColorDepth.TwentyFourBit;
 
 		// Act
 		var result = BmpValidator.Validate(bmp);
@@ -75,7 +75,7 @@ public class BmpValidatorTests
 	{
 		// Arrange
 		var bmp = new BmpRaster(100, 100);
-		bmp.Metadata.BitsPerPixel = 12; // Unsupported
+		bmp.BmpMetadata.BitsPerPixel = 12; // Unsupported
 
 		// Act
 		var result = BmpValidator.Validate(bmp);
@@ -90,7 +90,7 @@ public class BmpValidatorTests
 	{
 		// Arrange
 		var bmp = new BmpRaster(100, 100, BmpColorDepth.TwentyFourBit);
-		bmp.Metadata.BitsPerPixel = 16; // Mismatch
+		bmp.BmpMetadata.BitsPerPixel = 16; // Mismatch
 
 		// Act
 		var result = BmpValidator.Validate(bmp);
@@ -166,7 +166,7 @@ public class BmpValidatorTests
 	{
 		// Arrange
 		var bmp = new BmpRaster(100, 100, BmpColorDepth.EightBit);
-		bmp.Metadata.ColorsUsed = 256; // Indicates palette should be present
+		bmp.BmpMetadata.ColorsUsed = 256; // Indicates palette should be present
 
 		// Act
 		var result = BmpValidator.Validate(bmp);
@@ -226,7 +226,7 @@ public class BmpValidatorTests
 		// Arrange
 		var bmp = new BmpRaster(100, 100, BmpColorDepth.SixteenBit);
 		bmp.Compression = BmpCompression.BitFields;
-		bmp.Metadata.Compression = BmpCompression.BitFields; // Update metadata to match
+		bmp.BmpMetadata.Compression = BmpCompression.BitFields; // Update metadata to match
 
 		// Explicitly set all masks to zero to trigger validation error
 		bmp.SetBitMasks(0, 0, 0, 0);
@@ -259,7 +259,7 @@ public class BmpValidatorTests
 	{
 		// Arrange
 		var bmp = new BmpRaster(100, 100);
-		bmp.Metadata.FileSignature = "XX";
+		bmp.BmpMetadata.FileSignature = "XX";
 
 		// Act
 		var result = BmpValidator.Validate(bmp);
@@ -274,7 +274,7 @@ public class BmpValidatorTests
 	{
 		// Arrange
 		var bmp = new BmpRaster(100, 100);
-		bmp.Metadata.HeaderSize = 100; // Unsupported
+		bmp.BmpMetadata.HeaderSize = 100; // Unsupported
 
 		// Act
 		var result = BmpValidator.Validate(bmp);
@@ -289,7 +289,7 @@ public class BmpValidatorTests
 	{
 		// Arrange
 		var bmp = new BmpRaster(100, 100);
-		bmp.Metadata.Width = 200; // Mismatch
+		bmp.BmpMetadata.Width = 200; // Mismatch
 
 		// Act
 		var result = BmpValidator.Validate(bmp);
@@ -304,7 +304,7 @@ public class BmpValidatorTests
 	{
 		// Arrange
 		var bmp = new BmpRaster(100, 100);
-		bmp.Metadata.Planes = 2; // Should be 1
+		bmp.BmpMetadata.Planes = 2; // Should be 1
 
 		// Act
 		var result = BmpValidator.Validate(bmp);
@@ -319,7 +319,7 @@ public class BmpValidatorTests
 	{
 		// Arrange
 		var bmp = new BmpRaster(100, 100);
-		bmp.Metadata.XPixelsPerMeter = -100;
+		bmp.BmpMetadata.XPixelsPerMeter = -100;
 
 		// Act
 		var result = BmpValidator.Validate(bmp);
