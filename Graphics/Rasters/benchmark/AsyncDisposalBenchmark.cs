@@ -47,7 +47,7 @@ public class AsyncDisposalBenchmark
 		_webpLarge = new WebPRaster(4096, 4096);
 		_webpLarge.WebPMetadata.IccProfile = new byte[2_000_000]; // 2MB
 		_webpLarge.WebPMetadata.ExifData = new byte[500_000];     // 500KB
-		_webpLarge.WebPMetadata.XmpData = new byte[300_000];      // 300KB
+		_webpLarge.WebPMetadata.XmpData = new string('X', 300_000);      // 300KB
 
 		// Add many animation frames for large WebP
 		for (int i = 0; i < 100; i++)
@@ -142,7 +142,7 @@ public class AsyncDisposalBenchmark
 		var webp = new WebPRaster(4096, 4096);
 		webp.WebPMetadata.IccProfile = new byte[2_000_000];
 		webp.WebPMetadata.ExifData = new byte[500_000];
-		webp.WebPMetadata.XmpData = new byte[300_000];
+		webp.WebPMetadata.XmpData = new string('X', 300_000);
 		webp.Dispose();
 	}
 
@@ -153,7 +153,7 @@ public class AsyncDisposalBenchmark
 		var webp = new WebPRaster(4096, 4096);
 		webp.WebPMetadata.IccProfile = new byte[2_000_000];
 		webp.WebPMetadata.ExifData = new byte[500_000];
-		webp.WebPMetadata.XmpData = new byte[300_000];
+		webp.WebPMetadata.XmpData = new string('X', 300_000);
 		await webp.DisposeAsync();
 	}
 
