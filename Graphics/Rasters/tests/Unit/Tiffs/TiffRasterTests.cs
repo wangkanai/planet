@@ -67,20 +67,16 @@ public class TiffRasterTests
 	{
 		// Arrange
 		var tiffRaster = new TiffRaster();
-		var metadata = new TiffMetadata
-		{
-			ImageDescription = "Test Image",
-			Make = "Test Camera",
-			Model = "Test Model"
-		};
 
 		// Act
-		tiffRaster.Metadata = metadata;
+		tiffRaster.TiffMetadata.ImageDescription = "Test Image";
+		tiffRaster.TiffMetadata.Make = "Test Camera";
+		tiffRaster.TiffMetadata.Model = "Test Model";
 
 		// Assert
-		Assert.Equal("Test Image", tiffRaster.Metadata.ImageDescription);
-		Assert.Equal("Test Camera", tiffRaster.Metadata.Make);
-		Assert.Equal("Test Model", tiffRaster.Metadata.Model);
+		Assert.Equal("Test Image", tiffRaster.TiffMetadata.ImageDescription);
+		Assert.Equal("Test Camera", tiffRaster.TiffMetadata.Make);
+		Assert.Equal("Test Model", tiffRaster.TiffMetadata.Model);
 	}
 
 	[Fact]
@@ -197,7 +193,7 @@ public class TiffRasterTests
 		var tiffRaster = new TiffRaster();
 
 		// Act
-		var initialSize = tiffRaster.Metadata.EstimatedMetadataSize;
+		var initialSize = tiffRaster.TiffMetadata.EstimatedMetadataSize;
 
 		// Assert - Should include basic TIFF directory overhead
 		Assert.True(initialSize > 0);
@@ -212,9 +208,9 @@ public class TiffRasterTests
 		var testDescription = "Test image description with substantial text content";
 
 		// Act
-		var initialSize = tiffRaster.Metadata.EstimatedMetadataSize;
-		tiffRaster.Metadata.ImageDescription = testDescription;
-		var sizeWithDescription = tiffRaster.Metadata.EstimatedMetadataSize;
+		var initialSize = tiffRaster.TiffMetadata.EstimatedMetadataSize;
+		tiffRaster.TiffMetadata.ImageDescription = testDescription;
+		var sizeWithDescription = tiffRaster.TiffMetadata.EstimatedMetadataSize;
 
 		// Assert
 		var expectedIncrease = System.Text.Encoding.UTF8.GetByteCount(testDescription);
@@ -230,10 +226,10 @@ public class TiffRasterTests
 		var stripByteCounts = new int[100];
 
 		// Act
-		var initialSize = tiffRaster.Metadata.EstimatedMetadataSize;
-		tiffRaster.Metadata.StripOffsets = stripOffsets;
-		tiffRaster.Metadata.StripByteCounts = stripByteCounts;
-		var sizeWithStrips = tiffRaster.Metadata.EstimatedMetadataSize;
+		var initialSize = tiffRaster.TiffMetadata.EstimatedMetadataSize;
+		tiffRaster.TiffMetadata.StripOffsets = stripOffsets;
+		tiffRaster.TiffMetadata.StripByteCounts = stripByteCounts;
+		var sizeWithStrips = tiffRaster.TiffMetadata.EstimatedMetadataSize;
 
 		// Assert
 		var expectedIncrease = (stripOffsets.Length + stripByteCounts.Length) * sizeof(int);
@@ -250,11 +246,11 @@ public class TiffRasterTests
 		var xmpData = new byte[500];
 
 		// Act
-		var initialSize = tiffRaster.Metadata.EstimatedMetadataSize;
-		tiffRaster.Metadata.ExifIfd = exifData;
-		tiffRaster.Metadata.IccProfile = iccProfile;
-		tiffRaster.Metadata.XmpData = xmpData;
-		var sizeWithEmbedded = tiffRaster.Metadata.EstimatedMetadataSize;
+		var initialSize = tiffRaster.TiffMetadata.EstimatedMetadataSize;
+		tiffRaster.TiffMetadata.ExifIfd = exifData;
+		tiffRaster.TiffMetadata.IccProfile = iccProfile;
+		tiffRaster.TiffMetadata.XmpData = xmpData;
+		var sizeWithEmbedded = tiffRaster.TiffMetadata.EstimatedMetadataSize;
 
 		// Assert
 		var expectedIncrease = exifData.Length + iccProfile.Length + xmpData.Length;
@@ -271,11 +267,11 @@ public class TiffRasterTests
 		var testInts = new int[10];
 
 		// Act
-		var initialSize = tiffRaster.Metadata.EstimatedMetadataSize;
-		tiffRaster.Metadata.CustomTags[256] = testString;
-		tiffRaster.Metadata.CustomTags[257] = testBytes;
-		tiffRaster.Metadata.CustomTags[258] = testInts;
-		var sizeWithCustomTags = tiffRaster.Metadata.EstimatedMetadataSize;
+		var initialSize = tiffRaster.TiffMetadata.EstimatedMetadataSize;
+		tiffRaster.TiffMetadata.CustomTags[256] = testString;
+		tiffRaster.TiffMetadata.CustomTags[257] = testBytes;
+		tiffRaster.TiffMetadata.CustomTags[258] = testInts;
+		var sizeWithCustomTags = tiffRaster.TiffMetadata.EstimatedMetadataSize;
 
 		// Assert
 		var expectedIncrease = System.Text.Encoding.UTF8.GetByteCount(testString) +
@@ -293,11 +289,11 @@ public class TiffRasterTests
 		var largeData = new byte[ImageConstants.LargeMetadataThreshold + 1000];
 
 		// Act
-		tiffRaster.Metadata.IccProfile = largeData;
+		tiffRaster.TiffMetadata.IccProfile = largeData;
 
 		// Assert
-		Assert.True(tiffRaster.Metadata.HasLargeMetadata);
-		Assert.True(tiffRaster.Metadata.EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold);
+		Assert.True(tiffRaster.TiffMetadata.HasLargeMetadata);
+		Assert.True(tiffRaster.TiffMetadata.EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold);
 	}
 
 	[Fact]

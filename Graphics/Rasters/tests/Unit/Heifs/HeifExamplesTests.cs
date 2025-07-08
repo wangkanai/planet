@@ -25,8 +25,8 @@ public class HeifExamplesTests
 		Assert.Equal(0, heif.ThreadCount);
 		Assert.True(heif.GenerateThumbnails);
 		Assert.True(heif.EnableProgressiveDecoding);
-		Assert.Equal("Wangkanai Graphics Library", heif.Metadata.Software);
-		Assert.NotNull(heif.Metadata.CreationTime);
+		Assert.Equal("Wangkanai Graphics Library", heif.HeifMetadata.Software);
+		Assert.NotNull(heif.HeifMetadata.CreationTime);
 		Assert.True(heif.IsValid());
 	}
 
@@ -62,7 +62,7 @@ public class HeifExamplesTests
 		Assert.Equal(0, heif.ThreadCount);
 		Assert.True(heif.GenerateThumbnails);
 		Assert.False(heif.EnableProgressiveDecoding);
-		Assert.Equal("Wangkanai Graphics Library - Professional", heif.Metadata.Software);
+		Assert.Equal("Wangkanai Graphics Library - Professional", heif.HeifMetadata.Software);
 		Assert.True(heif.IsValid());
 	}
 
@@ -86,7 +86,7 @@ public class HeifExamplesTests
 		Assert.Equal(0, heif.ThreadCount);
 		Assert.True(heif.GenerateThumbnails);
 		Assert.False(heif.EnableProgressiveDecoding);
-		Assert.Equal("Wangkanai Graphics Library - Lossless", heif.Metadata.Software);
+		Assert.Equal("Wangkanai Graphics Library - Lossless", heif.HeifMetadata.Software);
 		Assert.True(heif.IsValid());
 	}
 
@@ -108,7 +108,7 @@ public class HeifExamplesTests
 		Assert.Equal(Environment.ProcessorCount, heif.ThreadCount);
 		Assert.False(heif.GenerateThumbnails);
 		Assert.False(heif.EnableProgressiveDecoding);
-		Assert.Equal("Wangkanai Graphics Library - Fast", heif.Metadata.Software);
+		Assert.Equal("Wangkanai Graphics Library - Fast", heif.HeifMetadata.Software);
 		Assert.True(heif.IsValid());
 	}
 
@@ -133,12 +133,12 @@ public class HeifExamplesTests
 		Assert.True(heif.GenerateThumbnails);
 		Assert.True(heif.EnableProgressiveDecoding);
 		Assert.True(heif.HasHdrMetadata);
-		Assert.Equal("Wangkanai Graphics Library - HDR", heif.Metadata.Software);
-		Assert.Equal("BT.2100 PQ HDR", heif.Metadata.ColorSpaceInfo);
+		Assert.Equal("Wangkanai Graphics Library - HDR", heif.HeifMetadata.Software);
+		Assert.Equal("BT.2100 PQ HDR", heif.HeifMetadata.ColorSpaceInfo);
 		Assert.True(heif.IsValid());
 
 		// Verify HDR metadata
-		var hdrMetadata = heif.Metadata.HdrMetadata;
+		var hdrMetadata = heif.HeifMetadata.HdrMetadata;
 		Assert.NotNull(hdrMetadata);
 		Assert.Equal(HeifConstants.Hdr.Hdr10PeakBrightness, hdrMetadata.MaxLuminance);
 		Assert.Equal(0.005, hdrMetadata.MinLuminance);
@@ -168,7 +168,7 @@ public class HeifExamplesTests
 		Assert.True(heif.ThreadCount <= Environment.ProcessorCount);
 		Assert.True(heif.GenerateThumbnails);
 		Assert.True(heif.EnableProgressiveDecoding);
-		Assert.Equal("Wangkanai Graphics Library - Mobile", heif.Metadata.Software);
+		Assert.Equal("Wangkanai Graphics Library - Mobile", heif.HeifMetadata.Software);
 		Assert.True(heif.IsValid());
 	}
 
@@ -190,7 +190,7 @@ public class HeifExamplesTests
 		Assert.Equal(1, heif.ThreadCount);
 		Assert.False(heif.GenerateThumbnails);
 		Assert.False(heif.EnableProgressiveDecoding);
-		Assert.Equal("Wangkanai Graphics Library - Thumbnail", heif.Metadata.Software);
+		Assert.Equal("Wangkanai Graphics Library - Thumbnail", heif.HeifMetadata.Software);
 		Assert.True(heif.IsValid());
 	}
 
@@ -224,7 +224,7 @@ public class HeifExamplesTests
 		Assert.Equal(0, heif.ThreadCount);
 		Assert.True(heif.GenerateThumbnails);
 		Assert.True(heif.EnableProgressiveDecoding);
-		Assert.Equal("Wangkanai Graphics Library - AV1", heif.Metadata.Software);
+		Assert.Equal("Wangkanai Graphics Library - AV1", heif.HeifMetadata.Software);
 		Assert.True(heif.IsValid());
 	}
 
@@ -249,30 +249,30 @@ public class HeifExamplesTests
 		Assert.True(heif.IsValid());
 
 		// Verify comprehensive metadata
-		Assert.Equal("Wangkanai Graphics Library - Demo", heif.Metadata.Software);
-		Assert.Equal("Demonstration HEIF image created with Wangkanai Graphics Library", heif.Metadata.Description);
-		Assert.Equal("© 2025 Wangkanai", heif.Metadata.Copyright);
-		Assert.Equal("Graphics Library", heif.Metadata.Author);
-		Assert.NotNull(heif.Metadata.CameraMetadata);
-		Assert.Equal("Demo Camera", heif.Metadata.CameraMetadata.CameraMake);
-		Assert.Equal("Model X", heif.Metadata.CameraMetadata.CameraModel);
-		Assert.Equal("Demo Lens", heif.Metadata.CameraMetadata.LensMake);
-		Assert.Equal("50mm f/1.8", heif.Metadata.CameraMetadata.LensModel);
-		Assert.Equal(50.0, heif.Metadata.CameraMetadata.FocalLength);
-		Assert.Equal(1.8, heif.Metadata.CameraMetadata.Aperture);
-		Assert.Equal(1.0 / 60.0, heif.Metadata.CameraMetadata.ExposureTime);
-		Assert.Equal(100, heif.Metadata.CameraMetadata.IsoSensitivity);
-		Assert.Equal(300.0, heif.Metadata.CameraMetadata.XResolution);
-		Assert.Equal(300.0, heif.Metadata.CameraMetadata.YResolution);
-		Assert.Equal("sRGB", heif.Metadata.ColorSpaceInfo);
-		Assert.Equal("Auto", heif.Metadata.WhiteBalance);
-		Assert.NotNull(heif.Metadata.CreationTime);
+		Assert.Equal("Wangkanai Graphics Library - Demo", heif.HeifMetadata.Software);
+		Assert.Equal("Demonstration HEIF image created with Wangkanai Graphics Library", heif.HeifMetadata.Description);
+		Assert.Equal("© 2025 Wangkanai", heif.HeifMetadata.Copyright);
+		Assert.Equal("Graphics Library", heif.HeifMetadata.Author);
+		Assert.NotNull(heif.HeifMetadata.CameraMetadata);
+		Assert.Equal("Demo Camera", heif.HeifMetadata.CameraMetadata.CameraMake);
+		Assert.Equal("Model X", heif.HeifMetadata.CameraMetadata.CameraModel);
+		Assert.Equal("Demo Lens", heif.HeifMetadata.CameraMetadata.LensMake);
+		Assert.Equal("50mm f/1.8", heif.HeifMetadata.CameraMetadata.LensModel);
+		Assert.Equal(50.0, heif.HeifMetadata.CameraMetadata.FocalLength);
+		Assert.Equal(1.8, heif.HeifMetadata.CameraMetadata.Aperture);
+		Assert.Equal(1.0 / 60.0, heif.HeifMetadata.CameraMetadata.ExposureTime);
+		Assert.Equal(100, heif.HeifMetadata.CameraMetadata.IsoSensitivity);
+		Assert.Equal(300.0, heif.HeifMetadata.CameraMetadata.XResolution);
+		Assert.Equal(300.0, heif.HeifMetadata.CameraMetadata.YResolution);
+		Assert.Equal("sRGB", heif.HeifMetadata.ColorSpaceInfo);
+		Assert.Equal("Auto", heif.HeifMetadata.WhiteBalance);
+		Assert.NotNull(heif.HeifMetadata.CreationTime);
 
 		// Verify GPS coordinates (Sydney Opera House)
-		Assert.NotNull(heif.Metadata.GpsCoordinates);
-		Assert.Equal(-33.8568, heif.Metadata.GpsCoordinates.Latitude);
-		Assert.Equal(151.2153, heif.Metadata.GpsCoordinates.Longitude);
-		Assert.Equal(5.0, heif.Metadata.GpsCoordinates.Altitude);
+		Assert.NotNull(heif.HeifMetadata.GpsCoordinates);
+		Assert.Equal(-33.8568, heif.HeifMetadata.GpsCoordinates.Latitude);
+		Assert.Equal(151.2153, heif.HeifMetadata.GpsCoordinates.Longitude);
+		Assert.Equal(5.0, heif.HeifMetadata.GpsCoordinates.Altitude);
 	}
 
 	[Fact]
@@ -306,42 +306,42 @@ public class HeifExamplesTests
 		Assert.True(heif.IsValid());
 
 		// Verify professional metadata
-		Assert.Equal("© Professional Photographer", heif.Metadata.Copyright);
-		Assert.Equal("John Doe Photography", heif.Metadata.Author);
-		Assert.Equal("Portrait photography with shallow depth of field", heif.Metadata.Description);
+		Assert.Equal("© Professional Photographer", heif.HeifMetadata.Copyright);
+		Assert.Equal("John Doe Photography", heif.HeifMetadata.Author);
+		Assert.Equal("Portrait photography with shallow depth of field", heif.HeifMetadata.Description);
 
 		// Verify professional camera metadata
-		Assert.NotNull(heif.Metadata.CameraMetadata);
-		Assert.Equal("Canon", heif.Metadata.CameraMetadata.CameraMake);
-		Assert.Equal("EOS R5", heif.Metadata.CameraMetadata.CameraModel);
-		Assert.Equal("Canon", heif.Metadata.CameraMetadata.LensMake);
-		Assert.Equal("RF 85mm F1.2 L USM", heif.Metadata.CameraMetadata.LensModel);
-		Assert.Equal(85.0, heif.Metadata.CameraMetadata.FocalLength);
-		Assert.Equal(1.2, heif.Metadata.CameraMetadata.Aperture);
-		Assert.Equal(1.0 / 200.0, heif.Metadata.CameraMetadata.ExposureTime);
-		Assert.Equal(100, heif.Metadata.CameraMetadata.IsoSensitivity);
-		Assert.Equal(300.0, heif.Metadata.CameraMetadata.XResolution);
-		Assert.Equal(300.0, heif.Metadata.CameraMetadata.YResolution);
-		Assert.Equal(2, heif.Metadata.CameraMetadata.ResolutionUnit); // Inches
-		Assert.Equal(1, heif.Metadata.CameraMetadata.WhiteBalance); // Manual
-		Assert.Equal(0, heif.Metadata.CameraMetadata.Flash); // Flash did not fire
-		Assert.Equal(0.0, heif.Metadata.CameraMetadata.ExposureBias);
-		Assert.Equal(3, heif.Metadata.CameraMetadata.MeteringMode); // Spot
-		Assert.Equal(1, heif.Metadata.CameraMetadata.ExposureProgram); // Manual
-		Assert.Equal(10, heif.Metadata.CameraMetadata.LightSource); // Flash
-		Assert.Equal(85.0, heif.Metadata.CameraMetadata.FocalLengthIn35mm);
-		Assert.Equal(1.0, heif.Metadata.CameraMetadata.DigitalZoomRatio);
-		Assert.Equal(0, heif.Metadata.CameraMetadata.SceneCaptureType); // Standard
-		Assert.Equal(0, heif.Metadata.CameraMetadata.Contrast); // Normal
-		Assert.Equal(0, heif.Metadata.CameraMetadata.Saturation); // Normal
-		Assert.Equal(1, heif.Metadata.CameraMetadata.Sharpness); // Soft
-		Assert.Equal(2, heif.Metadata.CameraMetadata.SubjectDistanceRange); // Macro
-		Assert.Equal(2, heif.Metadata.CameraMetadata.SensingMethod); // One-chip color area sensor
-		Assert.Equal(0, heif.Metadata.CameraMetadata.GainControl); // None
-		Assert.Equal("082024001234", heif.Metadata.CameraMetadata.BodySerialNumber);
-		Assert.Equal("1234567890", heif.Metadata.CameraMetadata.LensSerialNumber);
-		Assert.NotNull(heif.Metadata.CameraMetadata.LensSpecification);
-		Assert.Equal(new[] { 85.0, 85.0, 1.2, 1.2 }, heif.Metadata.CameraMetadata.LensSpecification);
+		Assert.NotNull(heif.HeifMetadata.CameraMetadata);
+		Assert.Equal("Canon", heif.HeifMetadata.CameraMetadata.CameraMake);
+		Assert.Equal("EOS R5", heif.HeifMetadata.CameraMetadata.CameraModel);
+		Assert.Equal("Canon", heif.HeifMetadata.CameraMetadata.LensMake);
+		Assert.Equal("RF 85mm F1.2 L USM", heif.HeifMetadata.CameraMetadata.LensModel);
+		Assert.Equal(85.0, heif.HeifMetadata.CameraMetadata.FocalLength);
+		Assert.Equal(1.2, heif.HeifMetadata.CameraMetadata.Aperture);
+		Assert.Equal(1.0 / 200.0, heif.HeifMetadata.CameraMetadata.ExposureTime);
+		Assert.Equal(100, heif.HeifMetadata.CameraMetadata.IsoSensitivity);
+		Assert.Equal(300.0, heif.HeifMetadata.CameraMetadata.XResolution);
+		Assert.Equal(300.0, heif.HeifMetadata.CameraMetadata.YResolution);
+		Assert.Equal(2, heif.HeifMetadata.CameraMetadata.ResolutionUnit); // Inches
+		Assert.Equal(1, heif.HeifMetadata.CameraMetadata.WhiteBalance); // Manual
+		Assert.Equal(0, heif.HeifMetadata.CameraMetadata.Flash); // Flash did not fire
+		Assert.Equal(0.0, heif.HeifMetadata.CameraMetadata.ExposureBias);
+		Assert.Equal(3, heif.HeifMetadata.CameraMetadata.MeteringMode); // Spot
+		Assert.Equal(1, heif.HeifMetadata.CameraMetadata.ExposureProgram); // Manual
+		Assert.Equal(10, heif.HeifMetadata.CameraMetadata.LightSource); // Flash
+		Assert.Equal(85.0, heif.HeifMetadata.CameraMetadata.FocalLengthIn35mm);
+		Assert.Equal(1.0, heif.HeifMetadata.CameraMetadata.DigitalZoomRatio);
+		Assert.Equal(0, heif.HeifMetadata.CameraMetadata.SceneCaptureType); // Standard
+		Assert.Equal(0, heif.HeifMetadata.CameraMetadata.Contrast); // Normal
+		Assert.Equal(0, heif.HeifMetadata.CameraMetadata.Saturation); // Normal
+		Assert.Equal(1, heif.HeifMetadata.CameraMetadata.Sharpness); // Soft
+		Assert.Equal(2, heif.HeifMetadata.CameraMetadata.SubjectDistanceRange); // Macro
+		Assert.Equal(2, heif.HeifMetadata.CameraMetadata.SensingMethod); // One-chip color area sensor
+		Assert.Equal(0, heif.HeifMetadata.CameraMetadata.GainControl); // None
+		Assert.Equal("082024001234", heif.HeifMetadata.CameraMetadata.BodySerialNumber);
+		Assert.Equal("1234567890", heif.HeifMetadata.CameraMetadata.LensSerialNumber);
+		Assert.NotNull(heif.HeifMetadata.CameraMetadata.LensSpecification);
+		Assert.Equal(new[] { 85.0, 85.0, 1.2, 1.2 }, heif.HeifMetadata.CameraMetadata.LensSpecification);
 	}
 
 	[Theory]
