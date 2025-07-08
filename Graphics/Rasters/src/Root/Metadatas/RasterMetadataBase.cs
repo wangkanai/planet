@@ -5,9 +5,8 @@ namespace Wangkanai.Graphics.Rasters.Metadatas;
 /// <summary>
 /// Base implementation of raster metadata with common properties and functionality.
 /// </summary>
-public abstract class RasterMetadataBase : IRasterMetadata
+public abstract class RasterMetadataBase : MetadataBase, IRasterMetadata
 {
-	private bool _disposed;
 
 	/// <inheritdoc />
 	public virtual int Width { get; set; }
@@ -46,20 +45,15 @@ public abstract class RasterMetadataBase : IRasterMetadata
 	public virtual string? Author { get; set; }
 
 	/// <inheritdoc />
-	public virtual long EstimatedMetadataSize
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
 			long size = GetBaseMemorySize();
 
-			if (ExifData != null)
-				size += ExifData.Length;
-
-			if (XmpData != null)
-				size += XmpData.Length * 2; // Unicode string
-
-			if (IccProfile != null)
-				size += IccProfile.Length;
+			size += EstimateByteArraySize(ExifData);
+			size += EstimateStringSize(XmpData);
+			size += EstimateByteArraySize(IccProfile);
 
 			// Estimate for string properties
 			size += EstimateStringSize(Software);
@@ -72,25 +66,12 @@ public abstract class RasterMetadataBase : IRasterMetadata
 	}
 
 	/// <inheritdoc />
-	public virtual bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
-
-	/// <inheritdoc />
 	public abstract IRasterMetadata Clone();
-	
-	/// <summary>
-	/// Throws an ObjectDisposedException if this instance has been disposed.
-	/// </summary>
-	protected void ThrowIfDisposed()
-	{
-		if (_disposed)
-			throw new ObjectDisposedException(GetType().Name);
-	}
 
 	/// <inheritdoc />
 	public virtual void Clear()
 	{
-		if (_disposed)
-			throw new ObjectDisposedException(GetType().Name);
+		ThrowIfDisposed();
 			
 		Width = 0;
 		Height = 0;
@@ -107,75 +88,20 @@ public abstract class RasterMetadataBase : IRasterMetadata
 	}
 
 	/// <inheritdoc />
-	public void Dispose()
+	protected override void DisposeManagedResources()
 	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
-	}
-
-	/// <inheritdoc />
-	public virtual async ValueTask DisposeAsync()
-	{
-		if (HasLargeMetadata)
-		{
-			await Task.Run(() => Dispose(true)).ConfigureAwait(false);
-		}
-		else
-		{
-			Dispose(true);
-		}
-		GC.SuppressFinalize(this);
-	}
-
-	/// <summary>
-	/// Releases resources.
-	/// </summary>
-	/// <param name="disposing">True to release managed resources.</param>
-	protected virtual void Dispose(bool disposing)
-	{
-		if (_disposed)
-			return;
-
-		if (disposing)
-		{
-			// Clear large arrays
-			ExifData = null;
-			IccProfile = null;
-			
-			// Clear strings
-			XmpData = null;
-			Software = null;
-			Description = null;
-			Copyright = null;
-			Author = null;
-		}
-
-		_disposed = true;
-	}
-
-	/// <summary>
-	/// Gets the base memory size for the metadata object.
-	/// </summary>
-	/// <returns>Base size in bytes.</returns>
-	protected virtual long GetBaseMemorySize()
-	{
-		// Base object size estimate
-		return 256;
-	}
-
-	/// <summary>
-	/// Estimates the memory size of a string.
-	/// </summary>
-	/// <param name="str">The string to estimate.</param>
-	/// <returns>Estimated size in bytes.</returns>
-	protected static long EstimateStringSize(string? str)
-	{
-		if (string.IsNullOrEmpty(str))
-			return 0;
+		// Clear large arrays
+		ExifData = null;
+		IccProfile = null;
 		
-		// Unicode string: 2 bytes per character plus overhead
-		return (str.Length * 2) + 24;
+		// Clear strings
+		XmpData = null;
+		Software = null;
+		Description = null;
+		Copyright = null;
+		Author = null;
 	}
+
 
 	/// <summary>
 	/// Copies base metadata properties from this instance to another.
