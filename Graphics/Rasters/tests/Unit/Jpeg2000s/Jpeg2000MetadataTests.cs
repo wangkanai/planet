@@ -334,7 +334,7 @@ public class Jpeg2000MetadataTests
 	}
 
 	[Fact]
-	public void EstimatedMemoryUsage_ShouldIncludeAllComponents()
+	public void EstimatedMetadataSize_ShouldIncludeAllComponents()
 	{
 		// Arrange
 		var metadata = new Jpeg2000Metadata
@@ -352,7 +352,7 @@ public class Jpeg2000MetadataTests
 		metadata.Markers.Add(new MarkerInfo());
 
 		// Act
-		var estimatedSize = metadata.EstimatedMemoryUsage;
+		var estimatedSize = metadata.EstimatedMetadataSize;
 
 		// Assert
 		Assert.True(estimatedSize > 1024 + 512 + 256 + 2048); // At least the byte arrays

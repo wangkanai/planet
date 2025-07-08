@@ -29,9 +29,9 @@ public class AvifRasterTests
 		Assert.Equal(width, avif.Width);
 		Assert.Equal(height, avif.Height);
 		Assert.Equal(hasAlpha, avif.HasAlpha);
-		Assert.Equal(width, avif.Metadata.Width);
-		Assert.Equal(height, avif.Metadata.Height);
-		Assert.Equal(hasAlpha, avif.Metadata.HasAlpha);
+		Assert.Equal(width, avif.AvifMetadata.Width);
+		Assert.Equal(height, avif.AvifMetadata.Height);
+		Assert.Equal(hasAlpha, avif.AvifMetadata.HasAlpha);
 	}
 
 	[Theory]
@@ -57,7 +57,7 @@ public class AvifRasterTests
 		avif.BitDepth = bitDepth;
 
 		Assert.Equal(bitDepth, avif.BitDepth);
-		Assert.Equal(bitDepth, avif.Metadata.BitDepth);
+		Assert.Equal(bitDepth, avif.AvifMetadata.BitDepth);
 	}
 
 	[Theory]
@@ -83,7 +83,7 @@ public class AvifRasterTests
 		avif.Quality = quality;
 
 		Assert.Equal(quality, avif.Quality);
-		Assert.Equal(quality, avif.Metadata.Quality);
+		Assert.Equal(quality, avif.AvifMetadata.Quality);
 	}
 
 	[Theory]
@@ -109,7 +109,7 @@ public class AvifRasterTests
 		avif.Speed = speed;
 
 		Assert.Equal(speed, avif.Speed);
-		Assert.Equal(speed, avif.Metadata.Speed);
+		Assert.Equal(speed, avif.AvifMetadata.Speed);
 	}
 
 	[Theory]
@@ -148,7 +148,7 @@ public class AvifRasterTests
 		avif.HasAlpha = true;
 
 		Assert.True(avif.HasAlpha);
-		Assert.True(avif.Metadata.HasAlpha);
+		Assert.True(avif.AvifMetadata.HasAlpha);
 	}
 
 	[Theory]
@@ -164,7 +164,7 @@ public class AvifRasterTests
 		avif.ColorSpace = colorSpace;
 
 		Assert.Equal(colorSpace, avif.ColorSpace);
-		Assert.Equal(colorSpace, avif.Metadata.ColorSpace);
+		Assert.Equal(colorSpace, avif.AvifMetadata.ColorSpace);
 	}
 
 	[Theory]
@@ -179,7 +179,7 @@ public class AvifRasterTests
 		avif.ChromaSubsampling = subsampling;
 
 		Assert.Equal(subsampling, avif.ChromaSubsampling);
-		Assert.Equal(subsampling, avif.Metadata.ChromaSubsampling);
+		Assert.Equal(subsampling, avif.AvifMetadata.ChromaSubsampling);
 	}
 
 	[Fact]
@@ -190,7 +190,7 @@ public class AvifRasterTests
 		avif.EnableFilmGrain = true;
 
 		Assert.True(avif.EnableFilmGrain);
-		Assert.True(avif.Metadata.UsesFilmGrain);
+		Assert.True(avif.AvifMetadata.UsesFilmGrain);
 	}
 
 	[Fact]
@@ -207,7 +207,7 @@ public class AvifRasterTests
 		avif.SetHdrMetadata(hdrMetadata);
 
 		Assert.True(avif.HasHdrMetadata);
-		Assert.Same(hdrMetadata, avif.Metadata.HdrInfo);
+		Assert.Same(hdrMetadata, avif.AvifMetadata.HdrInfo);
 		Assert.Equal(AvifColorSpace.Bt2100Pq, avif.ColorSpace);
 		Assert.Equal(10, avif.BitDepth);
 	}
@@ -381,7 +381,7 @@ public class AvifRasterTests
 
 		avif.ApplyColorProfile(iccProfile);
 
-		Assert.Same(iccProfile, avif.Metadata.IccProfile);
+		Assert.Same(iccProfile, avif.AvifMetadata.IccProfile);
 	}
 
 	[Theory]
@@ -411,9 +411,9 @@ public class AvifRasterTests
 	{
 		using var avif = new AvifRaster(8000, 8000) { BitDepth = 12 };
 		// Need actual large metadata content to trigger large metadata threshold
-		avif.Metadata.ExifData = new byte[2 * 1024 * 1024]; // 2MB of EXIF data
+		avif.AvifMetadata.ExifData = new byte[2 * 1024 * 1024]; // 2MB of EXIF data
 
-		Assert.True(avif.Metadata.HasLargeMetadata);
+		Assert.True(avif.AvifMetadata.HasLargeMetadata);
 	}
 
 	[Fact]
@@ -421,7 +421,7 @@ public class AvifRasterTests
 	{
 		using var avif = new AvifRaster(100, 100);
 
-		Assert.False(avif.Metadata.HasLargeMetadata);
+		Assert.False(avif.AvifMetadata.HasLargeMetadata);
 	}
 
 	[Fact]
@@ -432,7 +432,7 @@ public class AvifRasterTests
 		var estimatedSize = avif.AvifMetadata.EstimatedMetadataSize;
 
 		Assert.True(estimatedSize > 0);
-		Assert.True(estimatedSize >= avif.AvifMetadata.EstimatedMemoryUsage);
+		Assert.True(estimatedSize >= avif.AvifMetadata.EstimatedMetadataSize);
 	}
 
 	[Fact]

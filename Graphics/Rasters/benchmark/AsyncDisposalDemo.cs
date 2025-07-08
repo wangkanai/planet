@@ -206,7 +206,7 @@ public static class AsyncDisposalDemo
 			if (i % 4 == 0)
 			{
 				var webp = new WebPRaster(2048, 2048);
-				webp.Metadata.IccProfile = new byte[1_000_000];
+				webp.WebPMetadata.IccProfile = new byte[1_000_000];
 				images.Add(webp);
 			}
 			else if (i % 4 == 1)
@@ -218,7 +218,7 @@ public static class AsyncDisposalDemo
 			else if (i % 4 == 2)
 			{
 				var tiff = new TiffRaster(2048, 2048);
-				tiff.Metadata.ImageDescription = new string('B', 300_000);
+				tiff.TiffMetadata.ImageDescription = new string('B', 300_000);
 				images.Add(tiff);
 			}
 			else

@@ -390,8 +390,8 @@ public class HeifExamplesTests
 		foreach (var example in examples)
 		{
 			var fileSize = example.GetEstimatedFileSize();
-			Assert.True(fileSize > 0, $"File size should be positive for {example.Metadata.Software}");
-			Assert.True(fileSize < 100_000_000, $"File size should be reasonable for {example.Metadata.Software}");
+			Assert.True(fileSize > 0, $"File size should be positive for {example.HeifMetadata.Software}");
+			Assert.True(fileSize < 100_000_000, $"File size should be reasonable for {example.HeifMetadata.Software}");
 		}
 	}
 
@@ -446,10 +446,10 @@ public class HeifExamplesTests
 		// Assert
 		foreach (var example in examples)
 		{
-			Assert.NotNull(example.Metadata);
-			Assert.NotNull(example.Metadata.Software);
-			Assert.NotNull(example.Metadata.CreationTime);
-			Assert.Contains("Wangkanai Graphics Library", example.Metadata.Software);
+			Assert.NotNull(example.HeifMetadata);
+			Assert.NotNull(example.HeifMetadata.Software);
+			Assert.NotNull(example.HeifMetadata.CreationTime);
+			Assert.Contains("Wangkanai Graphics Library", example.HeifMetadata.Software);
 		}
 	}
 }
