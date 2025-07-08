@@ -1,9 +1,11 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
+using Wangkanai.Graphics.Rasters.Metadatas;
+
 namespace Wangkanai.Graphics.Rasters.Pngs;
 
 /// <summary>Represents PNG metadata information including ancillary chunks.</summary>
-public class PngMetadata : IMetadata
+public class PngMetadata : RasterMetadataBase
 {
 	/// <summary>Gets or sets the image title.</summary>
 	public string? Title
@@ -12,47 +14,23 @@ public class PngMetadata : IMetadata
 		set;
 	}
 
-	/// <summary>Gets or sets the image description.</summary>
-	public string? Description
-	{
-		get;
-		set;
-	}
+	// Note: Description and Software are inherited from base class
 
-	/// <summary>Gets or sets the software used to create the image.</summary>
-	public string? Software
-	{
-		get;
-		set;
-	}
-
-	/// <summary>Gets or sets the creation timestamp.</summary>
+	/// <summary>Gets or sets the PNG-specific creation timestamp.</summary>
 	public DateTime? Created
 	{
-		get;
-		set;
+		get => CreationTime;
+		set => CreationTime = value;
 	}
 
-	/// <summary>Gets or sets the last modification timestamp.</summary>
+	/// <summary>Gets or sets the PNG-specific modification timestamp.</summary>
 	public DateTime? Modified
 	{
-		get;
-		set;
+		get => ModificationTime;
+		set => ModificationTime = value;
 	}
 
-	/// <summary>Gets or sets the image author.</summary>
-	public string? Author
-	{
-		get;
-		set;
-	}
-
-	/// <summary>Gets or sets the image copyright information.</summary>
-	public string? Copyright
-	{
-		get;
-		set;
-	}
+	// Note: Author and Copyright are inherited from base class
 
 	/// <summary>Gets or sets the image comment.</summary>
 	public string? Comment
@@ -222,22 +200,18 @@ public class PngMetadata : IMetadata
 	}
 
 	/// <inheritdoc />
-	public bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
-
-	/// <inheritdoc />
-	public long EstimatedMetadataSize
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
-			var size = 0L;
+			var size = base.EstimatedMetadataSize;
 
 			// Add transparency data size
 			if (!TransparencyData.IsEmpty)
 				size += TransparencyData.Length;
 
 			// Add text chunk sizes
-			foreach (var textChunk in TextChunks.Values)
-				size += System.Text.Encoding.UTF8.GetByteCount(textChunk);
+			size += EstimateDictionarySize(TextChunks);
 
 			foreach (var compressedTextChunk in CompressedTextChunks.Values)
 				size += compressedTextChunk.Length;
@@ -246,8 +220,7 @@ public class PngMetadata : IMetadata
 				size += System.Text.Encoding.UTF8.GetByteCount(internationalTextChunk.text);
 
 			// Add custom chunk sizes
-			foreach (var customChunk in CustomChunks.Values)
-				size += customChunk.Length;
+			size += EstimateDictionaryByteArraySize(CustomChunks);
 
 			return size;
 		}
