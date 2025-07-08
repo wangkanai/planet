@@ -1,22 +1,16 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
+using Wangkanai.Graphics.Rasters.Metadatas;
+
 namespace Wangkanai.Graphics.Rasters.Avifs;
 
 /// <summary>
 /// Represents comprehensive metadata for an AVIF image including color, HDR, and auxiliary information.
 /// </summary>
-public class AvifMetadata : IMetadata
+public class AvifMetadata : RasterMetadataBase
 {
-	private bool _disposed;
 
-	/// <summary>Gets or sets the image width in pixels.</summary>
-	public int Width { get; set; }
-
-	/// <summary>Gets or sets the image height in pixels.</summary>
-	public int Height { get; set; }
-
-	/// <summary>Gets or sets the bit depth per channel (8, 10, or 12).</summary>
-	public int BitDepth { get; set; } = 8;
+	// Note: Width, Height, and BitDepth are inherited from base class
 
 	/// <summary>Gets or sets the color space.</summary>
 	public AvifColorSpace ColorSpace { get; set; } = AvifColorSpace.Srgb;
@@ -42,14 +36,7 @@ public class AvifMetadata : IMetadata
 	/// <summary>Gets or sets whether film grain synthesis is enabled.</summary>
 	public bool UsesFilmGrain { get; set; }
 
-	/// <summary>Gets or sets the EXIF metadata.</summary>
-	public byte[]? ExifData { get; set; }
-
-	/// <summary>Gets or sets the XMP metadata.</summary>
-	public string? XmpData { get; set; }
-
-	/// <summary>Gets or sets the ICC color profile.</summary>
-	public byte[]? IccProfile { get; set; }
+	// Note: ExifData, XmpData, and IccProfile are inherited from base class
 
 	/// <summary>Gets or sets HDR metadata if present.</summary>
 	public HdrMetadata? HdrInfo { get; set; }
@@ -60,11 +47,7 @@ public class AvifMetadata : IMetadata
 	/// <summary>Gets or sets the AV1 codec configuration record.</summary>
 	public byte[]? CodecConfigurationRecord { get; set; }
 
-	/// <summary>Gets or sets the creation timestamp.</summary>
-	public DateTime CreationTime { get; set; } = DateTime.UtcNow;
-
-	/// <summary>Gets or sets the modification timestamp.</summary>
-	public DateTime ModificationTime { get; set; } = DateTime.UtcNow;
+	// Note: CreationTime and ModificationTime are inherited from base class
 
 	/// <summary>Gets or sets the encoder name/version.</summary>
 	public string? EncoderInfo { get; set; }
@@ -84,104 +67,84 @@ public class AvifMetadata : IMetadata
 	/// <summary>Gets or sets additional metadata properties.</summary>
 	public Dictionary<string, object> ExtendedProperties { get; set; } = new();
 
-	/// <summary>Gets the estimated metadata size in bytes.</summary>
-	public long EstimatedMetadataSize
+	/// <inheritdoc />
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
-			long size = 256; // Base object size
-
-			if (ExifData != null)
-				size += ExifData.Length;
-
-			if (XmpData != null)
-				size += XmpData.Length * 2; // Unicode string
-
-			if (IccProfile != null)
-				size += IccProfile.Length;
+			long size = base.EstimatedMetadataSize;
 
 			if (CodecConfigurationRecord != null)
 				size += CodecConfigurationRecord.Length;
 
-			size += ExtendedProperties.Count * 64; // Estimate per property
+			size += EstimateDictionaryObjectSize(ExtendedProperties);
 
 			return size;
 		}
 	}
 
-	/// <summary>Gets whether this metadata contains large data that benefits from async disposal.</summary>
-	public bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
 
-	/// <summary>Creates a deep copy of the metadata.</summary>
-	public AvifMetadata Clone()
+	/// <inheritdoc />
+	public override IRasterMetadata Clone()
 	{
-		return new AvifMetadata
-		{
-			Width = Width,
-			Height = Height,
-			BitDepth = BitDepth,
-			ColorSpace = ColorSpace,
-			ChromaSubsampling = ChromaSubsampling,
-			HasAlpha = HasAlpha,
-			AlphaPremultiplied = AlphaPremultiplied,
-			Quality = Quality,
-			Speed = Speed,
-			IsLossless = IsLossless,
-			UsesFilmGrain = UsesFilmGrain,
-			ExifData = ExifData?.ToArray(),
-			XmpData = XmpData,
-			IccProfile = IccProfile?.ToArray(),
-			HdrInfo = HdrInfo?.Clone(),
-			ColorVolume = ColorVolume?.Clone(),
-			CodecConfigurationRecord = CodecConfigurationRecord?.ToArray(),
-			CreationTime = CreationTime,
-			ModificationTime = ModificationTime,
-			EncoderInfo = EncoderInfo,
-			CleanAperture = CleanAperture?.Clone(),
-			Rotation = Rotation,
-			IsMirrored = IsMirrored,
-			PixelAspectRatio = PixelAspectRatio,
-			ExtendedProperties = new Dictionary<string, object>(ExtendedProperties)
-		};
+		var clone = new AvifMetadata();
+		CopyBaseTo(clone);
+		
+		// Copy AVIF-specific properties
+		clone.ColorSpace = ColorSpace;
+		clone.ChromaSubsampling = ChromaSubsampling;
+		clone.HasAlpha = HasAlpha;
+		clone.AlphaPremultiplied = AlphaPremultiplied;
+		clone.Quality = Quality;
+		clone.Speed = Speed;
+		clone.IsLossless = IsLossless;
+		clone.UsesFilmGrain = UsesFilmGrain;
+		clone.HdrInfo = HdrInfo?.Clone();
+		clone.ColorVolume = ColorVolume?.Clone();
+		clone.CodecConfigurationRecord = CodecConfigurationRecord?.ToArray();
+		clone.EncoderInfo = EncoderInfo;
+		clone.CleanAperture = CleanAperture?.Clone();
+		clone.Rotation = Rotation;
+		clone.IsMirrored = IsMirrored;
+		clone.PixelAspectRatio = PixelAspectRatio;
+		clone.ExtendedProperties = new Dictionary<string, object>(ExtendedProperties);
+		
+		return clone;
+	}
+	
+	/// <inheritdoc />
+	public override void Clear()
+	{
+		base.Clear();
+		
+		// Reset AVIF-specific properties to defaults
+		ColorSpace = AvifColorSpace.Srgb;
+		ChromaSubsampling = AvifChromaSubsampling.Yuv420;
+		HasAlpha = false;
+		AlphaPremultiplied = false;
+		Quality = AvifConstants.DefaultQuality;
+		Speed = AvifConstants.DefaultSpeed;
+		IsLossless = false;
+		UsesFilmGrain = false;
+		HdrInfo = null;
+		ColorVolume = null;
+		CodecConfigurationRecord = null;
+		EncoderInfo = null;
+		CleanAperture = null;
+		Rotation = 0;
+		IsMirrored = false;
+		PixelAspectRatio = 1.0;
+		ExtendedProperties.Clear();
 	}
 
-	/// <summary>Disposes of the metadata resources.</summary>
-	public void Dispose()
+	/// <inheritdoc />
+	protected override void DisposeManagedResources()
 	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
-	}
-
-	/// <summary>Asynchronously disposes of the metadata resources.</summary>
-	public async ValueTask DisposeAsync()
-	{
-		if (HasLargeMetadata)
-		{
-			await Task.Run(() => Dispose(true)).ConfigureAwait(false);
-		}
-		else
-		{
-			Dispose(true);
-		}
-		GC.SuppressFinalize(this);
-	}
-
-	/// <summary>Releases resources.</summary>
-	protected virtual void Dispose(bool disposing)
-	{
-		if (_disposed)
-			return;
-
-		if (disposing)
-		{
-			// Clear large arrays
-			ExifData = null;
-			IccProfile = null;
-			CodecConfigurationRecord = null;
-			ExtendedProperties.Clear();
-		}
-
-		_disposed = true;
+		base.DisposeManagedResources();
+		
+		// Clear AVIF-specific resources
+		CodecConfigurationRecord = null;
+		ExtendedProperties.Clear();
 	}
 }
 

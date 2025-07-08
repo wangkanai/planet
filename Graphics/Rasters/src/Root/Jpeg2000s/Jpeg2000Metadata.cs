@@ -1,25 +1,20 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
 using System.Drawing;
+using Wangkanai.Graphics.Rasters.Metadatas;
 
 namespace Wangkanai.Graphics.Rasters.Jpeg2000s;
 
 /// <summary>Comprehensive metadata for JPEG2000 images including JP2 boxes and codestream parameters.</summary>
-public class Jpeg2000Metadata : IMetadata
+public class Jpeg2000Metadata : RasterMetadataBase
 {
-	private bool _disposed;
 
-	/// <summary>Basic image properties.</summary>
-	public int Width { get; set; }
-
-	/// <summary>Image height in pixels.</summary>
-	public int Height { get; set; }
+	// Note: Width and Height are inherited from base class
 
 	/// <summary>Number of image components (channels).</summary>
 	public int Components { get; set; } = 3;
 
-	/// <summary>Bit depth per component.</summary>
-	public int BitDepth { get; set; } = 8;
+	// Note: BitDepth is inherited from base class
 
 	/// <summary>Indicates if component values are signed.</summary>
 	public bool IsSigned { get; set; }
@@ -45,8 +40,7 @@ public class Jpeg2000Metadata : IMetadata
 	/// <summary>Indicates if ICC profile is present.</summary>
 	public bool HasIccProfile { get; set; }
 
-	/// <summary>ICC color profile data.</summary>
-	public byte[]? IccProfile { get; set; }
+	// Note: IccProfile is inherited from base class
 
 	/// <summary>Tiling configuration.</summary>
 	public int TileWidth { get; set; } = Jpeg2000Constants.DefaultTileSize;
@@ -126,39 +120,29 @@ public class Jpeg2000Metadata : IMetadata
 	/// <summary>Codestream marker information.</summary>
 	public List<MarkerInfo> Markers { get; set; } = new();
 
-	/// <summary>File creation timestamp.</summary>
-	public DateTime CreationTime { get; set; } = DateTime.UtcNow;
-
-	/// <summary>Last modification timestamp.</summary>
-	public DateTime ModificationTime { get; set; } = DateTime.UtcNow;
+	// Note: CreationTime and ModificationTime are inherited from base class
 
 	/// <summary>Intellectual property information.</summary>
 	public string? IntellectualProperty { get; set; }
 
-	/// <summary>Determines if this metadata represents a large dataset requiring async disposal.</summary>
-	public bool HasLargeMetadata =>
-		(IccProfile?.Length ?? 0) > 1024 * 1024 ||
-		(GeoTiffMetadata?.Length ?? 0) > 1024 * 1024 ||
-		UuidBoxes.Values.Any(data => data.Length > 1024 * 1024) ||
-		TotalTiles > 10000;
-
-	/// <summary>Gets the estimated metadata size in bytes.</summary>
-	public long EstimatedMetadataSize
+	/// <inheritdoc />
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
-			var size = 0L;
-			size += IccProfile?.Length ?? 0;
-			size += GeoTiffMetadata?.Length ?? 0;
+			var size = base.EstimatedMetadataSize;
+			size += EstimateByteArraySize(GeoTiffMetadata);
 			size += UuidBoxes.Values.Sum(data => data.Length);
-			size += XmlMetadata.Sum(xml => xml.Length * 2); // Unicode characters
-			size += Comments.Sum(comment => comment.Length * 2);
+			foreach (var xml in XmlMetadata)
+				size += EstimateStringSize(xml);
+			foreach (var comment in Comments)
+				size += EstimateStringSize(comment);
 			size += PaletteData?.Length ?? 0;
 			size += ChannelDefinitions.Count * 16; // Approximate size per definition
 			size += ComponentMappings.Count * 8;   // Approximate size per mapping
 			size += Boxes.Count * 24;              // Approximate size per box info
 			size += Markers.Count * 16;            // Approximate size per marker info
-			return size + 1024;                    // Base metadata overhead
+			return size;
 		}
 	}
 
@@ -206,108 +190,114 @@ public class Jpeg2000Metadata : IMetadata
 		return true;
 	}
 
-	/// <summary>Clones this metadata instance.</summary>
-	/// <returns>A deep copy of the metadata.</returns>
-	public Jpeg2000Metadata Clone()
+	/// <inheritdoc />
+	public override IRasterMetadata Clone()
 	{
-		var clone = new Jpeg2000Metadata
-		            {
-			            Width                     = Width,
-			            Height                    = Height,
-			            Components                = Components,
-			            BitDepth                  = BitDepth,
-			            IsSigned                  = IsSigned,
-			            IsLossless                = IsLossless,
-			            CompressionRatio          = CompressionRatio,
-			            DecompositionLevels       = DecompositionLevels,
-			            ProgressionOrder          = ProgressionOrder,
-			            QualityLayers             = QualityLayers,
-			            ColorSpace                = ColorSpace,
-			            HasIccProfile             = HasIccProfile,
-			            IccProfile                = IccProfile?.ToArray(),
-			            TileWidth                 = TileWidth,
-			            TileHeight                = TileHeight,
-			            CaptureResolutionX        = CaptureResolutionX,
-			            CaptureResolutionY        = CaptureResolutionY,
-			            DisplayResolutionX        = DisplayResolutionX,
-			            DisplayResolutionY        = DisplayResolutionY,
-			            GeoTiffMetadata           = GeoTiffMetadata?.ToArray(),
-			            GmlData                   = GmlData,
-			            GeoTransform              = GeoTransform?.ToArray(),
-			            CoordinateReferenceSystem = CoordinateReferenceSystem,
-			            UuidBoxes = new Dictionary<string, byte[]>(UuidBoxes.ToDictionary(
-				            kvp => kvp.Key,
-				            kvp => kvp.Value.ToArray())),
-			            XmlMetadata          = new List<string>(XmlMetadata),
-			            Comments             = new List<string>(Comments),
-			            WaveletTransform     = WaveletTransform,
-			            ErrorResilience      = ErrorResilience,
-			            RegionOfInterest     = RegionOfInterest,
-			            RoiQualityFactor     = RoiQualityFactor,
-			            ChannelDefinitions   = new List<ChannelDefinition>(ChannelDefinitions.Select(cd => cd.Clone())),
-			            ComponentMappings    = new List<ComponentMapping>(ComponentMappings.Select(cm => cm.Clone())),
-			            PaletteData          = PaletteData?.ToArray(),
-			            PaletteEntries       = PaletteEntries,
-			            Boxes                = new List<BoxInfo>(Boxes.Select(b => b.Clone())),
-			            Markers              = new List<MarkerInfo>(Markers.Select(m => m.Clone())),
-			            CreationTime         = CreationTime,
-			            ModificationTime     = ModificationTime,
-			            IntellectualProperty = IntellectualProperty
-		            };
+		var clone = new Jpeg2000Metadata();
+		CopyBaseTo(clone);
+		
+		// Copy JPEG2000-specific properties
+		clone.Components = Components;
+		clone.IsSigned = IsSigned;
+		clone.IsLossless = IsLossless;
+		clone.CompressionRatio = CompressionRatio;
+		clone.DecompositionLevels = DecompositionLevels;
+		clone.ProgressionOrder = ProgressionOrder;
+		clone.QualityLayers = QualityLayers;
+		clone.ColorSpace = ColorSpace;
+		clone.HasIccProfile = HasIccProfile;
+		clone.TileWidth = TileWidth;
+		clone.TileHeight = TileHeight;
+		clone.CaptureResolutionX = CaptureResolutionX;
+		clone.CaptureResolutionY = CaptureResolutionY;
+		clone.DisplayResolutionX = DisplayResolutionX;
+		clone.DisplayResolutionY = DisplayResolutionY;
+		clone.GeoTiffMetadata = GeoTiffMetadata?.ToArray();
+		clone.GmlData = GmlData;
+		clone.GeoTransform = GeoTransform?.ToArray();
+		clone.CoordinateReferenceSystem = CoordinateReferenceSystem;
+		clone.WaveletTransform = WaveletTransform;
+		clone.ErrorResilience = ErrorResilience;
+		clone.RegionOfInterest = RegionOfInterest;
+		clone.RoiQualityFactor = RoiQualityFactor;
+		clone.PaletteData = PaletteData?.ToArray();
+		clone.PaletteEntries = PaletteEntries;
+		clone.IntellectualProperty = IntellectualProperty;
+		
+		// Deep copy UUID boxes
+		foreach (var kvp in UuidBoxes)
+			clone.UuidBoxes[kvp.Key] = kvp.Value.ToArray();
+		
+		// Deep copy collections
+		clone.ComponentMappings = new List<ComponentMapping>(ComponentMappings.Select(m => m.Clone()));
+		clone.ChannelDefinitions = new List<ChannelDefinition>(ChannelDefinitions.Select(d => d.Clone()));
+		clone.XmlMetadata = new List<string>(XmlMetadata);
+		clone.Comments = new List<string>(Comments);
+		clone.Boxes = new List<BoxInfo>(Boxes.Select(b => b.Clone()));
+		clone.Markers = new List<MarkerInfo>(Markers.Select(m => m.Clone()));
 
 		return clone;
 	}
 
-	/// <summary>Disposes of resources synchronously.</summary>
-	public void Dispose()
+	/// <inheritdoc />
+	protected override void DisposeManagedResources()
 	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
+		base.DisposeManagedResources();
+		
+		// Clear JPEG2000-specific resources
+		GeoTiffMetadata = null;
+		PaletteData = null;
+		GeoTransform = null;
+		
+		// Clear collections
+		UuidBoxes.Clear();
+		XmlMetadata.Clear();
+		Comments.Clear();
+		ChannelDefinitions.Clear();
+		ComponentMappings.Clear();
+		Boxes.Clear();
+		Markers.Clear();
 	}
-
-	/// <summary>Disposes of resources asynchronously.</summary>
-	public async ValueTask DisposeAsync()
+	
+	/// <inheritdoc />
+	public override void Clear()
 	{
-		await DisposeAsyncCore().ConfigureAwait(false);
-		Dispose(false);
-		GC.SuppressFinalize(this);
-	}
-
-	/// <summary>Protected virtual dispose pattern implementation.</summary>
-	/// <param name="disposing">True if disposing managed resources.</param>
-	protected virtual void Dispose(bool disposing)
-	{
-		if (!_disposed && disposing)
-		{
-			// Clear large byte arrays
-			IccProfile      = null;
-			GeoTiffMetadata = null;
-			PaletteData     = null;
-
-			// Clear collections
-			UuidBoxes.Clear();
-			XmlMetadata.Clear();
-			Comments.Clear();
-			ChannelDefinitions.Clear();
-			ComponentMappings.Clear();
-			Boxes.Clear();
-			Markers.Clear();
-
-			_disposed = true;
-		}
-	}
-
-	/// <summary>Async disposal implementation for large metadata.</summary>
-	protected virtual async ValueTask DisposeAsyncCore()
-	{
-		if (HasLargeMetadata)
-		{
-			// For very large metadata, yield control to avoid blocking
-			await Task.Yield();
-		}
-
-		// Dispose synchronously after yielding
-		Dispose(true);
+		base.Clear();
+		
+		// Reset JPEG2000-specific properties to defaults
+		Components = 3;
+		IsSigned = false;
+		IsLossless = true;
+		CompressionRatio = Jpeg2000Constants.DefaultCompressionRatio;
+		DecompositionLevels = Jpeg2000Constants.DefaultDecompositionLevels;
+		ProgressionOrder = Jpeg2000Progression.LayerResolutionComponentPosition;
+		QualityLayers = Jpeg2000Constants.QualityLayers.DefaultLayers;
+		ColorSpace = Jpeg2000Constants.ColorSpaces.sRGB;
+		HasIccProfile = false;
+		TileWidth = Jpeg2000Constants.DefaultTileSize;
+		TileHeight = Jpeg2000Constants.DefaultTileSize;
+		CaptureResolutionX = 0;
+		CaptureResolutionY = 0;
+		DisplayResolutionX = 0;
+		DisplayResolutionY = 0;
+		GeoTiffMetadata = null;
+		GmlData = null;
+		GeoTransform = null;
+		CoordinateReferenceSystem = null;
+		WaveletTransform = Jpeg2000WaveletTransform.Irreversible97;
+		ErrorResilience = false;
+		RegionOfInterest = null;
+		RoiQualityFactor = 1.0f;
+		PaletteData = null;
+		PaletteEntries = 0;
+		IntellectualProperty = null;
+		UuidBoxes.Clear();
+		XmlMetadata.Clear();
+		Comments.Clear();
+		ChannelDefinitions.Clear();
+		ComponentMappings.Clear();
+		Boxes.Clear();
+		Markers.Clear();
 	}
 }
 

@@ -8,23 +8,23 @@ namespace Wangkanai.Graphics.Rasters.WebPs;
 public class WebPMetadata : RasterMetadataBase
 {
 	/// <summary>Gets or sets the WebP-specific ICC profile data.</summary>
-	public new ReadOnlyMemory<byte> IccProfile { get; set; }
+	public ReadOnlyMemory<byte> IccProfileMemory { get; set; }
 
 	/// <summary>Gets or sets the ICC profile as byte array for base class compatibility.</summary>
-	byte[]? IRasterMetadata.IccProfile
+	public override byte[]? IccProfile
 	{
-		get => IccProfile.IsEmpty ? null : IccProfile.ToArray();
-		set => IccProfile = value ?? ReadOnlyMemory<byte>.Empty;
+		get => IccProfileMemory.IsEmpty ? null : IccProfileMemory.ToArray();
+		set => IccProfileMemory = value ?? ReadOnlyMemory<byte>.Empty;
 	}
 
 	/// <summary>Gets or sets the WebP-specific EXIF data.</summary>
-	public new ReadOnlyMemory<byte> ExifData { get; set; }
+	public ReadOnlyMemory<byte> ExifDataMemory { get; set; }
 
 	/// <summary>Gets or sets the EXIF data as byte array for base class compatibility.</summary>
-	byte[]? IRasterMetadata.ExifData
+	public override byte[]? ExifData
 	{
-		get => ExifData.IsEmpty ? null : ExifData.ToArray();
-		set => ExifData = value ?? ReadOnlyMemory<byte>.Empty;
+		get => ExifDataMemory.IsEmpty ? null : ExifDataMemory.ToArray();
+		set => ExifDataMemory = value ?? ReadOnlyMemory<byte>.Empty;
 	}
 
 	/// <summary>Gets or sets the WebP-specific XMP data.</summary>
@@ -121,14 +121,20 @@ public class WebPMetadata : RasterMetadataBase
 	}
 
 	/// <inheritdoc />
-	public void Dispose()
+	protected override void DisposeManagedResources()
 	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
+		base.DisposeManagedResources();
+		
+		// Clear WebP-specific resources
+		IccProfile = ReadOnlyMemory<byte>.Empty;
+		ExifData = ReadOnlyMemory<byte>.Empty;
+		XmpDataBytes = ReadOnlyMemory<byte>.Empty;
+		CustomChunks.Clear();
+		AnimationFrames.Clear();
 	}
 
 	/// <inheritdoc />
-	public async ValueTask DisposeAsync()
+	public override async ValueTask DisposeAsync()
 	{
 		if (HasLargeMetadata)
 		{
@@ -179,19 +185,55 @@ public class WebPMetadata : RasterMetadataBase
 		GC.SuppressFinalize(this);
 	}
 
-	/// <summary>Releases unmanaged and - optionally - managed resources.</summary>
-	/// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
-	protected virtual void Dispose(bool disposing)
+	/// <inheritdoc />
+	public override IRasterMetadata Clone()
 	{
-		if (disposing)
-		{
-			// Clear WebP-specific managed resources
-			IccProfile = ReadOnlyMemory<byte>.Empty;
-			ExifData   = ReadOnlyMemory<byte>.Empty;
-			XmpDataBytes = ReadOnlyMemory<byte>.Empty;
-			CustomChunks.Clear();
-			AnimationFrames.Clear();
-		}
+		var clone = new WebPMetadata();
+		CopyBaseTo(clone);
+		
+		// Copy WebP-specific properties
+		clone.IccProfile = IccProfile;
+		clone.ExifData = ExifData;
+		clone.XmpDataBytes = XmpDataBytes;
+		clone.Title = Title;
+		clone.HasAnimation = HasAnimation;
+		clone.AnimationLoops = AnimationLoops;
+		clone.BackgroundColor = BackgroundColor;
+		clone.IsExtended = IsExtended;
+		clone.HasAlpha = HasAlpha;
+		clone.HasIccProfile = HasIccProfile;
+		clone.HasExif = HasExif;
+		clone.HasXmp = HasXmp;
+		
+		// Deep copy collections
+		foreach (var kvp in CustomChunks)
+			clone.CustomChunks[kvp.Key] = kvp.Value;
+		foreach (var frame in AnimationFrames)
+			clone.AnimationFrames.Add(frame.Clone());
+		
+		return clone;
+	}
+	
+	/// <inheritdoc />
+	public override void Clear()
+	{
+		base.Clear();
+		
+		// Clear WebP-specific properties
+		IccProfile = ReadOnlyMemory<byte>.Empty;
+		ExifData = ReadOnlyMemory<byte>.Empty;
+		XmpDataBytes = ReadOnlyMemory<byte>.Empty;
+		Title = null;
+		HasAnimation = false;
+		AnimationLoops = 0;
+		BackgroundColor = WebPConstants.DefaultBackgroundColor;
+		IsExtended = false;
+		HasAlpha = false;
+		HasIccProfile = false;
+		HasExif = false;
+		HasXmp = false;
+		CustomChunks.Clear();
+		AnimationFrames.Clear();
 	}
 }
 
@@ -221,6 +263,23 @@ public class WebPAnimationFrame
 
 	/// <summary>Gets or sets the frame data.</summary>
 	public ReadOnlyMemory<byte> Data { get; set; }
+
+	/// <summary>Creates a deep copy of this animation frame.</summary>
+	/// <returns>A new instance with the same values.</returns>
+	public WebPAnimationFrame Clone()
+	{
+		return new WebPAnimationFrame
+		{
+			OffsetX = OffsetX,
+			OffsetY = OffsetY,
+			Width = Width,
+			Height = Height,
+			Duration = Duration,
+			DisposalMethod = DisposalMethod,
+			BlendingMethod = BlendingMethod,
+			Data = Data
+		};
+	}
 }
 
 /// <summary>Defines the disposal methods for animation frames.</summary>
