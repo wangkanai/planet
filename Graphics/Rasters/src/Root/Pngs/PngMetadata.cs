@@ -8,11 +8,7 @@ namespace Wangkanai.Graphics.Rasters.Pngs;
 public class PngMetadata : RasterMetadataBase
 {
 	/// <summary>Gets or sets the image title.</summary>
-	public string? Title
-	{
-		get;
-		set;
-	}
+	public string? Title { get; set; }
 
 	// Note: Description and Software are inherited from base class
 
@@ -33,117 +29,57 @@ public class PngMetadata : RasterMetadataBase
 	// Note: Author and Copyright are inherited from base class
 
 	/// <summary>Gets or sets the image comment.</summary>
-	public string? Comment
-	{
-		get;
-		set;
-	}
+	public string? Comment { get; set; }
 
 	/// <summary>Gets or sets the gamma value for color correction.</summary>
-	public double? Gamma
-	{
-		get;
-		set;
-	}
+	public double? Gamma { get; set; }
 
 	/// <summary>Gets or sets the horizontal resolution in pixels per unit.</summary>
-	public uint? XResolution
-	{
-		get;
-		set;
-	}
+	public uint? XResolution { get; set; }
 
 	/// <summary>Gets or sets the vertical resolution in pixels per unit.</summary>
-	public uint? YResolution
-	{
-		get;
-		set;
-	}
+	public uint? YResolution { get; set; }
 
 	/// <summary>Gets or sets the resolution unit (0 = unknown, 1 = meter).</summary>
-	public byte? ResolutionUnit
-	{
-		get;
-		set;
-	}
+	public byte? ResolutionUnit { get; set; }
 
 	/// <summary>Gets or sets the background color.</summary>
-	public uint? BackgroundColor
-	{
-		get;
-		set;
-	}
+	public uint? BackgroundColor { get; set; }
 
 	/// <summary>Gets or sets the white point chromaticity coordinates.</summary>
-	public (uint x, uint y)? WhitePoint
-	{
-		get;
-		set;
-	}
+	public (uint x, uint y)? WhitePoint { get; set; }
 
 	/// <summary>Gets or sets the red primary chromaticity coordinates.</summary>
-	public (uint x, uint y)? RedPrimary
-	{
-		get;
-		set;
-	}
+	public (uint x, uint y)? RedPrimary { get; set; }
 
 	/// <summary>Gets or sets the green primary chromaticity coordinates.</summary>
-	public (uint x, uint y)? GreenPrimary
-	{
-		get;
-		set;
-	}
+	public (uint x, uint y)? GreenPrimary { get; set; }
 
 	/// <summary>Gets or sets the blue primary chromaticity coordinates.</summary>
-	public (uint x, uint y)? BluePrimary
-	{
-		get;
-		set;
-	}
+	public (uint x, uint y)? BluePrimary { get; set; }
 
 	/// <summary>Gets or sets the standard RGB color space rendering intent.</summary>
 	/// <remarks>0 = Perceptual, 1 = Relative colorimetric, 2 = Saturation, 3 = Absolute colorimetric</remarks>
-	public byte? SrgbRenderingIntent
-	{
-		get;
-		set;
-	}
+	public byte? SrgbRenderingIntent { get; set; }
 
 	/// <summary>Gets the collection of custom text chunks.</summary>
 	/// <remarks>Key is the chunk keyword, value is the text content.</remarks>
-	public Dictionary<string, string> TextChunks
-	{
-		get;
-	} = new();
+	public Dictionary<string, string> TextChunks { get; } = new();
 
 	/// <summary>Gets the collection of compressed text chunks.</summary>
 	/// <remarks>Key is the chunk keyword, value is the text content.</remarks>
-	public Dictionary<string, string> CompressedTextChunks
-	{
-		get;
-	} = new();
+	public Dictionary<string, string> CompressedTextChunks { get; } = new();
 
 	/// <summary>Gets the collection of international text chunks.</summary>
 	/// <remarks>Key is the chunk keyword, value contains language tag and text content.</remarks>
-	public Dictionary<string, (string? languageTag, string? translatedKeyword, string text)> InternationalTextChunks
-	{
-		get;
-	} = new();
+	public Dictionary<string, (string? languageTag, string? translatedKeyword, string text)> InternationalTextChunks { get; } = new();
 
 	/// <summary>Gets the collection of custom chunks not defined in the PNG specification.</summary>
 	/// <remarks>Key is the chunk type, value is the raw chunk data.</remarks>
-	public Dictionary<string, byte[]> CustomChunks
-	{
-		get;
-	} = new();
+	public Dictionary<string, byte[]> CustomChunks { get; } = new();
 
 	/// <summary>Gets or sets the transparency information for the image.</summary>
-	public ReadOnlyMemory<byte> TransparencyData
-	{
-		get;
-		set;
-	}
+	public ReadOnlyMemory<byte> TransparencyData { get; set; } = new();
 
 	/// <summary>Validates the PNG metadata.</summary>
 	/// <returns>A validation result indicating if the metadata is valid.</returns>
@@ -230,7 +166,7 @@ public class PngMetadata : RasterMetadataBase
 	protected override void DisposeManagedResources()
 	{
 		base.DisposeManagedResources();
-		
+
 		// Clear PNG-specific resources
 		TransparencyData = ReadOnlyMemory<byte>.Empty;
 		TextChunks.Clear();
@@ -273,7 +209,7 @@ public class PngMetadata : RasterMetadataBase
 	{
 		var clone = new PngMetadata();
 		CopyBaseTo(clone);
-		
+
 		// Copy PNG-specific properties
 		clone.Title = Title;
 		clone.Comment = Comment;
@@ -288,7 +224,7 @@ public class PngMetadata : RasterMetadataBase
 		clone.BluePrimary = BluePrimary;
 		clone.SrgbRenderingIntent = SrgbRenderingIntent;
 		clone.TransparencyData = TransparencyData;
-		
+
 		// Deep copy collections
 		foreach (var kvp in TextChunks)
 			clone.TextChunks[kvp.Key] = kvp.Value;
@@ -298,15 +234,15 @@ public class PngMetadata : RasterMetadataBase
 			clone.InternationalTextChunks[kvp.Key] = kvp.Value;
 		foreach (var kvp in CustomChunks)
 			clone.CustomChunks[kvp.Key] = kvp.Value.ToArray();
-		
+
 		return clone;
 	}
-	
+
 	/// <inheritdoc />
 	public override void Clear()
 	{
 		base.Clear();
-		
+
 		// Clear PNG-specific properties
 		Title = null;
 		Comment = null;
