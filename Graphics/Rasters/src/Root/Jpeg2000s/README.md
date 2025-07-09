@@ -1,4 +1,4 @@
-# JPEG2000 Raster Format Implementation
+# JPEG2000 Raster Technical Specification
 
 This directory contains a comprehensive implementation of the JPEG2000 (JP2) image format for the Wangkanai Graphics
 library. JPEG2000 is an advanced image compression standard that provides superior compression efficiency and advanced
@@ -430,6 +430,74 @@ Planned improvements for future releases:
 - [ISO/IEC 15444-2:2021 - JPEG2000 Part 2](https://www.iso.org/standard/81571.html)
 - [OGC GeoJP2 Specification](https://www.ogc.org/standards/jp2k)
 - [OpenJPEG Library](https://www.openjpeg.org/)
+
+## Integration with Planet Ecosystem
+
+### Graphics Library Integration
+
+```csharp
+// JPEG2000 inherits from Raster base class
+Raster raster = new Jpeg2000Raster(2048, 1536, 3);
+
+// Implements IMetadata interface
+IMetadata metadata = raster.Metadata;
+
+// Supports graphics library disposal patterns
+if (raster.HasLargeMetadata)
+{
+    await raster.DisposeAsync();
+}
+```
+
+### Spatial Library Integration
+
+```csharp
+using Wangkanai.Spatial;
+using Wangkanai.Spatial.Coordinates;
+
+// Integration with geospatial coordinates
+var geodetic = new Geodetic(40.7128, -74.0060);
+jpeg2000.ApplyGeospatialMetadata(geoTransform, "EPSG:4326");
+```
+
+## Professional Development Guidelines
+
+### Code Quality Standards
+
+1. **Follow CLAUDE.md guidelines**: Consistent with project standards
+2. **XML documentation**: Comprehensive API documentation
+3. **Unit testing**: Complete test coverage for all features
+4. **Performance testing**: Benchmarks for all operations
+5. **Memory profiling**: Validate memory usage patterns
+
+### Best Practices
+
+1. **Use appropriate tile sizes**: 512x512 or 1024x1024 for optimal performance
+2. **Choose proper compression ratios**: Balance quality vs. file size
+3. **Leverage progressive transmission**: For streaming applications
+4. **Implement proper disposal**: Use async disposal for large images
+5. **Cache configuration objects**: Reuse encoding options where possible
+
+### Error Handling Guidelines
+
+```csharp
+try
+{
+    var jpeg2000 = new Jpeg2000Raster(width, height, components);
+    var result = await jpeg2000.EncodeAsync(options);
+    return result;
+}
+catch (ArgumentOutOfRangeException ex)
+{
+    logger.LogError("Invalid JPEG2000 parameters: {Message}", ex.Message);
+    throw new InvalidOperationException("JPEG2000 encoding failed due to invalid parameters", ex);
+}
+catch (OutOfMemoryException ex)
+{
+    logger.LogError("Insufficient memory for JPEG2000 processing: {Message}", ex.Message);
+    throw new InvalidOperationException("Not enough memory to process JPEG2000 image", ex);
+}
+```
 
 ## License
 
