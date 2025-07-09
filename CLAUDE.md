@@ -196,6 +196,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `dotnet test --project <specific-test-project>` - Run tests for a specific project
 - Tests use xUnit v3 framework with testing platform support enabled (check xunit.runner.json files in test projects)
 
+### Benchmarking Commands
+- `dotnet run --project Graphics/Rasters/src/Root/Graphics.Rasters.Benchmarks -c Release` - Run performance benchmarks for raster operations
+- BenchmarkDotNet projects available for performance analysis and optimization
+
 ### Development Commands
 - `dotnet restore` - Restore NuGet packages
 - `dotnet run --project Portal/src/Server` - Run the Portal web application
@@ -249,9 +253,10 @@ The Planet solution follows a modular architecture with these main components or
 
 **Graphics** - Graphics processing and image handling library (namespace: `Wangkanai.Graphics`)
 - Abstractions: Core image processing interfaces and contracts
-- Rasters: Raster image processing with TIFF format support, metadata handling, and performance optimizations
+- Rasters: Raster image processing with multi-format support (TIFF, PNG, JPEG, WebP, AVIF, HEIF), metadata handling, and performance optimizations
 - Vectors: Vector graphics processing and manipulation
 - Includes comprehensive benchmarking and validation tools
+- Format specifications documented in Graphics/GRAPHICS_FORMAT_SPECIFICATIONS.md
 
 **Protocols** - Map service protocol implementations
 - WMS (Web Map Service) protocol support
@@ -270,8 +275,9 @@ The Planet solution follows a modular architecture with these main components or
 - PowerShell scripts for automation
 - Sass/SCSS for styling with Tabler UI framework
 - NPM for frontend asset management
-- Graphics processing with TIFF format support and performance benchmarking
+- Graphics processing with multi-format support (TIFF, PNG, JPEG, WebP, AVIF, HEIF) and performance benchmarking
 - Geospatial data handling with multiple format support (MBTiles, GeoPackages, GeoTIFF, Shapefiles)
+- Async disposal patterns for efficient resource management in graphics operations
 
 ### Database Context
 - Portal uses `PlanetDbContext` with SQLite connection
@@ -282,6 +288,8 @@ The Planet solution follows a modular architecture with these main components or
 - All major components have corresponding test projects
 - Tests use xUnit v3 framework with testing platform support enabled
 - Test projects follow naming convention: `<ProjectName>.Tests`
+- BenchmarkDotNet projects for performance testing (e.g., Graphics.Rasters.Benchmarks)
+- Unit test guidelines documented in module-specific GUIDELINES.md files
 
 ### Build Configuration
 - Central package management via Directory.Packages.props
@@ -291,23 +299,25 @@ The Planet solution follows a modular architecture with these main components or
 - Frontend assets managed via NPM with Tabler UI components
 
 ### Project Structure Details
-- **Portal/src/Server**: Main Blazor Server application with hybrid WASM components
-- **Portal/src/Client**: Blazor WebAssembly client components
+- **Engine/src/Console**: Console application for tile processing operations
+- **Engine/src/Domain**: Engine domain logic
+- **Extensions/Datastore/src**: Data storage extensions and utilities
+- **Graphics/Abstractions/src**: Core graphics interfaces and abstractions
+- **Graphics/Rasters/src/Root**: Raster image processing with multi-format support and metadata handling
+- **Graphics/Rasters/src/Root/Graphics.Rasters.Benchmarks**: Performance benchmarking for raster operations
+- **Graphics/Rasters/tests/Unit**: Unit tests with comprehensive testing guidelines
+- **Graphics/Vectors/src/Root**: Vector graphics processing capabilities
 - **Portal/src/Application**: Application layer with business logic and Identity configuration
+- **Portal/src/Client**: Blazor WebAssembly client components
 - **Portal/src/Domain**: Domain entities including custom Identity models
 - **Portal/src/Infrastructure**: Infrastructure services and external integrations
 - **Portal/src/Persistence**: Entity Framework data access with SQLite
-- **Engine/src/Console**: Console application for tile processing operations
-- **Engine/src/Domain**: Engine domain logic
-- **Graphics/Abstractions/src**: Core graphics interfaces and abstractions
-- **Graphics/Rasters/src/Root**: Raster image processing with TIFF support
-- **Graphics/Vectors/src/Root**: Vector graphics processing capabilities
-- **Spatial/src/Root**: Core spatial data types and coordinate systems (namespace: `Wangkanai.Spatial`)
-- **Spatial/src/MbTiles**: MBTiles format implementation
-- **Spatial/src/GeoPackages**: GeoPackage format support
-- **Spatial/src/GeoTiffs**: GeoTIFF format support with Graphics.Rasters integration
-- **Spatial/src/ShapeFiles**: Shapefile format support
-- **Spatial/src/MtPkgs**: Map tile package format support
+- **Portal/src/Server**: Main Blazor Server application with hybrid WASM components
 - **Protocols/src/Root**: Protocol abstractions and WMS implementations
 - **Providers/src/Root**: Map service provider implementations
-- **Extensions/Datastore/src**: Data storage extensions and utilities
+- **Spatial/src/GeoPackages**: GeoPackage format support
+- **Spatial/src/GeoTiffs**: GeoTIFF format support with Graphics.Rasters integration
+- **Spatial/src/MbTiles**: MBTiles format implementation
+- **Spatial/src/MtPkgs**: Map tile package format support
+- **Spatial/src/Root**: Core spatial data types and coordinate systems (namespace: `Wangkanai.Spatial`)
+- **Spatial/src/ShapeFiles**: Shapefile format support
