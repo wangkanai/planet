@@ -191,42 +191,6 @@ public static class MetadataComparisonExtensions
 		return ratio;
 	}
 
-	private static RasterComparisonResult CompareRasterMetadata(IRasterMetadata raster1, IRasterMetadata raster2)
-	{
-		return new RasterComparisonResult
-		{
-			BitDepthMatch = raster1.BitDepth == raster2.BitDepth,
-			ResolutionMatch = raster1.HasSimilarResolution(raster2),
-			ColorSpaceMatch = raster1.ColorSpace == raster2.ColorSpace,
-			HasExifData = (raster1.HasExifData(), raster2.HasExifData()),
-			HasGpsData = (raster1.HasGpsCoordinates(), raster2.HasGpsCoordinates()),
-			HasIccProfile = (raster1.HasIccProfile(), raster2.HasIccProfile())
-		};
-	}
-
-	private static VectorComparisonResult CompareVectorMetadata(IVectorMetadata vector1, IVectorMetadata vector2)
-	{
-		return new VectorComparisonResult
-		{
-			ElementCountSimilarity = CalculateElementCountSimilarity(vector1, vector2),
-			CoordinateSystemMatch = string.Equals(vector1.CoordinateReferenceSystem, 
-				vector2.CoordinateReferenceSystem, StringComparison.OrdinalIgnoreCase),
-			ColorSpaceMatch = string.Equals(vector1.ColorSpace, 
-				vector2.ColorSpace, StringComparison.OrdinalIgnoreCase),
-			ComplexityLevelMatch = vector1.GetComplexityLevel() == vector2.GetComplexityLevel()
-		};
-	}
-
-	private static double CalculateElementCountSimilarity(IVectorMetadata vector1, IVectorMetadata vector2)
-	{
-		var count1 = vector1.ElementCount;
-		var count2 = vector2.ElementCount;
-		
-		if (count1 == 0 && count2 == 0) return 1.0;
-		if (count1 == 0 || count2 == 0) return 0.0;
-		
-		return (double)Math.Min(count1, count2) / Math.Max(count1, count2);
-	}
 
 	private static double CalculateOverallSimilarity(MetadataComparisonResult result)
 	{
@@ -237,20 +201,7 @@ public static class MetadataComparisonExtensions
 			result.SizeSimilarity
 		};
 		
-		// Add type-specific scores
-		if (result.RasterComparison != null)
-		{
-			scores.Add(result.RasterComparison.BitDepthMatch ? 1.0 : 0.0);
-			scores.Add(result.RasterComparison.ResolutionMatch ? 1.0 : 0.0);
-			scores.Add(result.RasterComparison.ColorSpaceMatch ? 1.0 : 0.0);
-		}
-		
-		if (result.VectorComparison != null)
-		{
-			scores.Add(result.VectorComparison.ElementCountSimilarity);
-			scores.Add(result.VectorComparison.CoordinateSystemMatch ? 1.0 : 0.0);
-			scores.Add(result.VectorComparison.ColorSpaceMatch ? 1.0 : 0.0);
-		}
+		// Type-specific scores would be added by format-specific extension methods
 		
 		return scores.Average();
 	}
