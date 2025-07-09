@@ -530,7 +530,7 @@ public class WebPRasterTests
 		await webp.DisposeAsync();
 
 		// Assert
-		Assert.Equal(0, webp.WebPMetadata.IccProfile.Length);
+		Assert.Null(webp.WebPMetadata.IccProfile);
 		Assert.Empty(webp.WebPMetadata.AnimationFrames);
 	}
 
@@ -549,8 +549,8 @@ public class WebPRasterTests
 		await webp.DisposeAsync();
 
 		// Assert
-		Assert.Equal(0, webp.WebPMetadata.IccProfile.Length);
-		Assert.Equal(0, webp.WebPMetadata.ExifData.Length);
+		Assert.Null(webp.WebPMetadata.IccProfile);
+		Assert.Null(webp.WebPMetadata.ExifData);
 	}
 
 	[Fact]
