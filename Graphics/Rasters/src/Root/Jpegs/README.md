@@ -1,4 +1,4 @@
-# JPEG (Joint Photographic Experts Group) Format Implementation
+# JPEG (Joint Photographic Experts Group) Technical Specification
 
 ## Overview
 

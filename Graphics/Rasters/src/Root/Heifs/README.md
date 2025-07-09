@@ -1,4 +1,4 @@
-# HEIF (High Efficiency Image File Format) Implementation
+# HEIF (High Efficiency Image File Format) Technical Specification
 
 ## Overview
 

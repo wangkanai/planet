@@ -1,4 +1,4 @@
-# JPEG2000 Raster Format Implementation
+# JPEG2000 Raster Technical Specification
 
 This directory contains a comprehensive implementation of the JPEG2000 (JP2) image format for the Wangkanai Graphics
 library. JPEG2000 is an advanced image compression standard that provides superior compression efficiency and advanced

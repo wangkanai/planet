@@ -1,4 +1,4 @@
-# TIFF Format Implementation
+# TIFF Technical Specification
 
 A comprehensive TIFF (Tagged Image File Format) implementation for the Planet Graphics library, providing
 high-performance raster image processing with extensive metadata support and geospatial capabilities.

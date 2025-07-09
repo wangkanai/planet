@@ -1,4 +1,4 @@
-# WebP Format Support
+# WebP Technical Specification
 
 This directory contains the WebP format implementation for the Wangkanai Graphics Rasters library, providing
 comprehensive support for WebP image processing with high-performance optimizations.

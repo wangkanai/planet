@@ -1,4 +1,4 @@
-# PNG Format Implementation
+# PNG Technical Specification
 
 ## Overview
 

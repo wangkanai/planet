@@ -1,4 +1,4 @@
-# AVIF (AV1 Image File Format) Support
+# AVIF (AV1 Image File Format) Technical Specification
 
 This directory contains the AVIF (AV1 Image File Format) implementation for the Wangkanai Graphics Rasters library, providing comprehensive support for next-generation image processing with advanced compression and HDR capabilities.
 
@@ -410,7 +410,7 @@ try
     var avif = new AvifRaster(width, height);
     avif.BitDepth = 10; // HDR content
     avif.ColorSpace = AvifColorSpace.Bt2100Pq;
-    
+
     var result = await avif.EncodeAsync(options);
     return result;
 }
@@ -465,7 +465,7 @@ public void Constructor_WithValidHdrParameters_ShouldInitialize()
     using var avif = new AvifRaster(3840, 2160);
     avif.BitDepth = 10;
     avif.ColorSpace = AvifColorSpace.Bt2100Pq;
-    
+
     Assert.Equal(3840, avif.Width);
     Assert.Equal(2160, avif.Height);
     Assert.Equal(10, avif.BitDepth);
@@ -481,7 +481,7 @@ public void SetColorSpace_WithValidCombination_ShouldSucceed(AvifColorSpace colo
     using var avif = new AvifRaster(1920, 1080);
     avif.ColorSpace = colorSpace;
     avif.BitDepth = bitDepth;
-    
+
     var validation = AvifValidator.Validate(avif);
     Assert.True(validation.IsValid);
 }
@@ -493,11 +493,11 @@ public void SetColorSpace_WithValidCombination_ShouldSucceed(AvifColorSpace colo
 public async Task EncodeAsync_WithHdrContent_ShouldCompleteWithinTimeout()
 {
     using var avif = AvifExamples.CreateHdr10(3840, 2160, maxLuminance: 4000.0);
-    
+
     var stopwatch = Stopwatch.StartNew();
     var data = await avif.EncodeAsync();
     stopwatch.Stop();
-    
+
     Assert.True(stopwatch.ElapsedMilliseconds < 30000); // 30 second timeout for HDR
     Assert.True(data.Length > 0);
 }
@@ -528,24 +528,24 @@ await File.WriteAllBytesAsync("output.avif", avifData);
 public async Task ConvertBatchToAvifAsync(string[] inputFiles, IProgress<float> progress)
 {
     var total = inputFiles.Length;
-    
+
     for (int i = 0; i < total; i++)
     {
         var inputFile = inputFiles[i];
         var outputFile = Path.ChangeExtension(inputFile, ".avif");
-        
+
         // Load source image
         using var sourceRaster = await LoadImageAsync(inputFile);
-        
+
         // Create optimized AVIF
         using var avifRaster = AvifExamples.CreateWebOptimized(
             sourceRaster.Width, sourceRaster.Height);
-        
+
         // Copy and encode
         await avifRaster.CopyPixelDataFromAsync(sourceRaster);
         var avifData = await avifRaster.EncodeAsync();
         await File.WriteAllBytesAsync(outputFile, avifData);
-        
+
         // Report progress
         progress?.Report((float)(i + 1) / total);
     }

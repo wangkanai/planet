@@ -1,4 +1,4 @@
-# BMP (Bitmap) Format Implementation
+# BMP (Bitmap) Technical Specification
 
 A comprehensive BMP (Windows Bitmap) implementation for the Planet Graphics library, providing high-performance raster
 image processing with extensive metadata support and complete format specification compliance.
