@@ -1,13 +1,13 @@
-# JPEG XL (JXL) Next-Generation Image Format Implementation
+# JPEG XL (JXL) Next-Generation Image Technical Specification
 
 ## Overview
 
 The JPEG XL implementation in the Planet Graphics library provides comprehensive support for the next-generation JPEG XL (JXL) image format, offering superior compression efficiency, wide color gamut support, and advanced features for modern imaging applications. JPEG XL represents a significant advancement over traditional formats, providing substantial benefits for geospatial applications processing large raster datasets.
 
-**Specification Reference**: [GitHub Issue #90](https://github.com/wangkanai/planet/issues/90)  
-**ISO Standard**: ISO/IEC 18181-1:2022  
-**Namespace**: `Wangkanai.Graphics.Rasters.JpegXls`  
-**File Extensions**: `.jxl`  
+**Specification Reference**: [GitHub Issue #90](https://github.com/wangkanai/planet/issues/90)
+**ISO Standard**: ISO/IEC 18181-1:2022
+**Namespace**: `Wangkanai.Graphics.Rasters.JpegXls`
+**File Extensions**: `.jxl`
 **MIME Type**: `image/jxl`
 
 ## Key Features
@@ -47,18 +47,18 @@ public class JpegXlRaster : Raster, IJpegXlRaster
     public bool IsProgressive { get; set; } = true;
     public bool LosslessAlpha { get; set; } = true;
     public JpegXlColorSpace ColorSpace { get; set; } = JpegXlColorSpace.sRGB;
-    
+
     // Metadata access
     public JpegXlMetadata Metadata { get; }
-    
+
     // Encoding operations
     public Task<byte[]> EncodeAsync(JpegXlEncodingOptions? options = null);
     public byte[] Encode(JpegXlEncodingOptions? options = null);
-    
+
     // Decoding operations
     public Task DecodeAsync(byte[] jxlData, JpegXlDecodingOptions? options = null);
     public void Decode(byte[] jxlData, JpegXlDecodingOptions? options = null);
-    
+
     // Quality analysis
     public JpegXlQualityMetrics AnalyzeQuality();
     public float EstimateCompressionRatio();
@@ -74,21 +74,21 @@ public class JpegXlMetadata : RasterMetadata, IJpegXlMetadata
     public JpegXlColorEncoding ColorEncoding { get; set; }
     public JpegXlIntensityTarget IntensityTarget { get; set; }
     public JpegXlToneMapping ToneMapping { get; set; }
-    
+
     // Animation support
     public bool IsAnimation { get; set; }
     public JpegXlAnimationFrame[] Frames { get; set; }
     public TimeSpan TotalDuration { get; set; }
-    
+
     // Advanced features
     public JpegXlBlendInfo BlendInfo { get; set; }
     public byte[]? PreviewImage { get; set; }
     public JpegXlExtraChannels ExtraChannels { get; set; }
-    
+
     // Container format
     public bool UseContainer { get; set; }
     public JpegXlBox[] Boxes { get; set; }
-    
+
     // Quality metrics
     public float ButterflyScore { get; set; }
     public JpegXlDistortionMetrics DistortionMetrics { get; set; }
@@ -104,22 +104,22 @@ public class JpegXlEncodingOptions
     public int Effort { get; set; } = 7; // 1-9, higher = better compression
     public float Quality { get; set; } = 90.0f; // 0-100 for lossy mode
     public float Distance { get; set; } = 1.0f; // Butteraugli distance
-    
+
     // Format options
     public bool UseContainer { get; set; } = true;
     public bool Progressive { get; set; } = true;
     public bool LosslessAlpha { get; set; } = true;
     public bool Modular { get; set; } = false; // Use modular mode
-    
+
     // Color management
     public JpegXlColorSpace ColorSpace { get; set; } = JpegXlColorSpace.sRGB;
     public byte[]? IccProfile { get; set; }
     public JpegXlIntensityTarget? IntensityTarget { get; set; }
-    
+
     // Performance
     public int ThreadCount { get; set; } = Environment.ProcessorCount;
     public bool UseSimd { get; set; } = true;
-    
+
     // Advanced options
     public bool PreserveMetadata { get; set; } = true;
     public JpegXlPhotonNoiseIso PhotonNoiseIso { get; set; } = JpegXlPhotonNoiseIso.None;
@@ -309,7 +309,7 @@ Console.WriteLine($"Estimated compression ratio: {jxl.EstimateCompressionRatio()
 ### File Format Variants
 - **Codestream**: Direct bitstream encoding (smaller, faster)
 - **Container**: ISOBMFF-based with rich metadata support
-- **Magic Numbers**: 
+- **Magic Numbers**:
   - Codestream: `0xFF0A`
   - Container: `0x0000000C4A584C20`
 
@@ -343,22 +343,22 @@ public static class JpegXlConstants
     // File signatures
     public static readonly byte[] CodestreamSignature = { 0xFF, 0x0A };
     public static readonly byte[] ContainerSignature = { 0x00, 0x00, 0x00, 0x0C, 0x4A, 0x58, 0x4C, 0x20 };
-    
+
     // Quality ranges
     public const float MinQuality = 0.0f;
     public const float MaxQuality = 100.0f;
     public const float DefaultQuality = 90.0f;
-    
+
     // Effort levels
     public const int MinEffort = 1;
     public const int MaxEffort = 9;
     public const int DefaultEffort = 7;
-    
+
     // Distance ranges (Butteraugli)
     public const float MinDistance = 0.0f;
     public const float MaxDistance = 15.0f;
     public const float DefaultDistance = 1.0f;
-    
+
     // Dimensions
     public const int MaxDimension = 1073741824; // 2^30
     public const int MinDimension = 1;
@@ -441,7 +441,7 @@ public void SetCompressionMode_WithValidMode_ShouldSucceed(JpegXlCompressionMode
 {
     using var jxl = new JpegXlRaster(800, 600, 3);
     jxl.CompressionMode = mode;
-    
+
     var validation = JpegXlValidator.Validate(jxl);
     Assert.True(validation.IsValid);
 }
@@ -455,11 +455,11 @@ public async Task EncodeAsync_WithLargeImage_ShouldCompleteWithinTimeout()
     using var jxl = new JpegXlRaster(4096, 4096, 3);
     jxl.Quality = 85.0f;
     jxl.Effort = 7;
-    
+
     var stopwatch = Stopwatch.StartNew();
     var data = await jxl.EncodeAsync();
     stopwatch.Stop();
-    
+
     Assert.True(stopwatch.ElapsedMilliseconds < 10000); // 10 second timeout
     Assert.True(data.Length > 0);
 }
@@ -472,7 +472,7 @@ public void Encode_ShouldProduceCompliantJxlFile()
 {
     using var jxl = JpegXlExamples.CreateStandard(512, 512);
     var data = jxl.Encode();
-    
+
     var compliance = JpegXlValidator.CheckCompliance(data);
     Assert.Equal(JpegXlComplianceLevel.Full, compliance.Level);
 }
