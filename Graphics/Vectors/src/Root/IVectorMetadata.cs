@@ -23,5 +23,5 @@ public interface IVectorMetadata : IMetadata
 	int ElementCount { get; set; }
 
 	/// <summary>Creates a deep copy of the vector metadata.</summary>
-	IVectorMetadata CloneVector();
+	new IVectorMetadata Clone();
 }

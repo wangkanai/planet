@@ -37,5 +37,5 @@ public interface IRasterMetadata : IMetadata
 	double? GpsLongitude { get; set; }
 
 	/// <summary>Creates a deep copy of the raster metadata.</summary>
-	IRasterMetadata CloneRaster();
+	new IRasterMetadata Clone();
 }
