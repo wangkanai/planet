@@ -54,7 +54,6 @@
     <Project Path="Graphics\tests\Unit\Wangkanai.Graphics.UnitTests.csproj" Type="Classic C#" />
     <File Path="Graphics\Directory.Build.props" />
     <File Path="Graphics\README.md" />
-    <File Path="Graphics\GRAPHICS_FORMAT_SPECIFICATIONS.md" />
   </Folder>
   <Folder Name="/Graphics/Rasters/">
     <Project Path="Graphics\Rasters\benchmark\Wangkanai.Graphics.Rasters.Benchmark.csproj" Type="Classic C#" />
