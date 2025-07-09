@@ -171,10 +171,13 @@ public class TiffMetadata : RasterMetadataBase
 	}
 
 	/// <inheritdoc />
-	public override IRasterMetadata Clone()
+	public override IMetadata Clone() => CloneRaster();
+	
+	/// <inheritdoc />
+	public override IRasterMetadata CloneRaster()
 	{
 		var clone = new TiffMetadata();
-		CopyBaseTo(clone);
+		CopyRasterTo(clone);
 		
 		// Copy TIFF-specific properties
 		clone.Make = Make;

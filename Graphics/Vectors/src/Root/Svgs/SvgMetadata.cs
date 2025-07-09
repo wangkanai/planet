@@ -7,7 +7,7 @@ namespace Wangkanai.Graphics.Vectors.Svgs;
 /// Provides comprehensive metadata management for SVG documents including
 /// viewBox, coordinate systems, styling, and performance optimization data.
 /// </summary>
-public class SvgMetadata : ISvgMetadata
+public class SvgMetadata : VectorMetadataBase, ISvgMetadata
 {
 	private bool _disposed;
 
@@ -52,10 +52,18 @@ public class SvgMetadata : ISvgMetadata
 	public Dictionary<string, string> Namespaces => _namespaces;
 
 	/// <inheritdoc />
-	public string? Title { get; set; }
+	public new string? Title 
+	{ 
+		get => base.Title; 
+		set => base.Title = value; 
+	}
 
 	/// <inheritdoc />
-	public string? Description { get; set; }
+	public new string? Description 
+	{ 
+		get => base.Description; 
+		set => base.Description = value; 
+	}
 
 	/// <inheritdoc />
 	public DateTime CreationDate { get; set; }
@@ -138,9 +146,41 @@ public class SvgMetadata : ISvgMetadata
 	}
 
 	/// <inheritdoc />
-	public void Clear()
+	public override IMetadata Clone() => CloneVector();
+	
+	/// <inheritdoc />
+	public override IVectorMetadata CloneVector()
 	{
-		ThrowIfDisposed();
+		var clone = new SvgMetadata();
+		CopyVectorTo(clone);
+		
+		// Copy SVG-specific properties
+		clone.Version = Version;
+		clone.ViewBox = ViewBox;
+		clone.ViewportWidth = ViewportWidth;
+		clone.ViewportHeight = ViewportHeight;
+		clone.CoordinateReferenceSystem = CoordinateReferenceSystem;
+		clone.Creator = Creator;
+		clone.IsCompressed = IsCompressed;
+		clone.CompressionLevel = CompressionLevel;
+		clone.ElementCount = ElementCount;
+		clone.TotalPathLength = TotalPathLength;
+		clone.ColorSpace = ColorSpace;
+		
+		// Deep copy collections
+		foreach (var (key, value) in _namespaces)
+			clone._namespaces[key] = value;
+		foreach (var (key, value) in _customProperties)
+			clone._customProperties[key] = value;
+			
+		return clone;
+	}
+
+	/// <inheritdoc />
+	public override void Clear()
+	{
+		base.Clear();
+		
 		Version                   = SvgConstants.DefaultVersion;
 		ViewBox                   = SvgViewBox.Default;
 		ViewportWidth             = 100;
@@ -176,38 +216,25 @@ public class SvgMetadata : ISvgMetadata
 		=> ElementCount > SvgConstants.PerformanceOptimizationThreshold;
 
 	/// <inheritdoc />
-	public bool HasLargeMetadata => IsVeryLargeSvg;
+	public override bool HasLargeMetadata => IsVeryLargeSvg;
 
 	/// <inheritdoc />
-	public long EstimatedMetadataSize => CalculateEstimatedMetadataSize();
+	public override long EstimatedMetadataSize => CalculateEstimatedMetadataSize();
 
 	/// <inheritdoc />
 	public long CalculateEstimatedMemoryUsage() => CalculateEstimatedMetadataSize();
 
-	/// <inheritdoc />
-	public void Dispose()
-	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
-	}
 
 	/// <inheritdoc />
-	public async ValueTask DisposeAsync()
-	{
-		await DisposeAsyncCore().ConfigureAwait(false);
-		GC.SuppressFinalize(this);
-	}
-
-	/// <summary>Core disposal logic for asynchronous disposal.</summary>
-	protected virtual ValueTask DisposeAsyncCore()
+	public override async ValueTask DisposeAsync()
 	{
 		// For large metadata, use async disposal with yielding
 		if (IsVeryLargeSvg)
-			return DisposeAsyncLarge();
-
-		// For smaller metadata, use synchronous disposal
-		Dispose(true);
-		return ValueTask.CompletedTask;
+			await DisposeAsyncLarge();
+		else
+			await base.DisposeAsync();
+		
+		GC.SuppressFinalize(this);
 	}
 
 	/// <summary>Async disposal for very large SVG metadata.</summary>
@@ -261,25 +288,11 @@ public class SvgMetadata : ISvgMetadata
 		_disposed = true;
 	}
 
-	/// <summary>Protected dispose implementation.</summary>
-	protected virtual void Dispose(bool disposing)
+	/// <inheritdoc />
+	protected override void DisposeManagedResources()
 	{
-		if (!_disposed)
-		{
-			if (disposing)
-			{
-				_namespaces.Clear();
-				_customProperties.Clear();
-			}
-
-			_disposed = true;
-		}
-	}
-
-	/// <summary>Throws ObjectDisposedException if the metadata has been disposed.</summary>
-	protected void ThrowIfDisposed()
-	{
-		if (_disposed)
-			throw new ObjectDisposedException(nameof(SvgMetadata));
+		_namespaces.Clear();
+		_customProperties.Clear();
+		_disposed = true;
 	}
 }

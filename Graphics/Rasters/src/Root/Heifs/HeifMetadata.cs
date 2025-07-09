@@ -105,12 +105,15 @@ public sealed class HeifMetadata : RasterMetadataBase
 	/// Creates a copy of this metadata instance.
 	/// </summary>
 	/// <returns>A new metadata instance with copied values.</returns>
-	public override IRasterMetadata Clone()
+	public override IMetadata Clone() => CloneRaster();
+	
+	/// <inheritdoc />
+	public override IRasterMetadata CloneRaster()
 	{
 		ThrowIfDisposed();
 		
 		var clone = new HeifMetadata();
-		CopyBaseTo(clone);
+		CopyRasterTo(clone);
 		
 		clone.HdrMetadata = HdrMetadata?.Clone();
 		clone.CameraMetadata = CameraMetadata?.Clone();

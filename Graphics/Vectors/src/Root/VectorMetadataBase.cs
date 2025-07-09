@@ -32,111 +32,64 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 	/// </summary>
 	public virtual string? Title { get; set; }
 
-	/// <summary>
-	/// Gets or sets the description of the vector graphic.
-	/// </summary>
-	public virtual string? Description { get; set; }
-
-	/// <summary>
-	/// Gets or sets the author of the vector graphic.
-	/// </summary>
-	public virtual string? Author { get; set; }
-
-	/// <summary>
-	/// Gets or sets the copyright information.
-	/// </summary>
-	public virtual string? Copyright { get; set; }
-
-	/// <summary>
-	/// Gets or sets the creation date.
-	/// </summary>
-	public virtual DateTime? CreationDate { get; set; }
-
-	/// <summary>
-	/// Gets or sets the modification date.
-	/// </summary>
-	public virtual DateTime? ModificationDate { get; set; }
-
-	/// <summary>
-	/// Gets or sets the software used to create the vector graphic.
-	/// </summary>
-	public virtual string? Software { get; set; }
-
 	/// <inheritdoc />
 	public override long EstimatedMetadataSize
 	{
 		get
 		{
+			// Get base size which includes common properties
 			long size = GetBaseMemorySize();
 
-			// Add string sizes
+			// Add vector-specific properties
 			size += EstimateStringSize(Title);
-			size += EstimateStringSize(Description);
-			size += EstimateStringSize(Author);
-			size += EstimateStringSize(Copyright);
-			size += EstimateStringSize(Software);
-
-			// Add basic property sizes
 			size += sizeof(double) * 4; // ViewBox coordinates
-			size += 16 * 2;             // Creation and modification dates (estimated)
 
 			return size;
 		}
 	}
 
+	/// <inheritdoc />
+	public abstract override IMetadata Clone();
+	
 	/// <summary>
-	/// Creates a deep copy of the metadata.
+	/// Creates a deep copy of the vector metadata.
 	/// </summary>
 	/// <returns>A new instance with the same values.</returns>
-	public abstract IVectorMetadata Clone();
+	public abstract IVectorMetadata CloneVector();
 
-	/// <summary>
-	/// Clears all metadata values to their defaults.
-	/// </summary>
-	public virtual void Clear()
+	/// <inheritdoc />
+	public override void Clear()
 	{
-		ThrowIfDisposed();
-
-		ViewBoxWidth     = 0;
-		ViewBoxHeight    = 0;
-		ViewBoxX         = 0;
-		ViewBoxY         = 0;
-		Title            = null;
-		Description      = null;
-		Author           = null;
-		Copyright        = null;
-		CreationDate     = null;
-		ModificationDate = null;
-		Software         = null;
+		base.Clear();
+		
+		ViewBoxWidth  = 0;
+		ViewBoxHeight = 0;
+		ViewBoxX      = 0;
+		ViewBoxY      = 0;
+		Title         = null;
 	}
 
 	/// <inheritdoc />
 	protected override void DisposeManagedResources()
 	{
-		// Clear strings
-		Title       = null;
-		Description = null;
-		Author      = null;
-		Copyright   = null;
-		Software    = null;
+		// Clear vector-specific strings
+		Title = null;
 	}
 
 	/// <summary>
-	/// Copies base metadata properties from this instance to another.
+	/// Copies vector metadata properties from this instance to another.
 	/// </summary>
-	/// <param name="target">The target metadata instance.</param>
-	protected virtual void CopyBaseTo(VectorMetadataBase target)
+	/// <param name="target">The target vector metadata instance.</param>
+	protected virtual void CopyVectorTo(VectorMetadataBase target)
 	{
-		target.ViewBoxWidth     = ViewBoxWidth;
-		target.ViewBoxHeight    = ViewBoxHeight;
-		target.ViewBoxX         = ViewBoxX;
-		target.ViewBoxY         = ViewBoxY;
-		target.Title            = Title;
-		target.Description      = Description;
-		target.Author           = Author;
-		target.Copyright        = Copyright;
-		target.CreationDate     = CreationDate;
-		target.ModificationDate = ModificationDate;
-		target.Software         = Software;
+		// Copy base properties
+		base.CopyBaseTo(target);
+		
+		// Copy vector-specific properties
+		target.ViewBoxWidth  = ViewBoxWidth;
+		target.ViewBoxHeight = ViewBoxHeight;
+		target.ViewBoxX      = ViewBoxX;
+		target.ViewBoxY      = ViewBoxY;
+		target.Title         = Title;
 	}
 }

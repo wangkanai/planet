@@ -85,10 +85,13 @@ public class AvifMetadata : RasterMetadataBase
 
 
 	/// <inheritdoc />
-	public override IRasterMetadata Clone()
+	public override IMetadata Clone() => CloneRaster();
+	
+	/// <inheritdoc />
+	public override IRasterMetadata CloneRaster()
 	{
 		var clone = new AvifMetadata();
-		CopyBaseTo(clone);
+		CopyRasterTo(clone);
 		
 		// Copy AVIF-specific properties
 		clone.ColorSpace = ColorSpace;

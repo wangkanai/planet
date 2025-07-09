@@ -119,10 +119,13 @@ public class JpegMetadata : RasterMetadataBase
 	}
 
 	/// <inheritdoc />
-	public override IRasterMetadata Clone()
+	public override IMetadata Clone() => CloneRaster();
+	
+	/// <inheritdoc />
+	public override IRasterMetadata CloneRaster()
 	{
 		var clone = new JpegMetadata();
-		CopyBaseTo(clone);
+		CopyRasterTo(clone);
 		
 		// Copy JPEG-specific properties
 		clone.Make = Make;

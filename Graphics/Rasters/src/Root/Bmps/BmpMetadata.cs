@@ -218,10 +218,13 @@ public class BmpMetadata : RasterMetadataBase
 	}
 
 	/// <inheritdoc />
-	public override IRasterMetadata Clone()
+	public override IMetadata Clone() => CloneRaster();
+	
+	/// <inheritdoc />
+	public override IRasterMetadata CloneRaster()
 	{
 		var clone = new BmpMetadata();
-		CopyBaseTo(clone);
+		CopyRasterTo(clone);
 		
 		// Copy BMP-specific properties
 		clone.FileSignature = FileSignature;

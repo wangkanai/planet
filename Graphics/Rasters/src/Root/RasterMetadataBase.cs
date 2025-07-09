@@ -8,12 +8,6 @@ namespace Wangkanai.Graphics.Rasters;
 public abstract class RasterMetadataBase : MetadataBase, IRasterMetadata
 {
 	/// <inheritdoc />
-	public virtual int Width { get; set; }
-
-	/// <inheritdoc />
-	public virtual int Height { get; set; }
-
-	/// <inheritdoc />
 	public virtual int BitDepth { get; set; } = 8;
 
 	/// <inheritdoc />
@@ -26,64 +20,40 @@ public abstract class RasterMetadataBase : MetadataBase, IRasterMetadata
 	public virtual byte[]? IccProfile { get; set; }
 
 	/// <inheritdoc />
-	public virtual DateTime? CreationTime { get; set; }
-
-	/// <inheritdoc />
-	public virtual DateTime? ModificationTime { get; set; }
-
-	/// <inheritdoc />
-	public virtual string? Software { get; set; }
-
-	/// <inheritdoc />
-	public virtual string? Description { get; set; }
-
-	/// <inheritdoc />
-	public virtual string? Copyright { get; set; }
-
-	/// <inheritdoc />
-	public virtual string? Author { get; set; }
-
-	/// <inheritdoc />
 	public override long EstimatedMetadataSize
 	{
 		get
 		{
+			// Get base size which includes common properties
 			long size = GetBaseMemorySize();
 
+			// Add raster-specific properties
 			size += EstimateByteArraySize(ExifData);
 			size += EstimateStringSize(XmpData);
 			size += EstimateByteArraySize(IccProfile);
-
-			// Estimate for string properties
-			size += EstimateStringSize(Software);
-			size += EstimateStringSize(Description);
-			size += EstimateStringSize(Copyright);
-			size += EstimateStringSize(Author);
 
 			return size;
 		}
 	}
 
 	/// <inheritdoc />
-	public abstract IRasterMetadata Clone();
+	public abstract override IMetadata Clone();
+	
+	/// <summary>
+	/// Creates a deep copy of the raster metadata.
+	/// </summary>
+	/// <returns>A new instance with the same values.</returns>
+	public abstract IRasterMetadata CloneRaster();
 
 	/// <inheritdoc />
-	public virtual void Clear()
+	public override void Clear()
 	{
-		ThrowIfDisposed();
-
-		Width            = 0;
-		Height           = 0;
-		BitDepth         = 8;
-		ExifData         = null;
-		XmpData          = null;
-		IccProfile       = null;
-		CreationTime     = null;
-		ModificationTime = null;
-		Software         = null;
-		Description      = null;
-		Copyright        = null;
-		Author           = null;
+		base.Clear();
+		
+		BitDepth   = 8;
+		ExifData   = null;
+		XmpData    = null;
+		IccProfile = null;
 	}
 
 	/// <inheritdoc />
@@ -92,33 +62,23 @@ public abstract class RasterMetadataBase : MetadataBase, IRasterMetadata
 		// Clear large arrays
 		ExifData   = null;
 		IccProfile = null;
-
-		// Clear strings
-		XmpData     = null;
-		Software    = null;
-		Description = null;
-		Copyright   = null;
-		Author      = null;
+		XmpData    = null;
 	}
 
 
 	/// <summary>
-	/// Copies base metadata properties from this instance to another.
+	/// Copies raster metadata properties from this instance to another.
 	/// </summary>
-	/// <param name="target">The target metadata instance.</param>
-	protected virtual void CopyBaseTo(RasterMetadataBase target)
+	/// <param name="target">The target raster metadata instance.</param>
+	protected virtual void CopyRasterTo(RasterMetadataBase target)
 	{
-		target.Width            = Width;
-		target.Height           = Height;
-		target.BitDepth         = BitDepth;
-		target.ExifData         = ExifData?.ToArray();
-		target.XmpData          = XmpData;
-		target.IccProfile       = IccProfile?.ToArray();
-		target.CreationTime     = CreationTime;
-		target.ModificationTime = ModificationTime;
-		target.Software         = Software;
-		target.Description      = Description;
-		target.Copyright        = Copyright;
-		target.Author           = Author;
+		// Copy base properties
+		base.CopyBaseTo(target);
+		
+		// Copy raster-specific properties
+		target.BitDepth   = BitDepth;
+		target.ExifData   = ExifData?.ToArray();
+		target.XmpData    = XmpData;
+		target.IccProfile = IccProfile?.ToArray();
 	}
 }
