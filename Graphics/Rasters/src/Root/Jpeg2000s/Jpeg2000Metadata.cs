@@ -142,6 +142,18 @@ public class Jpeg2000Metadata : RasterMetadataBase
 			size += ComponentMappings.Count * 8;   // Approximate size per mapping
 			size += Boxes.Count * 24;              // Approximate size per box info
 			size += Markers.Count * 16;            // Approximate size per marker info
+			
+			// Add size for tile management overhead
+			// Each tile needs metadata tracking (position, size, etc.)
+			// Estimate ~100 bytes per tile for management structures
+			if (TileWidth > 0 && TileHeight > 0)
+			{
+				var tilesAcross = (Width + TileWidth - 1) / TileWidth;
+				var tilesDown = (Height + TileHeight - 1) / TileHeight;
+				var totalTiles = tilesAcross * tilesDown;
+				size += totalTiles * 100; // ~100 bytes per tile metadata
+			}
+			
 			return size;
 		}
 	}
