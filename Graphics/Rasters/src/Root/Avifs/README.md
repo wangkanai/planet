@@ -359,6 +359,199 @@ When contributing to the AVIF implementation:
 4. Validate against AVIF specification compliance
 5. Consider memory usage and performance implications
 
+## Integration with Planet Ecosystem
+
+### Graphics Library Integration
+```csharp
+// AVIF inherits from Raster base class
+Raster raster = new AvifRaster(3840, 2160);
+
+// Implements IMetadata interface
+IMetadata metadata = raster.Metadata;
+
+// Supports graphics library disposal patterns
+if (raster.HasLargeMetadata)
+{
+    await raster.DisposeAsync();
+}
+```
+
+### Spatial Library Integration
+```csharp
+using Wangkanai.Spatial;
+using Wangkanai.Spatial.Coordinates;
+
+// Integration with geospatial data (for aerial/satellite imagery)
+var avif = new AvifRaster(4096, 4096);
+avif.Metadata.ExifData.GpsLatitude = 40.7128;
+avif.Metadata.ExifData.GpsLongitude = -74.0060;
+```
+
+## Professional Development Guidelines
+
+### Code Quality Standards
+1. **Follow CLAUDE.md guidelines**: Consistent with project standards
+2. **XML documentation**: Comprehensive API documentation
+3. **Unit testing**: Complete test coverage for all features
+4. **Performance testing**: Benchmarks for encoding/decoding operations
+5. **Memory profiling**: Validate memory usage with large HDR images
+
+### Best Practices for AVIF
+1. **Choose appropriate bit depth**: 8-bit for web, 10-bit for HDR, 12-bit for professional
+2. **Use proper chroma subsampling**: 4:4:4 for professional, 4:2:0 for web
+3. **Optimize for target platform**: Web browsers vs. professional applications
+4. **Implement progressive loading**: Use quality layers for streaming
+5. **Handle HDR metadata properly**: Ensure proper HDR10/HLG support
+
+### Error Handling Guidelines
+```csharp
+try
+{
+    var avif = new AvifRaster(width, height);
+    avif.BitDepth = 10; // HDR content
+    avif.ColorSpace = AvifColorSpace.Bt2100Pq;
+    
+    var result = await avif.EncodeAsync(options);
+    return result;
+}
+catch (ArgumentOutOfRangeException ex)
+{
+    logger.LogError("Invalid AVIF parameters: {Message}", ex.Message);
+    throw new InvalidOperationException("AVIF encoding failed due to invalid parameters", ex);
+}
+catch (NotSupportedException ex)
+{
+    logger.LogError("AVIF feature not supported: {Message}", ex.Message);
+    throw new InvalidOperationException("AVIF encoding failed due to unsupported feature", ex);
+}
+catch (OutOfMemoryException ex)
+{
+    logger.LogError("Insufficient memory for AVIF processing: {Message}", ex.Message);
+    throw new InvalidOperationException("Not enough memory to process AVIF image", ex);
+}
+```
+
+### Performance Optimization Guidelines
+```csharp
+// Optimize for web delivery
+var webOptions = new AvifEncodingOptions
+{
+    Quality = 80,
+    Speed = AvifConstants.SpeedPresets.Fast,
+    ChromaSubsampling = AvifChromaSubsampling.Yuv420,
+    ThreadCount = Environment.ProcessorCount / 2,
+    EnableFilmGrain = false // Disable for web to reduce file size
+};
+
+// Optimize for archival quality
+var archivalOptions = new AvifEncodingOptions
+{
+    Quality = 95,
+    Speed = AvifConstants.SpeedPresets.Slow,
+    ChromaSubsampling = AvifChromaSubsampling.Yuv444,
+    IsLossless = true,
+    ThreadCount = Environment.ProcessorCount,
+    EnableFilmGrain = true
+};
+```
+
+## Testing Framework Integration
+
+### Unit Testing Examples
+```csharp
+[Fact]
+public void Constructor_WithValidHdrParameters_ShouldInitialize()
+{
+    using var avif = new AvifRaster(3840, 2160);
+    avif.BitDepth = 10;
+    avif.ColorSpace = AvifColorSpace.Bt2100Pq;
+    
+    Assert.Equal(3840, avif.Width);
+    Assert.Equal(2160, avif.Height);
+    Assert.Equal(10, avif.BitDepth);
+    Assert.Equal(AvifColorSpace.Bt2100Pq, avif.ColorSpace);
+}
+
+[Theory]
+[InlineData(AvifColorSpace.Srgb, 8)]
+[InlineData(AvifColorSpace.DisplayP3, 10)]
+[InlineData(AvifColorSpace.Bt2100Pq, 10)]
+public void SetColorSpace_WithValidCombination_ShouldSucceed(AvifColorSpace colorSpace, int bitDepth)
+{
+    using var avif = new AvifRaster(1920, 1080);
+    avif.ColorSpace = colorSpace;
+    avif.BitDepth = bitDepth;
+    
+    var validation = AvifValidator.Validate(avif);
+    Assert.True(validation.IsValid);
+}
+```
+
+### Performance Testing
+```csharp
+[Fact]
+public async Task EncodeAsync_WithHdrContent_ShouldCompleteWithinTimeout()
+{
+    using var avif = AvifExamples.CreateHdr10(3840, 2160, maxLuminance: 4000.0);
+    
+    var stopwatch = Stopwatch.StartNew();
+    var data = await avif.EncodeAsync();
+    stopwatch.Stop();
+    
+    Assert.True(stopwatch.ElapsedMilliseconds < 30000); // 30 second timeout for HDR
+    Assert.True(data.Length > 0);
+}
+```
+
+## Format Conversion Examples
+
+### Converting from JPEG to AVIF
+```csharp
+// Load JPEG image
+using var jpegRaster = await JpegRaster.LoadFromFileAsync("input.jpg");
+
+// Create AVIF with optimized settings
+using var avifRaster = new AvifRaster(jpegRaster.Width, jpegRaster.Height);
+avifRaster.Quality = 85;
+avifRaster.ChromaSubsampling = AvifChromaSubsampling.Yuv420;
+
+// Copy pixel data (implementation specific)
+await avifRaster.CopyPixelDataFromAsync(jpegRaster);
+
+// Encode to AVIF
+var avifData = await avifRaster.EncodeAsync();
+await File.WriteAllBytesAsync("output.avif", avifData);
+```
+
+### Batch Conversion with Progress Tracking
+```csharp
+public async Task ConvertBatchToAvifAsync(string[] inputFiles, IProgress<float> progress)
+{
+    var total = inputFiles.Length;
+    
+    for (int i = 0; i < total; i++)
+    {
+        var inputFile = inputFiles[i];
+        var outputFile = Path.ChangeExtension(inputFile, ".avif");
+        
+        // Load source image
+        using var sourceRaster = await LoadImageAsync(inputFile);
+        
+        // Create optimized AVIF
+        using var avifRaster = AvifExamples.CreateWebOptimized(
+            sourceRaster.Width, sourceRaster.Height);
+        
+        // Copy and encode
+        await avifRaster.CopyPixelDataFromAsync(sourceRaster);
+        var avifData = await avifRaster.EncodeAsync();
+        await File.WriteAllBytesAsync(outputFile, avifData);
+        
+        // Report progress
+        progress?.Report((float)(i + 1) / total);
+    }
+}
+```
+
 ## License
 
 Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0

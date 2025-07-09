@@ -1,6 +1,7 @@
 # BMP (Bitmap) Format Implementation
 
-A comprehensive BMP (Windows Bitmap) implementation for the Planet Graphics library, providing high-performance raster image processing with extensive metadata support and complete format specification compliance.
+A comprehensive BMP (Windows Bitmap) implementation for the Planet Graphics library, providing high-performance raster
+image processing with extensive metadata support and complete format specification compliance.
 
 ## Table of Contents
 
@@ -26,13 +27,15 @@ A comprehensive BMP (Windows Bitmap) implementation for the Planet Graphics libr
 
 ## Overview
 
-The BMP implementation in Planet Graphics provides a robust, high-performance solution for working with Windows Bitmap images. It supports all major BMP variants and serves as an excellent foundation for testing and basic image operations due to its simple structure and well-documented specification.
+The BMP implementation in Planet Graphics provides a robust, high-performance solution for working with Windows Bitmap
+images. It supports all major BMP variants and serves as an excellent foundation for testing and basic image operations
+due to its simple structure and well-documented specification.
 
-**Namespace**: `Wangkanai.Graphics.Rasters.Bmps`  
-**Main Class**: `BmpRaster`  
-**Interface**: `IBmpRaster`  
-**Metadata Class**: `BmpMetadata`  
-**File Extensions**: `.bmp`, `.dib`  
+**Namespace**: `Wangkanai.Graphics.Rasters.Bmps`
+**Main Class**: `BmpRaster`
+**Interface**: `IBmpRaster`
+**Metadata Class**: `BmpMetadata`
+**File Extensions**: `.bmp`, `.dib`
 **MIME Type**: `image/bmp`
 
 ### Key Benefits
@@ -73,15 +76,15 @@ The BMP implementation in Planet Graphics provides a robust, high-performance so
 
 ### Technical Specifications
 
-| Specification | Value |
-|---------------|-------|
-| **Maximum Width** | 2,147,483,647 pixels (int.MaxValue) |
-| **Maximum Height** | 2,147,483,647 pixels (int.MaxValue) |
-| **Supported Variants** | BITMAPINFOHEADER, V4HEADER, V5HEADER |
-| **Row Alignment** | 4-byte (DWORD) boundary |
-| **Color Order** | BGR (Blue, Green, Red) |
-| **Endianness** | Little-endian |
-| **File Structure** | Header + Optional Palette + Pixel Data |
+| Specification          | Value                                  |
+|------------------------|----------------------------------------|
+| **Maximum Width**      | 2,147,483,647 pixels (int.MaxValue)    |
+| **Maximum Height**     | 2,147,483,647 pixels (int.MaxValue)    |
+| **Supported Variants** | BITMAPINFOHEADER, V4HEADER, V5HEADER   |
+| **Row Alignment**      | 4-byte (DWORD) boundary                |
+| **Color Order**        | BGR (Blue, Green, Red)                 |
+| **Endianness**         | Little-endian                          |
+| **File Structure**     | Header + Optional Palette + Pixel Data |
 
 ### File Structure Layout
 

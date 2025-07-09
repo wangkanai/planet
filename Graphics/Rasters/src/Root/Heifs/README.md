@@ -2,17 +2,21 @@
 
 ## Overview
 
-The HEIF (High Efficiency Image File Format) implementation provides comprehensive support for Apple's advanced image container format. HEIF is a modern image format that offers superior compression efficiency, HDR support, and advanced features like image sequences, auxiliary images, and lossless transformations.
+The HEIF (High Efficiency Image File Format) implementation provides comprehensive support for Apple's advanced image
+container format. HEIF is a modern image format that offers superior compression efficiency, HDR support, and advanced
+features like image sequences, auxiliary images, and lossless transformations.
 
 ## Key Features
 
 ### 🚀 **Compression Efficiency**
+
 - **50-80% smaller** file sizes compared to JPEG
 - Multiple codec support: HEVC (H.265), AVC (H.264), AV1, VVC (H.266)
 - Lossless and near-lossless compression modes
 - Advanced chroma subsampling options
 
 ### 🎨 **Advanced Color Support**
+
 - **10-bit and 12-bit** color depth support
 - HDR10, HLG, and Dolby Vision metadata
 - Wide color gamut support (BT.2020, Display P3)
@@ -20,6 +24,7 @@ The HEIF (High Efficiency Image File Format) implementation provides comprehensi
 - Multiple color spaces (sRGB, BT.709, BT.2020)
 
 ### 📱 **Modern Features**
+
 - Image sequences (burst photos, Live Photos)
 - Auxiliary images (depth maps, alpha channels)
 - Lossless transformations (rotation, cropping)
@@ -27,6 +32,7 @@ The HEIF (High Efficiency Image File Format) implementation provides comprehensi
 - Progressive decoding support
 
 ### 🔧 **Professional Capabilities**
+
 - Comprehensive EXIF metadata support
 - GPS location embedding
 - Camera settings preservation
@@ -37,12 +43,12 @@ The HEIF (High Efficiency Image File Format) implementation provides comprehensi
 
 ### Supported Codecs
 
-| Codec | Performance | Quality | Compatibility | Use Case |
-|-------|-------------|---------|---------------|----------|
-| **HEVC (H.265)** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Primary choice |
-| **AVC (H.264)** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Compatibility |
-| **AV1** | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | Next-gen |
-| **VVC (H.266)** | ⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐ | Future-proof |
+| Codec            | Performance | Quality | Compatibility | Use Case       |
+|------------------|-------------|---------|---------------|----------------|
+| **HEVC (H.265)** | ⭐⭐⭐⭐        | ⭐⭐⭐⭐⭐   | ⭐⭐⭐⭐          | Primary choice |
+| **AVC (H.264)**  | ⭐⭐⭐⭐⭐       | ⭐⭐⭐     | ⭐⭐⭐⭐⭐         | Compatibility  |
+| **AV1**          | ⭐⭐⭐         | ⭐⭐⭐⭐⭐   | ⭐⭐⭐           | Next-gen       |
+| **VVC (H.266)**  | ⭐⭐          | ⭐⭐⭐⭐⭐   | ⭐⭐            | Future-proof   |
 
 ### Color Space Support
 
@@ -199,12 +205,12 @@ optionsResult.ThrowIfInvalid();
 
 ### Compression Efficiency
 
-| Quality Setting | File Size Reduction | Visual Quality | Encoding Speed |
-|----------------|-------------------|----------------|----------------|
-| Lossless (100) | 30-50% vs JPEG | Perfect | Slow |
-| Near-lossless (95) | 40-60% vs JPEG | Excellent | Slow |
-| High (85) | 50-70% vs JPEG | Very Good | Medium |
-| Standard (75) | 60-80% vs JPEG | Good | Fast |
+| Quality Setting    | File Size Reduction | Visual Quality | Encoding Speed |
+|--------------------|---------------------|----------------|----------------|
+| Lossless (100)     | 30-50% vs JPEG      | Perfect        | Slow           |
+| Near-lossless (95) | 40-60% vs JPEG      | Excellent      | Slow           |
+| High (85)          | 50-70% vs JPEG      | Very Good      | Medium         |
+| Standard (75)      | 60-80% vs JPEG      | Good           | Fast           |
 
 ### Memory Usage
 
@@ -258,10 +264,10 @@ public sealed class HeifRaster : Raster, IHeifRaster
     public HeifProfile Profile { get; set; }
     public int BitDepth { get; set; }
     public bool HasAlpha { get; set; }
-    
+
     // Metadata
     public HeifMetadata HeifMetadata { get; set; }
-    
+
     // Processing methods
     public async Task<byte[]> EncodeAsync(HeifEncodingOptions? options = null);
     public async Task DecodeAsync(byte[] data);
@@ -281,13 +287,13 @@ public sealed class HeifMetadata : RasterMetadataBase
     public CameraMetadata? CameraMetadata { get; set; }
     public GpsCoordinates? GpsCoordinates { get; set; }
     public ImageOrientation Orientation { get; set; }
-    
+
     // Container features
     public byte[]? ThumbnailData { get; set; }
     public byte[]? PreviewData { get; set; }
     public byte[]? DepthMapData { get; set; }
     public Dictionary<string, byte[]>? AuxiliaryImages { get; set; }
-    
+
     // Codec parameters
     public Dictionary<string, object>? CodecParameters { get; set; }
 }
@@ -335,12 +341,12 @@ public async Task EncodeDecodeRoundTrip_PreservesImageData()
     // Arrange
     var original = HeifExamples.CreateHighQuality(1920, 1080);
     var options = HeifEncodingOptions.CreateLossless();
-    
+
     // Act
     var encoded = await original.EncodeAsync(options);
     var decoded = new HeifRaster(encoded);
     await decoded.DecodeAsync(encoded);
-    
+
     // Assert
     Assert.Equal(original.Width, decoded.Width);
     Assert.Equal(original.Height, decoded.Height);
@@ -352,10 +358,10 @@ public void ValidateRaster_InvalidDimensions_ReturnsError()
 {
     // Arrange
     var heif = new HeifRaster(0, 1080);
-    
+
     // Act
     var result = HeifValidator.ValidateRaster(heif);
-    
+
     // Assert
     Assert.False(result.IsValid);
     Assert.Contains("Width must be greater than 0", result.Errors);
@@ -484,11 +490,11 @@ using (var heif = new HeifRaster(1920, 1080))
 try
 {
     var heif = new HeifRaster(width, height);
-    
+
     // Validate before processing
     var validation = HeifValidator.ValidateRaster(heif);
     validation.ThrowIfInvalid();
-    
+
     // Process image
     var result = await heif.EncodeAsync();
 }
@@ -509,9 +515,9 @@ catch (OutOfMemoryException ex)
 ### Development Setup
 
 1. **Prerequisites**
-   - .NET 9.0 SDK
-   - Visual Studio 2022 or JetBrains Rider
-   - Git
+	- .NET 9.0 SDK
+	- Visual Studio 2022 or JetBrains Rider
+	- Git
 
 2. **Building**
    ```bash
@@ -531,6 +537,7 @@ catch (OutOfMemoryException ex)
 ### Code Style
 
 Follow the project's coding guidelines:
+
 - Use PascalCase for public members
 - Use camelCase for private members
 - Use expression bodies for single-line methods
