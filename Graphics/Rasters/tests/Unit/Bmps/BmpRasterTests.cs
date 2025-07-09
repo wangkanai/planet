@@ -106,7 +106,7 @@ public class BmpRasterTests
 	{
 		// Arrange
 		var bmp = new BmpRaster(100, 100);
-		bmp.BmpMetadata.Height = -100;
+		bmp.BmpMetadata.RawHeight = -100;
 
 		// Act
 		var isTopDown = bmp.IsTopDown;

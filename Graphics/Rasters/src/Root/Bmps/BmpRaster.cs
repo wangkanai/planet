@@ -78,7 +78,7 @@ public sealed class BmpRaster : Raster, IBmpRaster
 
 	/// <inheritdoc />
 	public bool IsTopDown
-		=> BmpMetadata.Height < 0;
+		=> BmpMetadata.RawHeight < 0;
 
 	/// <inheritdoc />
 	public uint PixelDataSize

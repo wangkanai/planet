@@ -189,7 +189,7 @@ public static class WebPValidator
 		}
 
 		// Performance warning for large metadata
-		var totalMetadataSize = metadata.IccProfile.Length + metadata.ExifData.Length + metadata.XmpData.Length;
+		var totalMetadataSize = (metadata.IccProfile?.Length ?? 0) + (metadata.ExifData?.Length ?? 0) + (metadata.XmpData?.Length ?? 0);
 		if (totalMetadataSize > ImageConstants.LargeMetadataThreshold)
 			result.AddWarning($"Large metadata size ({totalMetadataSize:N0} bytes) may impact performance.");
 	}

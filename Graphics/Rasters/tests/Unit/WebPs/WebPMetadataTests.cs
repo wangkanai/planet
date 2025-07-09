@@ -11,9 +11,9 @@ public class WebPMetadataTests
 		var metadata = new WebPMetadata();
 
 		// Assert
-		Assert.Equal(0, metadata.IccProfile.Length);
-		Assert.Equal(0, metadata.ExifData.Length);
-		Assert.Equal(string.Empty, metadata.XmpData);
+		Assert.Null(metadata.IccProfile);
+		Assert.Null(metadata.ExifData);
+		Assert.Null(metadata.XmpData);
 		Assert.Null(metadata.CreationDateTime);
 		Assert.Null(metadata.Software);
 		Assert.Null(metadata.Description);
