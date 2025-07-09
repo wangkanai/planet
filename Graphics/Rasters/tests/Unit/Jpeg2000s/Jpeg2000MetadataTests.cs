@@ -379,7 +379,7 @@ public class Jpeg2000MetadataTests
 		original.ChannelDefinitions.Add(new ChannelDefinition { ChannelIndex = 1 });
 
 		// Act
-		var clone = original.Clone();
+		var clone = (Jpeg2000Metadata)original.Clone();
 
 		// Assert
 		Assert.Equal(original.Width, clone.Width);

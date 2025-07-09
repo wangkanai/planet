@@ -137,7 +137,7 @@ public class AvifMetadataTests
 			IccProfile = new byte[] { 5, 6, 7, 8 }
 		};
 
-		var clone = original.Clone();
+		var clone = (AvifMetadata)original.Clone();
 
 		Assert.NotSame(original, clone);
 		Assert.Equal(original.Width, clone.Width);
