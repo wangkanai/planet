@@ -416,9 +416,9 @@ public class WebPRasterTests
 		webp.Dispose();
 
 		// Assert
-		Assert.Equal(0, webp.WebPMetadata.IccProfile.Length);
-		Assert.Equal(0, webp.WebPMetadata.ExifData.Length);
-		Assert.Equal(string.Empty, webp.WebPMetadata.XmpData);
+		Assert.Null(webp.WebPMetadata.IccProfile);
+		Assert.Null(webp.WebPMetadata.ExifData);
+		Assert.Null(webp.WebPMetadata.XmpData);
 		Assert.Empty(webp.WebPMetadata.CustomChunks);
 		Assert.Empty(webp.WebPMetadata.AnimationFrames);
 	}
@@ -438,9 +438,9 @@ public class WebPRasterTests
 		await webp.DisposeAsync();
 
 		// Assert
-		Assert.Equal(0, webp.WebPMetadata.IccProfile.Length);
-		Assert.Equal(0, webp.WebPMetadata.ExifData.Length);
-		Assert.Equal(string.Empty, webp.WebPMetadata.XmpData);
+		Assert.Null(webp.WebPMetadata.IccProfile);
+		Assert.Null(webp.WebPMetadata.ExifData);
+		Assert.Null(webp.WebPMetadata.XmpData);
 		Assert.Empty(webp.WebPMetadata.CustomChunks);
 		Assert.Empty(webp.WebPMetadata.AnimationFrames);
 	}
