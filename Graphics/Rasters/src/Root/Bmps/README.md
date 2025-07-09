@@ -1,51 +1,117 @@
-# BMP (Bitmap) Raster Support
+# BMP (Bitmap) Format Implementation
 
-This directory contains the implementation of BMP (Windows Bitmap) format support for the Wangkanai Graphics Rasters
-library.
+A comprehensive BMP (Windows Bitmap) implementation for the Planet Graphics library, providing high-performance raster image processing with extensive metadata support and complete format specification compliance.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [BMP Format Specifications](#bmp-format-specifications)
+- [Header Variants](#header-variants)
+- [Color Depth Support](#color-depth-support)
+- [Compression Methods](#compression-methods)
+- [Metadata Support](#metadata-support)
+- [Performance Characteristics](#performance-characteristics)
+- [Usage Examples](#usage-examples)
+- [Advanced Features](#advanced-features)
+- [API Reference](#api-reference)
+- [Implementation Details](#implementation-details)
+- [Testing Framework](#testing-framework)
+- [Memory Management](#memory-management)
+- [Error Handling](#error-handling)
+- [Format Conversion](#format-conversion)
+- [Professional Development](#professional-development)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Overview
 
-BMP is a fundamental uncompressed raster format widely used in Windows environments. It serves as an excellent
-foundation for testing and basic image operations due to its simple structure and well-documented specification.
+The BMP implementation in Planet Graphics provides a robust, high-performance solution for working with Windows Bitmap images. It supports all major BMP variants and serves as an excellent foundation for testing and basic image operations due to its simple structure and well-documented specification.
+
+**Namespace**: `Wangkanai.Graphics.Rasters.Bmps`  
+**Main Class**: `BmpRaster`  
+**Interface**: `IBmpRaster`  
+**Metadata Class**: `BmpMetadata`  
+**File Extensions**: `.bmp`, `.dib`  
+**MIME Type**: `image/bmp`
+
+### Key Benefits
+
+- **Universal Compatibility**: Works across all Windows platforms and most image viewers
+- **Simple Structure**: Easy to parse and generate programmatically
+- **Excellent for Testing**: Uncompressed format ideal for algorithm validation
+- **Fast Processing**: No decompression overhead for most variants
+- **Comprehensive Support**: All major BMP variants and color depths
+- **Professional Quality**: Production-ready implementation with extensive validation
 
 ## Features
 
-### Supported BMP Variants
+### Core Capabilities
 
-- **BITMAPINFOHEADER** (40 bytes) - Most common variant
-- **BITMAPV4HEADER** (108 bytes) - Extended with color space information
-- **BITMAPV5HEADER** (124 bytes) - Latest version with ICC color profiles
+- ✅ **Complete BMP Support**: All major BMP header variants (BITMAPINFOHEADER, V4, V5)
+- ✅ **Full Color Depth Range**: 1, 4, 8, 16, 24, 32-bit support
+- ✅ **Compression Support**: BI_RGB, BI_RLE4, BI_RLE8, BI_BITFIELDS
+- ✅ **Advanced Color Management**: ICC profiles, color spaces, gamma correction
+- ✅ **Palette Support**: Full indexed color support with validation
+- ✅ **Transparency**: Alpha channel support for 32-bit images
+- ✅ **High-Performance Processing**: Optimized for speed and memory efficiency
+- ✅ **Comprehensive Validation**: Format validation with detailed error reporting
+- ✅ **Async/Await Support**: Modern asynchronous patterns
+- ✅ **Thread Safety**: Safe concurrent operations
 
-### Color Depth Support
+### Professional Features
 
-- **1-bit** - Monochrome (black and white)
-- **4-bit** - 16-color palette
-- **8-bit** - 256-color palette
-- **16-bit** - High color (RGB555, RGB565)
-- **24-bit** - True color (RGB888)
-- **32-bit** - True color with alpha channel (ARGB8888)
+- **Top-Down Images**: Support for negative height (top-down format)
+- **Custom Bit Masks**: Flexible bit field configurations
+- **Resolution Settings**: DPI and pixel-per-meter support
+- **Color Space Management**: sRGB, Adobe RGB, and custom color spaces
+- **Validation Framework**: Comprehensive format compliance checking
+- **Memory Optimization**: Efficient memory usage patterns
+- **Performance Monitoring**: Built-in performance characteristics tracking
 
-### Compression Types
+## BMP Format Specifications
 
-- **BI_RGB** - Uncompressed (most common)
-- **BI_RLE8** - 8-bit run-length encoding
-- **BI_RLE4** - 4-bit run-length encoding
-- **BI_BITFIELDS** - Uncompressed with custom bit masks
+### Technical Specifications
 
-## File Structure
+| Specification | Value |
+|---------------|-------|
+| **Maximum Width** | 2,147,483,647 pixels (int.MaxValue) |
+| **Maximum Height** | 2,147,483,647 pixels (int.MaxValue) |
+| **Supported Variants** | BITMAPINFOHEADER, V4HEADER, V5HEADER |
+| **Row Alignment** | 4-byte (DWORD) boundary |
+| **Color Order** | BGR (Blue, Green, Red) |
+| **Endianness** | Little-endian |
+| **File Structure** | Header + Optional Palette + Pixel Data |
+
+### File Structure Layout
+
+```
+BMP File Structure:
+┌─────────────────────┐
+│   File Header       │ 14 bytes
+├─────────────────────┤
+│   Info Header       │ 40/108/124 bytes
+├─────────────────────┤
+│   Color Palette     │ Optional (2^n * 4 bytes)
+├─────────────────────┤
+│   Pixel Data        │ Variable size
+└─────────────────────┘
+```
+
+### Directory Structure
 
 ```
 Bmps/
 ├── IBmpRaster.cs              # Interface definition
 ├── BmpRaster.cs               # Main implementation
-├── BmpMetadata.cs             # Metadata handling
-├── BmpConstants.cs            # Format constants
+├── BmpMetadata.cs             # Comprehensive metadata handling
+├── BmpConstants.cs            # Format constants and specifications
 ├── BmpColorDepth.cs           # Color depth enumeration
-├── BmpCompression.cs          # Compression types
-├── BmpValidator.cs            # Format validation
-├── BmpValidationResult.cs     # Validation results
-├── BmpExamples.cs             # Usage examples
-└── README.md                  # This documentation
+├── BmpCompression.cs          # Compression types enumeration
+├── BmpValidator.cs            # Format validation engine
+├── BmpValidationResult.cs     # Validation results container
+├── BmpExamples.cs             # Usage examples and factory methods
+└── README.md                  # This comprehensive documentation
 ```
 
 ## Usage Examples
