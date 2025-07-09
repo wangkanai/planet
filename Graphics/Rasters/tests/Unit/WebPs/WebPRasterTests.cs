@@ -322,7 +322,7 @@ public class WebPRasterTests
 		// Add metadata to webp2
 		webp2.WebPMetadata.IccProfile = new byte[1000];
 		webp2.WebPMetadata.ExifData = new byte[500];
-		webp2.WebPMetadata.XmpData = new byte[300];
+		webp2.WebPMetadata.XmpData = "<x:xmpmeta>Test XMP data</x:xmpmeta>";
 
 		// Act
 		var size1 = webp1.GetEstimatedFileSize();
@@ -408,7 +408,7 @@ public class WebPRasterTests
 		var webp = new WebPRaster();
 		webp.WebPMetadata.IccProfile = new byte[100];
 		webp.WebPMetadata.ExifData = new byte[100];
-		webp.WebPMetadata.XmpData = new byte[100];
+		webp.WebPMetadata.XmpData = "<x:xmpmeta>Test XMP data</x:xmpmeta>";
 		webp.WebPMetadata.CustomChunks.Add("TEST", new byte[50]);
 		webp.WebPMetadata.AnimationFrames.Add(new WebPAnimationFrame());
 
@@ -416,9 +416,9 @@ public class WebPRasterTests
 		webp.Dispose();
 
 		// Assert
-		Assert.True(webp.WebPMetadata.IccProfile.IsEmpty);
-		Assert.True(webp.WebPMetadata.ExifData.IsEmpty);
-		Assert.True(webp.WebPMetadata.XmpData.IsEmpty);
+		Assert.Equal(0, webp.WebPMetadata.IccProfile.Length);
+		Assert.Equal(0, webp.WebPMetadata.ExifData.Length);
+		Assert.Equal(string.Empty, webp.WebPMetadata.XmpData);
 		Assert.Empty(webp.WebPMetadata.CustomChunks);
 		Assert.Empty(webp.WebPMetadata.AnimationFrames);
 	}
@@ -430,7 +430,7 @@ public class WebPRasterTests
 		var webp = new WebPRaster();
 		webp.WebPMetadata.IccProfile = new byte[100];
 		webp.WebPMetadata.ExifData = new byte[100];
-		webp.WebPMetadata.XmpData = new byte[100];
+		webp.WebPMetadata.XmpData = "<x:xmpmeta>Test XMP data</x:xmpmeta>";
 		webp.WebPMetadata.CustomChunks.Add("TEST", new byte[50]);
 		webp.WebPMetadata.AnimationFrames.Add(new WebPAnimationFrame());
 
@@ -438,9 +438,9 @@ public class WebPRasterTests
 		await webp.DisposeAsync();
 
 		// Assert
-		Assert.True(webp.WebPMetadata.IccProfile.IsEmpty);
-		Assert.True(webp.WebPMetadata.ExifData.IsEmpty);
-		Assert.True(webp.WebPMetadata.XmpData.IsEmpty);
+		Assert.Equal(0, webp.WebPMetadata.IccProfile.Length);
+		Assert.Equal(0, webp.WebPMetadata.ExifData.Length);
+		Assert.Equal(string.Empty, webp.WebPMetadata.XmpData);
 		Assert.Empty(webp.WebPMetadata.CustomChunks);
 		Assert.Empty(webp.WebPMetadata.AnimationFrames);
 	}
@@ -475,7 +475,7 @@ public class WebPRasterTests
 		var webp = new WebPRaster();
 		webp.WebPMetadata.IccProfile = new byte[1000];
 		webp.WebPMetadata.ExifData = new byte[500];
-		webp.WebPMetadata.XmpData = new byte[300];
+		webp.WebPMetadata.XmpData = "<x:xmpmeta>Test XMP metadata with length</x:xmpmeta>";
 		webp.WebPMetadata.CustomChunks.Add("TEST1", new byte[200]);
 		webp.WebPMetadata.CustomChunks.Add("TEST2", new byte[100]);
 
@@ -524,7 +524,7 @@ public class WebPRasterTests
 		await webp.DisposeAsync();
 
 		// Assert
-		Assert.True(webp.WebPMetadata.IccProfile.IsEmpty);
+		Assert.Equal(0, webp.WebPMetadata.IccProfile.Length);
 		Assert.Empty(webp.WebPMetadata.AnimationFrames);
 	}
 
@@ -543,8 +543,8 @@ public class WebPRasterTests
 		await webp.DisposeAsync();
 
 		// Assert
-		Assert.True(webp.WebPMetadata.IccProfile.IsEmpty);
-		Assert.True(webp.WebPMetadata.ExifData.IsEmpty);
+		Assert.Equal(0, webp.WebPMetadata.IccProfile.Length);
+		Assert.Equal(0, webp.WebPMetadata.ExifData.Length);
 	}
 
 	[Fact]
