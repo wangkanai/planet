@@ -16,8 +16,29 @@ public abstract class MetadataBase : IMetadata
 	/// <inheritdoc />
 	public abstract long EstimatedMetadataSize { get; }
 
-	public int Width  { get; set; }
-	public int Height { get; set; }
+	/// <inheritdoc />
+	public virtual int Width  { get; set; }
+	
+	/// <inheritdoc />
+	public virtual int Height { get; set; }
+	
+	/// <summary>Gets or sets the author or artist name.</summary>
+	public virtual string? Author { get; set; }
+	
+	/// <summary>Gets or sets the copyright information.</summary>
+	public virtual string? Copyright { get; set; }
+	
+	/// <summary>Gets or sets the description.</summary>
+	public virtual string? Description { get; set; }
+	
+	/// <summary>Gets or sets the software used to create or modify the content.</summary>
+	public virtual string? Software { get; set; }
+	
+	/// <summary>Gets or sets the creation date and time.</summary>
+	public virtual DateTime? CreationTime { get; set; }
+	
+	/// <summary>Gets or sets the modification date and time.</summary>
+	public virtual DateTime? ModificationTime { get; set; }
 
 	/// <inheritdoc />
 	public virtual bool HasLargeMetadata
@@ -28,7 +49,21 @@ public abstract class MetadataBase : IMetadata
 	/// </summary>
 	/// <returns>Base size in bytes.</returns>
 	protected virtual long GetBaseMemorySize()
-		=> 256; // Base object size estimate
+	{
+		long size = 256; // Base object size estimate
+		
+		// Add sizes for common string properties
+		size += EstimateStringSize(Author);
+		size += EstimateStringSize(Copyright);
+		size += EstimateStringSize(Description);
+		size += EstimateStringSize(Software);
+		
+		// Add sizes for basic properties
+		size += sizeof(int) * 2; // Width and Height
+		size += 16 * 2; // CreationTime and ModificationTime (estimated)
+		
+		return size;
+	}
 
 	/// <summary>
 	/// Estimates the memory size of a string using UTF-8 encoding.
@@ -170,4 +205,43 @@ public abstract class MetadataBase : IMetadata
 	/// When overridden in a derived class, releases managed resources.
 	/// </summary>
 	protected abstract void DisposeManagedResources();
+	
+	/// <summary>
+	/// Creates a deep copy of the metadata.
+	/// </summary>
+	/// <returns>A new instance with the same values.</returns>
+	public abstract IMetadata Clone();
+	
+	/// <summary>
+	/// Clears all metadata values to their defaults.
+	/// </summary>
+	public virtual void Clear()
+	{
+		ThrowIfDisposed();
+		
+		Width = 0;
+		Height = 0;
+		Author = null;
+		Copyright = null;
+		Description = null;
+		Software = null;
+		CreationTime = null;
+		ModificationTime = null;
+	}
+	
+	/// <summary>
+	/// Copies base metadata properties from this instance to another.
+	/// </summary>
+	/// <param name="target">The target metadata instance.</param>
+	protected virtual void CopyBaseTo(MetadataBase target)
+	{
+		target.Width = Width;
+		target.Height = Height;
+		target.Author = Author;
+		target.Copyright = Copyright;
+		target.Description = Description;
+		target.Software = Software;
+		target.CreationTime = CreationTime;
+		target.ModificationTime = ModificationTime;
+	}
 }

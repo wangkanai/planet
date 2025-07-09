@@ -228,10 +228,13 @@ public class WebPMetadata : RasterMetadataBase
 	}
 
 	/// <inheritdoc />
-	public override IRasterMetadata Clone()
+	public override IMetadata Clone() => CloneRaster();
+	
+	/// <inheritdoc />
+	public override IRasterMetadata CloneRaster()
 	{
 		var clone = new WebPMetadata();
-		CopyBaseTo(clone);
+		CopyRasterTo(clone);
 		
 		// Copy WebP-specific properties
 		clone.IccProfileMemory = IccProfileMemory;

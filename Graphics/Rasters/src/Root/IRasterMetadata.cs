@@ -5,11 +5,6 @@ namespace Wangkanai.Graphics.Rasters;
 /// <summary>Defines the contract for raster image metadata across all image formats.</summary>
 public interface IRasterMetadata : IMetadata
 {
-	/// <summary>Gets or sets the image width in pixels.</summary>
-	int Width { get; set; }
-
-	/// <summary>Gets or sets the image height in pixels.</summary>
-	int Height { get; set; }
 
 	/// <summary>Gets or sets the bit depth per channel.</summary>
 	int BitDepth { get; set; }
@@ -41,9 +36,6 @@ public interface IRasterMetadata : IMetadata
 	/// <summary>Gets or sets the author or artist name.</summary>
 	string? Author { get; set; }
 
-	/// <summary>Creates a deep copy of the metadata.</summary>
-	/// <returns>A new instance with the same values.</returns>
-	IRasterMetadata Clone();
 
 	/// <summary>Clears all metadata values to their defaults.</summary>
 	void Clear();

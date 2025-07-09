@@ -52,7 +52,10 @@ internal class ExampleJpegMetadata : RasterMetadataBase
 	}
 
 	/// <inheritdoc />
-	public override IRasterMetadata Clone()
+	public override IMetadata Clone() => CloneRaster();
+	
+	/// <inheritdoc />
+	public override IRasterMetadata CloneRaster()
 	{
 		var clone = new ExampleJpegMetadata
 		{
@@ -65,7 +68,7 @@ internal class ExampleJpegMetadata : RasterMetadataBase
 		};
 
 		// Copy base properties
-		CopyBaseTo(clone);
+		CopyRasterTo(clone);
 
 		return clone;
 	}

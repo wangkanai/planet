@@ -205,10 +205,13 @@ public class PngMetadata : RasterMetadataBase
 	}
 
 	/// <inheritdoc />
-	public override IRasterMetadata Clone()
+	public override IMetadata Clone() => CloneRaster();
+	
+	/// <inheritdoc />
+	public override IRasterMetadata CloneRaster()
 	{
 		var clone = new PngMetadata();
-		CopyBaseTo(clone);
+		CopyRasterTo(clone);
 
 		// Copy PNG-specific properties
 		clone.Title = Title;

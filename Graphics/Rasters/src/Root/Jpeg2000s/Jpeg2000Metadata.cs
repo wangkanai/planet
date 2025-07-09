@@ -203,10 +203,13 @@ public class Jpeg2000Metadata : RasterMetadataBase
 	}
 
 	/// <inheritdoc />
-	public override IRasterMetadata Clone()
+	public override IMetadata Clone() => CloneRaster();
+	
+	/// <inheritdoc />
+	public override IRasterMetadata CloneRaster()
 	{
 		var clone = new Jpeg2000Metadata();
-		CopyBaseTo(clone);
+		CopyRasterTo(clone);
 		
 		// Copy JPEG2000-specific properties
 		clone.Components = Components;
