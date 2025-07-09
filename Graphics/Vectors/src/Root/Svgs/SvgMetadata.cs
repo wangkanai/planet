@@ -14,6 +14,9 @@ public class SvgMetadata : ISvgMetadata
 	private readonly Dictionary<string, string> _namespaces;
 	private readonly Dictionary<string, object> _customProperties;
 
+	public int Width  { get; set; }
+	public int Height { get; set; }
+
 	/// <summary>Initializes a new instance of the SvgMetadata class with default values.</summary>
 	public SvgMetadata()
 	{
@@ -174,6 +177,8 @@ public class SvgMetadata : ISvgMetadata
 	/// <summary>Gets whether this SVG requires performance optimization based on element count.</summary>
 	public bool RequiresOptimization
 		=> ElementCount > SvgConstants.PerformanceOptimizationThreshold;
+
+
 
 	/// <inheritdoc />
 	public bool HasLargeMetadata => IsVeryLargeSvg;

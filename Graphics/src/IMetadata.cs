@@ -6,8 +6,14 @@ namespace Wangkanai.Graphics;
 /// Base interface for all metadata implementations in the Graphics library.
 /// Provides a common contract for resource cleanup and size estimation.
 /// </summary>
-public interface IMetadata : IDisposable, IAsyncDisposable 
+public interface IMetadata : IDisposable, IAsyncDisposable
 {
+	/// <summary>Gets or sets the image width in pixels.</summary>
+	int Width { get; set; }
+
+	/// <summary>Gets or sets the image height in pixels.</summary>
+	int Height { get; set; }
+
 	/// <summary>Gets a value indicating whether the metadata is large and benefits from async disposal.</summary>
 	bool HasLargeMetadata { get; }
 

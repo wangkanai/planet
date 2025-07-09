@@ -16,6 +16,9 @@ public abstract class MetadataBase : IMetadata
 	/// <inheritdoc />
 	public abstract long EstimatedMetadataSize { get; }
 
+	public int Width  { get; set; }
+	public int Height { get; set; }
+
 	/// <inheritdoc />
 	public virtual bool HasLargeMetadata
 		=> EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
