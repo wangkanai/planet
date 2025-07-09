@@ -26,27 +26,7 @@ public static class MetadataConversionExtensions
 			[nameof(metadata.HasLargeMetadata)] = metadata.HasLargeMetadata
 		};
 
-		// Add type-specific properties
-		if (metadata is IRasterMetadata raster)
-		{
-			properties[nameof(raster.BitDepth)] = raster.BitDepth;
-			properties[nameof(raster.XResolution)] = raster.XResolution;
-			properties[nameof(raster.YResolution)] = raster.YResolution;
-			properties[nameof(raster.ResolutionUnit)] = raster.ResolutionUnit;
-			properties[nameof(raster.ColorSpace)] = raster.ColorSpace;
-			properties[nameof(raster.GpsLatitude)] = raster.GpsLatitude;
-			properties[nameof(raster.GpsLongitude)] = raster.GpsLongitude;
-			properties["HasExifData"] = raster.HasExifData();
-			properties["HasXmpData"] = raster.HasXmpData();
-			properties["HasIccProfile"] = raster.HasIccProfile();
-		}
-
-		if (metadata is IVectorMetadata vector)
-		{
-			properties[nameof(vector.CoordinateReferenceSystem)] = vector.CoordinateReferenceSystem;
-			properties[nameof(vector.ColorSpace)] = vector.ColorSpace;
-			properties[nameof(vector.ElementCount)] = vector.ElementCount;
-		}
+		// Type-specific properties would be added by format-specific extensions
 
 		return properties;
 	}
@@ -87,24 +67,7 @@ public static class MetadataConversionExtensions
 		if (metadata.HasOrientation())
 			parts.Add($"orientation:{metadata.Orientation}");
 
-		if (metadata is IRasterMetadata raster)
-		{
-			parts.Add($"depth:{raster.BitDepth}");
-			
-			if (raster.HasResolution())
-				parts.Add($"res:{raster.XResolution}x{raster.YResolution}");
-			
-			if (raster.HasGpsCoordinates())
-				parts.Add($"gps:{raster.GpsLatitude:F6},{raster.GpsLongitude:F6}");
-		}
-
-		if (metadata is IVectorMetadata vector)
-		{
-			parts.Add($"elements:{vector.ElementCount}");
-			
-			if (vector.HasCoordinateSystem())
-				parts.Add($"crs:{vector.CoordinateReferenceSystem}");
-		}
+		// Type-specific information would be added by format-specific extensions
 
 		return string.Join(" ", parts);
 	}
@@ -161,39 +124,7 @@ public static class MetadataConversionExtensions
 		var pixelCount = metadata.GetPixelCount();
 		description.AppendLine($"Resolution: {pixelCount:N0} pixels ({pixelCount / 1000000.0:F1} megapixels)");
 
-		// Type-specific information
-		if (metadata is IRasterMetadata raster)
-		{
-			description.AppendLine($"Bit depth: {raster.BitDepth} bits per channel");
-			
-			if (raster.HasResolution())
-			{
-				var dpi = raster.GetResolutionInDpi();
-				description.AppendLine($"Print resolution: {dpi:F0} DPI");
-			}
-			
-			if (raster.HasGpsCoordinates())
-			{
-				description.AppendLine($"Location: {raster.GpsLatitude:F6}°, {raster.GpsLongitude:F6}°");
-			}
-			
-			var features = new List<string>();
-			if (raster.HasExifData()) features.Add("EXIF");
-			if (raster.HasXmpData()) features.Add("XMP");
-			if (raster.HasIccProfile()) features.Add("ICC Profile");
-			
-			if (features.Any())
-				description.AppendLine($"Metadata: {string.Join(", ", features)}");
-		}
-
-		if (metadata is IVectorMetadata vector)
-		{
-			description.AppendLine($"Elements: {vector.ElementCount:N0}");
-			description.AppendLine($"Complexity: {vector.GetComplexityLevel()}");
-			
-			if (vector.HasCoordinateSystem())
-				description.AppendLine($"Coordinate system: {vector.CoordinateReferenceSystem}");
-		}
+		// Type-specific information would be added by format-specific extensions
 
 		// Performance characteristics
 		var sizeInfo = $"Metadata size: {metadata.GetEstimatedSizeInKB():F1} KB";
@@ -245,16 +176,14 @@ public static class MetadataConversionExtensions
 			HasTitle = metadata.HasTitle(),
 			HasOrientation = metadata.HasOrientation(),
 			
-			// Raster-specific
-			BitDepth = (metadata as IRasterMetadata)?.BitDepth,
-			HasResolution = (metadata as IRasterMetadata)?.HasResolution() ?? false,
-			HasGpsData = (metadata as IRasterMetadata)?.HasGpsCoordinates() ?? false,
-			HasColorProfile = (metadata as IRasterMetadata)?.HasIccProfile() ?? false,
-			
-			// Vector-specific
-			ElementCount = (metadata as IVectorMetadata)?.ElementCount,
-			HasCoordinateSystem = (metadata as IVectorMetadata)?.HasCoordinateSystem() ?? false,
-			ComplexityLevel = (metadata as IVectorMetadata)?.GetComplexityLevel().ToString()
+			// Type-specific properties would be set by format-specific extensions
+			BitDepth = null,
+			HasResolution = false,
+			HasGpsData = false,
+			HasColorProfile = false,
+			ElementCount = null,
+			HasCoordinateSystem = false,
+			ComplexityLevel = null
 		};
 	}
 
