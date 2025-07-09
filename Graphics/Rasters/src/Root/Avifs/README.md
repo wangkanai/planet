@@ -1,10 +1,42 @@
 # AVIF (AV1 Image File Format) Support
 
-This module provides comprehensive support for the AVIF image format in the Wangkanai Graphics Rasters library.
+This directory contains the AVIF (AV1 Image File Format) implementation for the Wangkanai Graphics Rasters library, providing comprehensive support for next-generation image processing with advanced compression and HDR capabilities.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [AVIF Format Capabilities](#avif-format-capabilities)
+- [Compression Modes](#compression-modes)
+- [Color Space and HDR Support](#color-space-and-hdr-support)
+- [Transparency and Alpha Channel](#transparency-and-alpha-channel)
+- [Metadata Handling](#metadata-handling)
+- [Performance Characteristics](#performance-characteristics)
+- [Technical Specifications](#technical-specifications)
+- [API Reference](#api-reference)
+- [Usage Examples](#usage-examples)
+- [Integration Examples](#integration-examples)
+- [Format Conversion](#format-conversion)
+- [Error Handling and Troubleshooting](#error-handling-and-troubleshooting)
+- [Testing Framework](#testing-framework)
+- [Development Guidelines](#development-guidelines)
+- [Performance Optimization](#performance-optimization)
+- [Implementation Details](#implementation-details)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Overview
 
-AVIF is a modern image format based on the AV1 video codec, offering superior compression efficiency while maintaining high image quality. It supports HDR, wide color gamut, alpha transparency, and advanced features like film grain synthesis.
+AVIF is a modern image format based on the AV1 video codec, offering superior compression efficiency while maintaining high image quality. It supports HDR, wide color gamut, alpha transparency, and advanced features like film grain synthesis. This implementation provides full support for the AVIF specification with optimized performance for the Planet Graphics ecosystem.
+
+### Key Benefits
+
+- **Superior Compression**: Up to 50% smaller file sizes compared to JPEG
+- **High Dynamic Range**: Full HDR10 and HLG support with proper metadata
+- **Wide Color Gamut**: BT.2020, Display P3, and extended color spaces
+- **Modern Features**: Film grain synthesis, alpha transparency, lossless compression
+- **Performance Optimized**: Multi-threaded encoding with memory efficiency
+- **Standards Compliant**: Full AVIF specification compliance with validation
+- **Extensible**: Clean architecture for future enhancements
 
 ## Features
 
