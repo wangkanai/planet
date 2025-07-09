@@ -18,25 +18,6 @@ public interface IRasterMetadata : IMetadata
 	/// <summary>Gets or sets the ICC color profile data.</summary>
 	byte[]? IccProfile { get; set; }
 
-	/// <summary>Gets or sets the creation date and time.</summary>
-	DateTime? CreationTime { get; set; }
-
-	/// <summary>Gets or sets the modification date and time.</summary>
-	DateTime? ModificationTime { get; set; }
-
-	/// <summary>Gets or sets the software used to create or modify the image.</summary>
-	string? Software { get; set; }
-
-	/// <summary>Gets or sets the image description.</summary>
-	string? Description { get; set; }
-
-	/// <summary>Gets or sets the copyright information.</summary>
-	string? Copyright { get; set; }
-
-	/// <summary>Gets or sets the author or artist name.</summary>
-	string? Author { get; set; }
-
-
 	/// <summary>Clears all metadata values to their defaults.</summary>
 	void Clear();
 }
