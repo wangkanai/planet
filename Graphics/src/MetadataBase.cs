@@ -68,7 +68,7 @@ public abstract class MetadataBase : IMetadata
 		// Add sizes for basic properties
 		size += sizeof(int) * 2; // Width and Height
 		size += 16 * 2; // CreationTime and ModificationTime (estimated)
-		size += sizeof(int); // Orientation (estimated)
+		size += sizeof(int) + sizeof(bool); // Orientation (estimated, accounting for nullable overhead)
 		
 		return size;
 	}
