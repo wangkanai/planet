@@ -33,6 +33,15 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 	public virtual string? Title { get; set; }
 
 	/// <inheritdoc />
+	public virtual string? CoordinateReferenceSystem { get; set; }
+
+	/// <inheritdoc />
+	public virtual string? ColorSpace { get; set; }
+
+	/// <inheritdoc />
+	public virtual int ElementCount { get; set; }
+
+	/// <inheritdoc />
 	public override long EstimatedMetadataSize
 	{
 		get
@@ -42,7 +51,10 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 
 			// Add vector-specific properties
 			size += EstimateStringSize(Title);
+			size += EstimateStringSize(CoordinateReferenceSystem);
+			size += EstimateStringSize(ColorSpace);
 			size += sizeof(double) * 4; // ViewBox coordinates
+			size += sizeof(int); // ElementCount
 
 			return size;
 		}
@@ -62,18 +74,23 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 	{
 		base.Clear();
 		
-		ViewBoxWidth  = 0;
-		ViewBoxHeight = 0;
-		ViewBoxX      = 0;
-		ViewBoxY      = 0;
-		Title         = null;
+		ViewBoxWidth              = 0;
+		ViewBoxHeight             = 0;
+		ViewBoxX                  = 0;
+		ViewBoxY                  = 0;
+		Title                     = null;
+		CoordinateReferenceSystem = null;
+		ColorSpace                = null;
+		ElementCount              = 0;
 	}
 
 	/// <inheritdoc />
 	protected override void DisposeManagedResources()
 	{
 		// Clear vector-specific strings
-		Title = null;
+		Title                     = null;
+		CoordinateReferenceSystem = null;
+		ColorSpace                = null;
 	}
 
 	/// <summary>
@@ -86,10 +103,13 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 		base.CopyBaseTo(target);
 		
 		// Copy vector-specific properties
-		target.ViewBoxWidth  = ViewBoxWidth;
-		target.ViewBoxHeight = ViewBoxHeight;
-		target.ViewBoxX      = ViewBoxX;
-		target.ViewBoxY      = ViewBoxY;
-		target.Title         = Title;
+		target.ViewBoxWidth              = ViewBoxWidth;
+		target.ViewBoxHeight             = ViewBoxHeight;
+		target.ViewBoxX                  = ViewBoxX;
+		target.ViewBoxY                  = ViewBoxY;
+		target.Title                     = Title;
+		target.CoordinateReferenceSystem = CoordinateReferenceSystem;
+		target.ColorSpace                = ColorSpace;
+		target.ElementCount              = ElementCount;
 	}
 }

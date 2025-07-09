@@ -19,4 +19,19 @@ public interface IMetadata : IDisposable, IAsyncDisposable
 
 	/// <summary>Gets the estimated size of metadata in bytes.</summary>
 	long EstimatedMetadataSize { get; }
+
+	/// <summary>Gets or sets the image/document title.</summary>
+	string? Title { get; set; }
+
+	/// <summary>Gets or sets the orientation of the content.</summary>
+	int? Orientation { get; set; }
+
+	/// <summary>Validates the metadata for compliance with format specifications.</summary>
+	bool ValidateMetadata();
+
+	/// <summary>Clears all metadata values to their defaults.</summary>
+	void Clear();
+
+	/// <summary>Creates a deep copy of the metadata.</summary>
+	IMetadata Clone();
 }

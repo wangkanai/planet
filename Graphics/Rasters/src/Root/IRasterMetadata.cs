@@ -18,6 +18,24 @@ public interface IRasterMetadata : IMetadata
 	/// <summary>Gets or sets the ICC color profile data.</summary>
 	byte[]? IccProfile { get; set; }
 
-	/// <summary>Clears all metadata values to their defaults.</summary>
-	void Clear();
+	/// <summary>Gets or sets the horizontal resolution.</summary>
+	double? XResolution { get; set; }
+
+	/// <summary>Gets or sets the vertical resolution.</summary>
+	double? YResolution { get; set; }
+
+	/// <summary>Gets or sets the resolution unit.</summary>
+	int? ResolutionUnit { get; set; }
+
+	/// <summary>Gets or sets the color space identifier.</summary>
+	int? ColorSpace { get; set; }
+
+	/// <summary>Gets or sets the GPS latitude.</summary>
+	double? GpsLatitude { get; set; }
+
+	/// <summary>Gets or sets the GPS longitude.</summary>
+	double? GpsLongitude { get; set; }
+
+	/// <summary>Creates a deep copy of the raster metadata.</summary>
+	IRasterMetadata CloneRaster();
 }

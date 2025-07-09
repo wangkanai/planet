@@ -40,6 +40,12 @@ public abstract class MetadataBase : IMetadata
 	/// <summary>Gets or sets the modification date and time.</summary>
 	public virtual DateTime? ModificationTime { get; set; }
 
+	/// <summary>Gets or sets the image/document title.</summary>
+	public virtual string? Title { get; set; }
+
+	/// <summary>Gets or sets the orientation of the content.</summary>
+	public virtual int? Orientation { get; set; }
+
 	/// <inheritdoc />
 	public virtual bool HasLargeMetadata
 		=> EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
@@ -57,10 +63,12 @@ public abstract class MetadataBase : IMetadata
 		size += EstimateStringSize(Copyright);
 		size += EstimateStringSize(Description);
 		size += EstimateStringSize(Software);
+		size += EstimateStringSize(Title);
 		
 		// Add sizes for basic properties
 		size += sizeof(int) * 2; // Width and Height
 		size += 16 * 2; // CreationTime and ModificationTime (estimated)
+		size += sizeof(int); // Orientation (estimated)
 		
 		return size;
 	}
@@ -213,6 +221,25 @@ public abstract class MetadataBase : IMetadata
 	public abstract IMetadata Clone();
 	
 	/// <summary>
+	/// Validates the metadata for compliance with format specifications.
+	/// </summary>
+	/// <returns>True if metadata is valid, false otherwise.</returns>
+	public virtual bool ValidateMetadata()
+	{
+		ThrowIfDisposed();
+		
+		// Basic validation - dimensions should be positive
+		if (Width < 0 || Height < 0)
+			return false;
+		
+		// Orientation should be within valid range (1-8 for EXIF)
+		if (Orientation.HasValue && (Orientation < 1 || Orientation > 8))
+			return false;
+		
+		return true;
+	}
+
+	/// <summary>
 	/// Clears all metadata values to their defaults.
 	/// </summary>
 	public virtual void Clear()
@@ -225,6 +252,8 @@ public abstract class MetadataBase : IMetadata
 		Copyright = null;
 		Description = null;
 		Software = null;
+		Title = null;
+		Orientation = null;
 		CreationTime = null;
 		ModificationTime = null;
 	}
@@ -241,6 +270,8 @@ public abstract class MetadataBase : IMetadata
 		target.Copyright = Copyright;
 		target.Description = Description;
 		target.Software = Software;
+		target.Title = Title;
+		target.Orientation = Orientation;
 		target.CreationTime = CreationTime;
 		target.ModificationTime = ModificationTime;
 	}
