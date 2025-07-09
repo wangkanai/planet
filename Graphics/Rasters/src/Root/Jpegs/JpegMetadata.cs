@@ -1,12 +1,19 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
+using Wangkanai.Graphics.Rasters.Metadatas;
+
 namespace Wangkanai.Graphics.Rasters.Jpegs;
 
 /// <summary>Represents metadata information for JPEG images.</summary>
-public class JpegMetadata : IMetadata
+public class JpegMetadata : RasterMetadataBase
 {
 	/// <summary>Gets or sets the image description.</summary>
-	public string? ImageDescription { get; set; }
+	/// <remarks>Maps to the Description property from base class for backward compatibility.</remarks>
+	public string? ImageDescription
+	{
+		get => Description;
+		set => Description = value;
+	}
 
 	/// <summary>Gets or sets the camera make.</summary>
 	public string? Make { get; set; }
@@ -14,17 +21,20 @@ public class JpegMetadata : IMetadata
 	/// <summary>Gets or sets the camera model.</summary>
 	public string? Model { get; set; }
 
-	/// <summary>Gets or sets the software used to create the image.</summary>
-	public string? Software { get; set; }
-
-	/// <summary>Gets or sets the copyright information.</summary>
-	public string? Copyright { get; set; }
-
 	/// <summary>Gets or sets the artist/photographer.</summary>
-	public string? Artist { get; set; }
+	/// <remarks>Maps to the Author property from base class for backward compatibility.</remarks>
+	public string? Artist
+	{
+		get => Author;
+		set => Author = value;
+	}
 
-	/// <summary>Gets or sets the creation date and time.</summary>
-	public DateTime? CaptureDateTime { get; set; }
+	/// <summary>Gets or sets the JPEG-specific capture date and time.</summary>
+	public DateTime? CaptureDateTime
+	{
+		get => CreationTime;
+		set => CreationTime = value;
+	}
 
 	/// <summary>Gets or sets the horizontal resolution in pixels per inch.</summary>
 	public double? XResolution { get; set; }
@@ -71,64 +81,93 @@ public class JpegMetadata : IMetadata
 	/// <summary>Gets or sets XMP metadata for additional information.</summary>
 	public Dictionary<string, string> XmpTags { get; set; } = new();
 
-	/// <summary>Gets or sets ICC color profile information.</summary>
-	public byte[]? IccProfile { get; set; }
+	// Note: IccProfile is inherited from base class
 
 	/// <inheritdoc />
-	public bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
-
-	/// <inheritdoc />
-	public long EstimatedMetadataSize
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
-			var size = 0L;
-
-			// Add ICC profile size
-			if (IccProfile != null)
-				size += IccProfile.Length;
+			var size = base.EstimatedMetadataSize;
 
 			// Add custom EXIF tags size
-			size += CustomExifTags.Count * 16; // Estimate 16 bytes per tag
+			size += EstimateDictionaryObjectSize(CustomExifTags);
 
 			// Add IPTC tags size
-			foreach (var tag in IptcTags.Values)
-				size += System.Text.Encoding.UTF8.GetByteCount(tag);
+			size += EstimateDictionarySize(IptcTags);
 
 			// Add XMP tags size
-			foreach (var tag in XmpTags.Values)
-				size += System.Text.Encoding.UTF8.GetByteCount(tag);
+			size += EstimateDictionarySize(XmpTags);
 
-			// Add standard string properties
-			if (!string.IsNullOrEmpty(ImageDescription))
-				size += System.Text.Encoding.UTF8.GetByteCount(ImageDescription);
-			if (!string.IsNullOrEmpty(Make))
-				size += System.Text.Encoding.UTF8.GetByteCount(Make);
-			if (!string.IsNullOrEmpty(Model))
-				size += System.Text.Encoding.UTF8.GetByteCount(Model);
-			if (!string.IsNullOrEmpty(Software))
-				size += System.Text.Encoding.UTF8.GetByteCount(Software);
-			if (!string.IsNullOrEmpty(Copyright))
-				size += System.Text.Encoding.UTF8.GetByteCount(Copyright);
-			if (!string.IsNullOrEmpty(Artist))
-				size += System.Text.Encoding.UTF8.GetByteCount(Artist);
+			// Add JPEG-specific string properties
+			size += EstimateStringSize(Make);
+			size += EstimateStringSize(Model);
 
 			return size;
 		}
 	}
 
 	/// <inheritdoc />
-	public void Dispose()
+	protected override void DisposeManagedResources()
 	{
-		IccProfile = null;
+		base.DisposeManagedResources();
+		
+		// Clear JPEG-specific collections
 		CustomExifTags.Clear();
 		IptcTags.Clear();
 		XmpTags.Clear();
 	}
 
 	/// <inheritdoc />
-	public async ValueTask DisposeAsync()
+	public override IRasterMetadata Clone()
 	{
-		await Task.Run(() => Dispose()).ConfigureAwait(false);
+		var clone = new JpegMetadata();
+		CopyBaseTo(clone);
+		
+		// Copy JPEG-specific properties
+		clone.Make = Make;
+		clone.Model = Model;
+		clone.XResolution = XResolution;
+		clone.YResolution = YResolution;
+		clone.ResolutionUnit = ResolutionUnit;
+		clone.Orientation = Orientation;
+		clone.ExposureTime = ExposureTime;
+		clone.FNumber = FNumber;
+		clone.IsoSpeedRating = IsoSpeedRating;
+		clone.FocalLength = FocalLength;
+		clone.GpsLatitude = GpsLatitude;
+		clone.GpsLongitude = GpsLongitude;
+		clone.ColorSpace = ColorSpace;
+		clone.WhiteBalance = WhiteBalance;
+		clone.CustomExifTags = new Dictionary<int, object>(CustomExifTags);
+		clone.IptcTags = new Dictionary<string, string>(IptcTags);
+		clone.XmpTags = new Dictionary<string, string>(XmpTags);
+		
+		return clone;
+	}
+	
+	/// <inheritdoc />
+	public override void Clear()
+	{
+		base.Clear();
+		
+		// Clear JPEG-specific properties
+		Make = null;
+		Model = null;
+		XResolution = null;
+		YResolution = null;
+		ResolutionUnit = null;
+		Orientation = null;
+		ExposureTime = null;
+		FNumber = null;
+		IsoSpeedRating = null;
+		FocalLength = null;
+		GpsLatitude = null;
+		GpsLongitude = null;
+		ColorSpace = null;
+		WhiteBalance = null;
+		CustomExifTags.Clear();
+		IptcTags.Clear();
+		XmpTags.Clear();
 	}
 }

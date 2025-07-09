@@ -422,7 +422,7 @@ public class WebPValidatorTests
 		var webp = new WebPRaster(800, 600);
 		webp.WebPMetadata.IccProfile = new byte[500_000];
 		webp.WebPMetadata.ExifData = new byte[400_000];
-		webp.WebPMetadata.XmpData = new byte[200_000];
+		webp.WebPMetadata.XmpData = new string('x', 200_000);
 
 		// Act
 		var result = webp.Validate();

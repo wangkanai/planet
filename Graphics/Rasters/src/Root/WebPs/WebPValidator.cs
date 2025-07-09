@@ -164,13 +164,13 @@ public static class WebPValidator
 		var metadata = webp.Metadata;
 
 		// Validate metadata consistency flags
-		if (metadata.HasIccProfile && metadata.IccProfile.IsEmpty)
+		if (metadata.HasIccProfile && (metadata.IccProfile == null || metadata.IccProfile.Length == 0))
 			result.AddWarning("HasIccProfile is true but IccProfile data is empty.");
 
-		if (metadata.HasExif && metadata.ExifData.IsEmpty)
+		if (metadata.HasExif && (metadata.ExifData == null || metadata.ExifData.Length == 0))
 			result.AddWarning("HasExif is true but ExifData is empty.");
 
-		if (metadata.HasXmp && metadata.XmpData.IsEmpty)
+		if (metadata.HasXmp && string.IsNullOrEmpty(metadata.XmpData))
 			result.AddWarning("HasXmp is true but XmpData is empty.");
 
 		// Validate extended features requirement
@@ -189,7 +189,7 @@ public static class WebPValidator
 		}
 
 		// Performance warning for large metadata
-		var totalMetadataSize = metadata.IccProfile.Length + metadata.ExifData.Length + metadata.XmpData.Length;
+		var totalMetadataSize = (metadata.IccProfile?.Length ?? 0) + (metadata.ExifData?.Length ?? 0) + (metadata.XmpData?.Length ?? 0);
 		if (totalMetadataSize > ImageConstants.LargeMetadataThreshold)
 			result.AddWarning($"Large metadata size ({totalMetadataSize:N0} bytes) may impact performance.");
 	}

@@ -1,9 +1,11 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
+using Wangkanai.Graphics.Rasters.Metadatas;
+
 namespace Wangkanai.Graphics.Rasters.Bmps;
 
 /// <summary>Represents metadata information for BMP images.</summary>
-public class BmpMetadata : IMetadata
+public class BmpMetadata : RasterMetadataBase
 {
 	/// <summary>Gets or sets the file signature (should be "BM").</summary>
 	public string? FileSignature { get; set; } = "BM";
@@ -17,17 +19,27 @@ public class BmpMetadata : IMetadata
 	/// <summary>Gets or sets the size of the DIB header in bytes.</summary>
 	public uint HeaderSize { get; set; } = BmpConstants.BitmapInfoHeaderSize;
 
-	/// <summary>Gets or sets the image width in pixels.</summary>
-	public int Width { get; set; }
+	// Note: Width is inherited from base class
 
-	/// <summary>Gets or sets the image height in pixels (positive for bottom-up, negative for top-down).</summary>
-	public int Height { get; set; }
+	/// <summary>Gets or sets the raw BMP height in pixels (positive for bottom-up, negative for top-down).</summary>
+	public int RawHeight { get; set; }
+
+	/// <summary>Gets or sets the image height in pixels (always positive).</summary>
+	public override int Height
+	{
+		get => Math.Abs(RawHeight);
+		set => RawHeight = value;
+	}
 
 	/// <summary>Gets or sets the number of color planes (always 1 for BMP).</summary>
 	public ushort Planes { get; set; } = BmpConstants.Planes;
 
 	/// <summary>Gets or sets the number of bits per pixel.</summary>
-	public ushort BitsPerPixel { get; set; }
+	public ushort BitsPerPixel
+	{
+		get => (ushort)BitDepth;
+		set => BitDepth = value;
+	}
 
 	/// <summary>Gets or sets the compression method used.</summary>
 	public BmpCompression Compression { get; set; } = BmpCompression.Rgb;
@@ -95,10 +107,10 @@ public class BmpMetadata : IMetadata
 	public bool HasAlpha => BitsPerPixel == 32 || Compression == BmpCompression.BitFields && AlphaMask != 0;
 
 	/// <summary>Gets a value indicating whether the image is top-down (negative height).</summary>
-	public bool IsTopDown => Height < 0;
+	public bool IsTopDown => RawHeight < 0;
 
 	/// <summary>Gets the absolute height value.</summary>
-	public int AbsoluteHeight => Math.Abs(Height);
+	public int AbsoluteHeight => Height;
 
 	/// <summary>Gets the number of colors in the palette based on bits per pixel.</summary>
 	public uint PaletteColors => BitsPerPixel switch
@@ -148,25 +160,11 @@ public class BmpMetadata : IMetadata
 	};
 
 	/// <inheritdoc />
-	public bool HasLargeMetadata
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
-			// Consider BMP as having large metadata if:
-			// 1. It has a large color palette (256+ colors)
-			// 2. The total file size is large
-			// 3. It has ICC profile data (V5 headers)
-			var estimatedSize = EstimatedMetadataSize;
-			return estimatedSize > ImageConstants.LargeMetadataThreshold;
-		}
-	}
-
-	/// <inheritdoc />
-	public long EstimatedMetadataSize
-	{
-		get
-		{
-			var size = 0L;
+			var size = base.EstimatedMetadataSize;
 
 			// File header
 			size += BmpConstants.FileHeaderSize;
@@ -183,27 +181,24 @@ public class BmpMetadata : IMetadata
 				size += ProfileSize;
 
 			// Custom metadata fields
-			foreach (var field in CustomFields.Values)
-				size += field switch
-				{
-					string str   => System.Text.Encoding.UTF8.GetByteCount(str),
-					byte[] bytes => bytes.Length,
-					_            => 32 // Default estimate for other types
-				};
+			size += EstimateDictionaryObjectSize(CustomFields);
 
 			return size;
 		}
 	}
 
 	/// <inheritdoc />
-	public void Dispose()
+	protected override void DisposeManagedResources()
 	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
+		base.DisposeManagedResources();
+		
+		// Clear BMP-specific resources
+		ColorPalette = null;
+		CustomFields.Clear();
 	}
 
 	/// <inheritdoc />
-	public async ValueTask DisposeAsync()
+	public override async ValueTask DisposeAsync()
 	{
 		if (HasLargeMetadata)
 		{
@@ -222,15 +217,72 @@ public class BmpMetadata : IMetadata
 		GC.SuppressFinalize(this);
 	}
 
-	/// <summary>Releases unmanaged and - optionally - managed resources.</summary>
-	/// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
-	protected virtual void Dispose(bool disposing)
+	/// <inheritdoc />
+	public override IRasterMetadata Clone()
 	{
-		if (disposing)
-		{
-			// Clear managed resources
-			ColorPalette = null;
-			CustomFields.Clear();
-		}
+		var clone = new BmpMetadata();
+		CopyBaseTo(clone);
+		
+		// Copy BMP-specific properties
+		clone.FileSignature = FileSignature;
+		clone.FileSize = FileSize;
+		clone.PixelDataOffset = PixelDataOffset;
+		clone.HeaderSize = HeaderSize;
+		clone.RawHeight = RawHeight;
+		clone.Planes = Planes;
+		clone.Compression = Compression;
+		clone.ImageSize = ImageSize;
+		clone.XPixelsPerMeter = XPixelsPerMeter;
+		clone.YPixelsPerMeter = YPixelsPerMeter;
+		clone.ColorsUsed = ColorsUsed;
+		clone.ColorsImportant = ColorsImportant;
+		clone.RedMask = RedMask;
+		clone.GreenMask = GreenMask;
+		clone.BlueMask = BlueMask;
+		clone.AlphaMask = AlphaMask;
+		clone.ColorSpaceType = ColorSpaceType;
+		clone.GammaRed = GammaRed;
+		clone.GammaGreen = GammaGreen;
+		clone.GammaBlue = GammaBlue;
+		clone.Intent = Intent;
+		clone.ProfileData = ProfileData;
+		clone.ProfileSize = ProfileSize;
+		clone.ColorPalette = ColorPalette?.ToArray();
+		clone.CustomFields = new Dictionary<string, object>(CustomFields);
+		
+		return clone;
+	}
+	
+	/// <inheritdoc />
+	public override void Clear()
+	{
+		base.Clear();
+		
+		// Reset BMP-specific properties to defaults
+		FileSignature = "BM";
+		FileSize = 0;
+		PixelDataOffset = 0;
+		HeaderSize = BmpConstants.BitmapInfoHeaderSize;
+		RawHeight = 0;
+		Planes = BmpConstants.Planes;
+		Compression = BmpCompression.Rgb;
+		ImageSize = 0;
+		XPixelsPerMeter = BmpConstants.DefaultHorizontalResolution;
+		YPixelsPerMeter = BmpConstants.DefaultVerticalResolution;
+		ColorsUsed = 0;
+		ColorsImportant = 0;
+		RedMask = 0;
+		GreenMask = 0;
+		BlueMask = 0;
+		AlphaMask = 0;
+		ColorSpaceType = 0;
+		GammaRed = 0;
+		GammaGreen = 0;
+		GammaBlue = 0;
+		Intent = 0;
+		ProfileData = 0;
+		ProfileSize = 0;
+		ColorPalette = null;
+		CustomFields.Clear();
 	}
 }

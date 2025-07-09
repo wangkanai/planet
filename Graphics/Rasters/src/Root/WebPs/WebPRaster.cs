@@ -206,12 +206,12 @@ public sealed class WebPRaster : Raster, IWebPRaster
 		var overhead = WebPConstants.ContainerOverhead;
 
 		// Add metadata overhead
-		if (!_metadata.IccProfile.IsEmpty)
+		if (_metadata.IccProfile != null && _metadata.IccProfile.Length > 0)
 			overhead += _metadata.IccProfile.Length + WebPConstants.ChunkHeaderSize;
-		if (!_metadata.ExifData.IsEmpty)
+		if (_metadata.ExifData != null && _metadata.ExifData.Length > 0)
 			overhead += _metadata.ExifData.Length + WebPConstants.ChunkHeaderSize;
-		if (!_metadata.XmpData.IsEmpty)
-			overhead += _metadata.XmpData.Length + WebPConstants.ChunkHeaderSize;
+		if (!string.IsNullOrEmpty(_metadata.XmpData))
+			overhead += System.Text.Encoding.UTF8.GetByteCount(_metadata.XmpData) + WebPConstants.ChunkHeaderSize;
 
 		// Add animation overhead if applicable
 		if (IsAnimated)
@@ -314,22 +314,22 @@ public sealed class WebPRaster : Raster, IWebPRaster
 		if (_metadata.HasLargeMetadata)
 		{
 			// For large WebP metadata, clear in stages with yielding
-			if (!_metadata.IccProfile.IsEmpty)
+			if (_metadata.IccProfile != null && _metadata.IccProfile.Length > 0)
 			{
 				await Task.Yield();
-				_metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
+				_metadata.IccProfile = null;
 			}
 
-			if (!_metadata.ExifData.IsEmpty)
+			if (_metadata.ExifData != null && _metadata.ExifData.Length > 0)
 			{
 				await Task.Yield();
-				_metadata.ExifData = ReadOnlyMemory<byte>.Empty;
+				_metadata.ExifData = null;
 			}
 
-			if (!_metadata.XmpData.IsEmpty)
+			if (!string.IsNullOrEmpty(_metadata.XmpData))
 			{
 				await Task.Yield();
-				_metadata.XmpData = ReadOnlyMemory<byte>.Empty;
+				_metadata.XmpData = null;
 			}
 
 			// Clear animation frames in batches for large collections
@@ -367,9 +367,9 @@ public sealed class WebPRaster : Raster, IWebPRaster
 		if (disposing)
 		{
 			// Clear WebP-specific managed resources
-			_metadata.IccProfile = ReadOnlyMemory<byte>.Empty;
-			_metadata.ExifData   = ReadOnlyMemory<byte>.Empty;
-			_metadata.XmpData    = ReadOnlyMemory<byte>.Empty;
+			_metadata.IccProfile = null;
+			_metadata.ExifData   = null;
+			_metadata.XmpData    = null;
 			_metadata.CustomChunks.Clear();
 			_metadata.AnimationFrames.Clear();
 		}

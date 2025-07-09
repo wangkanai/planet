@@ -1,12 +1,19 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
+using Wangkanai.Graphics.Rasters.Metadatas;
+
 namespace Wangkanai.Graphics.Rasters.Tiffs;
 
 /// <summary>Represents metadata information for TIFF images.</summary>
-public class TiffMetadata : IMetadata
+public class TiffMetadata : RasterMetadataBase
 {
 	/// <summary>Gets or sets the image description.</summary>
-	public string? ImageDescription { get; set; }
+	/// <remarks>Maps to the Description property from base class for backward compatibility.</remarks>
+	public string? ImageDescription
+	{
+		get => Description;
+		set => Description = value;
+	}
 
 	/// <summary>Gets or sets the camera make.</summary>
 	public string? Make { get; set; }
@@ -14,17 +21,20 @@ public class TiffMetadata : IMetadata
 	/// <summary>Gets or sets the camera model.</summary>
 	public string? Model { get; set; }
 
-	/// <summary>Gets or sets the software used to create the image.</summary>
-	public string? Software { get; set; }
-
-	/// <summary>Gets or sets the copyright information.</summary>
-	public string? Copyright { get; set; }
-
 	/// <summary>Gets or sets the artist/photographer.</summary>
-	public string? Artist { get; set; }
+	/// <remarks>Maps to the Author property from base class for backward compatibility.</remarks>
+	public string? Artist
+	{
+		get => Author;
+		set => Author = value;
+	}
 
-	/// <summary>Gets or sets the creation date and time.</summary>
-	public DateTime? DateTime { get; set; }
+	/// <summary>Gets or sets the TIFF-specific creation date and time.</summary>
+	public DateTime? DateTime
+	{
+		get => CreationTime;
+		set => CreationTime = value;
+	}
 
 	/// <summary>Gets or sets the horizontal resolution in pixels per inch.</summary>
 	public double? XResolution { get; set; }
@@ -68,88 +78,57 @@ public class TiffMetadata : IMetadata
 	/// <summary>Gets or sets the reference black and white values.</summary>
 	public double[]? ReferenceBlackWhite { get; set; }
 
-	/// <summary>Gets or sets EXIF metadata as a byte array.</summary>
-	public byte[]? ExifIfd { get; set; }
+	/// <summary>Gets or sets TIFF-specific EXIF IFD data.</summary>
+	public byte[]? ExifIfd
+	{
+		get => ExifData;
+		set => ExifData = value;
+	}
 
 	/// <summary>Gets or sets GPS metadata as a byte array.</summary>
 	public byte[]? GpsIfd { get; set; }
 
-	/// <summary>Gets or sets ICC color profile data.</summary>
-	public byte[]? IccProfile { get; set; }
-
-	/// <summary>Gets or sets XMP metadata as a byte array.</summary>
-	public byte[]? XmpData { get; set; }
+	// Note: IccProfile and XmpData are inherited from base class
 
 	/// <summary>Gets or sets IPTC metadata as a byte array.</summary>
 	public byte[]? IptcData { get; set; }
 
 	/// <inheritdoc />
-	public bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
-
-	/// <inheritdoc />
-	public long EstimatedMetadataSize
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
-			var size = 0L;
+			var size = base.EstimatedMetadataSize;
 
-			// Add string metadata sizes
-			if (!string.IsNullOrEmpty(ImageDescription))
-				size += System.Text.Encoding.UTF8.GetByteCount(ImageDescription);
-			if (!string.IsNullOrEmpty(Make))
-				size += System.Text.Encoding.UTF8.GetByteCount(Make);
-			if (!string.IsNullOrEmpty(Model))
-				size += System.Text.Encoding.UTF8.GetByteCount(Model);
-			if (!string.IsNullOrEmpty(Software))
-				size += System.Text.Encoding.UTF8.GetByteCount(Software);
-			if (!string.IsNullOrEmpty(Copyright))
-				size += System.Text.Encoding.UTF8.GetByteCount(Copyright);
-			if (!string.IsNullOrEmpty(Artist))
-				size += System.Text.Encoding.UTF8.GetByteCount(Artist);
+			// Add TIFF-specific string metadata sizes
+			size += EstimateStringSize(Make);
+			size += EstimateStringSize(Model);
 
 			// Add TIFF-specific array data sizes
-			if (StripOffsets != null)
-				size += StripOffsets.Length * sizeof(int);
-			if (StripByteCounts != null)
-				size += StripByteCounts.Length * sizeof(int);
-			if (TileOffsets != null)
-				size += TileOffsets.Length * sizeof(int);
-			if (TileByteCounts != null)
-				size += TileByteCounts.Length * sizeof(int);
+			size += EstimateArraySize(StripOffsets, sizeof(int));
+			size += EstimateArraySize(StripByteCounts, sizeof(int));
+			size += EstimateArraySize(TileOffsets, sizeof(int));
+			size += EstimateArraySize(TileByteCounts, sizeof(int));
 
 			// Add color data sizes
-			if (ColorMap != null)
-				size += ColorMap.Length * sizeof(ushort);
-			if (TransferFunction != null)
-				size += TransferFunction.Length * sizeof(ushort);
+			size += EstimateArraySize(ColorMap, sizeof(ushort));
+			size += EstimateArraySize(TransferFunction, sizeof(ushort));
 
 			// Add chromaticity and color space data
-			if (WhitePoint != null)
-				size += WhitePoint.Length * sizeof(double);
-			if (PrimaryChromaticities != null)
-				size += PrimaryChromaticities.Length * sizeof(double);
-			if (YCbCrCoefficients != null)
-				size += YCbCrCoefficients.Length * sizeof(double);
-			if (ReferenceBlackWhite != null)
-				size += ReferenceBlackWhite.Length * sizeof(double);
+			size += EstimateArraySize(WhitePoint, sizeof(double));
+			size += EstimateArraySize(PrimaryChromaticities, sizeof(double));
+			size += EstimateArraySize(YCbCrCoefficients, sizeof(double));
+			size += EstimateArraySize(ReferenceBlackWhite, sizeof(double));
 
 			// Add embedded metadata sizes
-			if (ExifIfd != null)
-				size += ExifIfd.Length;
-			if (GpsIfd != null)
-				size += GpsIfd.Length;
-			if (IccProfile != null)
-				size += IccProfile.Length;
-			if (XmpData != null)
-				size += XmpData.Length;
-			if (IptcData != null)
-				size += IptcData.Length;
+			size += EstimateByteArraySize(GpsIfd);
+			size += EstimateByteArraySize(IptcData);
 
-			// Add custom tags size
+			// Add custom tags size - TIFF uses a more specific calculation
 			foreach (var tag in CustomTags.Values)
 				size += tag switch
 				{
-					string str => System.Text.Encoding.UTF8.GetByteCount(str),
+					string str => EstimateStringSize(str),
 					byte[] bytes => bytes.Length,
 					int[] ints => ints.Length * sizeof(int),
 					ushort[] ushorts => ushorts.Length * sizeof(ushort),
@@ -171,9 +150,11 @@ public class TiffMetadata : IMetadata
 	}
 
 	/// <inheritdoc />
-	public void Dispose()
+	protected override void DisposeManagedResources()
 	{
-		// Clear large arrays
+		base.DisposeManagedResources();
+		
+		// Clear TIFF-specific large arrays
 		StripOffsets = null;
 		StripByteCounts = null;
 		TileOffsets = null;
@@ -184,17 +165,63 @@ public class TiffMetadata : IMetadata
 		PrimaryChromaticities = null;
 		YCbCrCoefficients = null;
 		ReferenceBlackWhite = null;
-		ExifIfd = null;
 		GpsIfd = null;
-		IccProfile = null;
-		XmpData = null;
 		IptcData = null;
 		CustomTags.Clear();
 	}
 
 	/// <inheritdoc />
-	public async ValueTask DisposeAsync()
+	public override IRasterMetadata Clone()
 	{
-		await Task.Run(() => Dispose()).ConfigureAwait(false);
+		var clone = new TiffMetadata();
+		CopyBaseTo(clone);
+		
+		// Copy TIFF-specific properties
+		clone.Make = Make;
+		clone.Model = Model;
+		clone.XResolution = XResolution;
+		clone.YResolution = YResolution;
+		clone.ResolutionUnit = ResolutionUnit;
+		clone.StripOffsets = StripOffsets?.ToArray();
+		clone.StripByteCounts = StripByteCounts?.ToArray();
+		clone.TileOffsets = TileOffsets?.ToArray();
+		clone.TileByteCounts = TileByteCounts?.ToArray();
+		clone.ColorMap = ColorMap?.ToArray();
+		clone.TransferFunction = TransferFunction?.ToArray();
+		clone.WhitePoint = WhitePoint?.ToArray();
+		clone.PrimaryChromaticities = PrimaryChromaticities?.ToArray();
+		clone.YCbCrCoefficients = YCbCrCoefficients?.ToArray();
+		clone.ReferenceBlackWhite = ReferenceBlackWhite?.ToArray();
+		clone.GpsIfd = GpsIfd?.ToArray();
+		clone.IptcData = IptcData?.ToArray();
+		clone.CustomTags = new Dictionary<int, object>(CustomTags);
+		
+		return clone;
+	}
+	
+	/// <inheritdoc />
+	public override void Clear()
+	{
+		base.Clear();
+		
+		// Clear TIFF-specific properties
+		Make = null;
+		Model = null;
+		XResolution = null;
+		YResolution = null;
+		ResolutionUnit = null;
+		StripOffsets = null;
+		StripByteCounts = null;
+		TileOffsets = null;
+		TileByteCounts = null;
+		ColorMap = null;
+		TransferFunction = null;
+		WhitePoint = null;
+		PrimaryChromaticities = null;
+		YCbCrCoefficients = null;
+		ReferenceBlackWhite = null;
+		GpsIfd = null;
+		IptcData = null;
+		CustomTags.Clear();
 	}
 }

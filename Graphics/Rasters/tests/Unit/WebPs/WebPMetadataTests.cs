@@ -11,9 +11,9 @@ public class WebPMetadataTests
 		var metadata = new WebPMetadata();
 
 		// Assert
-		Assert.True(metadata.IccProfile.IsEmpty);
-		Assert.True(metadata.ExifData.IsEmpty);
-		Assert.True(metadata.XmpData.IsEmpty);
+		Assert.Null(metadata.IccProfile);
+		Assert.Null(metadata.ExifData);
+		Assert.Null(metadata.XmpData);
 		Assert.Null(metadata.CreationDateTime);
 		Assert.Null(metadata.Software);
 		Assert.Null(metadata.Description);
@@ -43,9 +43,9 @@ public class WebPMetadataTests
 		metadata.IccProfile = profileData;
 
 		// Assert
-		Assert.False(metadata.IccProfile.IsEmpty);
+		Assert.True(metadata.IccProfile.Length > 0);
 		Assert.Equal(4, metadata.IccProfile.Length);
-		Assert.True(metadata.IccProfile.Span.SequenceEqual(profileData));
+		Assert.Equal(profileData, metadata.IccProfile);
 	}
 
 	[Fact]
@@ -59,9 +59,9 @@ public class WebPMetadataTests
 		metadata.ExifData = exifData;
 
 		// Assert
-		Assert.False(metadata.ExifData.IsEmpty);
+		Assert.True(metadata.ExifData.Length > 0);
 		Assert.Equal(4, metadata.ExifData.Length);
-		Assert.True(metadata.ExifData.Span.SequenceEqual(exifData));
+		Assert.Equal(exifData, metadata.ExifData);
 	}
 
 	[Fact]
@@ -69,13 +69,13 @@ public class WebPMetadataTests
 	{
 		// Arrange
 		var metadata = new WebPMetadata();
-		var xmpData = "<?xml version='1.0'?><rdf:RDF></rdf:RDF>"u8.ToArray();
+		var xmpData = "<?xml version='1.0'?><rdf:RDF></rdf:RDF>";
 
 		// Act
 		metadata.XmpData = xmpData;
 
 		// Assert
-		Assert.False(metadata.XmpData.IsEmpty);
+		Assert.NotEqual(string.Empty, metadata.XmpData);
 		Assert.True(metadata.XmpData.Length > 0);
 	}
 

@@ -1,171 +1,85 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
+using Wangkanai.Graphics.Rasters.Metadatas;
+
 namespace Wangkanai.Graphics.Rasters.Pngs;
 
 /// <summary>Represents PNG metadata information including ancillary chunks.</summary>
-public class PngMetadata : IMetadata
+public class PngMetadata : RasterMetadataBase
 {
 	/// <summary>Gets or sets the image title.</summary>
-	public string? Title
-	{
-		get;
-		set;
-	}
+	public string? Title { get; set; }
 
-	/// <summary>Gets or sets the image description.</summary>
-	public string? Description
-	{
-		get;
-		set;
-	}
+	// Note: Description and Software are inherited from base class
 
-	/// <summary>Gets or sets the software used to create the image.</summary>
-	public string? Software
-	{
-		get;
-		set;
-	}
-
-	/// <summary>Gets or sets the creation timestamp.</summary>
+	/// <summary>Gets or sets the PNG-specific creation timestamp.</summary>
 	public DateTime? Created
 	{
-		get;
-		set;
+		get => CreationTime;
+		set => CreationTime = value;
 	}
 
-	/// <summary>Gets or sets the last modification timestamp.</summary>
+	/// <summary>Gets or sets the PNG-specific modification timestamp.</summary>
 	public DateTime? Modified
 	{
-		get;
-		set;
+		get => ModificationTime;
+		set => ModificationTime = value;
 	}
 
-	/// <summary>Gets or sets the image author.</summary>
-	public string? Author
-	{
-		get;
-		set;
-	}
-
-	/// <summary>Gets or sets the image copyright information.</summary>
-	public string? Copyright
-	{
-		get;
-		set;
-	}
+	// Note: Author and Copyright are inherited from base class
 
 	/// <summary>Gets or sets the image comment.</summary>
-	public string? Comment
-	{
-		get;
-		set;
-	}
+	public string? Comment { get; set; }
 
 	/// <summary>Gets or sets the gamma value for color correction.</summary>
-	public double? Gamma
-	{
-		get;
-		set;
-	}
+	public double? Gamma { get; set; }
 
 	/// <summary>Gets or sets the horizontal resolution in pixels per unit.</summary>
-	public uint? XResolution
-	{
-		get;
-		set;
-	}
+	public uint? XResolution { get; set; }
 
 	/// <summary>Gets or sets the vertical resolution in pixels per unit.</summary>
-	public uint? YResolution
-	{
-		get;
-		set;
-	}
+	public uint? YResolution { get; set; }
 
 	/// <summary>Gets or sets the resolution unit (0 = unknown, 1 = meter).</summary>
-	public byte? ResolutionUnit
-	{
-		get;
-		set;
-	}
+	public byte? ResolutionUnit { get; set; }
 
 	/// <summary>Gets or sets the background color.</summary>
-	public uint? BackgroundColor
-	{
-		get;
-		set;
-	}
+	public uint? BackgroundColor { get; set; }
 
 	/// <summary>Gets or sets the white point chromaticity coordinates.</summary>
-	public (uint x, uint y)? WhitePoint
-	{
-		get;
-		set;
-	}
+	public (uint x, uint y)? WhitePoint { get; set; }
 
 	/// <summary>Gets or sets the red primary chromaticity coordinates.</summary>
-	public (uint x, uint y)? RedPrimary
-	{
-		get;
-		set;
-	}
+	public (uint x, uint y)? RedPrimary { get; set; }
 
 	/// <summary>Gets or sets the green primary chromaticity coordinates.</summary>
-	public (uint x, uint y)? GreenPrimary
-	{
-		get;
-		set;
-	}
+	public (uint x, uint y)? GreenPrimary { get; set; }
 
 	/// <summary>Gets or sets the blue primary chromaticity coordinates.</summary>
-	public (uint x, uint y)? BluePrimary
-	{
-		get;
-		set;
-	}
+	public (uint x, uint y)? BluePrimary { get; set; }
 
 	/// <summary>Gets or sets the standard RGB color space rendering intent.</summary>
 	/// <remarks>0 = Perceptual, 1 = Relative colorimetric, 2 = Saturation, 3 = Absolute colorimetric</remarks>
-	public byte? SrgbRenderingIntent
-	{
-		get;
-		set;
-	}
+	public byte? SrgbRenderingIntent { get; set; }
 
 	/// <summary>Gets the collection of custom text chunks.</summary>
 	/// <remarks>Key is the chunk keyword, value is the text content.</remarks>
-	public Dictionary<string, string> TextChunks
-	{
-		get;
-	} = new();
+	public Dictionary<string, string> TextChunks { get; } = new();
 
 	/// <summary>Gets the collection of compressed text chunks.</summary>
 	/// <remarks>Key is the chunk keyword, value is the text content.</remarks>
-	public Dictionary<string, string> CompressedTextChunks
-	{
-		get;
-	} = new();
+	public Dictionary<string, string> CompressedTextChunks { get; } = new();
 
 	/// <summary>Gets the collection of international text chunks.</summary>
 	/// <remarks>Key is the chunk keyword, value contains language tag and text content.</remarks>
-	public Dictionary<string, (string? languageTag, string? translatedKeyword, string text)> InternationalTextChunks
-	{
-		get;
-	} = new();
+	public Dictionary<string, (string? languageTag, string? translatedKeyword, string text)> InternationalTextChunks { get; } = new();
 
 	/// <summary>Gets the collection of custom chunks not defined in the PNG specification.</summary>
 	/// <remarks>Key is the chunk type, value is the raw chunk data.</remarks>
-	public Dictionary<string, byte[]> CustomChunks
-	{
-		get;
-	} = new();
+	public Dictionary<string, byte[]> CustomChunks { get; } = new();
 
 	/// <summary>Gets or sets the transparency information for the image.</summary>
-	public ReadOnlyMemory<byte> TransparencyData
-	{
-		get;
-		set;
-	}
+	public ReadOnlyMemory<byte> TransparencyData { get; set; } = new();
 
 	/// <summary>Validates the PNG metadata.</summary>
 	/// <returns>A validation result indicating if the metadata is valid.</returns>
@@ -222,22 +136,18 @@ public class PngMetadata : IMetadata
 	}
 
 	/// <inheritdoc />
-	public bool HasLargeMetadata => EstimatedMetadataSize > ImageConstants.LargeMetadataThreshold;
-
-	/// <inheritdoc />
-	public long EstimatedMetadataSize
+	public override long EstimatedMetadataSize
 	{
 		get
 		{
-			var size = 0L;
+			var size = base.EstimatedMetadataSize;
 
 			// Add transparency data size
 			if (!TransparencyData.IsEmpty)
 				size += TransparencyData.Length;
 
 			// Add text chunk sizes
-			foreach (var textChunk in TextChunks.Values)
-				size += System.Text.Encoding.UTF8.GetByteCount(textChunk);
+			size += EstimateDictionarySize(TextChunks);
 
 			foreach (var compressedTextChunk in CompressedTextChunks.Values)
 				size += compressedTextChunk.Length;
@@ -246,22 +156,27 @@ public class PngMetadata : IMetadata
 				size += System.Text.Encoding.UTF8.GetByteCount(internationalTextChunk.text);
 
 			// Add custom chunk sizes
-			foreach (var customChunk in CustomChunks.Values)
-				size += customChunk.Length;
+			size += EstimateDictionaryByteArraySize(CustomChunks);
 
 			return size;
 		}
 	}
 
 	/// <inheritdoc />
-	public void Dispose()
+	protected override void DisposeManagedResources()
 	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
+		base.DisposeManagedResources();
+
+		// Clear PNG-specific resources
+		TransparencyData = ReadOnlyMemory<byte>.Empty;
+		TextChunks.Clear();
+		CompressedTextChunks.Clear();
+		InternationalTextChunks.Clear();
+		CustomChunks.Clear();
 	}
 
 	/// <inheritdoc />
-	public async ValueTask DisposeAsync()
+	public override async ValueTask DisposeAsync()
 	{
 		if (HasLargeMetadata)
 		{
@@ -289,18 +204,62 @@ public class PngMetadata : IMetadata
 		GC.SuppressFinalize(this);
 	}
 
-	/// <summary>Releases unmanaged and - optionally - managed resources.</summary>
-	/// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
-	protected virtual void Dispose(bool disposing)
+	/// <inheritdoc />
+	public override IRasterMetadata Clone()
 	{
-		if (disposing)
-		{
-			// Clear managed resources
-			TransparencyData = ReadOnlyMemory<byte>.Empty;
-			TextChunks.Clear();
-			CompressedTextChunks.Clear();
-			InternationalTextChunks.Clear();
-			CustomChunks.Clear();
-		}
+		var clone = new PngMetadata();
+		CopyBaseTo(clone);
+
+		// Copy PNG-specific properties
+		clone.Title = Title;
+		clone.Comment = Comment;
+		clone.Gamma = Gamma;
+		clone.XResolution = XResolution;
+		clone.YResolution = YResolution;
+		clone.ResolutionUnit = ResolutionUnit;
+		clone.BackgroundColor = BackgroundColor;
+		clone.WhitePoint = WhitePoint;
+		clone.RedPrimary = RedPrimary;
+		clone.GreenPrimary = GreenPrimary;
+		clone.BluePrimary = BluePrimary;
+		clone.SrgbRenderingIntent = SrgbRenderingIntent;
+		clone.TransparencyData = TransparencyData;
+
+		// Deep copy collections
+		foreach (var kvp in TextChunks)
+			clone.TextChunks[kvp.Key] = kvp.Value;
+		foreach (var kvp in CompressedTextChunks)
+			clone.CompressedTextChunks[kvp.Key] = kvp.Value;
+		foreach (var kvp in InternationalTextChunks)
+			clone.InternationalTextChunks[kvp.Key] = kvp.Value;
+		foreach (var kvp in CustomChunks)
+			clone.CustomChunks[kvp.Key] = kvp.Value.ToArray();
+
+		return clone;
+	}
+
+	/// <inheritdoc />
+	public override void Clear()
+	{
+		base.Clear();
+
+		// Clear PNG-specific properties
+		Title = null;
+		Comment = null;
+		Gamma = null;
+		XResolution = null;
+		YResolution = null;
+		ResolutionUnit = null;
+		BackgroundColor = null;
+		WhitePoint = null;
+		RedPrimary = null;
+		GreenPrimary = null;
+		BluePrimary = null;
+		SrgbRenderingIntent = null;
+		TransparencyData = ReadOnlyMemory<byte>.Empty;
+		TextChunks.Clear();
+		CompressedTextChunks.Clear();
+		InternationalTextChunks.Clear();
+		CustomChunks.Clear();
 	}
 }
