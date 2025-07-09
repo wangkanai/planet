@@ -1,7 +1,5 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-using Wangkanai.Graphics.Rasters;
-using Wangkanai.Graphics.Vectors;
 
 namespace Wangkanai.Graphics.Extensions;
 
@@ -27,33 +25,6 @@ public static class MetadataComparisonExtensions
 		return widthDiff <= tolerance && heightDiff <= tolerance;
 	}
 
-	/// <summary>
-	/// Determines if two raster metadata instances have similar resolution within a tolerance.
-	/// </summary>
-	/// <param name="metadata">The first raster metadata instance.</param>
-	/// <param name="other">The raster metadata instance to compare with.</param>
-	/// <param name="tolerance">Tolerance as a percentage (default: 5% = 0.05).</param>
-	/// <returns>True if resolutions are similar within tolerance.</returns>
-	public static bool HasSimilarResolution(this IRasterMetadata metadata, IRasterMetadata other, double tolerance = 0.05)
-	{
-		if (metadata == other) return true;
-		
-		// If one has resolution and the other doesn't, they're not similar
-		if (metadata.HasResolution() != other.HasResolution())
-			return false;
-		
-		// If neither has resolution, consider them similar
-		if (!metadata.HasResolution())
-			return true;
-		
-		var res1 = metadata.GetResolution()!.Value;
-		var res2 = other.GetResolution()!.Value;
-		
-		var xDiff = Math.Abs(res1.x - res2.x) / Math.Max(res1.x, res2.x);
-		var yDiff = Math.Abs(res1.y - res2.y) / Math.Max(res1.y, res2.y);
-		
-		return xDiff <= tolerance && yDiff <= tolerance;
-	}
 
 	/// <summary>
 	/// Performs a comprehensive comparison between two metadata instances.
@@ -76,16 +47,7 @@ public static class MetadataComparisonExtensions
 		result.AspectRatioSimilarity = CalculateAspectRatioSimilarity(metadata, other);
 		result.SizeSimilarity = CalculateSizeSimilarity(metadata, other);
 		
-		// Type-specific comparisons
-		if (metadata is IRasterMetadata raster1 && other is IRasterMetadata raster2)
-		{
-			result.RasterComparison = CompareRasterMetadata(raster1, raster2);
-		}
-		
-		if (metadata is IVectorMetadata vector1 && other is IVectorMetadata vector2)
-		{
-			result.VectorComparison = CompareVectorMetadata(vector1, vector2);
-		}
+		// Type-specific comparisons would be handled by format-specific extension methods
 		
 		// Calculate overall similarity
 		result.OverallSimilarity = CalculateOverallSimilarity(result);
@@ -302,14 +264,7 @@ public static class MetadataComparisonExtensions
 
 	private static bool IsPrintEquivalent(IMetadata metadata1, IMetadata metadata2)
 	{
-		// For printing, exact dimensions and resolution matter
-		if (metadata1 is IRasterMetadata raster1 && metadata2 is IRasterMetadata raster2)
-		{
-			return metadata1.Width == metadata2.Width &&
-			       metadata1.Height == metadata2.Height &&
-			       raster1.HasSimilarResolution(raster2, 0.01); // 1% tolerance
-		}
-		
+		// For printing, exact dimensions matter - format-specific extensions can add resolution checks
 		return metadata1.Width == metadata2.Width && metadata1.Height == metadata2.Height;
 	}
 
@@ -323,14 +278,7 @@ public static class MetadataComparisonExtensions
 
 	private static bool IsProcessingEquivalent(IMetadata metadata1, IMetadata metadata2)
 	{
-		// For processing, dimensions and bit depth matter
-		if (metadata1 is IRasterMetadata raster1 && metadata2 is IRasterMetadata raster2)
-		{
-			return metadata1.Width == metadata2.Width &&
-			       metadata1.Height == metadata2.Height &&
-			       raster1.BitDepth == raster2.BitDepth;
-		}
-		
+		// For processing, dimensions matter - format-specific extensions can add bit depth checks
 		return metadata1.Width == metadata2.Width && metadata1.Height == metadata2.Height;
 	}
 
