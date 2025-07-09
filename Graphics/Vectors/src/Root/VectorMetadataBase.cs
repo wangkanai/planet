@@ -78,7 +78,7 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 
 			// Add basic property sizes
 			size += sizeof(double) * 4; // ViewBox coordinates
-			size += 16 * 2; // Creation and modification dates (estimated)
+			size += 16 * 2;             // Creation and modification dates (estimated)
 
 			return size;
 		}
@@ -97,28 +97,28 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 	{
 		ThrowIfDisposed();
 
-		ViewBoxWidth = 0;
-		ViewBoxHeight = 0;
-		ViewBoxX = 0;
-		ViewBoxY = 0;
-		Title = null;
-		Description = null;
-		Author = null;
-		Copyright = null;
-		CreationDate = null;
+		ViewBoxWidth     = 0;
+		ViewBoxHeight    = 0;
+		ViewBoxX         = 0;
+		ViewBoxY         = 0;
+		Title            = null;
+		Description      = null;
+		Author           = null;
+		Copyright        = null;
+		CreationDate     = null;
 		ModificationDate = null;
-		Software = null;
+		Software         = null;
 	}
 
 	/// <inheritdoc />
 	protected override void DisposeManagedResources()
 	{
 		// Clear strings
-		Title = null;
+		Title       = null;
 		Description = null;
-		Author = null;
-		Copyright = null;
-		Software = null;
+		Author      = null;
+		Copyright   = null;
+		Software    = null;
 	}
 
 	/// <summary>
@@ -127,16 +127,16 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 	/// <param name="target">The target metadata instance.</param>
 	protected virtual void CopyBaseTo(VectorMetadataBase target)
 	{
-		target.ViewBoxWidth = ViewBoxWidth;
-		target.ViewBoxHeight = ViewBoxHeight;
-		target.ViewBoxX = ViewBoxX;
-		target.ViewBoxY = ViewBoxY;
-		target.Title = Title;
-		target.Description = Description;
-		target.Author = Author;
-		target.Copyright = Copyright;
-		target.CreationDate = CreationDate;
+		target.ViewBoxWidth     = ViewBoxWidth;
+		target.ViewBoxHeight    = ViewBoxHeight;
+		target.ViewBoxX         = ViewBoxX;
+		target.ViewBoxY         = ViewBoxY;
+		target.Title            = Title;
+		target.Description      = Description;
+		target.Author           = Author;
+		target.Copyright        = Copyright;
+		target.CreationDate     = CreationDate;
 		target.ModificationDate = ModificationDate;
-		target.Software = Software;
+		target.Software         = Software;
 	}
 }

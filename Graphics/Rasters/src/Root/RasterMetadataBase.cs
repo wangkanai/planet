@@ -1,13 +1,12 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
-namespace Wangkanai.Graphics.Rasters.Metadatas;
+namespace Wangkanai.Graphics.Rasters;
 
 /// <summary>
 /// Base implementation of raster metadata with common properties and functionality.
 /// </summary>
 public abstract class RasterMetadataBase : MetadataBase, IRasterMetadata
 {
-
 	/// <inheritdoc />
 	public virtual int Width { get; set; }
 
@@ -72,34 +71,34 @@ public abstract class RasterMetadataBase : MetadataBase, IRasterMetadata
 	public virtual void Clear()
 	{
 		ThrowIfDisposed();
-			
-		Width = 0;
-		Height = 0;
-		BitDepth = 8;
-		ExifData = null;
-		XmpData = null;
-		IccProfile = null;
-		CreationTime = null;
+
+		Width            = 0;
+		Height           = 0;
+		BitDepth         = 8;
+		ExifData         = null;
+		XmpData          = null;
+		IccProfile       = null;
+		CreationTime     = null;
 		ModificationTime = null;
-		Software = null;
-		Description = null;
-		Copyright = null;
-		Author = null;
+		Software         = null;
+		Description      = null;
+		Copyright        = null;
+		Author           = null;
 	}
 
 	/// <inheritdoc />
 	protected override void DisposeManagedResources()
 	{
 		// Clear large arrays
-		ExifData = null;
+		ExifData   = null;
 		IccProfile = null;
-		
+
 		// Clear strings
-		XmpData = null;
-		Software = null;
+		XmpData     = null;
+		Software    = null;
 		Description = null;
-		Copyright = null;
-		Author = null;
+		Copyright   = null;
+		Author      = null;
 	}
 
 
@@ -109,17 +108,17 @@ public abstract class RasterMetadataBase : MetadataBase, IRasterMetadata
 	/// <param name="target">The target metadata instance.</param>
 	protected virtual void CopyBaseTo(RasterMetadataBase target)
 	{
-		target.Width = Width;
-		target.Height = Height;
-		target.BitDepth = BitDepth;
-		target.ExifData = ExifData?.ToArray();
-		target.XmpData = XmpData;
-		target.IccProfile = IccProfile?.ToArray();
-		target.CreationTime = CreationTime;
+		target.Width            = Width;
+		target.Height           = Height;
+		target.BitDepth         = BitDepth;
+		target.ExifData         = ExifData?.ToArray();
+		target.XmpData          = XmpData;
+		target.IccProfile       = IccProfile?.ToArray();
+		target.CreationTime     = CreationTime;
 		target.ModificationTime = ModificationTime;
-		target.Software = Software;
-		target.Description = Description;
-		target.Copyright = Copyright;
-		target.Author = Author;
+		target.Software         = Software;
+		target.Description      = Description;
+		target.Copyright        = Copyright;
+		target.Author           = Author;
 	}
 }
