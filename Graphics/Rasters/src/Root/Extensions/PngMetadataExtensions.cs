@@ -1,5 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
+using System.Text;
 using Wangkanai.Graphics.Rasters.Pngs;
 
 namespace Wangkanai.Graphics.Rasters.Extensions;
@@ -62,27 +63,31 @@ public static class PngMetadataExtensions
 	public static int GetTotalTextSize(this PngMetadata metadata)
 	{
 		var size = 0;
+		var utf8 = Encoding.UTF8; // Cache encoder for better performance
 
 		// Text chunks
 		foreach (var text in metadata.TextChunks.Values)
 		{
-			size += System.Text.Encoding.UTF8.GetByteCount(text);
+			if (!string.IsNullOrEmpty(text))
+				size += utf8.GetByteCount(text);
 		}
 
 		// Compressed text chunks
 		foreach (var text in metadata.CompressedTextChunks.Values)
 		{
-			size += System.Text.Encoding.UTF8.GetByteCount(text);
+			if (!string.IsNullOrEmpty(text))
+				size += utf8.GetByteCount(text);
 		}
 
 		// International text chunks
 		foreach (var (languageTag, translatedKeyword, text) in metadata.InternationalTextChunks.Values)
 		{
-			size += System.Text.Encoding.UTF8.GetByteCount(text);
+			if (!string.IsNullOrEmpty(text))
+				size += utf8.GetByteCount(text);
 			if (!string.IsNullOrEmpty(languageTag))
-				size += System.Text.Encoding.UTF8.GetByteCount(languageTag);
+				size += utf8.GetByteCount(languageTag);
 			if (!string.IsNullOrEmpty(translatedKeyword))
-				size += System.Text.Encoding.UTF8.GetByteCount(translatedKeyword);
+				size += utf8.GetByteCount(translatedKeyword);
 		}
 
 		return size;
@@ -167,13 +172,20 @@ public static class PngMetadataExtensions
 	/// <exception cref="ArgumentException">Thrown if keyword is invalid.</exception>
 	public static void AddTextChunk(this PngMetadata metadata, string keyword, string text)
 	{
-		if (string.IsNullOrWhiteSpace(keyword))
-			throw new ArgumentException("Keyword cannot be null or empty.", nameof(keyword));
+		if (!MetadataValidationHelpers.IsValidPngKeyword(keyword))
+			throw new ArgumentException("Invalid PNG text chunk keyword.", nameof(keyword));
 
-		if (keyword.Length > 79)
-			throw new ArgumentException("Keyword cannot exceed 79 characters.", nameof(keyword));
+		var sanitizedText = MetadataValidationHelpers.ValidateAndSanitizeString(text, "text chunk content", allowEmpty: true);
+		
+		// Check total text size limits
+		var currentSize = metadata.GetTotalTextSize();
+		var validation = MetadataValidationHelpers.ValidateCustomDataLimits(currentSize, 
+			metadata.TextChunks.Count + metadata.CompressedTextChunks.Count + metadata.InternationalTextChunks.Count + 1);
+		
+		if (!validation.IsValid)
+			throw new InvalidOperationException($"Cannot add text chunk: {string.Join("; ", validation.Errors)}");
 
-		metadata.TextChunks[keyword] = text ?? string.Empty;
+		metadata.TextChunks[keyword] = sanitizedText ?? string.Empty;
 	}
 
 	/// <summary>
@@ -239,7 +251,8 @@ public static class PngMetadataExtensions
 		// Check for sRGB intent and reasonable resolution
 		var hasSrgb = metadata.HasSrgbIntent();
 		var reasonableResolution = !metadata.HasResolution() || 
-		                          (metadata.GetResolutionInDpi() >= 72 && metadata.GetResolutionInDpi() <= 300);
+		                          (metadata.GetResolutionInDpi() >= MetadataConstants.PngLimits.WebOptimizedMinDpi && 
+		                           metadata.GetResolutionInDpi() <= MetadataConstants.PngLimits.WebOptimizedMaxDpi);
 		
 		return hasSrgb && reasonableResolution && !metadata.HasCustomChunks();
 	}
@@ -282,12 +295,12 @@ public static class PngMetadataExtensions
 		var result = metadata.ValidateMetadata();
 		
 		// Additional chunk validation can be added here
-		if (metadata.GetTotalTextSize() > 1000000) // 1MB of text data
+		if (metadata.GetTotalTextSize() > MetadataConstants.PngLimits.LargeTextSizeThreshold)
 		{
 			result.AddWarning("Large amount of text data may impact performance.");
 		}
 
-		if (metadata.GetCustomChunkCount() > 50)
+		if (metadata.GetCustomChunkCount() > MetadataConstants.PngLimits.ManyCustomChunksThreshold)
 		{
 			result.AddWarning("Large number of custom chunks may impact compatibility.");
 		}

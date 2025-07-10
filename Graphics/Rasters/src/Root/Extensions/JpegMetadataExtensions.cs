@@ -1,5 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
+using System.Text;
 using Wangkanai.Graphics.Extensions;
 using Wangkanai.Graphics.Rasters.Jpegs;
 
@@ -98,27 +99,41 @@ public static class JpegMetadataExtensions
 	/// <returns>Exposure summary in standard format.</returns>
 	public static string GetExposureSummary(this JpegMetadata metadata)
 	{
-		var parts = new List<string>();
+		var sb = new StringBuilder(64); // Pre-allocate reasonable capacity
+		var hasAnyData = false;
 
 		if (metadata.ExposureTime.HasValue)
 		{
 			var exposure = metadata.ExposureTime.Value;
 			if (exposure >= 1)
-				parts.Add($"{exposure:F1}s");
+				sb.Append($"{exposure:F1}s");
 			else
-				parts.Add($"1/{Math.Round(1 / exposure)}s");
+				sb.Append($"1/{Math.Round(1 / exposure)}s");
+			hasAnyData = true;
 		}
 
 		if (metadata.FNumber.HasValue)
-			parts.Add($"f/{metadata.FNumber:F1}");
+		{
+			if (hasAnyData) sb.Append(", ");
+			sb.Append($"f/{metadata.FNumber:F1}");
+			hasAnyData = true;
+		}
 
 		if (metadata.IsoSpeedRating.HasValue)
-			parts.Add($"ISO {metadata.IsoSpeedRating}");
+		{
+			if (hasAnyData) sb.Append(", ");
+			sb.Append($"ISO {metadata.IsoSpeedRating}");
+			hasAnyData = true;
+		}
 
 		if (metadata.FocalLength.HasValue)
-			parts.Add($"{metadata.FocalLength:F0}mm");
+		{
+			if (hasAnyData) sb.Append(", ");
+			sb.Append($"{metadata.FocalLength:F0}mm");
+			hasAnyData = true;
+		}
 
-		return parts.Count > 0 ? string.Join(", ", parts) : "No exposure data";
+		return hasAnyData ? sb.ToString() : "No exposure data";
 	}
 
 	/// <summary>
@@ -128,24 +143,27 @@ public static class JpegMetadataExtensions
 	/// <returns>True if exposure settings are within reasonable ranges.</returns>
 	public static bool HasValidExposureSettings(this JpegMetadata metadata)
 	{
-		// Validate exposure time (0.000001s to 30s)
+		// Validate exposure time
 		if (metadata.ExposureTime.HasValue && 
-		    (metadata.ExposureTime <= 0 || metadata.ExposureTime > 30))
+		    (metadata.ExposureTime <= 0 || metadata.ExposureTime > MetadataConstants.CameraValidation.MaxExposureTime))
 			return false;
 
-		// Validate F-number (f/0.5 to f/64)
+		// Validate F-number
 		if (metadata.FNumber.HasValue && 
-		    (metadata.FNumber < 0.5 || metadata.FNumber > 64))
+		    (metadata.FNumber < MetadataConstants.CameraValidation.MinFNumber || 
+		     metadata.FNumber > MetadataConstants.CameraValidation.MaxFNumber))
 			return false;
 
-		// Validate ISO (6 to 6400000)
+		// Validate ISO speed rating
 		if (metadata.IsoSpeedRating.HasValue && 
-		    (metadata.IsoSpeedRating < 6 || metadata.IsoSpeedRating > 6400000))
+		    (metadata.IsoSpeedRating < MetadataConstants.CameraValidation.MinIsoSpeed || 
+		     metadata.IsoSpeedRating > MetadataConstants.CameraValidation.MaxIsoSpeed))
 			return false;
 
-		// Validate focal length (1mm to 2000mm)
+		// Validate focal length
 		if (metadata.FocalLength.HasValue && 
-		    (metadata.FocalLength < 1 || metadata.FocalLength > 2000))
+		    (metadata.FocalLength < MetadataConstants.CameraValidation.MinFocalLength || 
+		     metadata.FocalLength > MetadataConstants.CameraValidation.MaxFocalLength))
 			return false;
 
 		return true;
@@ -181,23 +199,39 @@ public static class JpegMetadataExtensions
 	/// <returns>True if the image appears to be professionally captured.</returns>
 	public static bool IsProfessionalPhoto(this JpegMetadata metadata)
 	{
-		// Check for professional camera indicators
-		var hasProfessionalCamera = metadata.HasCameraMetadata() && 
-		                           (metadata.Make?.Contains("Canon", StringComparison.OrdinalIgnoreCase) == true ||
-		                            metadata.Make?.Contains("Nikon", StringComparison.OrdinalIgnoreCase) == true ||
-		                            metadata.Make?.Contains("Sony", StringComparison.OrdinalIgnoreCase) == true) &&
-		                           metadata.Model?.Contains("EOS", StringComparison.OrdinalIgnoreCase) == true;
+		return GetProfessionalPhotoScore(metadata) >= 0.6;
+	}
 
-		// Check for manual exposure settings
-		var hasManualSettings = metadata.HasExposureData() && 
-		                       metadata.WhiteBalance == 1; // Manual white balance
+	/// <summary>
+	/// Calculates a comprehensive professional photography score based on multiple factors.
+	/// </summary>
+	/// <param name="metadata">The JPEG metadata to analyze.</param>
+	/// <returns>Professional score from 0.0 to 1.0.</returns>
+	public static double GetProfessionalPhotoScore(this JpegMetadata metadata)
+	{
+		var totalScore = 0.0;
 
-		// Check for professional metadata
-		var hasProfessionalMetadata = metadata.HasIptcData() || 
-		                             metadata.HasXmpTags() ||
-		                             !string.IsNullOrWhiteSpace(metadata.Copyright);
+		// Camera equipment score (40% weight)
+		var cameraScore = ProfessionalCameraDetection.CalculateProfessionalCameraScore(metadata.Make, metadata.Model);
+		totalScore += cameraScore * 0.4;
 
-		return hasProfessionalCamera || hasManualSettings || hasProfessionalMetadata;
+		// Exposure settings score (30% weight)
+		var exposureScore = ProfessionalCameraDetection.CalculateProfessionalExposureScore(
+			metadata.ExposureTime, metadata.FNumber, metadata.IsoSpeedRating, metadata.WhiteBalance);
+		totalScore += exposureScore * 0.3;
+
+		// Lens characteristics score (15% weight)
+		var lensScore = ProfessionalCameraDetection.IsProfessionalLens(metadata.FocalLength, metadata.FNumber) ? 1.0 : 0.0;
+		totalScore += lensScore * 0.15;
+
+		// Professional metadata score (15% weight)
+		var metadataScore = 0.0;
+		if (metadata.HasIptcData()) metadataScore += 0.4;
+		if (metadata.HasXmpTags()) metadataScore += 0.3;
+		if (!string.IsNullOrWhiteSpace(metadata.Copyright)) metadataScore += 0.3;
+		totalScore += Math.Min(metadataScore, 1.0) * 0.15;
+
+		return Math.Min(totalScore, 1.0);
 	}
 
 	/// <summary>
@@ -211,9 +245,9 @@ public static class JpegMetadataExtensions
 
 		// Score based on resolution
 		var pixelCount = metadata.GetPixelCount();
-		if (pixelCount > 20000000) score += 3; // > 20MP
-		else if (pixelCount > 10000000) score += 2; // > 10MP
-		else if (pixelCount > 5000000) score += 1; // > 5MP
+		if (pixelCount > MetadataConstants.QualityThresholds.ProfessionalMegapixels) score += 3;
+		else if (pixelCount > MetadataConstants.QualityThresholds.HighQualityMegapixels) score += 2;
+		else if (pixelCount > MetadataConstants.QualityThresholds.StandardQualityMegapixels) score += 1;
 
 		// Score based on metadata completeness
 		if (metadata.HasCameraMetadata()) score += 1;
@@ -223,9 +257,9 @@ public static class JpegMetadataExtensions
 
 		return score switch
 		{
-			<= 2 => JpegQualityLevel.Basic,
-			<= 4 => JpegQualityLevel.Standard,
-			<= 6 => JpegQualityLevel.High,
+			<= MetadataConstants.QualityThresholds.StandardQualityScore => JpegQualityLevel.Basic,
+			<= MetadataConstants.QualityThresholds.HighQualityScore => JpegQualityLevel.Standard,
+			<= MetadataConstants.QualityThresholds.ProfessionalQualityScore => JpegQualityLevel.High,
 			_ => JpegQualityLevel.Professional
 		};
 	}
@@ -236,12 +270,22 @@ public static class JpegMetadataExtensions
 	/// <param name="metadata">The JPEG metadata to modify.</param>
 	/// <param name="tag">IPTC tag name.</param>
 	/// <param name="value">Tag value.</param>
+	/// <exception cref="ArgumentException">Thrown if tag name or value is invalid.</exception>
 	public static void AddIptcTag(this JpegMetadata metadata, string tag, string value)
 	{
-		if (string.IsNullOrWhiteSpace(tag))
-			throw new ArgumentException("Tag name cannot be null or empty.", nameof(tag));
+		if (!MetadataValidationHelpers.IsValidTagName(tag))
+			throw new ArgumentException("Invalid IPTC tag name format.", nameof(tag));
 
-		metadata.IptcTags[tag] = value ?? string.Empty;
+		var sanitizedValue = MetadataValidationHelpers.ValidateAndSanitizeString(value, "IPTC tag value", allowEmpty: true);
+		
+		// Check total custom data limits
+		var currentSize = metadata.IptcTags.Values.Sum(v => v?.Length ?? 0);
+		var validation = MetadataValidationHelpers.ValidateCustomDataLimits(currentSize, metadata.IptcTags.Count + 1);
+		
+		if (!validation.IsValid)
+			throw new InvalidOperationException($"Cannot add IPTC tag: {string.Join("; ", validation.Errors)}");
+
+		metadata.IptcTags[tag] = sanitizedValue ?? string.Empty;
 	}
 
 	/// <summary>
@@ -250,12 +294,22 @@ public static class JpegMetadataExtensions
 	/// <param name="metadata">The JPEG metadata to modify.</param>
 	/// <param name="tag">XMP tag name.</param>
 	/// <param name="value">Tag value.</param>
+	/// <exception cref="ArgumentException">Thrown if tag name or value is invalid.</exception>
 	public static void AddXmpTag(this JpegMetadata metadata, string tag, string value)
 	{
-		if (string.IsNullOrWhiteSpace(tag))
-			throw new ArgumentException("Tag name cannot be null or empty.", nameof(tag));
+		if (!MetadataValidationHelpers.IsValidTagName(tag))
+			throw new ArgumentException("Invalid XMP tag name format.", nameof(tag));
 
-		metadata.XmpTags[tag] = value ?? string.Empty;
+		var sanitizedValue = MetadataValidationHelpers.ValidateAndSanitizeString(value, "XMP tag value", allowEmpty: true);
+		
+		// Check total custom data limits
+		var currentSize = metadata.XmpTags.Values.Sum(v => v?.Length ?? 0);
+		var validation = MetadataValidationHelpers.ValidateCustomDataLimits(currentSize, metadata.XmpTags.Count + 1);
+		
+		if (!validation.IsValid)
+			throw new InvalidOperationException($"Cannot add XMP tag: {string.Join("; ", validation.Errors)}");
+
+		metadata.XmpTags[tag] = sanitizedValue ?? string.Empty;
 	}
 
 	/// <summary>
@@ -265,12 +319,25 @@ public static class JpegMetadataExtensions
 	/// <param name="make">Camera make.</param>
 	/// <param name="model">Camera model.</param>
 	/// <param name="captureDateTime">Capture date and time.</param>
+	/// <exception cref="ArgumentException">Thrown if camera make or model is invalid.</exception>
 	public static void SetCameraInfo(this JpegMetadata metadata, string make, string model, DateTime? captureDateTime = null)
 	{
-		metadata.Make = make;
-		metadata.Model = model;
+		if (!MetadataValidationHelpers.IsValidCameraMakeModel(make))
+			throw new ArgumentException("Invalid camera make format.", nameof(make));
+		
+		if (!MetadataValidationHelpers.IsValidCameraMakeModel(model))
+			throw new ArgumentException("Invalid camera model format.", nameof(model));
+
+		metadata.Make = MetadataValidationHelpers.ValidateAndSanitizeString(make, "camera make", 128, false);
+		metadata.Model = MetadataValidationHelpers.ValidateAndSanitizeString(model, "camera model", 128, false);
+		
 		if (captureDateTime.HasValue)
+		{
+			if (captureDateTime.Value < new DateTime(1970, 1, 1) || captureDateTime.Value > DateTime.Now.AddYears(1))
+				throw new ArgumentException("Capture date and time is outside reasonable range.", nameof(captureDateTime));
+			
 			metadata.CaptureDateTime = captureDateTime;
+		}
 	}
 
 	/// <summary>
@@ -281,9 +348,14 @@ public static class JpegMetadataExtensions
 	/// <param name="fNumber">F-number (aperture).</param>
 	/// <param name="isoSpeed">ISO speed rating.</param>
 	/// <param name="focalLength">Focal length in millimeters.</param>
+	/// <exception cref="ArgumentException">Thrown if any exposure setting is invalid.</exception>
 	public static void SetExposureInfo(this JpegMetadata metadata, double? exposureTime = null, 
 		double? fNumber = null, int? isoSpeed = null, double? focalLength = null)
 	{
+		var validation = MetadataValidationHelpers.ValidateCameraSettings(exposureTime, fNumber, isoSpeed, focalLength);
+		if (!validation.IsValid)
+			throw new ArgumentException($"Invalid camera settings: {string.Join("; ", validation.Errors)}");
+
 		if (exposureTime.HasValue) metadata.ExposureTime = exposureTime;
 		if (fNumber.HasValue) metadata.FNumber = fNumber;
 		if (isoSpeed.HasValue) metadata.IsoSpeedRating = isoSpeed;
@@ -301,11 +373,13 @@ public static class JpegMetadataExtensions
 		
 		// Ensure sRGB color space for web compatibility
 		if (!optimized.ColorSpace.HasValue)
-			optimized.ColorSpace = 1; // sRGB
+			optimized.ColorSpace = MetadataConstants.ProfessionalDetection.SrgbColorSpace;
 
 		// Set standard resolution if not present
 		if (!optimized.HasResolution())
-			optimized.SetResolution(300, 300, 2); // 300 DPI
+			optimized.SetResolution(MetadataConstants.ProfessionalDetection.StandardPrintDpi, 
+			                       MetadataConstants.ProfessionalDetection.StandardPrintDpi, 
+			                       MetadataConstants.ProfessionalDetection.InchesResolutionUnit);
 
 		return optimized;
 	}

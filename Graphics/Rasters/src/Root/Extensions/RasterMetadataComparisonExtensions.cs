@@ -14,7 +14,7 @@ public static class RasterMetadataComparisonExtensions
 	/// <param name="other">The raster metadata instance to compare with.</param>
 	/// <param name="tolerance">Tolerance as a percentage (default: 5% = 0.05).</param>
 	/// <returns>True if resolutions are similar within tolerance.</returns>
-	public static bool HasSimilarResolution(this IRasterMetadata metadata, IRasterMetadata other, double tolerance = 0.05)
+	public static bool HasSimilarResolution(this IRasterMetadata metadata, IRasterMetadata other, double tolerance = MetadataConstants.Performance.DefaultResolutionTolerance)
 	{
 		if (metadata == other) return true;
 		
@@ -64,7 +64,7 @@ public static class RasterMetadataComparisonExtensions
 	{
 		return metadata.Width == other.Width &&
 		       metadata.Height == other.Height &&
-		       metadata.HasSimilarResolution(other, 0.01) && // 1% tolerance for print
+		       metadata.HasSimilarResolution(other, MetadataConstants.Performance.PrintResolutionTolerance) &&
 		       metadata.BitDepth == other.BitDepth;
 	}
 
@@ -90,53 +90,60 @@ public static class RasterMetadataComparisonExtensions
 	/// <returns>Similarity score from 0.0 to 1.0.</returns>
 	public static double CalculateRasterSimilarity(this IRasterMetadata metadata, IRasterMetadata other)
 	{
-		var scores = new List<double>();
+		if (metadata == other) return 1.0;
 
-		// Dimension similarity
+		var totalScore = 0.0;
+
+		// Dimension similarity (weight: 30%)
 		var pixelCount1 = (long)metadata.Width * metadata.Height;
 		var pixelCount2 = (long)other.Width * other.Height;
 		if (pixelCount1 > 0 && pixelCount2 > 0)
 		{
-			scores.Add((double)Math.Min(pixelCount1, pixelCount2) / Math.Max(pixelCount1, pixelCount2));
+			var dimensionScore = (double)Math.Min(pixelCount1, pixelCount2) / Math.Max(pixelCount1, pixelCount2);
+			totalScore += dimensionScore * MetadataConstants.Performance.DimensionSimilarityWeight;
 		}
 
-		// Bit depth similarity
-		scores.Add(metadata.BitDepth == other.BitDepth ? 1.0 : 0.0);
+		// Bit depth similarity (weight: 15%)
+		var bitDepthScore = metadata.BitDepth == other.BitDepth ? 1.0 : 0.0;
+		totalScore += bitDepthScore * 0.15;
 
-		// Resolution similarity
+		// Resolution similarity (weight: 15%)
+		var resolutionScore = 0.0;
 		if (metadata.HasResolution() && other.HasResolution())
 		{
-			scores.Add(metadata.HasSimilarResolution(other) ? 1.0 : 0.5);
+			resolutionScore = metadata.HasSimilarResolution(other) ? 1.0 : 0.5;
 		}
 		else if (metadata.HasResolution() == other.HasResolution())
 		{
-			scores.Add(1.0); // Both have or don't have resolution
+			resolutionScore = 1.0; // Both have or don't have resolution
 		}
 		else
 		{
-			scores.Add(0.5); // One has resolution, other doesn't
+			resolutionScore = 0.5; // One has resolution, other doesn't
 		}
+		totalScore += resolutionScore * 0.15;
 
-		// Color space similarity
-		scores.Add(metadata.ColorSpace == other.ColorSpace ? 1.0 : 0.0);
+		// Color space similarity (weight: 15%)
+		var colorSpaceScore = metadata.ColorSpace == other.ColorSpace ? 1.0 : 0.0;
+		totalScore += colorSpaceScore * 0.15;
 
-		// GPS data similarity
+		// GPS data similarity (weight: 5%)
 		var gpsScore = (metadata.HasGpsCoordinates(), other.HasGpsCoordinates()) switch
 		{
 			(true, true) => 1.0,
 			(false, false) => 1.0,
 			_ => 0.5
 		};
-		scores.Add(gpsScore);
+		totalScore += gpsScore * 0.05;
 
-		// Metadata presence similarity
+		// Metadata presence similarity (weight: 20%)
 		var metadataScore = 0.0;
 		if (metadata.HasExifData() == other.HasExifData()) metadataScore += 0.33;
 		if (metadata.HasXmpData() == other.HasXmpData()) metadataScore += 0.33;
 		if (metadata.HasIccProfile() == other.HasIccProfile()) metadataScore += 0.34;
-		scores.Add(metadataScore);
+		totalScore += metadataScore * MetadataConstants.Performance.MetadataSimilarityWeight;
 
-		return scores.Average();
+		return Math.Min(totalScore, 1.0);
 	}
 
 	/// <summary>
@@ -148,13 +155,22 @@ public static class RasterMetadataComparisonExtensions
 	public static (IRasterMetadata metadata, double similarity)? FindMostSimilarRaster(
 		this IRasterMetadata metadata, IEnumerable<IRasterMetadata> candidates)
 	{
-		var bestMatch = candidates
-			.Where(candidate => candidate != metadata) // Exclude self
-			.Select(candidate => new { Metadata = candidate, Similarity = metadata.CalculateRasterSimilarity(candidate) })
-			.OrderByDescending(x => x.Similarity)
-			.FirstOrDefault();
-		
-		return bestMatch != null ? (bestMatch.Metadata, bestMatch.Similarity) : null;
+		IRasterMetadata? bestMatch = null;
+		var bestSimilarity = -1.0;
+
+		foreach (var candidate in candidates)
+		{
+			if (candidate == metadata) continue; // Exclude self
+
+			var similarity = metadata.CalculateRasterSimilarity(candidate);
+			if (similarity > bestSimilarity)
+			{
+				bestSimilarity = similarity;
+				bestMatch = candidate;
+			}
+		}
+
+		return bestMatch != null ? (bestMatch, bestSimilarity) : null;
 	}
 
 	/// <summary>
@@ -195,7 +211,13 @@ public static class RasterMetadataComparisonExtensions
 			}
 		}
 		
-		return groups.Select(kvp => new RasterGrouping(kvp.Key, kvp.Value));
+		// Convert to IGrouping without LINQ for better performance
+		var result = new List<IGrouping<int, IRasterMetadata>>(groups.Count);
+		foreach (var kvp in groups)
+		{
+			result.Add(new RasterGrouping(kvp.Key, kvp.Value));
+		}
+		return result;
 	}
 
 	private class RasterGrouping : IGrouping<int, IRasterMetadata>
