@@ -7,7 +7,7 @@ namespace Wangkanai.Graphics.Vectors.Svgs;
 /// Provides comprehensive metadata management for SVG documents including
 /// viewBox, coordinate systems, styling, and performance optimization data.
 /// </summary>
-public class SvgMetadata : VectorMetadataBase, ISvgMetadata
+public class SvgMetadata : VectorMetadata, ISvgMetadata
 {
 	private bool _disposed;
 
@@ -52,17 +52,17 @@ public class SvgMetadata : VectorMetadataBase, ISvgMetadata
 	public Dictionary<string, string> Namespaces => _namespaces;
 
 	/// <inheritdoc />
-	public new string? Title 
-	{ 
-		get => base.Title; 
-		set => base.Title = value; 
+	public new string? Title
+	{
+		get => base.Title;
+		set => base.Title = value;
 	}
 
 	/// <inheritdoc />
-	public new string? Description 
-	{ 
-		get => base.Description; 
-		set => base.Description = value; 
+	public new string? Description
+	{
+		get => base.Description;
+		set => base.Description = value;
 	}
 
 	/// <inheritdoc />
@@ -147,13 +147,13 @@ public class SvgMetadata : VectorMetadataBase, ISvgMetadata
 
 	/// <inheritdoc />
 	public override IMetadata Clone() => CloneVector();
-	
+
 	/// <inheritdoc />
 	public override IVectorMetadata CloneVector()
 	{
 		var clone = new SvgMetadata();
 		CopyVectorTo(clone);
-		
+
 		// Copy SVG-specific properties
 		clone.Version = Version;
 		clone.ViewBox = ViewBox;
@@ -166,13 +166,13 @@ public class SvgMetadata : VectorMetadataBase, ISvgMetadata
 		clone.ElementCount = ElementCount;
 		clone.TotalPathLength = TotalPathLength;
 		clone.ColorSpace = ColorSpace;
-		
+
 		// Deep copy collections
 		foreach (var (key, value) in _namespaces)
 			clone._namespaces[key] = value;
 		foreach (var (key, value) in _customProperties)
 			clone._customProperties[key] = value;
-			
+
 		return clone;
 	}
 
@@ -180,7 +180,7 @@ public class SvgMetadata : VectorMetadataBase, ISvgMetadata
 	public override void Clear()
 	{
 		base.Clear();
-		
+
 		Version                   = SvgConstants.DefaultVersion;
 		ViewBox                   = SvgViewBox.Default;
 		ViewportWidth             = 100;
@@ -233,7 +233,7 @@ public class SvgMetadata : VectorMetadataBase, ISvgMetadata
 			await DisposeAsyncLarge();
 		else
 			await base.DisposeAsync();
-		
+
 		GC.SuppressFinalize(this);
 	}
 

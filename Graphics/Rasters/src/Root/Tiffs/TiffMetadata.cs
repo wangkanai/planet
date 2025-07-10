@@ -5,7 +5,7 @@ using Wangkanai.Graphics.Rasters.Metadatas;
 namespace Wangkanai.Graphics.Rasters.Tiffs;
 
 /// <summary>Represents metadata information for TIFF images.</summary>
-public class TiffMetadata : RasterMetadataBase
+public class TiffMetadata : RasterMetadata
 {
 	/// <summary>Gets or sets the image description.</summary>
 	/// <remarks>Maps to the Description property from base class for backward compatibility.</remarks>

@@ -6,7 +6,7 @@ using Wangkanai.Graphics.Rasters.Metadatas;
 namespace Wangkanai.Graphics.Rasters.Jpeg2000s;
 
 /// <summary>Comprehensive metadata for JPEG2000 images including JP2 boxes and codestream parameters.</summary>
-public class Jpeg2000Metadata : RasterMetadataBase
+public class Jpeg2000Metadata : RasterMetadata
 {
 
 	// Note: Width and Height are inherited from base class

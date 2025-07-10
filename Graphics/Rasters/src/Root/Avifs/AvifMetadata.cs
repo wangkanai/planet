@@ -7,7 +7,7 @@ namespace Wangkanai.Graphics.Rasters.Avifs;
 /// <summary>
 /// Represents comprehensive metadata for an AVIF image including color, HDR, and auxiliary information.
 /// </summary>
-public class AvifMetadata : RasterMetadataBase
+public class AvifMetadata : RasterMetadata
 {
 
 	// Note: Width, Height, and BitDepth are inherited from base class

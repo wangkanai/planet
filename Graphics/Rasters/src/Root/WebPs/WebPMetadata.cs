@@ -5,7 +5,7 @@ using Wangkanai.Graphics.Rasters.Metadatas;
 namespace Wangkanai.Graphics.Rasters.WebPs;
 
 /// <summary>Represents metadata information for WebP images.</summary>
-public class WebPMetadata : RasterMetadataBase
+public class WebPMetadata : RasterMetadata
 {
 	private ReadOnlyMemory<byte> _iccProfileMemory;
 	

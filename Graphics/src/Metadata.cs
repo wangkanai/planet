@@ -7,7 +7,7 @@ namespace Wangkanai.Graphics;
 /// <summary>
 /// Abstract base class for all metadata implementations providing common functionality.
 /// </summary>
-public abstract class MetadataBase : IMetadata
+public abstract class Metadata : IMetadata
 {
 	private bool _disposed;
 
@@ -18,25 +18,25 @@ public abstract class MetadataBase : IMetadata
 
 	/// <inheritdoc />
 	public virtual int Width  { get; set; }
-	
+
 	/// <inheritdoc />
 	public virtual int Height { get; set; }
-	
+
 	/// <summary>Gets or sets the author or artist name.</summary>
 	public virtual string? Author { get; set; }
-	
+
 	/// <summary>Gets or sets the copyright information.</summary>
 	public virtual string? Copyright { get; set; }
-	
+
 	/// <summary>Gets or sets the description.</summary>
 	public virtual string? Description { get; set; }
-	
+
 	/// <summary>Gets or sets the software used to create or modify the content.</summary>
 	public virtual string? Software { get; set; }
-	
+
 	/// <summary>Gets or sets the creation date and time.</summary>
 	public virtual DateTime? CreationTime { get; set; }
-	
+
 	/// <summary>Gets or sets the modification date and time.</summary>
 	public virtual DateTime? ModificationTime { get; set; }
 
@@ -57,19 +57,19 @@ public abstract class MetadataBase : IMetadata
 	protected virtual long GetBaseMemorySize()
 	{
 		long size = 256; // Base object size estimate
-		
+
 		// Add sizes for common string properties
 		size += EstimateStringSize(Author);
 		size += EstimateStringSize(Copyright);
 		size += EstimateStringSize(Description);
 		size += EstimateStringSize(Software);
 		size += EstimateStringSize(Title);
-		
+
 		// Add sizes for basic properties
 		size += sizeof(int) * 2; // Width and Height
 		size += 16 * 2; // CreationTime and ModificationTime (estimated)
 		size += sizeof(int) + sizeof(bool); // Orientation (estimated, accounting for nullable overhead)
-		
+
 		return size;
 	}
 
@@ -213,13 +213,13 @@ public abstract class MetadataBase : IMetadata
 	/// When overridden in a derived class, releases managed resources.
 	/// </summary>
 	protected abstract void DisposeManagedResources();
-	
+
 	/// <summary>
 	/// Creates a deep copy of the metadata.
 	/// </summary>
 	/// <returns>A new instance with the same values.</returns>
 	public abstract IMetadata Clone();
-	
+
 	/// <summary>
 	/// Validates the metadata for compliance with format specifications.
 	/// </summary>
@@ -227,15 +227,15 @@ public abstract class MetadataBase : IMetadata
 	public virtual bool ValidateMetadata()
 	{
 		ThrowIfDisposed();
-		
+
 		// Basic validation - dimensions should be positive
 		if (Width < 0 || Height < 0)
 			return false;
-		
+
 		// Orientation should be within valid range (1-8 for EXIF)
 		if (Orientation.HasValue && (Orientation < 1 || Orientation > 8))
 			return false;
-		
+
 		return true;
 	}
 
@@ -245,7 +245,7 @@ public abstract class MetadataBase : IMetadata
 	public virtual void Clear()
 	{
 		ThrowIfDisposed();
-		
+
 		Width = 0;
 		Height = 0;
 		Author = null;
@@ -257,12 +257,12 @@ public abstract class MetadataBase : IMetadata
 		CreationTime = null;
 		ModificationTime = null;
 	}
-	
+
 	/// <summary>
 	/// Copies base metadata properties from this instance to another.
 	/// </summary>
 	/// <param name="target">The target metadata instance.</param>
-	protected virtual void CopyBaseTo(MetadataBase target)
+	protected virtual void CopyBaseTo(Metadata target)
 	{
 		target.Width = Width;
 		target.Height = Height;

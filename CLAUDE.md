@@ -76,21 +76,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `mcp__github__search_issues` - Search issues
 - `mcp__github__search_users` - Search users
 
-### SonarQube Integration
-- `mcp__sonarqube__search_my_sonarqube_projects` - Find SonarQube projects
-- `mcp__sonarqube__search_sonar_issues_in_projects` - Search issues in projects
-- `mcp__sonarqube__change_sonar_issue_status` - Change issue status
-- `mcp__sonarqube__get_project_quality_gate_status` - Get quality gate status
-- `mcp__sonarqube__show_rule` - Show detailed rule information
-- `mcp__sonarqube__list_rule_repositories` - List rule repositories
-- `mcp__sonarqube__list_quality_gates` - List quality gates
-- `mcp__sonarqube__list_languages` - List supported languages
-- `mcp__sonarqube__analyze_code_snippet` - Analyze code snippets
-- `mcp__sonarqube__get_component_measures` - Get component measures
-- `mcp__sonarqube__search_metrics` - Search for metrics
-- `mcp__sonarqube__get_scm_info` - Get SCM information
-- `mcp__sonarqube__get_raw_source` - Get raw source code
-
 ### Container Management (Podman/Docker)
 - `mcp__podman__container_list` - List containers
 - `mcp__podman__container_run` - Run containers
@@ -144,27 +129,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `mcp__memory__read_graph` - Read entire knowledge graph
 - `mcp__memory__search_nodes` - Search graph nodes
 - `mcp__memory__open_nodes` - Open specific nodes
-
-### Basic Memory Tools
-- `mcp__basic-memory__build_context` - Build context from a memory:// URI to continue conversations naturally
-- `mcp__basic-memory__canvas` - Create an Obsidian canvas file to visualize concepts and connections
-- `mcp__basic-memory__delete_note` - Delete a note by title or permalink
-- `mcp__basic-memory__edit_note` - Edit an existing markdown note using various operations
-- `mcp__basic-memory__list_directory` - List directory contents with filtering and depth control
-- `mcp__basic-memory__list_memory_projects` - List all available projects with their status
-- `mcp__basic-memory__move_note` - Move a note to a new location, updating database and maintaining links
-- `mcp__basic-memory__read_content` - Read a file's raw content by path or permalink
-- `mcp__basic-memory__read_note` - Read a markdown note by title or permalink
-- `mcp__basic-memory__recent_activity` - Get recent activity from across the knowledge base
-- `mcp__basic-memory__search_notes` - Search across all content in the knowledge base with advanced syntax support
-- `mcp__basic-memory__sync_status` - Check the status of file synchronization and background operations
-- `mcp__basic-memory__view_note` - View a note as a formatted artifact for better readability
-- `mcp__basic-memory__write_note` - Create or update a markdown note
-- `mcp__basic-memory__switch_project` - Switch to a different project context
-- `mcp__basic-memory__get_current_project` - Show the currently active project and basic stats
-- `mcp__basic-memory__set_default_project` - Set default project in config (requires restart)
-- `mcp__basic-memory__create_memory_project` - Create a new Basic Memory project
-- `mcp__basic-memory__delete_project` - Delete a Basic Memory project
 
 ### Advanced Tools
 - `mcp__sequential-thinking__sequentialthinking` - Sequential thinking process
