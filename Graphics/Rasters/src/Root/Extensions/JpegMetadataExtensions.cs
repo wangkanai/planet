@@ -279,7 +279,11 @@ public static class JpegMetadataExtensions
 		var sanitizedValue = MetadataValidationHelpers.ValidateAndSanitizeString(value, "IPTC tag value", allowEmpty: true);
 		
 		// Check total custom data limits
-		var currentSize = metadata.IptcTags.Values.Sum(v => v?.Length ?? 0);
+		var currentSize = 0;
+		foreach (var tagValue in metadata.IptcTags.Values)
+		{
+			if (tagValue != null) currentSize += tagValue.Length;
+		}
 		var validation = MetadataValidationHelpers.ValidateCustomDataLimits(currentSize, metadata.IptcTags.Count + 1);
 		
 		if (!validation.IsValid)
@@ -303,7 +307,11 @@ public static class JpegMetadataExtensions
 		var sanitizedValue = MetadataValidationHelpers.ValidateAndSanitizeString(value, "XMP tag value", allowEmpty: true);
 		
 		// Check total custom data limits
-		var currentSize = metadata.XmpTags.Values.Sum(v => v?.Length ?? 0);
+		var currentSize = 0;
+		foreach (var tagValue in metadata.XmpTags.Values)
+		{
+			if (tagValue != null) currentSize += tagValue.Length;
+		}
 		var validation = MetadataValidationHelpers.ValidateCustomDataLimits(currentSize, metadata.XmpTags.Count + 1);
 		
 		if (!validation.IsValid)
@@ -369,7 +377,7 @@ public static class JpegMetadataExtensions
 	/// <returns>Photography-optimized JPEG metadata.</returns>
 	public static JpegMetadata CreatePhotographyOptimized(this JpegMetadata metadata)
 	{
-		var optimized = (JpegMetadata)metadata.CloneRaster();
+		var optimized = (JpegMetadata)metadata.Clone();
 		
 		// Ensure sRGB color space for web compatibility
 		if (!optimized.ColorSpace.HasValue)

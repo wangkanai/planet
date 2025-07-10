@@ -162,18 +162,19 @@ public static class ProfessionalCameraDetection
 		// Professional ISO usage patterns
 		if (isoSpeed.HasValue)
 		{
-			if (isoSpeed <= 800) // Clean, professional ISO range
+			if (isoSpeed <= MetadataConstants.Performance.CleanIsoThreshold) // Clean, professional ISO range
 				score += 0.2;
-			else if (isoSpeed <= 3200) // Acceptable professional range
+			else if (isoSpeed <= MetadataConstants.Performance.AcceptableIsoThreshold) // Acceptable professional range
 				score += 0.1;
 		}
 
 		// Professional exposure time patterns
 		if (exposureTime.HasValue)
 		{
-			if (exposureTime >= 1.0) // Long exposure for artistic effect
+			if (exposureTime >= MetadataConstants.Performance.LongExposureThreshold) // Long exposure for artistic effect
 				score += 0.1;
-			else if (exposureTime >= 1.0/1000.0 && exposureTime <= 1.0/60.0) // Standard professional range
+			else if (exposureTime >= MetadataConstants.Performance.ProfessionalShutterSpeedMin && 
+			         exposureTime <= MetadataConstants.Performance.ProfessionalShutterSpeedMax) // Standard professional range
 				score += 0.1;
 		}
 

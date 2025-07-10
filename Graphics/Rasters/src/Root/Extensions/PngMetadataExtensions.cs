@@ -110,7 +110,12 @@ public static class PngMetadataExtensions
 	/// <returns>Total custom chunk size in bytes.</returns>
 	public static long GetCustomChunkSize(this PngMetadata metadata)
 	{
-		return metadata.CustomChunks.Values.Sum(chunk => chunk.Length);
+		long totalSize = 0;
+		foreach (var chunk in metadata.CustomChunks.Values)
+		{
+			totalSize += chunk.Length;
+		}
+		return totalSize;
 	}
 
 	/// <summary>

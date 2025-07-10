@@ -193,7 +193,7 @@ public static class RasterMetadataComparisonExtensions
 			// Check if it belongs to an existing group
 			foreach (var (id, group) in groups)
 			{
-				var representative = group.First();
+				var representative = group[0]; // Use indexer instead of LINQ First()
 				var similarity = raster.CalculateRasterSimilarity(representative);
 				
 				if (similarity >= similarityThreshold)
