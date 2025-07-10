@@ -259,7 +259,7 @@ public static class PngMetadataExtensions
 		                          (metadata.GetResolutionInDpi() >= MetadataConstants.PngLimits.WebOptimizedMinDpi && 
 		                           metadata.GetResolutionInDpi() <= MetadataConstants.PngLimits.WebOptimizedMaxDpi);
 		
-		return hasSrgb && reasonableResolution && !metadata.HasCustomChunks();
+		return hasSrgb && reasonableResolution && metadata.GetCustomChunkCount() == 0;
 	}
 
 	/// <summary>

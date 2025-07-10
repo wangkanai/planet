@@ -49,6 +49,14 @@ public abstract class RasterMetadataBase : MetadataBase, IRasterMetadata
 			size += EstimateByteArraySize(ExifData);
 			size += EstimateStringSize(XmpData);
 			size += EstimateByteArraySize(IccProfile);
+			
+			// Add missing raster properties
+			size += sizeof(double); // XResolution
+			size += sizeof(double); // YResolution
+			size += sizeof(int);    // ResolutionUnit
+			size += sizeof(int);    // ColorSpace (nullable int)
+			size += sizeof(double); // GpsLatitude
+			size += sizeof(double); // GpsLongitude
 
 			return size;
 		}

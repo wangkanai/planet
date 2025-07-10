@@ -27,10 +27,6 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 	/// </summary>
 	public virtual double ViewBoxY { get; set; }
 
-	/// <summary>
-	/// Gets or sets the title of the vector graphic.
-	/// </summary>
-	public virtual string? Title { get; set; }
 
 	/// <inheritdoc />
 	public virtual string? CoordinateReferenceSystem { get; set; }
