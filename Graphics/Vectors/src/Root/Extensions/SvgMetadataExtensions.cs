@@ -283,7 +283,7 @@ public static class SvgMetadataExtensions
 	/// <returns>Optimized SVG metadata.</returns>
 	public static SvgMetadata CreateOptimized(this SvgMetadata metadata)
 	{
-		var optimized = (SvgMetadata)metadata.CloneVector();
+		var optimized = (SvgMetadata)metadata.Clone();
 		
 		// Enable compression if not already compressed and the SVG is large
 		if (!optimized.IsCompressed && optimized.IsLargeSvg)
