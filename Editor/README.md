@@ -1,3 +1,4 @@
 ## Wangakanai Planet Editor 
 
-Photo editor desktop application for last sets of Ariel photography preprocessing. current major challenge for doing this class is manually adjusting images and software like Adobe Lightroom, Photo
+A photo editor desktop application for large sets of aerial photography preprocessing. 
+The current major challenge for completing this task is manually adjusting images and using software like Adobe Lightroom and Cyberlink PhotoDirector, among others.
