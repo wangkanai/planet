@@ -60,6 +60,7 @@
     <File Path="Graphics\docs\chapter01.md" />
     <File Path="Graphics\docs\chapter02.md" />
     <File Path="Graphics\docs\toc.md" />
+    <File Path="Graphics\docs\chapter03.md" />
   </Folder>
   <Folder Name="/Graphics/Rasters/">
     <Project Path="Graphics\Rasters\benchmark\Wangkanai.Graphics.Rasters.Benchmark.csproj" Type="Classic C#" />
