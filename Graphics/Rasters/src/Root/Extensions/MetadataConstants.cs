@@ -106,5 +106,23 @@ public static class MetadataConstants
 		
 		/// <summary>Weight for metadata presence similarity in overall calculation.</summary>
 		public const double MetadataSimilarityWeight = 0.2;
+		
+		/// <summary>Pre-allocated StringBuilder capacity for exposure summaries.</summary>
+		public const int ExposureSummaryCapacity = 64;
+		
+		/// <summary>Minimum exposure time for long exposure detection (1 second).</summary>
+		public const double LongExposureThreshold = 1.0;
+		
+		/// <summary>Standard professional shutter speed range minimum (1/1000s).</summary>
+		public const double ProfessionalShutterSpeedMin = 1.0 / 1000.0;
+		
+		/// <summary>Standard professional shutter speed range maximum (1/60s).</summary>
+		public const double ProfessionalShutterSpeedMax = 1.0 / 60.0;
+		
+		/// <summary>Professional ISO speed threshold for clean images.</summary>
+		public const int CleanIsoThreshold = 800;
+		
+		/// <summary>Acceptable professional ISO speed threshold.</summary>
+		public const int AcceptableIsoThreshold = 3200;
 	}
 }

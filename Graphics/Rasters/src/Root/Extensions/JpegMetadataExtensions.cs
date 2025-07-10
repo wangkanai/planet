@@ -99,13 +99,13 @@ public static class JpegMetadataExtensions
 	/// <returns>Exposure summary in standard format.</returns>
 	public static string GetExposureSummary(this JpegMetadata metadata)
 	{
-		var sb = new StringBuilder(64); // Pre-allocate reasonable capacity
+		var sb = new StringBuilder(MetadataConstants.Performance.ExposureSummaryCapacity); // Pre-allocate reasonable capacity
 		var hasAnyData = false;
 
 		if (metadata.ExposureTime.HasValue)
 		{
 			var exposure = metadata.ExposureTime.Value;
-			if (exposure >= 1)
+			if (exposure >= MetadataConstants.Performance.LongExposureThreshold)
 				sb.Append($"{exposure:F1}s");
 			else
 				sb.Append($"1/{Math.Round(1 / exposure)}s");
