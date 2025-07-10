@@ -20,6 +20,24 @@ public abstract class RasterMetadataBase : MetadataBase, IRasterMetadata
 	public virtual byte[]? IccProfile { get; set; }
 
 	/// <inheritdoc />
+	public virtual double? XResolution { get; set; }
+
+	/// <inheritdoc />
+	public virtual double? YResolution { get; set; }
+
+	/// <inheritdoc />
+	public virtual int? ResolutionUnit { get; set; }
+
+	/// <inheritdoc />
+	public virtual int? ColorSpace { get; set; }
+
+	/// <inheritdoc />
+	public virtual double? GpsLatitude { get; set; }
+
+	/// <inheritdoc />
+	public virtual double? GpsLongitude { get; set; }
+
+	/// <inheritdoc />
 	public override long EstimatedMetadataSize
 	{
 		get
@@ -31,6 +49,14 @@ public abstract class RasterMetadataBase : MetadataBase, IRasterMetadata
 			size += EstimateByteArraySize(ExifData);
 			size += EstimateStringSize(XmpData);
 			size += EstimateByteArraySize(IccProfile);
+			
+			// Add missing raster properties
+			size += sizeof(double); // XResolution
+			size += sizeof(double); // YResolution
+			size += sizeof(int);    // ResolutionUnit
+			size += sizeof(int);    // ColorSpace (nullable int)
+			size += sizeof(double); // GpsLatitude
+			size += sizeof(double); // GpsLongitude
 
 			return size;
 		}
@@ -46,14 +72,23 @@ public abstract class RasterMetadataBase : MetadataBase, IRasterMetadata
 	public abstract IRasterMetadata CloneRaster();
 
 	/// <inheritdoc />
+	IRasterMetadata IRasterMetadata.Clone() => CloneRaster();
+
+	/// <inheritdoc />
 	public override void Clear()
 	{
 		base.Clear();
 		
-		BitDepth   = 8;
-		ExifData   = null;
-		XmpData    = null;
-		IccProfile = null;
+		BitDepth       = 8;
+		ExifData       = null;
+		XmpData        = null;
+		IccProfile     = null;
+		XResolution    = null;
+		YResolution    = null;
+		ResolutionUnit = null;
+		ColorSpace     = null;
+		GpsLatitude    = null;
+		GpsLongitude   = null;
 	}
 
 	/// <inheritdoc />
@@ -76,9 +111,15 @@ public abstract class RasterMetadataBase : MetadataBase, IRasterMetadata
 		base.CopyBaseTo(target);
 		
 		// Copy raster-specific properties
-		target.BitDepth   = BitDepth;
-		target.ExifData   = ExifData?.ToArray();
-		target.XmpData    = XmpData;
-		target.IccProfile = IccProfile?.ToArray();
+		target.BitDepth       = BitDepth;
+		target.ExifData       = ExifData?.ToArray();
+		target.XmpData        = XmpData;
+		target.IccProfile     = IccProfile?.ToArray();
+		target.XResolution    = XResolution;
+		target.YResolution    = YResolution;
+		target.ResolutionUnit = ResolutionUnit;
+		target.ColorSpace     = ColorSpace;
+		target.GpsLatitude    = GpsLatitude;
+		target.GpsLongitude   = GpsLongitude;
 	}
 }

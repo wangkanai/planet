@@ -11,4 +11,17 @@ namespace Wangkanai.Graphics.Vectors;
 /// are resolution-independent and may have different metadata requirements
 /// such as viewbox dimensions, path counts, or coordinate systems.
 /// </remarks>
-public interface IVectorMetadata : IMetadata { }
+public interface IVectorMetadata : IMetadata
+{
+	/// <summary>Gets or sets the coordinate reference system.</summary>
+	string? CoordinateReferenceSystem { get; set; }
+
+	/// <summary>Gets or sets the color space for vector graphics.</summary>
+	string? ColorSpace { get; set; }
+
+	/// <summary>Gets or sets the element count for performance optimization.</summary>
+	int ElementCount { get; set; }
+
+	/// <summary>Creates a deep copy of the vector metadata.</summary>
+	new IVectorMetadata Clone();
+}
