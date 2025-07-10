@@ -25,6 +25,7 @@ Also supports map service protocols like WMTS, WMS, and XYZ Tiles.
 - **[Wangkanai.Planet.Portal](Portal)** - Blazor Server/WASM hybrid web application with ASP.NET Core Identity
 - **[Wangkanai.Planet.Engine](Engine)** - Console application for map tile processing and rendering
 - **[Wangkanai.Planet.Providers](Providers)** - External map service integrations (Bing Maps, Google Maps)
+- **[Wangkanai.Planet.Editor](Editor)** - Desktop application for aerial photography image preprocessing for photography orthomosaic.
 - **[Wangkanai.Planet.Protocols](Protocols)** - Map service protocol implementations (WMS, WMTS)
 - **[Wangkanai.Planet.Extensions](Extensions)** - Extension methods and utilities for the Planet ecosystem
 - **[Wangkanai.Graphics](Graphics)** - Graphics processing library with raster, vector, and TIFF format support
