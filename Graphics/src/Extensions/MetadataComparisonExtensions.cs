@@ -18,10 +18,10 @@ public static class MetadataComparisonExtensions
 	public static bool HasSimilarDimensions(this IMetadata metadata, IMetadata other, double tolerance = 0.01)
 	{
 		if (metadata == other) return true;
-		
-		var widthDiff = Math.Abs(metadata.Width - other.Width) / (double)Math.Max(metadata.Width, other.Width);
+
+		var widthDiff  = Math.Abs(metadata.Width - other.Width) / (double)Math.Max(metadata.Width, other.Width);
 		var heightDiff = Math.Abs(metadata.Height - other.Height) / (double)Math.Max(metadata.Height, other.Height);
-		
+
 		return widthDiff <= tolerance && heightDiff <= tolerance;
 	}
 
@@ -35,23 +35,23 @@ public static class MetadataComparisonExtensions
 	public static MetadataComparisonResult Compare(this IMetadata metadata, IMetadata other)
 	{
 		var result = new MetadataComparisonResult();
-		
+
 		// Basic property comparisons
-		result.DimensionsMatch = metadata.Width == other.Width && metadata.Height == other.Height;
-		result.TitleMatch = string.Equals(metadata.Title, other.Title, StringComparison.Ordinal);
+		result.DimensionsMatch  = metadata.Width == other.Width && metadata.Height == other.Height;
+		result.TitleMatch       = string.Equals(metadata.Title, other.Title, StringComparison.Ordinal);
 		result.OrientationMatch = metadata.Orientation == other.Orientation;
-		result.TypeMatch = metadata.GetType() == other.GetType();
-		
+		result.TypeMatch        = metadata.GetType() == other.GetType();
+
 		// Calculate similarity scores
-		result.DimensionSimilarity = CalculateDimensionSimilarity(metadata, other);
+		result.DimensionSimilarity   = CalculateDimensionSimilarity(metadata, other);
 		result.AspectRatioSimilarity = CalculateAspectRatioSimilarity(metadata, other);
-		result.SizeSimilarity = CalculateSizeSimilarity(metadata, other);
-		
+		result.SizeSimilarity        = CalculateSizeSimilarity(metadata, other);
+
 		// Type-specific comparisons would be handled by format-specific extension methods
-		
+
 		// Calculate overall similarity
 		result.OverallSimilarity = CalculateOverallSimilarity(result);
-		
+
 		return result;
 	}
 
@@ -65,11 +65,11 @@ public static class MetadataComparisonExtensions
 		this IMetadata metadata, IEnumerable<IMetadata> candidates)
 	{
 		var bestMatch = candidates
-			.Select(candidate => new { Metadata = candidate, Comparison = metadata.Compare(candidate) })
-			.Where(x => x.Metadata != metadata) // Exclude self
-			.OrderByDescending(x => x.Comparison.OverallSimilarity)
-			.FirstOrDefault();
-		
+		                .Select(candidate => new { Metadata = candidate, Comparison = metadata.Compare(candidate) })
+		                .Where(x => x.Metadata != metadata) // Exclude self
+		                .OrderByDescending(x => x.Comparison.OverallSimilarity)
+		                .FirstOrDefault();
+
 		return bestMatch != null ? (bestMatch.Metadata, bestMatch.Comparison) : null;
 	}
 
@@ -83,19 +83,19 @@ public static class MetadataComparisonExtensions
 		this IEnumerable<IMetadata> metadataCollection, double similarityThreshold = 0.8)
 	{
 		var metadataList = metadataCollection.ToList();
-		var groups = new Dictionary<int, List<IMetadata>>();
-		var groupId = 0;
-		
+		var groups       = new Dictionary<int, List<IMetadata>>();
+		var groupId      = 0;
+
 		foreach (var metadata in metadataList)
 		{
 			var assignedToGroup = false;
-			
+
 			// Check if it belongs to an existing group
 			foreach (var (id, group) in groups)
 			{
 				var representative = group.First();
-				var similarity = metadata.Compare(representative).OverallSimilarity;
-				
+				var similarity     = metadata.Compare(representative).OverallSimilarity;
+
 				if (similarity >= similarityThreshold)
 				{
 					group.Add(metadata);
@@ -103,14 +103,12 @@ public static class MetadataComparisonExtensions
 					break;
 				}
 			}
-			
-			// Create new group if not assigned
+
+			// Create a new group if not assigned
 			if (!assignedToGroup)
-			{
 				groups[groupId++] = new List<IMetadata> { metadata };
-			}
 		}
-		
+
 		return groups.Select(kvp => new MetadataGrouping(kvp.Key, kvp.Value));
 	}
 
@@ -122,18 +120,18 @@ public static class MetadataComparisonExtensions
 	/// <returns>Size difference information.</returns>
 	public static SizeDifference CalculateSizeDifference(this IMetadata metadata, IMetadata other)
 	{
-		var size1 = metadata.EstimatedMetadataSize;
-		var size2 = other.EstimatedMetadataSize;
-		var difference = size2 - size1;
+		var size1                = metadata.EstimatedMetadataSize;
+		var size2                = other.EstimatedMetadataSize;
+		var difference           = size2 - size1;
 		var percentageDifference = size1 > 0 ? (difference / (double)size1) * 100 : 0;
-		
+
 		return new SizeDifference
-		{
-			AbsoluteDifference = difference,
-			PercentageDifference = percentageDifference,
-			IsLarger = difference > 0,
-			IsSignificant = Math.Abs(percentageDifference) > 10 // More than 10% difference
-		};
+		       {
+			       AbsoluteDifference   = difference,
+			       PercentageDifference = percentageDifference,
+			       IsLarger             = difference > 0,
+			       IsSignificant        = Math.Abs(percentageDifference) > 10 // More than 10% difference
+		       };
 	}
 
 	/// <summary>
@@ -148,10 +146,10 @@ public static class MetadataComparisonExtensions
 		return useCase switch
 		{
 			UseCase.WebDisplay => IsWebEquivalent(metadata, other),
-			UseCase.Printing => IsPrintEquivalent(metadata, other),
-			UseCase.Archival => IsArchivalEquivalent(metadata, other),
+			UseCase.Printing   => IsPrintEquivalent(metadata, other),
+			UseCase.Archival   => IsArchivalEquivalent(metadata, other),
 			UseCase.Processing => IsProcessingEquivalent(metadata, other),
-			_ => metadata.Compare(other).OverallSimilarity > 0.9
+			_                  => metadata.Compare(other).OverallSimilarity > 0.9
 		};
 	}
 
@@ -159,10 +157,10 @@ public static class MetadataComparisonExtensions
 	{
 		var pixelCount1 = metadata1.GetPixelCount();
 		var pixelCount2 = metadata2.GetPixelCount();
-		
+
 		if (pixelCount1 == 0 && pixelCount2 == 0) return 1.0;
 		if (pixelCount1 == 0 || pixelCount2 == 0) return 0.0;
-		
+
 		var ratio = (double)Math.Min(pixelCount1, pixelCount2) / Math.Max(pixelCount1, pixelCount2);
 		return ratio;
 	}
@@ -171,10 +169,10 @@ public static class MetadataComparisonExtensions
 	{
 		var ratio1 = metadata1.GetAspectRatio();
 		var ratio2 = metadata2.GetAspectRatio();
-		
+
 		if (ratio1 == 0 && ratio2 == 0) return 1.0;
 		if (ratio1 == 0 || ratio2 == 0) return 0.0;
-		
+
 		var similarity = Math.Min(ratio1, ratio2) / Math.Max(ratio1, ratio2);
 		return similarity;
 	}
@@ -183,10 +181,10 @@ public static class MetadataComparisonExtensions
 	{
 		var size1 = metadata1.EstimatedMetadataSize;
 		var size2 = metadata2.EstimatedMetadataSize;
-		
+
 		if (size1 == 0 && size2 == 0) return 1.0;
 		if (size1 == 0 || size2 == 0) return 0.0;
-		
+
 		var ratio = (double)Math.Min(size1, size2) / Math.Max(size1, size2);
 		return ratio;
 	}
@@ -195,14 +193,14 @@ public static class MetadataComparisonExtensions
 	private static double CalculateOverallSimilarity(MetadataComparisonResult result)
 	{
 		var scores = new List<double>
-		{
-			result.DimensionSimilarity,
-			result.AspectRatioSimilarity,
-			result.SizeSimilarity
-		};
-		
+		             {
+			             result.DimensionSimilarity,
+			             result.AspectRatioSimilarity,
+			             result.SizeSimilarity
+		             };
+
 		// Type-specific scores would be added by format-specific extension methods
-		
+
 		return scores.Average();
 	}
 
@@ -235,16 +233,16 @@ public static class MetadataComparisonExtensions
 
 	private class MetadataGrouping : IGrouping<int, IMetadata>
 	{
-		public int Key { get; }
+		public           int             Key { get; }
 		private readonly List<IMetadata> _metadata;
 
 		public MetadataGrouping(int key, List<IMetadata> metadata)
 		{
-			Key = key;
+			Key       = key;
 			_metadata = metadata;
 		}
 
-		public IEnumerator<IMetadata> GetEnumerator() => _metadata.GetEnumerator();
+		public IEnumerator<IMetadata>                                 GetEnumerator() => _metadata.GetEnumerator();
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
 	}
 }
@@ -254,16 +252,16 @@ public static class MetadataComparisonExtensions
 /// </summary>
 public class MetadataComparisonResult
 {
-	public bool DimensionsMatch { get; set; }
-	public bool TitleMatch { get; set; }
+	public bool DimensionsMatch  { get; set; }
+	public bool TitleMatch       { get; set; }
 	public bool OrientationMatch { get; set; }
-	public bool TypeMatch { get; set; }
-	
-	public double DimensionSimilarity { get; set; }
+	public bool TypeMatch        { get; set; }
+
+	public double DimensionSimilarity   { get; set; }
 	public double AspectRatioSimilarity { get; set; }
-	public double SizeSimilarity { get; set; }
-	public double OverallSimilarity { get; set; }
-	
+	public double SizeSimilarity        { get; set; }
+	public double OverallSimilarity     { get; set; }
+
 	public RasterComparisonResult? RasterComparison { get; set; }
 	public VectorComparisonResult? VectorComparison { get; set; }
 }
@@ -273,12 +271,12 @@ public class MetadataComparisonResult
 /// </summary>
 public class RasterComparisonResult
 {
-	public bool BitDepthMatch { get; set; }
-	public bool ResolutionMatch { get; set; }
-	public bool ColorSpaceMatch { get; set; }
-	public (bool first, bool second) HasExifData { get; set; }
-	public (bool first, bool second) HasGpsData { get; set; }
-	public (bool first, bool second) HasIccProfile { get; set; }
+	public bool                      BitDepthMatch   { get; set; }
+	public bool                      ResolutionMatch { get; set; }
+	public bool                      ColorSpaceMatch { get; set; }
+	public (bool first, bool second) HasExifData     { get; set; }
+	public (bool first, bool second) HasGpsData      { get; set; }
+	public (bool first, bool second) HasIccProfile   { get; set; }
 }
 
 /// <summary>
@@ -287,9 +285,9 @@ public class RasterComparisonResult
 public class VectorComparisonResult
 {
 	public double ElementCountSimilarity { get; set; }
-	public bool CoordinateSystemMatch { get; set; }
-	public bool ColorSpaceMatch { get; set; }
-	public bool ComplexityLevelMatch { get; set; }
+	public bool   CoordinateSystemMatch  { get; set; }
+	public bool   ColorSpaceMatch        { get; set; }
+	public bool   ComplexityLevelMatch   { get; set; }
 }
 
 /// <summary>
@@ -297,10 +295,10 @@ public class VectorComparisonResult
 /// </summary>
 public record SizeDifference
 {
-	public long AbsoluteDifference { get; init; }
+	public long   AbsoluteDifference   { get; init; }
 	public double PercentageDifference { get; init; }
-	public bool IsLarger { get; init; }
-	public bool IsSignificant { get; init; }
+	public bool   IsLarger             { get; init; }
+	public bool   IsSignificant        { get; init; }
 }
 
 /// <summary>

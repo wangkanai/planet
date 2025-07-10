@@ -13,19 +13,15 @@ public static class MetadataExtensions
 	/// <param name="metadata">The metadata to check.</param>
 	/// <returns>True if both width and height are greater than 0.</returns>
 	public static bool HasDimensions(this IMetadata metadata)
-	{
-		return metadata.Width > 0 && metadata.Height > 0;
-	}
+		=> metadata.Width > 0 && metadata.Height > 0;
 
 	/// <summary>
 	/// Determines if the metadata has a title.
 	/// </summary>
 	/// <param name="metadata">The metadata to check.</param>
-	/// <returns>True if title is not null or empty.</returns>
+	/// <returns>True if the title is not null or empty.</returns>
 	public static bool HasTitle(this IMetadata metadata)
-	{
-		return !string.IsNullOrWhiteSpace(metadata.Title);
-	}
+		=> !string.IsNullOrWhiteSpace(metadata.Title);
 
 	/// <summary>
 	/// Determines if the metadata has orientation information.
@@ -33,9 +29,7 @@ public static class MetadataExtensions
 	/// <param name="metadata">The metadata to check.</param>
 	/// <returns>True if orientation is set.</returns>
 	public static bool HasOrientation(this IMetadata metadata)
-	{
-		return metadata.Orientation.HasValue;
-	}
+		=> metadata.Orientation.HasValue;
 
 	/// <summary>
 	/// Sets the dimensions of the metadata.
@@ -45,7 +39,7 @@ public static class MetadataExtensions
 	/// <param name="height">The height in pixels.</param>
 	public static void SetDimensions(this IMetadata metadata, int width, int height)
 	{
-		metadata.Width = width;
+		metadata.Width  = width;
 		metadata.Height = height;
 	}
 
@@ -55,9 +49,7 @@ public static class MetadataExtensions
 	/// <param name="metadata">The metadata to read from.</param>
 	/// <returns>A tuple containing width and height.</returns>
 	public static (int width, int height) GetDimensions(this IMetadata metadata)
-	{
-		return (metadata.Width, metadata.Height);
-	}
+		=> (metadata.Width, metadata.Height);
 
 	/// <summary>
 	/// Calculates the aspect ratio of the image.
@@ -65,9 +57,7 @@ public static class MetadataExtensions
 	/// <param name="metadata">The metadata to calculate from.</param>
 	/// <returns>The aspect ratio (width/height), or 0 if height is 0.</returns>
 	public static float GetAspectRatio(this IMetadata metadata)
-	{
-		return metadata.Height > 0 ? (float)metadata.Width / metadata.Height : 0f;
-	}
+		=> metadata.Height > 0 ? (float)metadata.Width / metadata.Height : 0f;
 
 	/// <summary>
 	/// Determines if the metadata has valid dimensions within specified bounds.
@@ -77,21 +67,20 @@ public static class MetadataExtensions
 	/// <param name="maxDimension">Maximum allowed dimension.</param>
 	/// <returns>True if dimensions are within bounds.</returns>
 	public static bool IsValidDimensions(this IMetadata metadata, int minDimension = 1, int maxDimension = int.MaxValue)
-	{
-		return metadata.Width >= minDimension && metadata.Width <= maxDimension &&
-		       metadata.Height >= minDimension && metadata.Height <= maxDimension;
-	}
+		=> metadata.Width >= minDimension &&
+		   metadata.Width <= maxDimension &&
+		   metadata.Height >= minDimension &&
+		   metadata.Height <= maxDimension;
 
 	/// <summary>
-	/// Determines if the orientation value is valid according to EXIF specification.
+	/// Determines if the orientation value is valid, according to EXIF specification.
 	/// </summary>
 	/// <param name="metadata">The metadata to validate.</param>
 	/// <returns>True if orientation is null or between 1-8.</returns>
 	public static bool IsValidOrientation(this IMetadata metadata)
-	{
-		return !metadata.Orientation.HasValue || 
-		       (metadata.Orientation >= 1 && metadata.Orientation <= 8);
-	}
+		=> !metadata.Orientation.HasValue ||
+		   metadata.Orientation >= 1 &&
+		   metadata.Orientation <= 8;
 
 	/// <summary>
 	/// Determines if the metadata requires async disposal based on size.
@@ -99,9 +88,7 @@ public static class MetadataExtensions
 	/// <param name="metadata">The metadata to check.</param>
 	/// <returns>True if async disposal is recommended.</returns>
 	public static bool RequiresAsyncDisposal(this IMetadata metadata)
-	{
-		return metadata.HasLargeMetadata;
-	}
+		=> metadata.HasLargeMetadata;
 
 	/// <summary>
 	/// Gets the estimated metadata size in kilobytes.
@@ -109,9 +96,7 @@ public static class MetadataExtensions
 	/// <param name="metadata">The metadata to measure.</param>
 	/// <returns>Size in KB.</returns>
 	public static double GetEstimatedSizeInKB(this IMetadata metadata)
-	{
-		return metadata.EstimatedMetadataSize / 1024.0;
-	}
+		=> metadata.EstimatedMetadataSize / 1024.0;
 
 	/// <summary>
 	/// Gets the estimated metadata size in megabytes.
@@ -119,9 +104,7 @@ public static class MetadataExtensions
 	/// <param name="metadata">The metadata to measure.</param>
 	/// <returns>Size in MB.</returns>
 	public static double GetEstimatedSizeInMB(this IMetadata metadata)
-	{
-		return metadata.EstimatedMetadataSize / (1024.0 * 1024.0);
-	}
+		=> metadata.EstimatedMetadataSize / (1024.0 * 1024.0);
 
 	/// <summary>
 	/// Determines if the metadata is considered large (over 1MB).
@@ -129,9 +112,7 @@ public static class MetadataExtensions
 	/// <param name="metadata">The metadata to check.</param>
 	/// <returns>True if metadata is large.</returns>
 	public static bool IsConsideredLarge(this IMetadata metadata)
-	{
-		return metadata.GetEstimatedSizeInMB() > 1.0;
-	}
+		=> metadata.GetEstimatedSizeInMB() > 1.0;
 
 	/// <summary>
 	/// Performs basic validation of common metadata properties.
@@ -139,9 +120,7 @@ public static class MetadataExtensions
 	/// <param name="metadata">The metadata to validate.</param>
 	/// <returns>True if basic validation passes.</returns>
 	public static bool HasValidBasicProperties(this IMetadata metadata)
-	{
-		return metadata.IsValidDimensions() && metadata.IsValidOrientation();
-	}
+		=> metadata.IsValidDimensions() && metadata.IsValidOrientation();
 
 	/// <summary>
 	/// Gets the total pixel count of the image.
@@ -149,9 +128,7 @@ public static class MetadataExtensions
 	/// <param name="metadata">The metadata to calculate from.</param>
 	/// <returns>Total number of pixels.</returns>
 	public static long GetPixelCount(this IMetadata metadata)
-	{
-		return (long)metadata.Width * metadata.Height;
-	}
+		=> (long)metadata.Width * metadata.Height;
 
 	/// <summary>
 	/// Determines if the image is in landscape orientation.
@@ -159,9 +136,7 @@ public static class MetadataExtensions
 	/// <param name="metadata">The metadata to check.</param>
 	/// <returns>True if width is greater than height.</returns>
 	public static bool IsLandscape(this IMetadata metadata)
-	{
-		return metadata.Width > metadata.Height;
-	}
+		=> metadata.Width > metadata.Height;
 
 	/// <summary>
 	/// Determines if the image is in portrait orientation.
@@ -169,9 +144,7 @@ public static class MetadataExtensions
 	/// <param name="metadata">The metadata to check.</param>
 	/// <returns>True if height is greater than width.</returns>
 	public static bool IsPortrait(this IMetadata metadata)
-	{
-		return metadata.Height > metadata.Width;
-	}
+		=> metadata.Height > metadata.Width;
 
 	/// <summary>
 	/// Determines if the image is square.
@@ -179,9 +152,7 @@ public static class MetadataExtensions
 	/// <param name="metadata">The metadata to check.</param>
 	/// <returns>True if width equals height.</returns>
 	public static bool IsSquare(this IMetadata metadata)
-	{
-		return metadata.Width == metadata.Height;
-	}
+		=> metadata.Width == metadata.Height;
 
 	/// <summary>
 	/// Creates a copy of the metadata with specified dimensions.

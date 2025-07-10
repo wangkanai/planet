@@ -46,7 +46,6 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 			long size = GetBaseMemorySize();
 
 			// Add vector-specific properties
-			size += EstimateStringSize(Title);
 			size += EstimateStringSize(CoordinateReferenceSystem);
 			size += EstimateStringSize(ColorSpace);
 			size += sizeof(double) * 4; // ViewBox coordinates
@@ -77,7 +76,6 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 		ViewBoxHeight             = 0;
 		ViewBoxX                  = 0;
 		ViewBoxY                  = 0;
-		Title                     = null;
 		CoordinateReferenceSystem = null;
 		ColorSpace                = null;
 		ElementCount              = 0;
@@ -87,7 +85,6 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 	protected override void DisposeManagedResources()
 	{
 		// Clear vector-specific strings
-		Title                     = null;
 		CoordinateReferenceSystem = null;
 		ColorSpace                = null;
 	}
@@ -106,7 +103,6 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 		target.ViewBoxHeight             = ViewBoxHeight;
 		target.ViewBoxX                  = ViewBoxX;
 		target.ViewBoxY                  = ViewBoxY;
-		target.Title                     = Title;
 		target.CoordinateReferenceSystem = CoordinateReferenceSystem;
 		target.ColorSpace                = ColorSpace;
 		target.ElementCount              = ElementCount;

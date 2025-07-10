@@ -17,14 +17,14 @@ public static class MetadataConversionExtensions
 	public static Dictionary<string, object?> ToPropertyDictionary(this IMetadata metadata)
 	{
 		var properties = new Dictionary<string, object?>
-		{
-			[nameof(metadata.Width)] = metadata.Width,
-			[nameof(metadata.Height)] = metadata.Height,
-			[nameof(metadata.Title)] = metadata.Title,
-			[nameof(metadata.Orientation)] = metadata.Orientation,
-			[nameof(metadata.EstimatedMetadataSize)] = metadata.EstimatedMetadataSize,
-			[nameof(metadata.HasLargeMetadata)] = metadata.HasLargeMetadata
-		};
+		                 {
+			                 [nameof(metadata.Width)]                 = metadata.Width,
+			                 [nameof(metadata.Height)]                = metadata.Height,
+			                 [nameof(metadata.Title)]                 = metadata.Title,
+			                 [nameof(metadata.Orientation)]           = metadata.Orientation,
+			                 [nameof(metadata.EstimatedMetadataSize)] = metadata.EstimatedMetadataSize,
+			                 [nameof(metadata.HasLargeMetadata)]      = metadata.HasLargeMetadata
+		                 };
 
 		// Type-specific properties would be added by format-specific extensions
 
@@ -41,10 +41,10 @@ public static class MetadataConversionExtensions
 	{
 		var properties = metadata.ToPropertyDictionary();
 		var options = new JsonSerializerOptions
-		{
-			WriteIndented = indented,
-			PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-		};
+		              {
+			              WriteIndented        = indented,
+			              PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+		              };
 
 		return JsonSerializer.Serialize(properties, options);
 	}
@@ -57,9 +57,9 @@ public static class MetadataConversionExtensions
 	public static string ToCompactString(this IMetadata metadata)
 	{
 		var parts = new List<string>
-		{
-			$"{metadata.Width}x{metadata.Height}"
-		};
+		            {
+			            $"{metadata.Width}x{metadata.Height}"
+		            };
 
 		if (metadata.HasTitle())
 			parts.Add($"\"{metadata.Title}\"");
@@ -80,22 +80,20 @@ public static class MetadataConversionExtensions
 	public static string ToXmlString(this IMetadata metadata)
 	{
 		var properties = metadata.ToPropertyDictionary();
-		var xml = new System.Text.StringBuilder();
-		
+		var xml        = new System.Text.StringBuilder();
+
 		xml.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		xml.AppendLine("<metadata>");
 		xml.AppendLine($"  <type>{metadata.GetType().Name}</type>");
-		
+
 		foreach (var (key, value) in properties)
 		{
 			if (value != null)
-			{
 				xml.AppendLine($"  <{key}>{System.Security.SecurityElement.Escape(value.ToString()!)}</{key}>");
-			}
 		}
-		
+
 		xml.AppendLine("</metadata>");
-		
+
 		return xml.ToString();
 	}
 
@@ -107,17 +105,17 @@ public static class MetadataConversionExtensions
 	public static string ToHumanReadableString(this IMetadata metadata)
 	{
 		var description = new System.Text.StringBuilder();
-		
+
 		// Basic information
 		description.AppendLine($"Image: {metadata.Width} × {metadata.Height} pixels");
-		
+
 		if (metadata.HasTitle())
 			description.AppendLine($"Title: {metadata.Title}");
 
 		// Aspect ratio and orientation
 		var aspectRatio = metadata.GetAspectRatio();
-		var orientation = metadata.IsLandscape() ? "landscape" : 
-		                 metadata.IsPortrait() ? "portrait" : "square";
+		var orientation = metadata.IsLandscape() ? "landscape" :
+		                  metadata.IsPortrait()  ? "portrait" : "square";
 		description.AppendLine($"Format: {orientation} ({aspectRatio:F2}:1)");
 
 		// Size information
@@ -144,17 +142,16 @@ public static class MetadataConversionExtensions
 	public static string ToCsvString(this IMetadata metadata, bool includeHeaders = true)
 	{
 		var properties = metadata.ToPropertyDictionary();
-		var csv = new System.Text.StringBuilder();
-		
+		var csv        = new System.Text.StringBuilder();
+
 		if (includeHeaders)
-		{
 			csv.AppendLine(string.Join(",", properties.Keys));
-		}
-		
-		var values = properties.Values.Select(v => 
+
+		var values = properties.Values.Select(v =>
 			v?.ToString()?.Replace(",", ";") ?? string.Empty);
+
 		csv.AppendLine(string.Join(",", values));
-		
+
 		return csv.ToString();
 	}
 
@@ -164,28 +161,26 @@ public static class MetadataConversionExtensions
 	/// <param name="metadata">The metadata to summarize.</param>
 	/// <returns>Metadata summary object.</returns>
 	public static MetadataSummary CreateSummary(this IMetadata metadata)
-	{
-		return new MetadataSummary
-		{
-			Type = metadata.GetType().Name,
-			Dimensions = metadata.GetDimensions(),
-			PixelCount = metadata.GetPixelCount(),
-			AspectRatio = metadata.GetAspectRatio(),
-			MetadataSize = metadata.EstimatedMetadataSize,
-			IsLarge = metadata.HasLargeMetadata,
-			HasTitle = metadata.HasTitle(),
-			HasOrientation = metadata.HasOrientation(),
-			
-			// Type-specific properties would be set by format-specific extensions
-			BitDepth = null,
-			HasResolution = false,
-			HasGpsData = false,
-			HasColorProfile = false,
-			ElementCount = null,
-			HasCoordinateSystem = false,
-			ComplexityLevel = null
-		};
-	}
+		=> new()
+		   {
+			   Type           = metadata.GetType().Name,
+			   Dimensions     = metadata.GetDimensions(),
+			   PixelCount     = metadata.GetPixelCount(),
+			   AspectRatio    = metadata.GetAspectRatio(),
+			   MetadataSize   = metadata.EstimatedMetadataSize,
+			   IsLarge        = metadata.HasLargeMetadata,
+			   HasTitle       = metadata.HasTitle(),
+			   HasOrientation = metadata.HasOrientation(),
+
+			   // Type-specific properties would be set by format-specific extensions
+			   BitDepth            = null,
+			   HasResolution       = false,
+			   HasGpsData          = false,
+			   HasColorProfile     = false,
+			   ElementCount        = null,
+			   HasCoordinateSystem = false,
+			   ComplexityLevel     = null
+		   };
 
 	/// <summary>
 	/// Converts a collection of metadata to a comparison table.
@@ -200,54 +195,28 @@ public static class MetadataConversionExtensions
 
 		// Get all unique property keys
 		var allProperties = metadataList
-			.SelectMany(m => m.ToPropertyDictionary().Keys)
-			.Distinct()
-			.OrderBy(k => k)
-			.ToList();
+		                    .SelectMany(m => m.ToPropertyDictionary().Keys)
+		                    .Distinct()
+		                    .OrderBy(k => k)
+		                    .ToList();
 
 		var csv = new System.Text.StringBuilder();
-		
+
 		// Headers
 		csv.AppendLine("Index," + string.Join(",", allProperties));
-		
+
 		// Data rows
 		for (int i = 0; i < metadataList.Count; i++)
 		{
 			var properties = metadataList[i].ToPropertyDictionary();
-			var values = allProperties.Select(key => 
-				properties.TryGetValue(key, out var value) && value != null 
-					? value.ToString()?.Replace(",", ";") ?? string.Empty 
+			var values = allProperties.Select(key =>
+				properties.TryGetValue(key, out var value) && value != null
+					? value.ToString()?.Replace(",", ";") ?? string.Empty
 					: string.Empty);
-			
+
 			csv.AppendLine($"{i + 1},{string.Join(",", values)}");
 		}
-		
+
 		return csv.ToString();
 	}
-}
-
-/// <summary>
-/// Metadata summary structure for quick analysis.
-/// </summary>
-public record MetadataSummary
-{
-	public string Type { get; init; } = string.Empty;
-	public (int width, int height) Dimensions { get; init; }
-	public long PixelCount { get; init; }
-	public float AspectRatio { get; init; }
-	public long MetadataSize { get; init; }
-	public bool IsLarge { get; init; }
-	public bool HasTitle { get; init; }
-	public bool HasOrientation { get; init; }
-	
-	// Raster-specific properties
-	public int? BitDepth { get; init; }
-	public bool HasResolution { get; init; }
-	public bool HasGpsData { get; init; }
-	public bool HasColorProfile { get; init; }
-	
-	// Vector-specific properties
-	public int? ElementCount { get; init; }
-	public bool HasCoordinateSystem { get; init; }
-	public string? ComplexityLevel { get; init; }
 }

@@ -18,39 +18,27 @@ public static class MetadataValidationExtensions
 
 		// Basic validation
 		if (!metadata.ValidateMetadata())
-		{
 			result.AddError("Basic metadata validation failed.");
-		}
 
 		// Dimension validation
 		if (!metadata.IsValidDimensions())
-		{
 			result.AddError($"Invalid dimensions: {metadata.Width}x{metadata.Height}");
-		}
 
 		// Orientation validation
 		if (!metadata.IsValidOrientation())
-		{
 			result.AddError($"Invalid orientation value: {metadata.Orientation}");
-		}
 
 		// Size validation
 		if (metadata.EstimatedMetadataSize < 0)
-		{
 			result.AddError("Negative metadata size estimate.");
-		}
 
 		// Large metadata warning
 		if (metadata.IsConsideredLarge())
-		{
 			result.AddWarning($"Large metadata size: {metadata.GetEstimatedSizeInMB():F2} MB");
-		}
 
 		// Title validation
 		if (metadata.HasTitle() && metadata.Title!.Length > 1000)
-		{
 			result.AddWarning("Title is very long and may cause compatibility issues.");
-		}
 
 		return result;
 	}
@@ -126,7 +114,7 @@ public static class MetadataValidationExtensions
 		{
 			var title = metadata.Title!.ToLowerInvariant();
 			var sensitiveKeywords = new[] { "password", "secret", "private", "confidential", "internal" };
-			
+
 			if (sensitiveKeywords.Any(keyword => title.Contains(keyword)))
 			{
 				result.AddWarning("Title may contain sensitive information.");
@@ -356,10 +344,10 @@ public enum ValidationSeverity
 {
 	/// <summary>Informational message.</summary>
 	Info,
-	
+
 	/// <summary>Warning that doesn't prevent usage.</summary>
 	Warning,
-	
+
 	/// <summary>Error that may prevent proper usage.</summary>
 	Error
 }
@@ -372,25 +360,25 @@ public enum ValidationTypes
 {
 	/// <summary>Basic metadata validation.</summary>
 	Basic = 1,
-	
+
 	/// <summary>Web compatibility validation.</summary>
 	Web = 2,
-	
+
 	/// <summary>Print compatibility validation.</summary>
 	Print = 4,
-	
+
 	/// <summary>Security validation.</summary>
 	Security = 8,
-	
+
 	/// <summary>Archival compatibility validation.</summary>
 	Archival = 16,
-	
+
 	/// <summary>Performance validation.</summary>
 	Performance = 32,
-	
+
 	/// <summary>Professional use validation.</summary>
 	Professional = 64,
-	
+
 	/// <summary>All validation types.</summary>
 	All = Basic | Web | Print | Security | Archival | Performance | Professional
 }
