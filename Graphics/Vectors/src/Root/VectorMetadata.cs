@@ -5,7 +5,7 @@ namespace Wangkanai.Graphics.Vectors;
 /// <summary>
 /// Base implementation of vector metadata with common properties and functionality.
 /// </summary>
-public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
+public abstract class VectorMetadata : Metadata, IVectorMetadata
 {
 	/// <summary>
 	/// Gets or sets the viewbox width.
@@ -93,7 +93,7 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 	/// Copies vector metadata properties from this instance to another.
 	/// </summary>
 	/// <param name="target">The target vector metadata instance.</param>
-	protected virtual void CopyVectorTo(VectorMetadataBase target)
+	protected virtual void CopyVectorTo(VectorMetadata target)
 	{
 		// Copy base properties
 		base.CopyBaseTo(target);

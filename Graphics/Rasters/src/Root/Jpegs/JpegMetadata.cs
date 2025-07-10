@@ -5,7 +5,7 @@ using Wangkanai.Graphics.Rasters.Metadatas;
 namespace Wangkanai.Graphics.Rasters.Jpegs;
 
 /// <summary>Represents metadata information for JPEG images.</summary>
-public class JpegMetadata : RasterMetadataBase
+public class JpegMetadata : RasterMetadata
 {
 	/// <summary>Gets or sets the image description.</summary>
 	/// <remarks>Maps to the Description property from base class for backward compatibility.</remarks>

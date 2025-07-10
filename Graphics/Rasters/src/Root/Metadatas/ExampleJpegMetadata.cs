@@ -10,7 +10,7 @@ namespace Wangkanai.Graphics.Rasters.Metadatas;
 /// Actual JPEG metadata implementation should be updated in Jpegs/JpegMetadata.cs
 /// to inherit from RasterMetadataBase and implement IRasterMetadata.
 /// </remarks>
-internal class ExampleJpegMetadata : RasterMetadataBase
+internal class ExampleJpegMetadata : RasterMetadata
 {
 	/// <summary>Gets or sets the camera metadata.</summary>
 	public CameraMetadata? Camera { get; set; }

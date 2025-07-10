@@ -8,7 +8,7 @@ using Wangkanai.Graphics.Rasters.Metadatas;
 /// <summary>
 /// Represents comprehensive metadata for HEIF images including EXIF, XMP, ICC profiles, and HDR information.
 /// </summary>
-public sealed class HeifMetadata : RasterMetadataBase
+public sealed class HeifMetadata : RasterMetadata
 {
 	/// <summary>
 	/// Gets or sets the HDR metadata.

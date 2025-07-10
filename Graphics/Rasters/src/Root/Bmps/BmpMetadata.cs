@@ -5,7 +5,7 @@ using Wangkanai.Graphics.Rasters.Metadatas;
 namespace Wangkanai.Graphics.Rasters.Bmps;
 
 /// <summary>Represents metadata information for BMP images.</summary>
-public class BmpMetadata : RasterMetadataBase
+public class BmpMetadata : RasterMetadata
 {
 	/// <summary>Gets or sets the file signature (should be "BM").</summary>
 	public string? FileSignature { get; set; } = "BM";

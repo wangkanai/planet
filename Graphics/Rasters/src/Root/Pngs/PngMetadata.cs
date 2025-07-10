@@ -5,7 +5,7 @@ using Wangkanai.Graphics.Rasters.Metadatas;
 namespace Wangkanai.Graphics.Rasters.Pngs;
 
 /// <summary>Represents PNG metadata information including ancillary chunks.</summary>
-public class PngMetadata : RasterMetadataBase
+public class PngMetadata : RasterMetadata
 {
 	/// <summary>Gets or sets the image title.</summary>
 	public string? Title { get; set; }
