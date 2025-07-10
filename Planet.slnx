@@ -54,8 +54,10 @@
     <Project Path="Graphics\tests\Unit\Wangkanai.Graphics.UnitTests.csproj" Type="Classic C#" />
     <File Path="Graphics\Directory.Build.props" />
     <File Path="Graphics\README.md" />
-    <File Path="Graphics\docs\chapter01.md" />
+  </Folder>
+  <Folder Name="/Graphics/docs/">
     <File Path="Graphics\docs\Architecture_design.md" />
+    <File Path="Graphics\docs\chapter01.md" />
     <File Path="Graphics\docs\chapter02.md" />
     <File Path="Graphics\docs\toc.md" />
   </Folder>

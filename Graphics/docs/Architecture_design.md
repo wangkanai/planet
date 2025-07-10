@@ -2,13 +2,18 @@
 
 ## Executive Summary
 
-Building a high-performance graphics module in .NET 9.0 requires a sophisticated architecture that leverages modern compression algorithms, GPU acceleration, efficient memory management, and extensible plugin systems. This report synthesizes industry best practices from Adobe Photoshop, ImageMagick, GIMP, and modern image processing libraries to provide a comprehensive blueprint for implementing a professional-grade image processing system with special consideration for geospatial applications handling large TIFF files and map tiles.
+Building a high-performance graphics module in .NET 9.0 requires a sophisticated architecture that leverages modern
+compression algorithms, GPU acceleration, efficient memory management, and extensible plugin systems. This report
+synthesizes industry best practices from Adobe Photoshop, ImageMagick, GIMP, and modern image processing libraries to
+provide a comprehensive blueprint for implementing a professional-grade image processing system with special
+consideration for geospatial applications handling large TIFF files and map tiles.
 
 ## Core Architecture Patterns
 
 ### Pipeline Architecture Foundation
 
-The recommended architecture follows a **fluent, imperative pipeline pattern** that enables efficient chaining of image operations while maintaining memory efficiency. ImageSharp's approach provides an excellent model:
+The recommended architecture follows a **fluent, imperative pipeline pattern** that enables efficient chaining of image
+operations while maintaining memory efficiency. ImageSharp's approach provides an excellent model:
 
 ```csharp
 public interface IImageProcessor
@@ -20,22 +25,23 @@ public class ImageProcessingPipeline : IImageProcessor
 {
     private readonly IList<IImageOperation> _operations;
     private readonly IMemoryPool _memoryPool;
-    
+
     public async Task<ProcessingResult> ProcessAsync(ProcessingRequest request)
     {
         using var context = new ProcessingContext(request, _memoryPool);
-        
+
         foreach (var operation in _operations)
         {
             await operation.ApplyAsync(context);
         }
-        
+
         return context.GetResult();
     }
 }
 ```
 
-This architecture supports both **depth-first processing** (multiple perspectives on single operations) and **breadth-first processing** (parallel independent operations), crucial for scalability.
+This architecture supports both **depth-first processing** (multiple perspectives on single operations) and *
+*breadth-first processing** (parallel independent operations), crucial for scalability.
 
 ### Non-Destructive Editing Architecture
 
@@ -47,16 +53,16 @@ public class NonDestructiveImage
     private readonly Image _baseImage;
     private readonly List<IAdjustmentLayer> _adjustmentLayers;
     private readonly CommandManager _commandManager;
-    
+
     public Image Render()
     {
         var result = _baseImage.Clone();
-        
+
         foreach (var adjustment in _adjustmentLayers)
         {
             result = adjustment.Apply(result);
         }
-        
+
         return result;
     }
 }
@@ -68,12 +74,12 @@ public class NonDestructiveImage
 
 Based on extensive benchmarking, here's the recommended compression strategy for different scenarios:
 
-| Format | Compression Ratio | Encoding Speed | Use Case |
-|--------|------------------|----------------|----------|
-| **WebP** | 25-34% smaller than JPEG | Fast | Web delivery, broad compatibility |
-| **AVIF** | 50% smaller than JPEG | Slow (10x) | Progressive enhancement, quality-critical |
-| **JPEG XL** | 55% smaller than JPEG | Medium | Future-proofing, archival |
-| **HEIC** | 50% smaller than JPEG | Medium | iOS ecosystem |
+| Format      | Compression Ratio        | Encoding Speed | Use Case                                  |
+|-------------|--------------------------|----------------|-------------------------------------------|
+| **WebP**    | 25-34% smaller than JPEG | Fast           | Web delivery, broad compatibility         |
+| **AVIF**    | 50% smaller than JPEG    | Slow (10x)     | Progressive enhancement, quality-critical |
+| **JPEG XL** | 55% smaller than JPEG    | Medium         | Future-proofing, archival                 |
+| **HEIC**    | 50% smaller than JPEG    | Medium         | iOS ecosystem                             |
 
 ### Content-Adaptive Compression
 
@@ -86,7 +92,7 @@ public class ContentAdaptiveCompressor
     {
         var regions = await AnalyzeContentRegions(image);
         var compressionMap = GenerateCompressionMap(regions, analysis);
-        
+
         return await ApplyVariableQualityCompression(image, compressionMap);
     }
 }
@@ -109,19 +115,19 @@ For .NET 9.0, the GPU acceleration landscape offers several mature options:
 public class GPUImageProcessor
 {
     private readonly GPUResourcePool _resourcePool;
-    
+
     public async Task ProcessLargeImageAsync(Stream input, Stream output)
     {
         using var gpuBuffer = _resourcePool.Rent(imageSize);
         using var cpuBuffer = new PinnedBuffer<float>(imageSize);
-        
+
         // Minimize CPU-GPU transfers
         cpuBuffer.LoadImage(input);
         gpuBuffer.CopyFrom(cpuBuffer);
-        
+
         // Process on GPU
         await ProcessOnGPUAsync(gpuBuffer);
-        
+
         // Transfer back
         gpuBuffer.CopyTo(cpuBuffer);
         cpuBuffer.SaveImage(output);
@@ -129,7 +135,8 @@ public class GPUImageProcessor
 }
 ```
 
-GPU acceleration provides **10-500x speedup** for parallel operations, with modern GPUs achieving ~27 TFlops compared to ~91 GFlops for high-end CPUs.
+GPU acceleration provides **10-500x speedup** for parallel operations, with modern GPUs achieving ~27 TFlops compared
+to ~91 GFlops for high-end CPUs.
 
 ## Memory Management Excellence
 
@@ -140,7 +147,7 @@ public class MemoryEfficientProcessor
 {
     private static readonly ArrayPool<byte> _arrayPool = ArrayPool<byte>.Shared;
     private readonly MemoryPool<byte> _memoryPool;
-    
+
     public async Task ProcessImageAsync(Stream input, Stream output)
     {
         // Use pooled arrays for temporary buffers
@@ -162,6 +169,7 @@ public class MemoryEfficientProcessor
 ### Large Object Heap Optimization
 
 For images exceeding 85KB (LOH threshold):
+
 - Use **RecyclableMemoryStream** to prevent LOH fragmentation
 - Implement **memory-mapped files** for multi-gigabyte images
 - Enable LOH compaction in .NET Core 3.0+ for long-running processes
@@ -171,19 +179,20 @@ For images exceeding 85KB (LOH threshold):
 ### Mathematical Foundations
 
 **Brightness/Contrast Implementation:**
+
 ```csharp
 public static void ApplyContrast(Span<Rgb24> pixels, float contrast)
 {
     var factor = Math.Pow((100.0 + contrast) / 100.0, 2.0);
     var offset = (1.0 - factor) * 127.5;
-    
+
     // Pre-compute lookup table
     var lookupTable = new byte[256];
     for (int i = 0; i < 256; i++)
     {
         lookupTable[i] = (byte)Math.Clamp(i * factor + offset, 0, 255);
     }
-    
+
     // Apply using SIMD when possible
     for (int i = 0; i < pixels.Length; i++)
     {
@@ -203,7 +212,7 @@ Implement professional-grade adjustments using **Bezier interpolation** for curv
 public class CurvesAdjustment
 {
     private readonly byte[] _redLookup = new byte[256];
-    
+
     public void SetCurve(ColorChannel channel, Point[] controlPoints)
     {
         for (int i = 0; i < 256; i++)
@@ -219,6 +228,7 @@ public class CurvesAdjustment
 ### Progressive Loading Strategy
 
 Implement modern progressive loading patterns:
+
 - **LQIP** (Low Quality Image Placeholder) for instant visual feedback
 - **Blurhash** for compact color representations
 - **Intersection Observer** for viewport-based lazy loading
@@ -233,7 +243,7 @@ public class TilePyramid
     public static (int x, int y, int z) LatLonToTile(double lat, double lon, int zoom)
     {
         var x = (int)Math.Floor((lon + 180.0) / 360.0 * (1 << zoom));
-        var y = (int)Math.Floor((1.0 - Math.Log(Math.Tan(lat * Math.PI / 180.0) + 
+        var y = (int)Math.Floor((1.0 - Math.Log(Math.Tan(lat * Math.PI / 180.0) +
                  1.0 / Math.Cos(lat * Math.PI / 180.0)) / Math.PI) / 2.0 * (1 << zoom));
         return (x, y, zoom);
     }
@@ -245,6 +255,7 @@ public class TilePyramid
 ### Modern Color Space Support
 
 Implement comprehensive color management supporting:
+
 - **sRGB** - Standard web and display gamut
 - **Adobe RGB** - Professional print workflows
 - **Display P3** - Modern wide gamut displays
@@ -326,6 +337,7 @@ var createOptions = new string[] {
 ### Cloud-Optimized GeoTIFF (COG)
 
 Implement COG patterns for efficient cloud-based processing:
+
 - Internal tiling (256x256 or 512x512)
 - Overview pyramids for multi-resolution access
 - Optimized header layout for HTTP range requests
@@ -339,14 +351,14 @@ public class TileCache
     {
         // Multi-level caching: memory -> disk -> generate
         var cacheKey = $"{z}/{x}/{y}";
-        
+
         if (_memoryCache.TryGetValue(cacheKey, out byte[] cached))
             return cached;
-            
+
         var diskPath = Path.Combine(_diskCacheRoot, $"{z}/{x}/{y}.png");
         if (File.Exists(diskPath))
             return await File.ReadAllBytesAsync(diskPath);
-            
+
         return await GenerateTileAsync(x, y, z);
     }
 }
@@ -365,7 +377,7 @@ public static void AdjustBrightness(Span<float> pixels, float brightness)
     {
         var brightnessVector = new Vector<float>(brightness);
         var vectorSize = Vector<float>.Count;
-        
+
         for (int i = 0; i <= pixels.Length - vectorSize; i += vectorSize)
         {
             var pixelVector = new Vector<float>(pixels.Slice(i, vectorSize));
@@ -382,11 +394,11 @@ public static void AdjustBrightness(Span<float> pixels, float brightness)
 public class BatchImageProcessor
 {
     public async Task<BatchResult> ProcessBatchAsync(
-        IEnumerable<string> imagePaths, 
+        IEnumerable<string> imagePaths,
         ImagePreset preset)
     {
         var semaphore = new SemaphoreSlim(Environment.ProcessorCount);
-        
+
         await Parallel.ForEachAsync(imagePaths, async (path, ct) =>
         {
             await semaphore.WaitAsync(ct);
@@ -430,6 +442,11 @@ public class BatchImageProcessor
 
 ## Conclusion
 
-Building a high-performance graphics module in .NET 9.0 requires careful orchestration of multiple technologies and patterns. The architecture presented combines industry best practices with modern .NET capabilities to create a system capable of handling everything from simple image operations to complex geospatial processing at scale. Key success factors include intelligent use of GPU acceleration, sophisticated memory management, extensible plugin architecture, and optimization for both single-image and batch processing scenarios.
+Building a high-performance graphics module in .NET 9.0 requires careful orchestration of multiple technologies and
+patterns. The architecture presented combines industry best practices with modern .NET capabilities to create a system
+capable of handling everything from simple image operations to complex geospatial processing at scale. Key success
+factors include intelligent use of GPU acceleration, sophisticated memory management, extensible plugin architecture,
+and optimization for both single-image and batch processing scenarios.
 
-By following these patterns and leveraging the recommended libraries, developers can create professional-grade image processing applications that rival commercial solutions while maintaining the benefits of the .NET ecosystem.
+By following these patterns and leveraging the recommended libraries, developers can create professional-grade image
+processing applications that rival commercial solutions while maintaining the benefits of the .NET ecosystem.
