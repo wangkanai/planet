@@ -1,5 +1,7 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
+using Wangkanai.Graphics.Extensions;
+
 namespace Wangkanai.Graphics.Vectors.Extensions;
 
 /// <summary>
@@ -209,7 +211,7 @@ public static class VectorMetadataExtensions
 	/// <returns>A cloned metadata with new CRS.</returns>
 	public static IVectorMetadata WithCoordinateSystem(this IVectorMetadata metadata, string crs)
 	{
-		var clone = metadata.CloneVector();
+		var clone = (IVectorMetadata)metadata.Clone();
 		clone.CoordinateReferenceSystem = crs;
 		return clone;
 	}
@@ -222,7 +224,7 @@ public static class VectorMetadataExtensions
 	/// <returns>A cloned metadata with new color space.</returns>
 	public static IVectorMetadata WithColorSpace(this IVectorMetadata metadata, string colorSpace)
 	{
-		var clone = metadata.CloneVector();
+		var clone = (IVectorMetadata)metadata.Clone();
 		clone.ColorSpace = colorSpace;
 		return clone;
 	}
@@ -235,7 +237,7 @@ public static class VectorMetadataExtensions
 	/// <returns>A cloned metadata with new element count.</returns>
 	public static IVectorMetadata WithElementCount(this IVectorMetadata metadata, int elementCount)
 	{
-		var clone = metadata.CloneVector();
+		var clone = (IVectorMetadata)metadata.Clone();
 		clone.ElementCount = elementCount;
 		return clone;
 	}

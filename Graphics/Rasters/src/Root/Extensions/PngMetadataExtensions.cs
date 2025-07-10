@@ -129,6 +129,16 @@ public static class PngMetadataExtensions
 	}
 
 	/// <summary>
+	/// Determines if the metadata has custom chunks not defined in the PNG specification.
+	/// </summary>
+	/// <param name="metadata">The PNG metadata to check.</param>
+	/// <returns>True if custom chunks are present.</returns>
+	public static bool HasCustomChunks(this PngMetadata metadata)
+	{
+		return metadata.CustomChunks.Count > 0;
+	}
+
+	/// <summary>
 	/// Gets the sRGB rendering intent as a descriptive string.
 	/// </summary>
 	/// <param name="metadata">The PNG metadata to describe.</param>

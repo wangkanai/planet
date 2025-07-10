@@ -303,7 +303,7 @@ public static class RasterMetadataExtensions
 	/// <returns>A cloned metadata with new resolution.</returns>
 	public static IRasterMetadata WithResolution(this IRasterMetadata metadata, double x, double y, int unit = 2)
 	{
-		var clone = metadata.CloneRaster();
+		var clone = (IRasterMetadata)metadata.Clone();
 		clone.SetResolution(x, y, unit);
 		return clone;
 	}
@@ -317,7 +317,7 @@ public static class RasterMetadataExtensions
 	/// <returns>A cloned metadata with new GPS coordinates.</returns>
 	public static IRasterMetadata WithGpsCoordinates(this IRasterMetadata metadata, double latitude, double longitude)
 	{
-		var clone = metadata.CloneRaster();
+		var clone = (IRasterMetadata)metadata.Clone();
 		clone.SetGpsCoordinates(latitude, longitude);
 		return clone;
 	}

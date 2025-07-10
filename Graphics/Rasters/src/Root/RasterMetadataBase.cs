@@ -64,6 +64,9 @@ public abstract class RasterMetadataBase : MetadataBase, IRasterMetadata
 	public abstract IRasterMetadata CloneRaster();
 
 	/// <inheritdoc />
+	IRasterMetadata IRasterMetadata.Clone() => CloneRaster();
+
+	/// <inheritdoc />
 	public override void Clear()
 	{
 		base.Clear();

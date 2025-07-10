@@ -70,6 +70,9 @@ public abstract class VectorMetadataBase : MetadataBase, IVectorMetadata
 	public abstract IVectorMetadata CloneVector();
 
 	/// <inheritdoc />
+	IVectorMetadata IVectorMetadata.Clone() => CloneVector();
+
+	/// <inheritdoc />
 	public override void Clear()
 	{
 		base.Clear();
