@@ -59,9 +59,12 @@
     <File Path="Graphics\docs\Architecture_design.md" />
     <File Path="Graphics\docs\chapter01.md" />
     <File Path="Graphics\docs\chapter02.md" />
-    <File Path="Graphics\docs\README.md" />
     <File Path="Graphics\docs\chapter03.md" />
     <File Path="Graphics\docs\chapter04.md" />
+    <File Path="Graphics\docs\chapter05.md" />
+    <File Path="Graphics\docs\chapter06.md" />
+    <File Path="Graphics\docs\chapter07.md" />
+    <File Path="Graphics\docs\README.md" />
   </Folder>
   <Folder Name="/Graphics/Rasters/">
     <Project Path="Graphics\Rasters\benchmark\Wangkanai.Graphics.Rasters.Benchmark.csproj" Type="Classic C#" />
