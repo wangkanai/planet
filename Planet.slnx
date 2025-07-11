@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/.claude/">
-    <File Path=".claude\settings.json" />
     <File Path="CLAUDE.md" />
+    <File Path=".claude\settings.json" />
     <File Path=".claude\mcp.txt" />
   </Folder>
   <Folder Name="/.docs/">
