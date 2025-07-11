@@ -2,6 +2,7 @@
   <Folder Name="/.claude/">
     <File Path=".claude\settings.json" />
     <File Path="CLAUDE.md" />
+    <File Path="mcp.txt" />
   </Folder>
   <Folder Name="/.docs/">
     <File Path="docs\development-roadmap.md" />
