@@ -29,6 +29,7 @@
     <File Path="Version.ps1" />
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
+    <File Path="projectBrief.md" />
   </Folder>
   <Folder Name="/Engine/">
     <Project Path="Engine\src\Console\Wangkanai.Planet.Engine.Console.csproj" Type="Classic C#" />
