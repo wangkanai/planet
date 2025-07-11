@@ -2,30 +2,32 @@
 
 ## Table of Contents
 
+> **Note:** This documentation is currently in development. Chapters 1-4 are complete and have clickable navigation links. Chapters 5-21 and appendices are planned content and will be added in future updates.
+
 ---
 
 ## **Part I: Foundations**
 
 ### **Chapter 1: Introduction to Modern Graphics Processing**
 
-- 1.1 The Evolution of Graphics Processing in .NET
-- 1.2 Understanding the Graphics Pipeline
-- 1.3 Performance Challenges in Modern Applications
-- 1.4 Overview of the .NET 9.0 Graphics Ecosystem
+- [1.1 The Evolution of Graphics Processing in .NET](chapter01.md#11-the-evolution-of-graphics-processing-in-net)
+- [1.2 Understanding the Graphics Pipeline](chapter01.md#12-understanding-the-graphics-pipeline)
+- [1.3 Performance Challenges in Modern Applications](chapter01.md#13-performance-challenges-in-modern-applications)
+- [1.4 Overview of the .NET 9.0 Graphics Ecosystem](chapter01.md#14-overview-of-the-net-90-graphics-ecosystem)
 
 ### **Chapter 2: Core Architecture Patterns**
 
-- 2.1 Pipeline Architecture Fundamentals
-- 2.2 Fluent vs. Imperative Design Patterns
-- 2.3 Depth-First vs. Breadth-First Processing Strategies
-- 2.4 Building Extensible Processing Pipelines
+- [2.1 Pipeline Architecture Fundamentals](chapter02.md#21-pipeline-architecture-fundamentals)
+- [2.2 Fluent vs. Imperative Design Patterns](chapter02.md#22-fluent-vs-imperative-design-patterns)
+- [2.3 Depth-First vs. Breadth-First Processing Strategies](chapter02.md#23-depth-first-vs-breadth-first-processing-strategies)
+- [2.4 Building Extensible Processing Pipelines](chapter02.md#24-building-extensible-processing-pipelines)
 
 ### **Chapter 3: Memory Management Excellence**
 
-- 3.1 Understanding .NET Memory Architecture
-- 3.2 Array Pools and Memory Pools
-- 3.3 Span<T> and Memory<T> for Zero-Copy Operations
-- 3.4 Large Object Heap Optimization Strategies
+- [3.1 Understanding .NET Memory Architecture](chapter03.md#31-understanding-net-memory-architecture)
+- [3.2 Array Pools and Memory Pools](chapter03.md#32-array-pools-and-memory-pools)
+- [3.3 Span<T> and Memory<T> for Zero-Copy Operations](chapter03.md#33-spant-and-memoryt-for-zero-copy-operations)
+- [3.4 Large Object Heap Optimization Strategies](chapter03.md#34-large-object-heap-optimization-strategies)
 
 ---
 
@@ -33,10 +35,10 @@
 
 ### **Chapter 4: Image Representation and Data Structures**
 
-- 4.1 Pixel Formats and Color Spaces
-- 4.2 Image Buffer Management
-- 4.3 Coordinate Systems and Transformations
-- 4.4 Metadata Architecture and Design
+- [4.1 Pixel Formats and Color Spaces](chapter04.md#41-pixel-formats-and-color-spaces)
+- [4.2 Image Buffer Management](chapter04.md#42-image-buffer-management)
+- [4.3 Coordinate Systems and Transformations](chapter04.md#43-coordinate-systems-and-transformations)
+- [4.4 Metadata Architecture and Design](chapter04.md#44-metadata-architecture-and-design)
 
 ### **Chapter 5: Mathematical Foundations**
 
