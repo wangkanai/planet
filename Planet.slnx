@@ -65,6 +65,7 @@
     <File Path="Graphics\docs\chapter06.md" />
     <File Path="Graphics\docs\chapter07.md" />
     <File Path="Graphics\docs\README.md" />
+    <File Path="Graphics\docs\chapter08-compression.md" />
   </Folder>
   <Folder Name="/Graphics/Rasters/">
     <Project Path="Graphics\Rasters\benchmark\Wangkanai.Graphics.Rasters.Benchmark.csproj" Type="Classic C#" />
