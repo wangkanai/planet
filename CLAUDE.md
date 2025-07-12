@@ -130,41 +130,38 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `mcp__memory__search_nodes` - Search graph nodes
 - `mcp__memory__open_nodes` - Open specific nodes
 
-### ConPort - Context Pool & Knowledge Management
-- `mcp__conport__get_product_context` - Get overall project goals, features, and architecture
-- `mcp__conport__update_product_context` - Update product context (full content or patch)
-- `mcp__conport__get_active_context` - Get current working focus, recent changes, and open issues
-- `mcp__conport__update_active_context` - Update active context (full content or patch)
-- `mcp__conport__log_decision` - Log architectural or implementation decisions
-- `mcp__conport__get_decisions` - Retrieve logged decisions with optional filtering
-- `mcp__conport__search_decisions_fts` - Full-text search across decision fields
-- `mcp__conport__delete_decision_by_id` - Delete specific decision by ID
-- `mcp__conport__log_progress` - Log progress entries or task status
-- `mcp__conport__get_progress` - Retrieve progress entries with filtering
-- `mcp__conport__update_progress` - Update existing progress entries
-- `mcp__conport__delete_progress_by_id` - Delete progress entry by ID
-- `mcp__conport__log_system_pattern` - Log or update system/coding patterns
-- `mcp__conport__get_system_patterns` - Retrieve system patterns with filtering
-- `mcp__conport__delete_system_pattern_by_id` - Delete system pattern by ID
-- `mcp__conport__log_custom_data` - Store/update custom key-value entries under categories
-- `mcp__conport__get_custom_data` - Retrieve custom data with optional filtering
-- `mcp__conport__delete_custom_data` - Delete specific custom data entry
-- `mcp__conport__search_custom_data_value_fts` - Full-text search across all custom data
-- `mcp__conport__search_project_glossary_fts` - Search within ProjectGlossary category
-- `mcp__conport__link_conport_items` - Create relationship links between ConPort items
-- `mcp__conport__get_linked_items` - Retrieve items linked to a specific item
-- `mcp__conport__batch_log_items` - Log multiple items of the same type in single call
-- `mcp__conport__get_item_history` - Get version history for Product or Active Context
-- `mcp__conport__semantic_search_conport` - Semantic search across ConPort data
-- `mcp__conport__get_recent_activity_summary` - Summary of recent ConPort activity
-- `mcp__conport__export_conport_to_markdown` - Export ConPort data to markdown files
-- `mcp__conport__import_markdown_to_conport` - Import data from markdown files
-- `mcp__conport__get_conport_schema` - Get schema of available ConPort tools
-
 ### Advanced Tools
 - `mcp__sequential-thinking__sequentialthinking` - Sequential thinking process
 - `mcp__fetch__fetch` - Fetch URLs with content extraction
 - `mcp__ide__getDiagnostics` - Get IDE diagnostics
+
+### Serena Code Intelligence
+- `mcp__serena__list_dir` - List directory contents with recursive option
+- `mcp__serena__find_file` - Find files by name/mask pattern
+- `mcp__serena__replace_regex` - Replace text using regular expressions
+- `mcp__serena__search_for_pattern` - Flexible pattern search in codebase
+- `mcp__serena__replace_symbol_body` - Replace entire symbol body
+- `mcp__serena__insert_after_symbol` - Insert content after symbol
+- `mcp__serena__insert_before_symbol` - Insert content before symbol
+- `mcp__serena__write_memory` - Write project information to memory
+- `mcp__serena__read_memory` - Read memory file contents
+- `mcp__serena__list_memories` - List available memory files
+- `mcp__serena__delete_memory` - Delete memory files
+- `mcp__serena__activate_project` - Activate project by name/path
+- `mcp__serena__remove_project` - Remove project from configuration
+- `mcp__serena__switch_modes` - Switch between operation modes
+- `mcp__serena__get_current_config` - Get current agent configuration
+- `mcp__serena__check_onboarding_performed` - Check if onboarding completed
+- `mcp__serena__onboarding` - Perform project onboarding
+- `mcp__serena__think_about_collected_information` - Analyze collected information
+- `mcp__serena__think_about_task_adherence` - Review task progress
+- `mcp__serena__think_about_whether_you_are_done` - Evaluate task completion
+- `mcp__serena__summarize_changes` - Summarize codebase changes
+- `mcp__serena__prepare_for_new_conversation` - Prepare for new session
+- `mcp__serena__initial_instructions` - Get initial project instructions
+- `mcp__serena__jet_brains_find_symbol` - Find symbols/code entities
+- `mcp__serena__jet_brains_find_referencing_symbols` - Find symbol references
+- `mcp__serena__jet_brains_get_symbols_overview` - Get file symbol overview
 
 ## GitHub Repository
 
@@ -316,164 +313,3 @@ The Planet solution follows a modular architecture with these main components or
 - **Spatial/src/MtPkgs**: Map tile package format support
 - **Spatial/src/Root**: Core spatial data types and coordinate systems (namespace: `Wangkanai.Spatial`)
 - **Spatial/src/ShapeFiles**: Shapefile format support
-
-## ConPort - Project Context & Knowledge Management
-
-ConPort provides persistent project context and knowledge management capabilities that enhance AI-assisted development workflows.
-It maintains project memory across sessions and provides intelligent context retrieval.
-
-### Context Pool Overview
-
-The ConPort context pool contains organized project knowledge in these categories:
-
-#### **Product Context**
-- Overall project goals, architecture, and strategic direction
-- High-level features and target audience
-- Technology stack and architectural decisions
-- Access via: `mcp__conport__get_product_context` / `mcp__conport__update_product_context`
-
-#### **Active Context**
-- Current development focus and priorities
-- Recent changes and open issues
-- Immediate working context
-- Access via: `mcp__conport__get_active_context` / `mcp__conport__update_active_context`
-
-#### **Decision Log**
-- Architectural and implementation decisions
-- Rationale and implementation details
-- Searchable decision history
-- Access via: `mcp__conport__log_decision` / `mcp__conport__get_decisions` / `mcp__conport__search_decisions_fts`
-
-#### **Progress Tracking**
-- Development milestones and task status
-- Hierarchical task management
-- Progress linking to other ConPort items
-- Access via: `mcp__conport__log_progress` / `mcp__conport__get_progress` / `mcp__conport__update_progress`
-
-#### **System Patterns**
-- Coding patterns and architectural guidelines
-- Reusable implementation approaches
-- Tagged pattern classification
-- Access via: `mcp__conport__log_system_pattern` / `mcp__conport__get_system_patterns`
-
-#### **Custom Data**
-- Project-specific information organized by categories
-- Documentation references, component mappings, etc.
-- Full-text searchable content
-- Access via: `mcp__conport__log_custom_data` / `mcp__conport__get_custom_data` / `mcp__conport__search_custom_data_value_fts`
-
-### ConPort Usage Patterns
-
-#### **Starting New Development Sessions**
-```bash
-# Get current project context
-mcp__conport__get_product_context         # Overall project understanding
-mcp__conport__get_active_context          # Current development focus
-mcp__conport__get_recent_activity_summary # Recent changes and progress
-```
-
-#### **Logging Project Knowledge**
-```bash
-# Document architectural decisions
-mcp__conport__log_decision --summary "Use SQLite for tile storage" --rationale "Performance and simplicity for MVP"
-
-# Track development progress
-mcp__conport__log_progress --status "IN_PROGRESS" --description "Implementing GeoTIFF to MBTiles conversion"
-
-# Document coding patterns
-mcp__conport__log_system_pattern --name "Async Disposal Pattern" --description "Resource cleanup for Graphics processing"
-```
-
-#### **Searching and Linking Knowledge**
-```bash
-# Semantic search across all content
-mcp__conport__semantic_search_conport --query_text "tile processing performance"
-
-# Full-text search in specific areas
-mcp__conport__search_decisions_fts --query_term "SQLite"
-mcp__conport__search_custom_data_value_fts --query_term "Graphics.Rasters"
-
-# Link related items
-mcp__conport__link_conport_items --source_item_type "decision" --target_item_type "progress_entry"
-```
-
-### Current Planet Project Context Pool
-
-The Planet project context pool currently contains:
-
-#### **Documentation (Custom Data)**
-- **project_brief** - `/projectBrief.md` - Primary context document for JetBrains Rider and AI development
-- **project_readme** - `/README.md` - Main project overview
-- **portal_readme** - `/Portal/README.md` - Web application component documentation
-- **development_roadmap** - `/docs/development-roadmap.md` - Project phases and milestones
-- **technical_implementation_guide** - `/docs/technical-implementation-guide.md` - Detailed technical specifications
-- **graphics_chapters** - Graphics documentation chapters (chapter01.md, chapter04.md, chapter05.md)
-- **spatial_readmes** - Spatial component documentation (5 README files for different formats)
-
-#### **Missing Context Areas** (Opportunities for Enhancement)
-- **Product Context** - High-level project goals and architecture (empty)
-- **Active Context** - Current development priorities (empty)
-- **Decision Log** - Architectural decisions and rationale (empty)
-- **Progress Tracking** - Development milestone tracking (empty)
-- **System Patterns** - Coding patterns and guidelines (empty)
-
-### Best Practices for ConPort Usage
-
-#### **For AI Development Sessions**
-1. **Start with context retrieval** - Always check product and active context
-2. **Log important decisions** - Document architectural choices and reasoning
-3. **Track progress** - Update task status and link to related items
-4. **Document patterns** - Capture reusable coding approaches
-5. **Use semantic search** - Find related information across all categories
-
-#### **For Project Knowledge Management**
-1. **Keep product context current** - Update as project evolves
-2. **Maintain active context** - Reflect current development focus
-3. **Link related items** - Create connections between decisions, progress, and patterns
-4. **Regular exports** - Backup knowledge to markdown format
-5. **Tag effectively** - Use consistent tagging for better search and filtering
-
-#### **Integration with Development Workflow**
-1. **Decision documentation** - Log major architectural choices immediately
-2. **Progress tracking** - Update status as milestones are completed
-3. **Pattern documentation** - Capture successful implementation approaches
-4. **Context handoffs** - Update active context when switching focus areas
-5. **Knowledge search** - Use ConPort to find relevant past decisions and patterns
-
-### ConPort Commands for Planet Development
-
-#### **Essential Context Commands**
-```bash
-# Get project overview
-mcp__conport__get_product_context
-
-# Check current development focus
-mcp__conport__get_active_context
-
-# View recent activity
-mcp__conport__get_recent_activity_summary --hours_ago 24
-```
-
-#### **Knowledge Management Commands**
-```bash
-# Search for tile processing information
-mcp__conport__semantic_search_conport --query_text "tile processing MBTiles"
-
-# Find Graphics-related documentation
-mcp__conport__search_custom_data_value_fts --query_term "Graphics.Rasters" --category_filter "Documentation"
-
-# Get linked items for a decision
-mcp__conport__get_linked_items --item_type "decision" --item_id "1"
-```
-
-#### **Development Tracking Commands**
-```bash
-# Log architectural decision
-mcp__conport__log_decision --summary "Implement GPU acceleration with ILGPU" --rationale "Performance requirements for large GeoTIFF processing"
-
-# Track Phase 1 progress
-mcp__conport__log_progress --status "IN_PROGRESS" --description "Core Foundation - Engine.Console tile generation"
-
-# Document async disposal pattern
-mcp__conport__log_system_pattern --name "Graphics Resource Disposal" --description "Async disposal pattern for Graphics.Rasters processing"
-```
