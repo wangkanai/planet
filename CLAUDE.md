@@ -135,6 +135,34 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `mcp__fetch__fetch` - Fetch URLs with content extraction
 - `mcp__ide__getDiagnostics` - Get IDE diagnostics
 
+### Serena Code Intelligence
+- `mcp__serena__list_dir` - List directory contents with recursive option
+- `mcp__serena__find_file` - Find files by name/mask pattern
+- `mcp__serena__replace_regex` - Replace text using regular expressions
+- `mcp__serena__search_for_pattern` - Flexible pattern search in codebase
+- `mcp__serena__replace_symbol_body` - Replace entire symbol body
+- `mcp__serena__insert_after_symbol` - Insert content after symbol
+- `mcp__serena__insert_before_symbol` - Insert content before symbol
+- `mcp__serena__write_memory` - Write project information to memory
+- `mcp__serena__read_memory` - Read memory file contents
+- `mcp__serena__list_memories` - List available memory files
+- `mcp__serena__delete_memory` - Delete memory files
+- `mcp__serena__activate_project` - Activate project by name/path
+- `mcp__serena__remove_project` - Remove project from configuration
+- `mcp__serena__switch_modes` - Switch between operation modes
+- `mcp__serena__get_current_config` - Get current agent configuration
+- `mcp__serena__check_onboarding_performed` - Check if onboarding completed
+- `mcp__serena__onboarding` - Perform project onboarding
+- `mcp__serena__think_about_collected_information` - Analyze collected information
+- `mcp__serena__think_about_task_adherence` - Review task progress
+- `mcp__serena__think_about_whether_you_are_done` - Evaluate task completion
+- `mcp__serena__summarize_changes` - Summarize codebase changes
+- `mcp__serena__prepare_for_new_conversation` - Prepare for new session
+- `mcp__serena__initial_instructions` - Get initial project instructions
+- `mcp__serena__jet_brains_find_symbol` - Find symbols/code entities
+- `mcp__serena__jet_brains_find_referencing_symbols` - Find symbol references
+- `mcp__serena__jet_brains_get_symbols_overview` - Get file symbol overview
+
 ## GitHub Repository
 
 - GitHub integration is enabled for this repository via MCP `github` command.
