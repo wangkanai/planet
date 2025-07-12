@@ -88,6 +88,13 @@
     <File Path="Graphics\docs\Architecture\chapter20-deployment-operations.md" />
     <File Path="Graphics\docs\Architecture\chapter21-future-proofing.md" />
     <File Path="Graphics\docs\Architecture\README.md" />
+    <File Path="Graphics\docs\Architecture\appendix-a1-comparative-analysis.md" />
+    <File Path="Graphics\docs\Architecture\appendix-a2-hardware-config.md" />
+    <File Path="Graphics\docs\Architecture\appendix-a3-optimization-checklists.md" />
+    <File Path="Graphics\docs\Architecture\appendix-b1-pipeline-examples.md" />
+    <File Path="Graphics\docs\Architecture\appendix-b2-processing-recipes.md" />
+    <File Path="Graphics\docs\Architecture\appendix-b3-troubleshooting.md" />
+    <File Path="Graphics\docs\Architecture\appendix-c1-format-compatibility.md" />
   </Folder>
   <Folder Name="/Graphics/Rasters/">
     <Project Path="Graphics\Rasters\benchmark\Wangkanai.Graphics.Rasters.Benchmark.csproj" Type="Classic C#" />
