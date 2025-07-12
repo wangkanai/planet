@@ -81,6 +81,9 @@
     <File Path="Graphics\docs\chapter13-color-space-management.md" />
     <File Path="Graphics\docs\chapter14-metadata-handling.md" />
     <File Path="Graphics\docs\chapter15-plugin-architecture.md" />
+    <File Path="Graphics\docs\chapter16-geospatial.md" />
+    <File Path="Graphics\docs\chapter17-batch-processing.md" />
+    <File Path="Graphics\docs\chapter18-cloud-ready.md" />
   </Folder>
   <Folder Name="/Graphics/Rasters/">
     <Project Path="Graphics\Rasters\benchmark\Wangkanai.Graphics.Rasters.Benchmark.csproj" Type="Classic C#" />

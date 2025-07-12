@@ -2,8 +2,8 @@
 
 ## Table of Contents
 
-> **Note:** This documentation is currently in development. Chapters 1-12 are complete and have clickable navigation
-> links. Chapters 13-21 and appendices are planned content and will be added in future updates.
+> **Note:** This documentation is currently in development. Chapters 1-18 are complete and have clickable navigation
+> links. Chapters 19-21 and appendices are planned content and will be added in future updates.
 
 ---
 
@@ -111,24 +111,24 @@
 
 ### **Chapter 13: Color Space Management**
 
-- 13.1 ICC Profile Integration
-- 13.2 Wide Gamut and HDR Support
-- 13.3 Color Space Conversions
-- 13.4 Display Calibration Integration
+- [13.1 ICC Profile Integration](chapter13-color-space-management.md#131-icc-profile-integration)
+- [13.2 Wide Gamut and HDR Support](chapter13-color-space-management.md#132-wide-gamut-and-hdr-support)
+- [13.3 Color Space Conversions](chapter13-color-space-management.md#133-color-space-conversions)
+- [13.4 Display Calibration Integration](chapter13-color-space-management.md#134-display-calibration-integration)
 
 ### **Chapter 14: Metadata Handling Systems**
 
-- 14.1 EXIF, IPTC, and XMP Standards
-- 14.2 Custom Metadata Schemas
-- 14.3 Metadata Preservation Strategies
-- 14.4 Performance Considerations
+- [14.1 EXIF, IPTC, and XMP Standards](chapter14-metadata-handling.md#141-exif-iptc-and-xmp-standards)
+- [14.2 Custom Metadata Schemas](chapter14-metadata-handling.md#142-custom-metadata-schemas)
+- [14.3 Metadata Preservation Strategies](chapter14-metadata-handling.md#143-metadata-preservation-strategies)
+- [14.4 Performance Considerations](chapter14-metadata-handling.md#144-performance-considerations)
 
 ### **Chapter 15: Plugin Architecture**
 
-- 15.1 MEF-Based Extensibility
-- 15.2 Security and Isolation
-- 15.3 Plugin Discovery and Loading
-- 15.4 API Design for Extensions
+- [15.1 MEF-Based Extensibility](chapter15-plugin-architecture.md#151-mef-based-extensibility)
+- [15.2 Security and Isolation](chapter15-plugin-architecture.md#152-security-and-isolation)
+- [15.3 Plugin Discovery and Loading](chapter15-plugin-architecture.md#153-plugin-discovery-and-loading)
+- [15.4 API Design for Extensions](chapter15-plugin-architecture.md#154-api-design-for-extensions)
 
 ---
 
@@ -136,24 +136,24 @@
 
 ### **Chapter 16: Geospatial Image Processing**
 
-- 16.1 Large TIFF and BigTIFF Handling
-- 16.2 Cloud-Optimized GeoTIFF (COG)
-- 16.3 Coordinate System Integration
-- 16.4 Map Tile Generation
+- [16.1 Large TIFF and BigTIFF Handling](chapter16-geospatial.md#161-large-tiff-and-bigtiff-handling)
+- [16.2 Cloud-Optimized GeoTIFF (COG)](chapter16-geospatial.md#162-cloud-optimized-geotiff-cog)
+- [16.3 Coordinate System Integration](chapter16-geospatial.md#163-coordinate-system-integration)
+- [16.4 Map Tile Generation](chapter16-geospatial.md#164-map-tile-generation)
 
 ### **Chapter 17: Batch Processing Systems**
 
-- 17.1 Workflow Engine Design
-- 17.2 Resource Pool Management
-- 17.3 Error Handling and Recovery
-- 17.4 Performance Monitoring
+- [17.1 Workflow Engine Design](chapter17-batch-processing.md#171-workflow-engine-design)
+- [17.2 Resource Pool Management](chapter17-batch-processing.md#172-resource-pool-management)
+- [17.3 Error Handling and Recovery](chapter17-batch-processing.md#173-error-handling-and-recovery)
+- [17.4 Performance Monitoring](chapter17-batch-processing.md#174-performance-monitoring)
 
 ### **Chapter 18: Cloud-Ready Architecture**
 
-- 18.1 Microservice Design Patterns
-- 18.2 Containerization Strategies
-- 18.3 Distributed Processing
-- 18.4 Cloud Storage Integration
+- [18.1 Microservice Design Patterns](chapter18-cloud-ready.md#181-microservice-design-patterns)
+- [18.2 Containerization Strategies](chapter18-cloud-ready.md#182-containerization-strategies)
+- [18.3 Distributed Processing](chapter18-cloud-ready.md#183-distributed-processing)
+- [18.4 Cloud Storage Integration](chapter18-cloud-ready.md#184-cloud-storage-integration)
 
 ---
 
