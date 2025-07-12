@@ -65,19 +65,19 @@
   </Folder>
   <Folder Name="/Graphics/docs/">
     <File Path="Graphics\docs\Architecture_design.md" />
-    <File Path="Graphics\docs\chapter01.md" />
-    <File Path="Graphics\docs\chapter02.md" />
-    <File Path="Graphics\docs\chapter03.md" />
-    <File Path="Graphics\docs\chapter04.md" />
-    <File Path="Graphics\docs\chapter05.md" />
-    <File Path="Graphics\docs\chapter06.md" />
-    <File Path="Graphics\docs\chapter07.md" />
     <File Path="Graphics\docs\README.md" />
     <File Path="Graphics\docs\chapter08-compression.md" />
     <File Path="Graphics\docs\chapter09-streaming-tiling.md" />
     <File Path="Graphics\docs\chapter10-gpu-acceleration.md" />
-    <File Path="Graphics\docs\chapter11_simd_vectorization.md" />
     <File Path="Graphics\docs\chapter12-async-processing.md" />
+    <File Path="Graphics\docs\chapter01-introduction.md" />
+    <File Path="Graphics\docs\chapter02-core-architecture.md" />
+    <File Path="Graphics\docs\chapter03-memory-management.md" />
+    <File Path="Graphics\docs\chapter04-netcore-compatibility.md" />
+    <File Path="Graphics\docs\chapter05-imagesharp-ecosystem.md" />
+    <File Path="Graphics\docs\chapter06-skia-bindings.md" />
+    <File Path="Graphics\docs\chapter07-cross-platform.md" />
+    <File Path="Graphics\docs\chapter11-simd-vectorization.md" />
   </Folder>
   <Folder Name="/Graphics/Rasters/">
     <Project Path="Graphics\Rasters\benchmark\Wangkanai.Graphics.Rasters.Benchmark.csproj" Type="Classic C#" />
