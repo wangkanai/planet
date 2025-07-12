@@ -2,8 +2,8 @@
 
 ## Table of Contents
 
-> **Note:** This documentation is currently in development. Chapters 1-15 are complete and have clickable navigation
-> links. Chapters 16-21 and appendices are planned content and will be added in future updates.
+> **Note:** This documentation is currently in development. Chapters 1-18 are complete and have clickable navigation
+> links. Chapters 19-21 and appendices are planned content and will be added in future updates.
 
 ---
 
@@ -136,24 +136,24 @@
 
 ### **Chapter 16: Geospatial Image Processing**
 
-- 16.1 Large TIFF and BigTIFF Handling
-- 16.2 Cloud-Optimized GeoTIFF (COG)
-- 16.3 Coordinate System Integration
-- 16.4 Map Tile Generation
+- [16.1 Large TIFF and BigTIFF Handling](chapter16-geospatial.md#161-large-tiff-and-bigtiff-handling)
+- [16.2 Cloud-Optimized GeoTIFF (COG)](chapter16-geospatial.md#162-cloud-optimized-geotiff-cog)
+- [16.3 Coordinate System Integration](chapter16-geospatial.md#163-coordinate-system-integration)
+- [16.4 Map Tile Generation](chapter16-geospatial.md#164-map-tile-generation)
 
 ### **Chapter 17: Batch Processing Systems**
 
-- 17.1 Workflow Engine Design
-- 17.2 Resource Pool Management
-- 17.3 Error Handling and Recovery
-- 17.4 Performance Monitoring
+- [17.1 Workflow Engine Design](chapter17-batch-processing.md#171-workflow-engine-design)
+- [17.2 Resource Pool Management](chapter17-batch-processing.md#172-resource-pool-management)
+- [17.3 Error Handling and Recovery](chapter17-batch-processing.md#173-error-handling-and-recovery)
+- [17.4 Performance Monitoring](chapter17-batch-processing.md#174-performance-monitoring)
 
 ### **Chapter 18: Cloud-Ready Architecture**
 
-- 18.1 Microservice Design Patterns
-- 18.2 Containerization Strategies
-- 18.3 Distributed Processing
-- 18.4 Cloud Storage Integration
+- [18.1 Microservice Design Patterns](chapter18-cloud-ready.md#181-microservice-design-patterns)
+- [18.2 Containerization Strategies](chapter18-cloud-ready.md#182-containerization-strategies)
+- [18.3 Distributed Processing](chapter18-cloud-ready.md#183-distributed-processing)
+- [18.4 Cloud Storage Integration](chapter18-cloud-ready.md#184-cloud-storage-integration)
 
 ---
 
