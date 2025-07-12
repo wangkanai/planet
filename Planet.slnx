@@ -63,7 +63,9 @@
     <File Path="Graphics\Directory.Build.props" />
     <File Path="Graphics\README.md" />
   </Folder>
-  <Folder Name="/Graphics/docs/" />
+  <Folder Name="/Graphics/docs/">
+    <File Path="Graphics\docs\README.md" />
+  </Folder>
   <Folder Name="/Graphics/docs/Architecture/">
     <File Path="Graphics\docs\Architecture\Architecture_design.md" />
     <File Path="Graphics\docs\Architecture\chapter01-introduction.md" />
