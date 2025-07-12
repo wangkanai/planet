@@ -14,6 +14,15 @@
   <Folder Name="/.serena/">
     <File Path=".serena\project.yml" />
   </Folder>
+  <Folder Name="/.serena/memories/">
+    <File Path=".serena\memories\architecture_structure.md" />
+    <File Path=".serena\memories\coding_style_conventions.md" />
+    <File Path=".serena\memories\design_patterns_guidelines.md" />
+    <File Path=".serena\memories\project_overview.md" />
+    <File Path=".serena\memories\suggested_commands.md" />
+    <File Path=".serena\memories\task_completion_checklist.md" />
+    <File Path=".serena\memories\tech_stack.md" />
+  </Folder>
   <Folder Name="/.solutions/">
     <File Path="build.ps1" />
     <File Path="Directory.Build.props" />
