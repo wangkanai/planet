@@ -3,7 +3,7 @@
     <File Path="CLAUDE.md" />
     <File Path=".claude\settings.json" />
     <File Path=".claude\mcp.txt" />
-  <File Path="projectBrief.md" />
+    <File Path="projectBrief.md" />
   </Folder>
   <Folder Name="/.github/">
     <File Path=".github\workflows\dotnet.yml" />
@@ -77,6 +77,7 @@
     <File Path="Graphics\docs\chapter09-streaming-tiling.md" />
     <File Path="Graphics\docs\chapter10-gpu-acceleration.md" />
     <File Path="Graphics\docs\chapter11_simd_vectorization.md" />
+    <File Path="Graphics\docs\chapter12-async-processing.md" />
   </Folder>
   <Folder Name="/Graphics/Rasters/">
     <Project Path="Graphics\Rasters\benchmark\Wangkanai.Graphics.Rasters.Benchmark.csproj" Type="Classic C#" />

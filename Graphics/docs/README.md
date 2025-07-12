@@ -2,7 +2,8 @@
 
 ## Table of Contents
 
-> **Note:** This documentation is currently in development. Chapters 1-4 are complete and have clickable navigation links. Chapters 5-21 and appendices are planned content and will be added in future updates.
+> **Note:** This documentation is currently in development. Chapters 1-4 are complete and have clickable navigation
+> links. Chapters 5-21 and appendices are planned content and will be added in future updates.
 
 ---
 
