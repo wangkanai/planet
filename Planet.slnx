@@ -95,6 +95,8 @@
     <File Path="Graphics\docs\Architecture\appendix-b2-processing-recipes.md" />
     <File Path="Graphics\docs\Architecture\appendix-b3-troubleshooting.md" />
     <File Path="Graphics\docs\Architecture\appendix-c1-format-compatibility.md" />
+    <File Path="Graphics\docs\Architecture\appendix-c2-algorithm-complexity.md" />
+    <File Path="Graphics\docs\Architecture\appendix-c3-memory-usage.md" />
   </Folder>
   <Folder Name="/Graphics/Rasters/">
     <Project Path="Graphics\Rasters\benchmark\Wangkanai.Graphics.Rasters.Benchmark.csproj" Type="Classic C#" />
