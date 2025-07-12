@@ -2,8 +2,8 @@
 
 ## Table of Contents
 
-> **Note:** This documentation is currently in development. Chapters 1-18 are complete and have clickable navigation
-> links. Chapters 19-21 and appendices are planned content and will be added in future updates.
+> **Note:** This documentation is complete. Chapters 1-21 are complete and have clickable navigation
+> links. Appendices are planned content and will be added in future updates.
 
 ---
 
@@ -161,24 +161,24 @@
 
 ### **Chapter 19: Testing Strategies**
 
-- 19.1 Unit Testing Image Operations
-- 19.2 Performance Benchmarking
-- 19.3 Visual Regression Testing
-- 19.4 Load Testing Graphics Systems
+- [19.1 Unit Testing Image Operations](chapter19-testing-strategies.md#191-unit-testing-image-operations)
+- [19.2 Performance Benchmarking](chapter19-testing-strategies.md#192-performance-benchmarking)
+- [19.3 Visual Regression Testing](chapter19-testing-strategies.md#193-visual-regression-testing)
+- [19.4 Load Testing Graphics Systems](chapter19-testing-strategies.md#194-load-testing-graphics-systems)
 
 ### **Chapter 20: Deployment and Operations**
 
-- 20.1 Configuration Management
-- 20.2 Monitoring and Diagnostics
-- 20.3 Performance Tuning
-- 20.4 Troubleshooting Common Issues
+- [20.1 Configuration Management](chapter20-deployment-operations.md#201-configuration-management)
+- [20.2 Monitoring and Diagnostics](chapter20-deployment-operations.md#202-monitoring-and-diagnostics)
+- [20.3 Performance Tuning](chapter20-deployment-operations.md#203-performance-tuning)
+- [20.4 Troubleshooting Common Issues](chapter20-deployment-operations.md#204-troubleshooting-common-issues)
 
 ### **Chapter 21: Future-Proofing Your Architecture**
 
-- 21.1 Emerging Image Formats
-- 21.2 AI Integration Points
-- 21.3 Quantum-Resistant Security
-- 21.4 Next-Generation Protocols
+- [21.1 Emerging Image Formats](chapter21-future-proofing.md#211-emerging-image-formats)
+- [21.2 AI Integration Points](chapter21-future-proofing.md#212-ai-integration-points)
+- [21.3 Quantum-Resistant Security](chapter21-future-proofing.md#213-quantum-resistant-security)
+- [21.4 Next-Generation Protocols](chapter21-future-proofing.md#214-next-generation-protocols)
 
 ---
 
