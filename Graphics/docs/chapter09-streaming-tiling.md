@@ -1,14 +1,27 @@
 # Chapter 9: Streaming and Tiling Architecture
 
-The transformation from loading entire images into memory to streaming tiles on demand represents one of the most significant architectural shifts in modern graphics processing. Consider the challenge: a single aerial photograph of Manhattan at 1cm resolution would require 400GB of storage, yet users expect instant, smooth panning and zooming on their mobile devices. The solution lies in sophisticated streaming and tiling architectures that slice massive datasets into manageable chunks, predict what users will need next, and deliver it just in time. This chapter explores how .NET 9.0's advanced streaming capabilities, combined with modern HTTP protocols and intelligent caching strategies, enable applications to handle terabyte-scale imagery while maintaining sub-second response times. From Google Maps serving billions of tile requests daily to medical imaging systems streaming multi-gigapixel pathology slides, these patterns have become fundamental to how we interact with visual data at scale.
+The transformation from loading entire images into memory to streaming tiles on demand represents one of the most
+significant architectural shifts in modern graphics processing. Consider the challenge: a single aerial photograph of
+Manhattan at 1cm resolution would require 400GB of storage, yet users expect instant, smooth panning and zooming on
+their mobile devices. The solution lies in sophisticated streaming and tiling architectures that slice massive datasets
+into manageable chunks, predict what users will need next, and deliver it just in time. This chapter explores how .NET
+9.0's advanced streaming capabilities, combined with modern HTTP protocols and intelligent caching strategies, enable
+applications to handle terabyte-scale imagery while maintaining sub-second response times. From Google Maps serving
+billions of tile requests daily to medical imaging systems streaming multi-gigapixel pathology slides, these patterns
+have become fundamental to how we interact with visual data at scale.
 
 ## 9.1 Tile-Based Rendering Systems
 
-The evolution from immediate-mode to tile-based rendering represents a fundamental rethinking of how graphics hardware processes pixels. Modern mobile GPUs demonstrate this shift dramatically—where traditional desktop GPUs might consume 100W processing a complex scene, a mobile GPU achieves similar results at 5W through intelligent tile-based architectures.
+The evolution from immediate-mode to tile-based rendering represents a fundamental rethinking of how graphics hardware
+processes pixels. Modern mobile GPUs demonstrate this shift dramatically—where traditional desktop GPUs might consume
+100W processing a complex scene, a mobile GPU achieves similar results at 5W through intelligent tile-based
+architectures.
 
 ### Understanding modern tile-based GPU architectures
 
-Tile-based rendering divides the screen into small rectangular regions, typically 16×16 to 32×32 pixels, processing each tile to completion before moving to the next. This **locality of reference** transforms memory access patterns from random to sequential, reducing bandwidth requirements by up to 10x compared to traditional immediate-mode rendering.
+Tile-based rendering divides the screen into small rectangular regions, typically 16×16 to 32×32 pixels, processing each
+tile to completion before moving to the next. This **locality of reference** transforms memory access patterns from
+random to sequential, reducing bandwidth requirements by up to 10x compared to traditional immediate-mode rendering.
 
 ```csharp
 public class TileBasedRenderer
@@ -95,11 +108,15 @@ public class TileBasedRenderer
 }
 ```
 
-Modern GPU architectures employ sophisticated **two-phase rendering**: the binning phase assigns geometry to tiles, while the rendering phase processes each tile using fast on-chip memory. ARM Mali GPUs use 16×16 pixel tiles optimized for memory efficiency, PowerVR employs 32×32 tiles with hardware-managed parameter buffers, and Apple's TBDR (Tile-Based Deferred Rendering) adds hidden surface removal, eliminating overdraw entirely.
+Modern GPU architectures employ sophisticated **two-phase rendering**: the binning phase assigns geometry to tiles,
+while the rendering phase processes each tile using fast on-chip memory. ARM Mali GPUs use 16×16 pixel tiles optimized
+for memory efficiency, PowerVR employs 32×32 tiles with hardware-managed parameter buffers, and Apple's TBDR (Tile-Based
+Deferred Rendering) adds hidden surface removal, eliminating overdraw entirely.
 
 ### Optimal tile sizing strategies
 
-Tile size selection profoundly impacts performance, memory usage, and visual quality. The trade-offs are complex and application-specific:
+Tile size selection profoundly impacts performance, memory usage, and visual quality. The trade-offs are complex and
+application-specific:
 
 ```csharp
 public class AdaptiveTileManager
@@ -193,7 +210,8 @@ Performance measurements across different architectures reveal optimal configura
 
 ### Memory management and caching strategies
 
-Efficient tile caching transforms perceived performance by serving frequently accessed tiles from memory rather than regenerating or refetching them:
+Efficient tile caching transforms perceived performance by serving frequently accessed tiles from memory rather than
+regenerating or refetching them:
 
 ```csharp
 public class HierarchicalTileCache
@@ -326,10 +344,10 @@ public class HierarchicalTileCache
 
             var key = l1Cache.First(kvp => kvp.Value.Equals(entry)).Key;
             l1Cache.Remove(key);
-            
+
             // Demote to L2
             await AddToL2Async(key, entry);
-            
+
             evicted += entry.Data.Length;
             currentL1Usage -= entry.Data.Length;
         }
@@ -376,7 +394,7 @@ public class SpatialTileIndex
     }
 
     public IEnumerable<TileNode> QueryVisibleTiles(
-        Frustum viewFrustum, 
+        Frustum viewFrustum,
         float lodBias = 1.0f)
     {
         // Early frustum culling using quadtree
@@ -412,7 +430,7 @@ public class SpatialTileIndex
     {
         // Project tile bounds to screen space
         var screenBounds = frustum.ProjectToScreen(node.Bounds);
-        
+
         // Calculate geometric error
         var worldSize = node.Bounds.Size;
         var screenSize = screenBounds.Size;
@@ -426,7 +444,7 @@ public class SpatialTileIndex
     public IEnumerable<TileNode> TraverseCacheOptimal(Bounds2D region)
     {
         var tiles = quadTree.Query(region).ToList();
-        
+
         // Sort by Hilbert curve order for cache locality
         var sorted = tiles.OrderBy(t => hilbertIndex.GetIndex(t.Bounds.Center));
 
@@ -482,7 +500,8 @@ Performance characteristics of spatial indices:
 
 ### GPU tile-based deferred rendering
 
-Modern GPUs implement sophisticated tile-based deferred rendering (TBDR) that eliminates overdraw through hardware hidden surface removal:
+Modern GPUs implement sophisticated tile-based deferred rendering (TBDR) that eliminates overdraw through hardware
+hidden surface removal:
 
 ```csharp
 public class TBDRPipeline
@@ -500,17 +519,17 @@ public class TBDRPipeline
         using (cmd.BeginSample("TBDR_Binning"))
         {
             // Clear tile lists
-            cmd.SetComputeBufferParam(tileClassificationShader, 
+            cmd.SetComputeBufferParam(tileClassificationShader,
                 "TileLists", tileLists);
-            cmd.DispatchCompute(tileClassificationShader, 
+            cmd.DispatchCompute(tileClassificationShader,
                 clearKernel, tileCountX, tileCountY, 1);
 
             // Render z-prepass and bin primitives
             foreach (var primitive in scene.OpaqueGeometry)
             {
                 // Vertex shader tags primitives with tile IDs
-                cmd.DrawMeshInstanced(primitive.Mesh, 
-                    primitive.Material, 
+                cmd.DrawMeshInstanced(primitive.Mesh,
+                    primitive.Material,
                     zPrepassMaterial);
             }
         }
@@ -519,11 +538,11 @@ public class TBDRPipeline
         using (cmd.BeginSample("TBDR_Shading"))
         {
             // Process each tile independently
-            cmd.SetComputeTextureParam(tileShadingShader, 
+            cmd.SetComputeTextureParam(tileShadingShader,
                 shadingKernel, "Output", target);
-            
+
             // Dispatch one thread group per tile
-            cmd.DispatchCompute(tileShadingShader, 
+            cmd.DispatchCompute(tileShadingShader,
                 shadingKernel, tileCountX, tileCountY, 1);
         }
 
@@ -547,42 +566,42 @@ public class TBDRPipeline
                         uint3 groupThreadId : SV_GroupThreadID)
         {
             uint tileIndex = groupId.y * TilesX + groupId.x;
-            
+
             // First thread loads tile primitive list
             if (all(groupThreadId.xy == 0))
             {
                 s_PrimitiveCount = TileLists[tileIndex].count;
                 s_MinDepth = TileLists[tileIndex].minDepth;
                 s_MaxDepth = TileLists[tileIndex].maxDepth;
-                
+
                 // Load primitive indices
                 for (uint i = 0; i < s_PrimitiveCount; i++)
                 {
                     s_PrimitiveList[i] = TileLists[tileIndex].primitives[i];
                 }
             }
-            
+
             GroupMemoryBarrierWithGroupSync();
-            
+
             // Early Z-rejection
             float pixelDepth = DepthTexture.Load(int3(id.xy, 0)).r;
             if (pixelDepth < s_MinDepth || pixelDepth > s_MaxDepth)
                 return;
-            
+
             // Shade pixel using only primitives in this tile
             float3 color = float3(0, 0, 0);
-            
+
             for (uint i = 0; i < s_PrimitiveCount; i++)
             {
                 uint primIndex = s_PrimitiveList[i];
-                
+
                 // Test if primitive covers this pixel
                 if (TestPrimitiveCoverage(primIndex, id.xy))
                 {
                     color += ShadePrimitive(primIndex, id.xy);
                 }
             }
-            
+
             Output[id.xy] = float4(color, 1.0);
         }
     ";
@@ -591,11 +610,14 @@ public class TBDRPipeline
 
 ## 9.2 Progressive Loading Patterns
 
-Progressive loading transforms user perception of performance by providing immediate visual feedback while full-quality content loads in the background. This psychological optimization often matters more than actual load times—users perceive progressive interfaces as 40% faster than equivalent blocking loads.
+Progressive loading transforms user perception of performance by providing immediate visual feedback while full-quality
+content loads in the background. This psychological optimization often matters more than actual load times—users
+perceive progressive interfaces as 40% faster than equivalent blocking loads.
 
 ### JPEG progressive encoding strategies
 
-Progressive JPEG encoding reorganizes image data from the traditional raster scan order into multiple scans of increasing quality:
+Progressive JPEG encoding reorganizes image data from the traditional raster scan order into multiple scans of
+increasing quality:
 
 ```csharp
 public class ProgressiveJPEGEncoder
@@ -613,17 +635,17 @@ public class ProgressiveJPEGEncoder
     private static readonly ScanScript[] WebOptimizedScans = new[]
     {
         // Scan 1: DC coefficients only (very low quality)
-        new ScanScript { StartComponent = 0, EndComponent = 2, 
+        new ScanScript { StartComponent = 0, EndComponent = 2,
                         StartCoefficient = 0, EndCoefficient = 0 },
-        
+
         // Scan 2: First 5 AC coefficients (basic structure)
-        new ScanScript { StartComponent = 0, EndComponent = 2, 
+        new ScanScript { StartComponent = 0, EndComponent = 2,
                         StartCoefficient = 1, EndCoefficient = 5 },
-        
+
         // Scan 3: Next 9 AC coefficients (improved detail)
-        new ScanScript { StartComponent = 0, EndComponent = 2, 
+        new ScanScript { StartComponent = 0, EndComponent = 2,
                         StartCoefficient = 6, EndCoefficient = 14 },
-        
+
         // Scan 4-7: Successive approximation for refinement
         // ... additional scans for quality improvement
     };
@@ -633,29 +655,29 @@ public class ProgressiveJPEGEncoder
         int quality = 85)
     {
         var output = new MemoryStream();
-        
+
         // Compute DCT coefficients for all blocks
         var dctCoefficients = await ComputeDCTCoefficientsAsync(image);
-        
+
         // Quantize based on quality setting
         var quantized = QuantizeCoefficients(dctCoefficients, quality);
-        
+
         // Write JPEG header
         WriteJPEGHeader(output, image.Width, image.Height, WebOptimizedScans);
-        
+
         // Encode each scan
         foreach (var scan in WebOptimizedScans)
         {
             await EncodeScanAsync(output, quantized, scan);
-            
+
             // Flush to enable progressive display
             await output.FlushAsync();
         }
-        
+
         // Write EOI marker
         output.WriteByte(0xFF);
         output.WriteByte(0xD9);
-        
+
         output.Position = 0;
         return output;
     }
@@ -668,9 +690,9 @@ public class ProgressiveJPEGEncoder
         // Start of scan marker
         output.WriteByte(0xFF);
         output.WriteByte(0xDA);
-        
+
         var entropy = new ArithmeticEncoder(output);
-        
+
         // Encode specified coefficient range
         for (int block = 0; block < coefficients.BlockCount; block++)
         {
@@ -679,7 +701,7 @@ public class ProgressiveJPEGEncoder
                 for (int coef = scan.StartCoefficient; coef <= scan.EndCoefficient; coef++)
                 {
                     var value = coefficients.GetCoefficient(block, comp, coef);
-                    
+
                     if (scan.SuccessiveBit > 0)
                     {
                         // Successive approximation - send refinement bits
@@ -692,14 +714,14 @@ public class ProgressiveJPEGEncoder
                     }
                 }
             }
-            
+
             // Allow cancellation for large images
             if (block % 1000 == 0)
             {
                 await Task.Yield();
             }
         }
-        
+
         entropy.Flush();
     }
 }
@@ -714,8 +736,8 @@ public class ProgressiveImageLoader
         Uri imageUri,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        using var response = await httpClient.GetAsync(imageUri, 
-            HttpCompletionOption.ResponseHeadersRead, 
+        using var response = await httpClient.GetAsync(imageUri,
+            HttpCompletionOption.ResponseHeadersRead,
             cancellationToken);
 
         using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
@@ -740,7 +762,7 @@ public class ProgressiveImageLoader
         Action<ImageUpdate> onUpdate)
     {
         var updates = LoadProgressiveAsync(imageUri).ConfigureAwait(false);
-        
+
         await foreach (var update in updates)
         {
             // For viewport area, show every update
@@ -783,12 +805,12 @@ public class ModernPlaceholderGenerator
 
             // Calculate DCT coefficients
             var coefficients = new Vector3[componentsX * componentsY];
-            
+
             for (int y = 0; y < componentsY; y++)
             {
                 for (int x = 0; x < componentsX; x++)
                 {
-                    coefficients[y * componentsX + x] = 
+                    coefficients[y * componentsX + x] =
                         CalculateDCTCoefficient(pixels, width, height, x, y);
                 }
             }
@@ -841,7 +863,7 @@ public class ModernPlaceholderGenerator
         private float[] GetCosineTable(int component, int size)
         {
             var key = (component, size);
-            
+
             if (!cosineCache.TryGetValue(key, out var table))
             {
                 table = new float[size];
@@ -940,7 +962,7 @@ public class ModernPlaceholderGenerator
         var base64 = Convert.ToBase64String(lqip.WebPData);
 
         return $@"
-            <svg viewBox='0 0 {lqip.Width} {lqip.Height}' 
+            <svg viewBox='0 0 {lqip.Width} {lqip.Height}'
                  xmlns='http://www.w3.org/2000/svg'>
                 <defs>
                     <linearGradient id='g'>
@@ -952,9 +974,9 @@ public class ModernPlaceholderGenerator
                     </filter>
                 </defs>
                 <rect fill='url(#g)' width='100%' height='100%'/>
-                <image 
+                <image
                     href='data:image/webp;base64,{base64}'
-                    width='100%' 
+                    width='100%'
                     height='100%'
                     filter='url(#b)'
                     preserveAspectRatio='none'/>
@@ -972,7 +994,7 @@ public class AdaptiveImageLoader
 {
     private readonly NetworkMonitor networkMonitor;
     private readonly HttpClient httpClient;
-    
+
     public async Task<AdaptiveImage> LoadImageAsync(
         ImageSource source,
         ViewportInfo viewport,
@@ -983,15 +1005,15 @@ public class AdaptiveImageLoader
 
         return strategy.Type switch
         {
-            LoadingStrategyType.Progressive => 
+            LoadingStrategyType.Progressive =>
                 await LoadProgressiveAsync(source, strategy, cancellationToken),
-            
-            LoadingStrategyType.ResponsiveImages => 
+
+            LoadingStrategyType.ResponsiveImages =>
                 await LoadResponsiveAsync(source, strategy, cancellationToken),
-            
-            LoadingStrategyType.TiledProgressive => 
+
+            LoadingStrategyType.TiledProgressive =>
                 await LoadTiledProgressiveAsync(source, strategy, cancellationToken),
-            
+
             _ => throw new NotSupportedException()
         };
     }
@@ -1072,10 +1094,10 @@ public class AdaptiveImageLoader
 
             // Request next chunk
             request.Headers.Range = new RangeHeaderValue(chunkStart, chunkStart + chunkSize - 1);
-            
+
             var stopwatch = Stopwatch.StartNew();
-            using var response = await httpClient.SendAsync(request, 
-                HttpCompletionOption.ResponseHeadersRead, 
+            using var response = await httpClient.SendAsync(request,
+                HttpCompletionOption.ResponseHeadersRead,
                 cancellationToken);
 
             // Copy to buffer and measure bandwidth
@@ -1351,10 +1373,10 @@ public class ViewportPriorityLoader
                 if (isIntersecting)
                 {
                     var element = ImageElement.FindById(elementId);
-                    
+
                     // Prioritize based on intersection ratio
-                    element.LoadPriority = intersectionRatio > 0.5 
-                        ? LoadPriority.High 
+                    element.LoadPriority = intersectionRatio > 0.5
+                        ? LoadPriority.High
                         : LoadPriority.Medium;
 
                     callback(element);
@@ -1367,11 +1389,13 @@ public class ViewportPriorityLoader
 
 ## 9.3 Pyramidal Image Structures
 
-Pyramidal image structures provide the mathematical foundation for efficient multi-scale image processing, enabling everything from smooth zooming in mapping applications to level-of-detail systems in 3D rendering.
+Pyramidal image structures provide the mathematical foundation for efficient multi-scale image processing, enabling
+everything from smooth zooming in mapping applications to level-of-detail systems in 3D rendering.
 
 ### Gaussian and Laplacian pyramid construction
 
-The Gaussian pyramid represents the cornerstone of scale-space theory, providing theoretically optimal lowpass filtering:
+The Gaussian pyramid represents the cornerstone of scale-space theory, providing theoretically optimal lowpass
+filtering:
 
 ```csharp
 public class PyramidGenerator
@@ -1398,7 +1422,7 @@ public class PyramidGenerator
             var currentImage = baseImage.Clone();
             int level = 0;
 
-            while (currentImage.Width > 1 && currentImage.Height > 1 && 
+            while (currentImage.Width > 1 && currentImage.Height > 1 &&
                    (maxLevels < 0 || level < maxLevels))
             {
                 // Store current level
@@ -1490,9 +1514,9 @@ public class PyramidGenerator
             var alpha = levelF - level0;
 
             // Sample from both levels
-            var color0 = SampleLevel(level0, x / (float)Math.Pow(2, level0), 
+            var color0 = SampleLevel(level0, x / (float)Math.Pow(2, level0),
                                             y / (float)Math.Pow(2, level0));
-            var color1 = SampleLevel(level1, x / (float)Math.Pow(2, level1), 
+            var color1 = SampleLevel(level1, x / (float)Math.Pow(2, level1),
                                             y / (float)Math.Pow(2, level1));
 
             // Interpolate between levels
@@ -1537,7 +1561,7 @@ public class PyramidGenerator
                         for (int x = 0; x < laplacianRow.Length; x++)
                         {
                             var diff = currentRow[x].ToVector4() - upsampledRow[x].ToVector4();
-                            
+
                             // Store with offset to handle negative values
                             laplacianRow[x] = new Rgba32((diff + Vector4.One) * 0.5f);
                         }
@@ -1681,7 +1705,7 @@ public class GPUMipmapGenerator
     public Texture2D GenerateMipmaps(Texture2D sourceTexture, MipmapFilter filter = MipmapFilter.Kaiser)
     {
         var mipLevels = CalculateMipLevels(sourceTexture.Width, sourceTexture.Height);
-        
+
         var mipmappedTexture = new Texture2D(device, new TextureDescription
         {
             Width = sourceTexture.Width,
@@ -1697,7 +1721,7 @@ public class GPUMipmapGenerator
 
         // Copy base level
         device.ImmediateContext.CopySubresourceRegion(
-            sourceTexture, 0, null, 
+            sourceTexture, 0, null,
             mipmappedTexture, 0, 0, 0, 0);
 
         // Generate mips using compute shader
@@ -1711,10 +1735,10 @@ public class GPUMipmapGenerator
                 var dstWidth = Math.Max(1, sourceTexture.Width >> level);
                 var dstHeight = Math.Max(1, sourceTexture.Height >> level);
 
-                GenerateMipLevel(commandList, mipmappedTexture, 
-                    sourceLevel, level, 
-                    srcWidth, srcHeight, 
-                    dstWidth, dstHeight, 
+                GenerateMipLevel(commandList, mipmappedTexture,
+                    sourceLevel, level,
+                    srcWidth, srcHeight,
+                    dstWidth, dstHeight,
                     filter);
             }
 
@@ -1738,7 +1762,7 @@ public class GPUMipmapGenerator
         commandList.SetComputeShader(downsampleShader);
 
         // Create views for source and destination levels
-        using var srcView = new ShaderResourceView(device, texture, 
+        using var srcView = new ShaderResourceView(device, texture,
             new ShaderResourceViewDescription
             {
                 Format = texture.Format,
@@ -1838,7 +1862,7 @@ public class GPUMipmapGenerator
                         float2 samplePos = texCoord + offset;
 
                         float weight = KaiserFilter(length(float2(x, y)) / float(radius), alpha);
-                        
+
                         result += SrcTexture.SampleLevel(LinearClampSampler, samplePos, 0) * weight;
                         weightSum += weight;
                     }
@@ -1897,7 +1921,8 @@ public class GPUMipmapGenerator
 
 ### Cloud-Optimized GeoTIFF format
 
-COG represents a breakthrough in cloud-native geospatial imaging, organizing massive TIFF files for efficient HTTP access:
+COG represents a breakthrough in cloud-native geospatial imaging, organizing massive TIFF files for efficient HTTP
+access:
 
 ```csharp
 public class CloudOptimizedGeoTIFF
@@ -1977,7 +2002,7 @@ public class CloudOptimizedGeoTIFF
 
             // Multi-range request for efficiency
             using var request = new HttpRequestMessage(HttpMethod.Get, cogUri);
-            
+
             var ranges = new List<RangeItemHeaderValue>();
             foreach (var (col, row) in group)
             {
@@ -2140,7 +2165,8 @@ public class CloudOptimizedGeoTIFF
 
 ### Wavelet-based pyramid decomposition
 
-Wavelets provide superior energy compaction compared to traditional pyramids, enabling better compression and progressive transmission:
+Wavelets provide superior energy compaction compared to traditional pyramids, enabling better compression and
+progressive transmission:
 
 ```csharp
 public class WaveletPyramid
@@ -2318,7 +2344,7 @@ public class WaveletPyramid
             // Predict odd samples from even samples
             for (int i = 1; i < length - 1; i += 2)
             {
-                data[offset + i * stride] -= (data[offset + (i - 1) * stride] + 
+                data[offset + i * stride] -= (data[offset + (i - 1) * stride] +
                                               data[offset + (i + 1) * stride]) >> 1;
             }
 
@@ -2334,7 +2360,7 @@ public class WaveletPyramid
             // Update even samples using predicted odd samples
             for (int i = 2; i < length; i += 2)
             {
-                data[offset + i * stride] += (data[offset + (i - 1) * stride] + 
+                data[offset + i * stride] += (data[offset + (i - 1) * stride] +
                                               data[offset + (i + 1) * stride] + 2) >> 2;
             }
 
@@ -2436,11 +2462,14 @@ public class WaveletPyramid
 
 ## 9.4 HTTP Range Request Optimization
 
-HTTP range requests transform how we deliver large images over networks, enabling partial content retrieval that makes gigapixel imagery practical for web delivery. This section explores advanced techniques for optimizing these requests in .NET 9.0.
+HTTP range requests transform how we deliver large images over networks, enabling partial content retrieval that makes
+gigapixel imagery practical for web delivery. This section explores advanced techniques for optimizing these requests in
+.NET 9.0.
 
 ### Implementing efficient byte-range strategies
 
-HTTP range requests allow clients to request specific byte ranges of a resource, crucial for streaming large images without downloading entire files:
+HTTP range requests allow clients to request specific byte ranges of a resource, crucial for streaming large images
+without downloading entire files:
 
 ```csharp
 public class RangeRequestHandler
@@ -2501,8 +2530,8 @@ public class RangeRequestHandler
         using var request = new HttpRequestMessage(HttpMethod.Get, resourceUri);
         request.Headers.Range = new RangeHeaderValue(start, end);
 
-        var response = await httpClient.SendAsync(request, 
-            HttpCompletionOption.ResponseHeadersRead, 
+        var response = await httpClient.SendAsync(request,
+            HttpCompletionOption.ResponseHeadersRead,
             cancellationToken);
 
         if (response.StatusCode != HttpStatusCode.PartialContent)
@@ -2570,9 +2599,9 @@ public class RangeRequestHandler
                 try
                 {
                     var chunkData = await GetSingleRangeAsync(
-                        resourceUri, 
-                        chunk.Start, 
-                        chunk.End, 
+                        resourceUri,
+                        chunk.Start,
+                        chunk.End,
                         ct);
 
                     // Thread-safe write to result
@@ -2667,8 +2696,8 @@ public class RangeRequestHandler
                 request.Headers.Range = new RangeHeaderValue(range.Start, range.End);
                 request.Version = HttpVersion.Version20;
 
-                var response = await client.SendAsync(request, 
-                    HttpCompletionOption.ResponseContentRead, 
+                var response = await client.SendAsync(request,
+                    HttpCompletionOption.ResponseContentRead,
                     cancellationToken);
 
                 return await response.Content.ReadAsByteArrayAsync(cancellationToken);
@@ -2709,7 +2738,8 @@ public class RangeRequestHandler
 
 ### CDN integration and edge caching
 
-Content Delivery Networks dramatically improve tile delivery performance through geographic distribution and intelligent caching:
+Content Delivery Networks dramatically improve tile delivery performance through geographic distribution and intelligent
+caching:
 
 ```csharp
 public class CDNOptimizedTileService
@@ -2805,45 +2835,45 @@ public class CDNOptimizedTileService
             async function handleRequest(request) {
                 const cache = caches.default
                 const cacheKey = new Request(request.url, request)
-                
+
                 // Check cache
                 let response = await cache.match(cacheKey)
-                
+
                 if (response) {
                     // Cache hit - add analytics
                     const newHeaders = new Headers(response.headers)
                     newHeaders.set('CF-Cache-Status', 'HIT')
                     newHeaders.set('X-Cache-Age', getAgeSeconds(response))
-                    
+
                     return new Response(response.body, {
                         status: response.status,
                         statusText: response.statusText,
                         headers: newHeaders
                     })
                 }
-                
+
                 // Cache miss - fetch from origin
                 response = await fetch(request)
-                
+
                 // Cache successful responses
                 if (response.status === 200) {
                     const headers = new Headers(response.headers)
                     headers.set('CF-Cache-Status', 'MISS')
                     headers.set('Cache-Control', 'public, max-age=31536000')
-                    
+
                     // Clone response for caching
                     const responseToCache = new Response(response.body, {
                         status: response.status,
                         statusText: response.statusText,
                         headers: headers
                     })
-                    
+
                     // Don't block on cache write
                     event.waitUntil(cache.put(cacheKey, responseToCache.clone()))
-                    
+
                     return responseToCache
                 }
-                
+
                 return response
             }
 
@@ -2853,7 +2883,7 @@ public class CDNOptimizedTileService
                     [tileX - 1, tileY], [tileX + 1, tileY],
                     [tileX, tileY - 1], [tileX, tileY + 1]
                 ]
-                
+
                 const prefetchPromises = adjacentTiles.map(([x, y]) => {
                     const url = `/tiles/${tileZ}/${x}/${y}.png`
                     return cache.match(url).then(cached => {
@@ -2866,7 +2896,7 @@ public class CDNOptimizedTileService
                         }
                     })
                 })
-                
+
                 await Promise.all(prefetchPromises)
             }
         ";
@@ -3154,7 +3184,7 @@ public class PredictiveTilePrefetcher
                 // Feature vector includes:
                 // - Current viewport center (normalized)
                 // - Velocity vector
-                // - Acceleration vector  
+                // - Acceleration vector
                 // - Time of day (cyclical encoding)
                 // - Day of week (one-hot)
                 // - Historical tile access patterns
@@ -3454,7 +3484,7 @@ public class RealtimeTileService
             // Subscribe to tile changes
             foreach (var tile in subscription.Tiles)
             {
-                updateQueue.Subscribe(tile, update => 
+                updateQueue.Subscribe(tile, update =>
                 {
                     updateChannel.Writer.TryWrite(update);
                 });
@@ -3488,7 +3518,7 @@ public class RealtimeTileService
             else if (capabilities.SupportsSSE)
             {
                 // Fallback: Use Server-Sent Events
-                await sseService.StreamUpdatesAsync(context, 
+                await sseService.StreamUpdatesAsync(context,
                     ExtractSubscription(context.Request));
             }
             else
@@ -3587,28 +3617,28 @@ public class StreamingPerformanceMonitor
         {
             AverageLoadTime = TimeSpan.FromMilliseconds(
                 metrics.Average(m => m.LoadTime.TotalMilliseconds)),
-            
+
             P95LoadTime = TimeSpan.FromMilliseconds(
                 metrics.OrderBy(m => m.LoadTime)
                       .Skip((int)(metrics.Count * 0.95))
                       .First().LoadTime.TotalMilliseconds),
-            
+
             P99LoadTime = TimeSpan.FromMilliseconds(
                 metrics.OrderBy(m => m.LoadTime)
                       .Skip((int)(metrics.Count * 0.99))
                       .First().LoadTime.TotalMilliseconds),
-            
+
             TotalBytesTransferred = metrics.Sum(m => m.BytesTransferred),
-            
+
             AverageBytesPerTile = metrics.Average(m => m.BytesTransferred),
-            
+
             LoadTimeByNetworkType = metrics
                 .GroupBy(m => m.NetworkType)
                 .ToDictionary(
                     g => g.Key,
                     g => TimeSpan.FromMilliseconds(g.Average(m => m.LoadTime.TotalMilliseconds))
                 ),
-            
+
             CDNPerformance = metrics
                 .GroupBy(m => m.CDNNode)
                 .Select(g => new CDNNodeMetrics
@@ -3645,10 +3675,10 @@ public class StreamingPerformanceMonitor
             {
                 // Assign variant
                 var variant = variants[random.Next(variants.Length)];
-                
+
                 // Configure tile service for user
                 await ConfigureTileServiceAsync(userId, variant);
-                
+
                 // Track metrics
                 await TrackUserMetricsAsync(userId, variant.Name);
             });
@@ -3799,13 +3829,29 @@ public class StreamingPerformanceMonitor
 
 ## Conclusion
 
-The evolution from monolithic image loading to sophisticated streaming and tiling architectures represents one of the most significant advances in modern graphics processing. Through this chapter, we've explored how tile-based rendering systems leverage hardware capabilities to achieve 10x memory bandwidth reductions, how progressive loading patterns transform user perception of performance, how pyramidal structures enable seamless multi-scale access, and how HTTP optimization strategies maximize network efficiency.
+The evolution from monolithic image loading to sophisticated streaming and tiling architectures represents one of the
+most significant advances in modern graphics processing. Through this chapter, we've explored how tile-based rendering
+systems leverage hardware capabilities to achieve 10x memory bandwidth reductions, how progressive loading patterns
+transform user perception of performance, how pyramidal structures enable seamless multi-scale access, and how HTTP
+optimization strategies maximize network efficiency.
 
-The key insights that emerge from our exploration center on the fundamental shift from pushing pixels to orchestrating systems. Modern graphics applications no longer simply load and display images; they predict user behavior, adapt to network conditions, leverage global CDN infrastructure, and stream precisely what users need exactly when they need it. The streaming architectures we've examined demonstrate that **performance is no longer about raw speed but about perceived responsiveness**.
+The key insights that emerge from our exploration center on the fundamental shift from pushing pixels to orchestrating
+systems. Modern graphics applications no longer simply load and display images; they predict user behavior, adapt to
+network conditions, leverage global CDN infrastructure, and stream precisely what users need exactly when they need it.
+The streaming architectures we've examined demonstrate that **performance is no longer about raw speed but about
+perceived responsiveness**.
 
-.NET 9.0 provides a remarkable platform for implementing these sophisticated patterns. The combination of improved HttpClient performance, native HTTP/3 support, enhanced SIMD capabilities, and powerful async primitives like Channel<T> and IAsyncEnumerable enables developers to build streaming systems that rival those of tech giants. The 20% improvement in HTTP request handling, 25% reduction in latency, and support for memory-mapped files with 4x performance gains transform theoretical architectures into practical realities.
+.NET 9.0 provides a remarkable platform for implementing these sophisticated patterns. The combination of improved
+HttpClient performance, native HTTP/3 support, enhanced SIMD capabilities, and powerful async primitives like Channel<T>
+and IAsyncEnumerable enables developers to build streaming systems that rival those of tech giants. The 20% improvement
+in HTTP request handling, 25% reduction in latency, and support for memory-mapped files with 4x performance gains
+transform theoretical architectures into practical realities.
 
-Real-world implementations validate these approaches. Google Maps serves billions of tile requests daily using 256×256 pixel tiles with sophisticated caching strategies. Cesium demonstrates 10x performance improvements through intelligent tile prioritization. Cloud-Optimized GeoTIFF enables partial access to terabyte-scale imagery with 50-90% bandwidth savings. These success stories prove that the patterns and techniques presented in this chapter scale from mobile applications to planetary-scale systems.
+Real-world implementations validate these approaches. Google Maps serves billions of tile requests daily using 256×256
+pixel tiles with sophisticated caching strategies. Cesium demonstrates 10x performance improvements through intelligent
+tile prioritization. Cloud-Optimized GeoTIFF enables partial access to terabyte-scale imagery with 50-90% bandwidth
+savings. These success stories prove that the patterns and techniques presented in this chapter scale from mobile
+applications to planetary-scale systems.
 
 The architectural principles that emerge from our analysis provide clear guidance for implementation:
 
@@ -3819,8 +3865,18 @@ The architectural principles that emerge from our analysis provide clear guidanc
 
 5. **Design for failure**: Implement fallback strategies, progressive enhancement, and graceful degradation.
 
-Looking forward, the convergence of 5G networks, edge computing, and WebGPU promises even more dramatic improvements. Streaming architectures will evolve to leverage distributed compute at the edge, enabling real-time image processing without centralized servers. Machine learning models will predict not just which tiles users need next, but generate them on demand using neural synthesis.
+Looking forward, the convergence of 5G networks, edge computing, and WebGPU promises even more dramatic improvements.
+Streaming architectures will evolve to leverage distributed compute at the edge, enabling real-time image processing
+without centralized servers. Machine learning models will predict not just which tiles users need next, but generate
+them on demand using neural synthesis.
 
-The journey from static images to dynamic streaming represents a fundamental reimagining of how we interact with visual data. As datasets grow from gigabytes to petabytes and user expectations shift from patient waiting to instant gratification, the streaming and tiling architectures explored in this chapter provide the foundation for meeting these challenges. The combination of mathematical elegance, engineering pragmatism, and relentless optimization creates systems that feel magical to users while remaining maintainable for developers.
+The journey from static images to dynamic streaming represents a fundamental reimagining of how we interact with visual
+data. As datasets grow from gigabytes to petabytes and user expectations shift from patient waiting to instant
+gratification, the streaming and tiling architectures explored in this chapter provide the foundation for meeting these
+challenges. The combination of mathematical elegance, engineering pragmatism, and relentless optimization creates
+systems that feel magical to users while remaining maintainable for developers.
 
-In the end, the best streaming architecture is invisible—users simply see smooth, responsive imagery without awareness of the complex orchestration making it possible. By mastering the patterns and techniques presented in this chapter, developers can create these invisible marvels, transforming massive datasets into fluid, interactive experiences that delight users and push the boundaries of what's possible in modern graphics processing.
+In the end, the best streaming architecture is invisible—users simply see smooth, responsive imagery without awareness
+of the complex orchestration making it possible. By mastering the patterns and techniques presented in this chapter,
+developers can create these invisible marvels, transforming massive datasets into fluid, interactive experiences that
+delight users and push the boundaries of what's possible in modern graphics processing.
