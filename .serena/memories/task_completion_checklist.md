@@ -46,6 +46,7 @@ npm run deploy                       # Clean, lib, and build CSS
 # Test application startup:
 dotnet run --project Portal/src/Server       # Verify Portal runs
 dotnet run --project Engine/src/Console      # Verify Engine runs
+# After verification, stop the running processes using Ctrl+C or equivalent commands to avoid resource leaks.
 ```
 
 ## Code Review Checklist
