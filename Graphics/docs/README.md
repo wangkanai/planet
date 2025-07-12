@@ -2,8 +2,8 @@
 
 ## Table of Contents
 
-> **Note:** This documentation is currently in development. Chapters 1-4 are complete and have clickable navigation
-> links. Chapters 5-21 and appendices are planned content and will be added in future updates.
+> **Note:** This documentation is currently in development. Chapters 1-12 are complete and have clickable navigation
+> links. Chapters 13-21 and appendices are planned content and will be added in future updates.
 
 ---
 
@@ -41,44 +41,44 @@
 - [4.3 Coordinate Systems and Transformations](chapter04-netcore-compatibility.md#43-coordinate-systems-and-transformations)
 - [4.4 Metadata Architecture and Design](chapter04-netcore-compatibility.md#44-metadata-architecture-and-design)
 
-### **Chapter 5: Mathematical Foundations**
+### **Chapter 5: ImageSharp Ecosystem**
 
-- 5.1 Color Theory and Transformations
-- 5.2 Interpolation Algorithms
-- 5.3 Convolution and Kernel Operations
-- 5.4 Geometric Transformations
+- [5.1 Pure Managed Image Processing Architecture](chapter05-imagesharp-ecosystem.md#51-pure-managed-image-processing-architecture)
+- [5.2 Configuration and Performance Tuning](chapter05-imagesharp-ecosystem.md#52-configuration-and-performance-tuning)
+- [5.3 Format Support and Extensibility](chapter05-imagesharp-ecosystem.md#53-format-support-and-extensibility)
+- [5.4 Advanced Processing Techniques](chapter05-imagesharp-ecosystem.md#54-advanced-processing-techniques)
 
-### **Chapter 6: Basic Image Operations**
+### **Chapter 6: SkiaSharp Integration**
 
-- 6.1 Brightness, Contrast, and Exposure
-- 6.2 Color Adjustments and Channel Operations
-- 6.3 Filters and Effects Implementation
-- 6.4 Alpha Blending and Compositing
+- [6.1 Native Binding Architecture](chapter06-skia-bindings.md#61-native-binding-architecture)
+- [6.2 Cross-Platform Graphics Implementation](chapter06-skia-bindings.md#62-cross-platform-graphics-implementation)
+- [6.3 Performance Optimization Strategies](chapter06-skia-bindings.md#63-performance-optimization-strategies)
+- [6.4 Resource Management Patterns](chapter06-skia-bindings.md#64-resource-management-patterns)
 
 ---
 
 ## **Part III: Advanced Processing Techniques**
 
-### **Chapter 7: Non-Destructive Editing Architecture**
+### **Chapter 7: Cross-Platform Graphics**
 
-- 7.1 Adjustment Layers and Layer Stacks
-- 7.2 Command Pattern for Undo/Redo
-- 7.3 Virtual Image Pipelines
-- 7.4 Memory-Efficient Layer Management
+- [7.1 Platform Abstraction Strategies](chapter07-cross-platform.md#71-platform-abstraction-strategies)
+- [7.2 Hardware Acceleration Support](chapter07-cross-platform.md#72-hardware-acceleration-support)
+- [7.3 Performance Considerations](chapter07-cross-platform.md#73-performance-considerations)
+- [7.4 Deployment and Distribution](chapter07-cross-platform.md#74-deployment-and-distribution)
 
 ### **Chapter 8: Modern Compression Strategies**
 
-- 8.1 Compression Algorithm Comparison
-- 8.2 Content-Adaptive Compression
-- 8.3 Progressive Enhancement Techniques
-- 8.4 Format Selection Strategies
+- [8.1 Compression Algorithm Comparison](chapter08-compression.md#81-compression-algorithm-comparison)
+- [8.2 Content-Adaptive Compression](chapter08-compression.md#82-content-adaptive-compression)
+- [8.3 Progressive Enhancement Techniques](chapter08-compression.md#83-progressive-enhancement-techniques)
+- [8.4 Format Selection Strategies](chapter08-compression.md#84-format-selection-strategies)
 
 ### **Chapter 9: Streaming and Tiling Architecture**
 
-- 9.1 Tile-Based Rendering Systems
-- 9.2 Progressive Loading Patterns
-- 9.3 Pyramidal Image Structures
-- 9.4 HTTP Range Request Optimization
+- [9.1 Tile-Based Rendering Systems](chapter09-streaming-tiling.md#91-tile-based-rendering-systems)
+- [9.2 Progressive Loading Patterns](chapter09-streaming-tiling.md#92-progressive-loading-patterns)
+- [9.3 Pyramidal Image Structures](chapter09-streaming-tiling.md#93-pyramidal-image-structures)
+- [9.4 HTTP Range Request Optimization](chapter09-streaming-tiling.md#94-http-range-request-optimization)
 
 ---
 
@@ -86,24 +86,24 @@
 
 ### **Chapter 10: GPU Acceleration Patterns**
 
-- 10.1 GPU Architecture for Graphics Processing
-- 10.2 Framework Selection and Comparison
-- 10.3 CPU-GPU Data Transfer Optimization
-- 10.4 Parallel Algorithm Design
+- [10.1 Modern GPU Architecture and .NET Integration](chapter10-gpu-acceleration.md#101-modern-gpu-architecture-and-net-integration)
+- [10.2 Framework Selection and Performance Characteristics](chapter10-gpu-acceleration.md#102-framework-selection-and-performance-characteristics)
+- [10.3 Memory Transfer Optimization and Resource Management](chapter10-gpu-acceleration.md#103-memory-transfer-optimization-and-resource-management)
+- [10.4 Parallel Algorithm Design and Implementation](chapter10-gpu-acceleration.md#104-parallel-algorithm-design-and-implementation)
 
 ### **Chapter 11: SIMD and Vectorization**
 
-- 11.1 Hardware Acceleration in .NET 9.0
-- 11.2 Vector<T> and Intrinsics
-- 11.3 Batch Processing Optimization
-- 11.4 Performance Measurement and Profiling
+- [11.1 Hardware Acceleration in .NET 9.0](chapter11-simd-vectorization.md#111-hardware-acceleration-in-net-90)
+- [11.2 Vector<T> and Intrinsics](chapter11-simd-vectorization.md#112-vectort-and-intrinsics)
+- [11.3 Batch Processing Optimization](chapter11-simd-vectorization.md#113-batch-processing-optimization)
+- [11.4 Performance Measurement and Profiling](chapter11-simd-vectorization.md#114-performance-measurement-and-profiling)
 
 ### **Chapter 12: Asynchronous Processing Patterns**
 
-- 12.1 Task-Based Asynchronous Patterns
-- 12.2 Pipeline Parallelism
-- 12.3 Resource Management in Async Context
-- 12.4 Cancellation and Progress Reporting
+- [12.1 Task-Based Asynchronous Patterns](chapter12-async-processing.md#121-task-based-asynchronous-patterns)
+- [12.2 Pipeline Parallelism](chapter12-async-processing.md#122-pipeline-parallelism)
+- [12.3 Resource Management in Async Context](chapter12-async-processing.md#123-resource-management-in-async-context)
+- [12.4 Cancellation and Progress Reporting](chapter12-async-processing.md#124-cancellation-and-progress-reporting)
 
 ---
 

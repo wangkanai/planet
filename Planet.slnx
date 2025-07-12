@@ -78,6 +78,7 @@
     <File Path="Graphics\docs\chapter06-skia-bindings.md" />
     <File Path="Graphics\docs\chapter07-cross-platform.md" />
     <File Path="Graphics\docs\chapter11-simd-vectorization.md" />
+    <File Path="Graphics\docs\chapter13-color-space-management.md" />
   </Folder>
   <Folder Name="/Graphics/Rasters/">
     <Project Path="Graphics\Rasters\benchmark\Wangkanai.Graphics.Rasters.Benchmark.csproj" Type="Classic C#" />
