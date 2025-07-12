@@ -1,1 +1,4 @@
 claude mcp add-json "conport" '{"command": "uvx", "args": ["--from", "context-portal-mcp", "conport-mcp", "--mode", "stdio", "--workspace_id", "/Users/wangkanai/Sources/planet/", "--log-file", "./logs/conport.log", "--log-level", "INFO"]}'
+
+claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant --project $(pwd)
+

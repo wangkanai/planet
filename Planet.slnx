@@ -4,18 +4,15 @@
     <File Path=".claude\settings.json" />
     <File Path=".claude\mcp.txt" />
   </Folder>
-  <Folder Name="/.docs/">
-    <File Path="docs\development-roadmap.md" />
-    <File Path="docs\technical-implementation-guide.md" />
-    <File Path="docs\scope-clarity-recommendations.md" />
-    <File Path="docs\README.md" />
-  </Folder>
   <Folder Name="/.github/">
     <File Path=".github\workflows\dotnet.yml" />
     <File Path=".github\FUNDING.yml" />
     <File Path=".github\copilot-instructions.md" />
     <File Path=".github\workflows\claude-code-review.yml" />
     <File Path=".github\workflows\claude.yml" />
+  </Folder>
+  <Folder Name="/.serena/">
+    <File Path=".serena\project.yml" />
   </Folder>
   <Folder Name="/.solutions/">
     <File Path="build.ps1" />
@@ -29,7 +26,6 @@
     <File Path="Version.ps1" />
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
-    <File Path="projectBrief.md" />
   </Folder>
   <Folder Name="/Engine/">
     <Project Path="Engine\src\Console\Wangkanai.Planet.Engine.Console.csproj" Type="Classic C#" />
