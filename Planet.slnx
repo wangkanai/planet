@@ -84,6 +84,9 @@
     <File Path="Graphics\docs\chapter16-geospatial.md" />
     <File Path="Graphics\docs\chapter17-batch-processing.md" />
     <File Path="Graphics\docs\chapter18-cloud-ready.md" />
+    <File Path="Graphics\docs\chapter19-testing-strategies.md" />
+    <File Path="Graphics\docs\chapter20-deployment-operations.md" />
+    <File Path="Graphics\docs\chapter21-future-proofing.md" />
   </Folder>
   <Folder Name="/Graphics/Rasters/">
     <Project Path="Graphics\Rasters\benchmark\Wangkanai.Graphics.Rasters.Benchmark.csproj" Type="Classic C#" />
