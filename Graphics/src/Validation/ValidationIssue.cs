@@ -2,7 +2,5 @@
 
 namespace Wangkanai.Graphics.Validation;
 
-/// <summary>
-/// Represents a single validation issue.
-/// </summary>
+/// <summary>Represents a single validation issue.</summary>
 public record ValidationIssue(ValidationSeverity Severity, string Message);

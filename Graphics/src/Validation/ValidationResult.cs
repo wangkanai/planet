@@ -2,9 +2,7 @@
 
 namespace Wangkanai.Graphics.Validation;
 
-/// <summary>
-/// Validation result class for metadata validation operations.
-/// </summary>
+/// <summary>Validation result class for metadata validation operations.</summary>
 public class ValidationResult
 {
 	private readonly List<ValidationIssue> _issues = new();

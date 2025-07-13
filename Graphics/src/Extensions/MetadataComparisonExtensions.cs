@@ -1,13 +1,8 @@
-// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
-
-
-using Wangkanai.Graphics.Metadatas;
+// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
 namespace Wangkanai.Graphics.Extensions;
 
-/// <summary>
-/// Extension methods for comparing metadata between different instances.
-/// </summary>
+/// <summary>Extension methods for comparing metadata between different instances.</summary>
 public static class MetadataComparisonExtensions
 {
 	/// <summary>
