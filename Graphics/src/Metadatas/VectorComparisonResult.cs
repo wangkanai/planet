@@ -1,10 +1,8 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Graphics.Extensions;
+namespace Wangkanai.Graphics;
 
-/// <summary>
-/// Vector-specific comparison results.
-/// </summary>
+/// <summary>Vector-specific comparison results.</summary>
 public class VectorComparisonResult : IImageComparisonResult
 {
 	public double ElementCountSimilarity { get; set; }

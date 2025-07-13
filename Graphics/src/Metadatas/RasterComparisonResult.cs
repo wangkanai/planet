@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Graphics.Extensions;
+namespace Wangkanai.Graphics;
 
 /// <summary>Raster-specific comparison results.</summary>
 public class RasterComparisonResult
