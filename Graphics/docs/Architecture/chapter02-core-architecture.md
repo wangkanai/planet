@@ -1,4 +1,4 @@
-# Chapter 2: Core Architecture Patterns for High-Performance Graphics Processing in .NET 9.0
+# Chapter 2: Core Architecture Patterns
 
 ## 2.1 Pipeline Architecture Fundamentals
 

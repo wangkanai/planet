@@ -1,4 +1,4 @@
-# Chapter 10: GPU Acceleration Patterns for Graphics Processing in .NET 9.0
+# Chapter 10: GPU Acceleration Patterns
 
 The evolution of graphics processing in .NET 9.0 has reached a pivotal moment where GPU acceleration transforms from
 experimental technology to production-ready infrastructure. Modern GPUs deliver computational power that can exceed CPU

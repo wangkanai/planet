@@ -1,4 +1,4 @@
-# Chapter 3: Memory Management Excellence for High-Performance Graphics Processing in .NET 9.0
+# Chapter 3: Memory Management Excellence
 
 ## 3.1 Understanding .NET Memory Architecture
 
