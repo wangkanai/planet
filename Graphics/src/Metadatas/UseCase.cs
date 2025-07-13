@@ -1,0 +1,12 @@
+// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
+
+namespace Wangkanai.Graphics.Metadatas;
+
+/// <summary>Use cases for functional equivalence testing.</summary>
+public enum UseCase
+{
+	WebDisplay,
+	Printing,
+	Archival,
+	Processing
+}

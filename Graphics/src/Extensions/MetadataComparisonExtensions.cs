@@ -1,6 +1,8 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
 
+using Wangkanai.Graphics.Metadatas;
+
 namespace Wangkanai.Graphics.Extensions;
 
 /// <summary>
@@ -243,69 +245,4 @@ public static class MetadataComparisonExtensions
 		public IEnumerator<IMetadata>                                 GetEnumerator() => _metadata.GetEnumerator();
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
 	}
-}
-
-/// <summary>
-/// Result of comparing two metadata instances.
-/// </summary>
-public class MetadataComparisonResult
-{
-	public bool DimensionsMatch  { get; set; }
-	public bool TitleMatch       { get; set; }
-	public bool OrientationMatch { get; set; }
-	public bool TypeMatch        { get; set; }
-
-	public double DimensionSimilarity   { get; set; }
-	public double AspectRatioSimilarity { get; set; }
-	public double SizeSimilarity        { get; set; }
-	public double OverallSimilarity     { get; set; }
-
-	public RasterComparisonResult? RasterComparison { get; set; }
-	public VectorComparisonResult? VectorComparison { get; set; }
-}
-
-/// <summary>
-/// Raster-specific comparison results.
-/// </summary>
-public class RasterComparisonResult
-{
-	public bool                      BitDepthMatch   { get; set; }
-	public bool                      ResolutionMatch { get; set; }
-	public bool                      ColorSpaceMatch { get; set; }
-	public (bool first, bool second) HasExifData     { get; set; }
-	public (bool first, bool second) HasGpsData      { get; set; }
-	public (bool first, bool second) HasIccProfile   { get; set; }
-}
-
-/// <summary>
-/// Vector-specific comparison results.
-/// </summary>
-public class VectorComparisonResult
-{
-	public double ElementCountSimilarity { get; set; }
-	public bool   CoordinateSystemMatch  { get; set; }
-	public bool   ColorSpaceMatch        { get; set; }
-	public bool   ComplexityLevelMatch   { get; set; }
-}
-
-/// <summary>
-/// Size difference information between two metadata instances.
-/// </summary>
-public record SizeDifference
-{
-	public long   AbsoluteDifference   { get; init; }
-	public double PercentageDifference { get; init; }
-	public bool   IsLarger             { get; init; }
-	public bool   IsSignificant        { get; init; }
-}
-
-/// <summary>
-/// Use cases for functional equivalence testing.
-/// </summary>
-public enum UseCase
-{
-	WebDisplay,
-	Printing,
-	Archival,
-	Processing
 }
