@@ -65,6 +65,16 @@ resharper_align_multiline_array_and_object_initializer                =true
 resharper_enforce_line_ending_style                                   =true
 resharper_csharp_max_line_length                                      =500
 
+resharper_xmldoc_linebreak_before_singleline_elements                 =false
+resharper_xmldoc_space_before_self_closing                            =false
+resharper_xmldoc_space_after_last_attribute                           =false
+resharper_xmldoc_alignment_tab_fill_style                             =optimal_fill
+resharper_xmldoc_attribute_indent                                     =align_by_first_attribute
+resharper_xmldoc_attribute_style                                      =on_single_line
+resharper_xmldoc_blank_line_after_pi                                  =false
+resharper_xmldoc_indent_text                                          =ZeroIndent
+resharper_xmldoc_pi_attribute_style                                   =on_single_line
+
 # ReSharper inspection severities
 resharper_arrange_redundant_parentheses_highlighting                  =hint
 resharper_arrange_this_qualifier_highlighting                         =hint
@@ -107,7 +117,7 @@ resharper_csharp_place_property_on_single_line               =always
 resharper_place_expr_property_on_single_line                 =always
 
 [*.{cs, cpp, h}]
-file_header_template=Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
+file_header_template=Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
 [*.{html,cshtml,razor}]
 indent_size                                                           =3
