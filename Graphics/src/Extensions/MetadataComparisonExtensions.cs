@@ -5,16 +5,15 @@ namespace Wangkanai.Graphics.Extensions;
 /// <summary>Extension methods for comparing metadata between different instances.</summary>
 public static class MetadataComparisonExtensions
 {
-	/// <summary>
-	/// Determines if two metadata instances have similar dimensions within a tolerance.
-	/// </summary>
+	/// <summary>Determines if two metadata instances have similar dimensions within a tolerance.</summary>
 	/// <param name="metadata">The first metadata instance.</param>
 	/// <param name="other">The metadata instance to compare with.</param>
 	/// <param name="tolerance">Tolerance as a percentage (default: 1% = 0.01).</param>
 	/// <returns>True if dimensions are similar within tolerance.</returns>
 	public static bool HasSimilarDimensions(this IMetadata metadata, IMetadata other, double tolerance = 0.01)
 	{
-		if (metadata == other) return true;
+		if (metadata == other)
+			return true;
 
 		var widthDiff  = Math.Abs(metadata.Width - other.Width) / (double)Math.Max(metadata.Width, other.Width);
 		var heightDiff = Math.Abs(metadata.Height - other.Height) / (double)Math.Max(metadata.Height, other.Height);
@@ -109,9 +108,7 @@ public static class MetadataComparisonExtensions
 		return groups.Select(kvp => new MetadataGrouping(kvp.Key, kvp.Value));
 	}
 
-	/// <summary>
-	/// Calculates the difference in file size requirements between two metadata instances.
-	/// </summary>
+	/// <summary>Calculates the difference in file size requirements between two metadata instances.</summary>
 	/// <param name="metadata">The first metadata instance.</param>
 	/// <param name="other">The metadata instance to compare with.</param>
 	/// <returns>Size difference information.</returns>
@@ -131,9 +128,7 @@ public static class MetadataComparisonExtensions
 		       };
 	}
 
-	/// <summary>
-	/// Determines if two metadata instances are functionally equivalent for a specific use case.
-	/// </summary>
+	/// <summary>Determines if two metadata instances are functionally equivalent for a specific use case.</summary>
 	/// <param name="metadata">The first metadata instance.</param>
 	/// <param name="other">The metadata instance to compare with.</param>
 	/// <param name="useCase">The use case to evaluate for.</param>
@@ -222,22 +217,19 @@ public static class MetadataComparisonExtensions
 
 	private static bool IsProcessingEquivalent(IMetadata metadata1, IMetadata metadata2)
 	{
-		// For processing, dimensions matter - format-specific extensions can add bit depth checks
+		// For processing, dimension matter - format-specific extensions can add bit depth checks
 		return metadata1.Width == metadata2.Width && metadata1.Height == metadata2.Height;
 	}
 
-	private class MetadataGrouping : IGrouping<int, IMetadata>
+	private class MetadataGrouping(int key, List<IMetadata> metadata)
+		: IGrouping<int, IMetadata>
 	{
-		public           int             Key { get; }
-		private readonly List<IMetadata> _metadata;
+		public int Key { get; } = key;
 
-		public MetadataGrouping(int key, List<IMetadata> metadata)
-		{
-			Key       = key;
-			_metadata = metadata;
-		}
+		public IEnumerator<IMetadata> GetEnumerator()
+			=> metadata.GetEnumerator();
 
-		public IEnumerator<IMetadata>                                 GetEnumerator() => _metadata.GetEnumerator();
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+			=> GetEnumerator();
 	}
 }
