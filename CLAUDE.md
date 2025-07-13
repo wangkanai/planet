@@ -37,7 +37,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Test Project Structure Guidelines
 
 ### Core Principle: Clear Separation
-Maintain clear separation between core source code and test codebase to ensure clean architecture and maintainability.
+Maintain clear separation between core source code and test codebase to ensure clean architecture and maintainability throughout the entire repository.
 
 ### Test Platform Project
 The test platform project (`<Module>.TestPlatform`) should contain:
@@ -53,8 +53,10 @@ The test platform project (`<Module>.TestPlatform`) should contain:
 - **Integration Test Projects**: Should focus on integration scenarios, using platform utilities for setup
 
 ### Project Structure Example
+This pattern should be applied consistently across all modules in the repository:
+
 ```
-Graphics/
+<ModuleName>/
 ├── src/
 │   └── Root/                    # Core production code only
 ├── tests/
@@ -67,10 +69,18 @@ Graphics/
 │       └── UseCase.cs
 ```
 
+Examples of modules that should follow this pattern:
+- **Graphics/**: Graphics processing and image handling
+- **Spatial/**: Geospatial data handling and coordinate systems  
+- **Portal/**: Blazor web application components
+- **Engine/**: Console application and tile processing
+- **Providers/**: External map service integrations
+- **Protocols/**: Map service protocol implementations
+
 ### Benefits
-- **Maintainability**: Test utilities are centralized and reusable
+- **Maintainability**: Test utilities are centralized and reusable across all modules
 - **Clarity**: Clear distinction between production code and test infrastructure
-- **Consistency**: Standardized test patterns across the solution
+- **Consistency**: Standardized test patterns across the entire solution
 - **Efficiency**: Reduced code duplication in test projects
 
 ## Available MCP Tools
