@@ -34,6 +34,45 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Use `Theory` attribute for parameterized tests
 - Use `Assert` methods for assertions
 
+## Test Project Structure Guidelines
+
+### Core Principle: Clear Separation
+Maintain clear separation between core source code and test codebase to ensure clean architecture and maintainability.
+
+### Test Platform Project
+The test platform project (`<Module>.TestPlatform`) should contain:
+- **Mocks**: All mock implementations and mock factories
+- **Examples**: Sample data, test fixtures, and example implementations
+- **Test Validation Logic**: Common validation helpers and assertion extensions
+- **Test Comparison Logic**: Comparison utilities and result analysis tools
+
+### Test Organization Rules
+- **Core Source Projects**: Should contain only production code with minimal test utilities
+- **Unit Test Projects**: Should contain only actual test methods and simple test setup
+- **Platform Test Projects**: Should contain all reusable test infrastructure, utilities, and complex test logic
+- **Integration Test Projects**: Should focus on integration scenarios, using platform utilities for setup
+
+### Project Structure Example
+```
+Graphics/
+├── src/
+│   └── Root/                    # Core production code only
+├── tests/
+│   ├── Unit/                    # Unit tests using platform utilities
+│   ├── Integration/             # Integration tests
+│   └── Platform/                # Test platform with mocks, examples, validation logic
+│       ├── Mocks/
+│       ├── Examples/
+│       ├── Extensions/          # Test comparison and validation logic
+│       └── UseCase.cs
+```
+
+### Benefits
+- **Maintainability**: Test utilities are centralized and reusable
+- **Clarity**: Clear distinction between production code and test infrastructure
+- **Consistency**: Standardized test patterns across the solution
+- **Efficiency**: Reduced code duplication in test projects
+
 ## Available MCP Tools
 
 ### Advanced Tools
