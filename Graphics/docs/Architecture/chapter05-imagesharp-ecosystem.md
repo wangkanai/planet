@@ -1,4 +1,4 @@
-# Mathematical Foundations of High-Performance Graphics Processing in .NET 9.0
+# Chapter 5: ImageSharp Ecosystem
 
 The mathematical underpinnings of graphics processing define the boundary between mediocre visual output and stunning,
 high-performance imagery. .NET 9.0 introduces groundbreaking SIMD optimizations, hardware intrinsics support including
