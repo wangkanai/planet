@@ -55,22 +55,16 @@ public static class MetadataValidationExtensions
 		// Check dimensions for web use
 		var pixelCount = metadata.GetPixelCount();
 		if (pixelCount > 100000000) // 100 megapixels
-		{
 			result.AddWarning("Very high resolution may cause performance issues on web.");
-		}
 
 		// Check metadata size
 		if (metadata.GetEstimatedSizeInMB() > 10)
-		{
 			result.AddWarning("Large metadata may slow down web page loading.");
-		}
 
-		// Check aspect ratio for common web formats
+		// Check an aspect ratio for common web formats
 		var aspectRatio = metadata.GetAspectRatio();
 		if (aspectRatio < 0.1 || aspectRatio > 10)
-		{
 			result.AddWarning("Extreme aspect ratio may cause display issues on web.");
-		}
 
 		return result;
 	}
@@ -87,15 +81,11 @@ public static class MetadataValidationExtensions
 		// Check minimum resolution for print
 		var pixelCount = metadata.GetPixelCount();
 		if (pixelCount < 1000000) // Less than 1 megapixel
-		{
 			result.AddWarning("Low resolution may not be suitable for high-quality printing.");
-		}
 
 		// Check for extremely high pixel counts that might cause memory issues
 		if (pixelCount > 500000000) // 500 megapixels
-		{
 			result.AddWarning("Extremely high resolution may cause memory issues during printing.");
-		}
 
 		return result;
 	}
@@ -112,20 +102,16 @@ public static class MetadataValidationExtensions
 		// Check for potentially sensitive information in title
 		if (metadata.HasTitle())
 		{
-			var title = metadata.Title!.ToLowerInvariant();
+			var title             = metadata.Title!.ToLowerInvariant();
 			var sensitiveKeywords = new[] { "password", "secret", "private", "confidential", "internal" };
 
 			if (sensitiveKeywords.Any(keyword => title.Contains(keyword)))
-			{
 				result.AddWarning("Title may contain sensitive information.");
-			}
 		}
 
 		// Check for extremely large metadata that could be used for attacks
 		if (metadata.GetEstimatedSizeInMB() > 100)
-		{
 			result.AddError("Extremely large metadata may indicate a security threat.");
-		}
 
 		return result;
 	}
@@ -141,21 +127,15 @@ public static class MetadataValidationExtensions
 
 		// Check for complete metadata
 		if (!metadata.HasTitle())
-		{
 			result.AddWarning("Missing title may make archival organization difficult.");
-		}
 
 		// Check for reasonable file sizes for long-term storage
 		if (metadata.GetEstimatedSizeInMB() > 50)
-		{
 			result.AddWarning("Large metadata may increase archival storage costs.");
-		}
 
 		// Validate that basic information is present
 		if (!metadata.HasDimensions())
-		{
 			result.AddError("Missing dimensions critical for archival indexing.");
-		}
 
 		return result;
 	}
@@ -171,23 +151,17 @@ public static class MetadataValidationExtensions
 
 		// Check if async disposal is needed but not supported
 		if (metadata.RequiresAsyncDisposal())
-		{
 			result.AddInfo("Large metadata detected. Consider using async disposal patterns.");
-		}
 
 		// Check for performance-impacting sizes
 		var pixelCount = metadata.GetPixelCount();
 		if (pixelCount > 50000000) // 50 megapixels
-		{
 			result.AddWarning("High pixel count may impact processing performance.");
-		}
 
 		// Check metadata overhead
 		var metadataRatio = metadata.EstimatedMetadataSize / (double)pixelCount;
 		if (metadataRatio > 10) // More than 10 bytes of metadata per pixel
-		{
 			result.AddWarning("High metadata-to-pixel ratio may impact performance.");
-		}
 
 		return result;
 	}
@@ -203,27 +177,19 @@ public static class MetadataValidationExtensions
 
 		// Check for essential professional metadata
 		if (!metadata.HasTitle())
-		{
 			result.AddWarning("Professional images should have descriptive titles.");
-		}
 
 		if (!metadata.HasOrientation())
-		{
 			result.AddWarning("Orientation information missing - may cause display issues.");
-		}
 
 		// Check dimensions are reasonable for professional use
 		if (!metadata.HasDimensions())
-		{
 			result.AddError("Dimensions are required for professional image processing.");
-		}
 		else
 		{
 			var pixelCount = metadata.GetPixelCount();
 			if (pixelCount < 2000000) // Less than 2 megapixels
-			{
 				result.AddWarning("Low resolution may not meet professional quality standards.");
-			}
 		}
 
 		return result;
@@ -240,39 +206,25 @@ public static class MetadataValidationExtensions
 		var combinedResult = new ValidationResult();
 
 		if (validationTypes.HasFlag(ValidationTypes.Basic))
-		{
 			combinedResult.Merge(metadata.ValidateComprehensive());
-		}
 
 		if (validationTypes.HasFlag(ValidationTypes.Web))
-		{
 			combinedResult.Merge(metadata.ValidateWebCompatibility());
-		}
 
 		if (validationTypes.HasFlag(ValidationTypes.Print))
-		{
 			combinedResult.Merge(metadata.ValidatePrintCompatibility());
-		}
 
 		if (validationTypes.HasFlag(ValidationTypes.Security))
-		{
 			combinedResult.Merge(metadata.ValidateSecurity());
-		}
 
 		if (validationTypes.HasFlag(ValidationTypes.Archival))
-		{
 			combinedResult.Merge(metadata.ValidateArchivalCompatibility());
-		}
 
 		if (validationTypes.HasFlag(ValidationTypes.Performance))
-		{
 			combinedResult.Merge(metadata.ValidatePerformance());
-		}
 
 		if (validationTypes.HasFlag(ValidationTypes.Professional))
-		{
 			combinedResult.Merge(metadata.ValidateProfessionalUse());
-		}
 
 		return combinedResult;
 	}
@@ -286,37 +238,48 @@ public class ValidationResult
 	private readonly List<ValidationIssue> _issues = new();
 
 	/// <summary>Gets all validation issues.</summary>
-	public IReadOnlyList<ValidationIssue> Issues => _issues.AsReadOnly();
+	public IReadOnlyList<ValidationIssue> Issues
+		=> _issues.AsReadOnly();
 
 	/// <summary>Gets all errors.</summary>
-	public IEnumerable<ValidationIssue> Errors => _issues.Where(i => i.Severity == ValidationSeverity.Error);
+	public IEnumerable<ValidationIssue> Errors
+		=> _issues.Where(i => i.Severity == ValidationSeverity.Error);
 
 	/// <summary>Gets all warnings.</summary>
-	public IEnumerable<ValidationIssue> Warnings => _issues.Where(i => i.Severity == ValidationSeverity.Warning);
+	public IEnumerable<ValidationIssue> Warnings
+		=> _issues.Where(i => i.Severity == ValidationSeverity.Warning);
 
 	/// <summary>Gets all informational messages.</summary>
-	public IEnumerable<ValidationIssue> Info => _issues.Where(i => i.Severity == ValidationSeverity.Info);
+	public IEnumerable<ValidationIssue> Info
+		=> _issues.Where(i => i.Severity == ValidationSeverity.Info);
 
 	/// <summary>Gets whether validation passed (no errors).</summary>
-	public bool IsValid => !Errors.Any();
+	public bool IsValid
+		=> !Errors.Any();
 
 	/// <summary>Gets whether there are any warnings.</summary>
-	public bool HasWarnings => Warnings.Any();
+	public bool HasWarnings
+		=> Warnings.Any();
 
 	/// <summary>Gets the total number of issues.</summary>
-	public int IssueCount => _issues.Count;
+	public int IssueCount
+		=> _issues.Count;
 
 	/// <summary>Adds an error to the validation result.</summary>
-	public void AddError(string message) => _issues.Add(new ValidationIssue(ValidationSeverity.Error, message));
+	public void AddError(string message)
+		=> _issues.Add(new ValidationIssue(ValidationSeverity.Error, message));
 
 	/// <summary>Adds a warning to the validation result.</summary>
-	public void AddWarning(string message) => _issues.Add(new ValidationIssue(ValidationSeverity.Warning, message));
+	public void AddWarning(string message)
+		=> _issues.Add(new ValidationIssue(ValidationSeverity.Warning, message));
 
 	/// <summary>Adds an informational message to the validation result.</summary>
-	public void AddInfo(string message) => _issues.Add(new ValidationIssue(ValidationSeverity.Info, message));
+	public void AddInfo(string message)
+		=> _issues.Add(new ValidationIssue(ValidationSeverity.Info, message));
 
 	/// <summary>Merges another validation result into this one.</summary>
-	public void Merge(ValidationResult other) => _issues.AddRange(other._issues);
+	public void Merge(ValidationResult other)
+		=> _issues.AddRange(other._issues);
 
 	/// <summary>Gets a summary string of all issues.</summary>
 	public string GetSummary()
@@ -324,9 +287,9 @@ public class ValidationResult
 		if (!_issues.Any())
 			return "Validation passed with no issues.";
 
-		var errorCount = Errors.Count();
+		var errorCount   = Errors.Count();
 		var warningCount = Warnings.Count();
-		var infoCount = Info.Count();
+		var infoCount    = Info.Count();
 
 		return $"Validation completed: {errorCount} errors, {warningCount} warnings, {infoCount} info messages.";
 	}

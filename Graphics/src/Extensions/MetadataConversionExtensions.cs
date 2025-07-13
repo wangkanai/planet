@@ -15,21 +15,15 @@ public static class MetadataConversionExtensions
 	/// <param name="metadata">The metadata to convert.</param>
 	/// <returns>Dictionary containing all metadata properties.</returns>
 	public static Dictionary<string, object?> ToPropertyDictionary(this IMetadata metadata)
-	{
-		var properties = new Dictionary<string, object?>
-		                 {
-			                 [nameof(metadata.Width)]                 = metadata.Width,
-			                 [nameof(metadata.Height)]                = metadata.Height,
-			                 [nameof(metadata.Title)]                 = metadata.Title,
-			                 [nameof(metadata.Orientation)]           = metadata.Orientation,
-			                 [nameof(metadata.EstimatedMetadataSize)] = metadata.EstimatedMetadataSize,
-			                 [nameof(metadata.HasLargeMetadata)]      = metadata.HasLargeMetadata
-		                 };
-
-		// Type-specific properties would be added by format-specific extensions
-
-		return properties;
-	}
+		=> new() // Type-specific properties would be added by format-specific extensions
+		   {
+			   [nameof(metadata.Width)]                 = metadata.Width,
+			   [nameof(metadata.Height)]                = metadata.Height,
+			   [nameof(metadata.Title)]                 = metadata.Title,
+			   [nameof(metadata.Orientation)]           = metadata.Orientation,
+			   [nameof(metadata.EstimatedMetadataSize)] = metadata.EstimatedMetadataSize,
+			   [nameof(metadata.HasLargeMetadata)]      = metadata.HasLargeMetadata
+		   };
 
 	/// <summary>
 	/// Converts metadata to a JSON string representation.

@@ -142,8 +142,7 @@ public static class MetadataComparisonExtensions
 	/// <param name="useCase">The use case to evaluate for.</param>
 	/// <returns>True if functionally equivalent for the use case.</returns>
 	public static bool IsFunctionallyEquivalent(this IMetadata metadata, IMetadata other, UseCase useCase)
-	{
-		return useCase switch
+		=> useCase switch
 		{
 			UseCase.WebDisplay => IsWebEquivalent(metadata, other),
 			UseCase.Printing   => IsPrintEquivalent(metadata, other),
@@ -151,7 +150,6 @@ public static class MetadataComparisonExtensions
 			UseCase.Processing => IsProcessingEquivalent(metadata, other),
 			_                  => metadata.Compare(other).OverallSimilarity > 0.9
 		};
-	}
 
 	private static double CalculateDimensionSimilarity(IMetadata metadata1, IMetadata metadata2)
 	{
