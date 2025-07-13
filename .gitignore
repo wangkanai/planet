@@ -3,11 +3,13 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+Graphics/docs/pdf/
 conport_export/
 context_portal/
 lib/
 dist/
 .idea/
+.obsidian/
 .vscode/
 DS_Store
 Migrations/
@@ -418,4 +420,5 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
 

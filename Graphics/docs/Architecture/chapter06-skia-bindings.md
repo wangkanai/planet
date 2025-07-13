@@ -1,4 +1,4 @@
-# Chapter 6: Basic Image Operations
+# Chapter 6: SkiaSharp Integration
 
 The journey from a raw pixel array to a polished image involves a series of fundamental operations that form the
 backbone of every graphics application. These basic operations—brightness adjustments, color manipulations, filters, and

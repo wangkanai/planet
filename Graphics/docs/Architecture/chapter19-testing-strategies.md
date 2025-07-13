@@ -1,4 +1,4 @@
-# Chapter 19: Testing Strategies for High-Performance Graphics Processing in .NET 9.0
+# Chapter 19: Testing Strategies
 
 Testing graphics processing systems presents unique challenges that extend beyond traditional software testing methodologies. The inherent complexity of image data, the subjective nature of visual quality, and the critical importance of performance characteristics demand specialized testing approaches. This chapter explores comprehensive testing strategies tailored for graphics applications in .NET 9.0, covering unit testing of image operations, performance benchmarking, visual regression testing, and load testing of graphics systems.
 

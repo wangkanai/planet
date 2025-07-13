@@ -1,4 +1,4 @@
-# Chapter 7: Non-Destructive Editing Architecture
+# Chapter 7: Cross-Platform Graphics
 
 The difference between a toy image editor and professional graphics software lies not in the filters it offers, but in
 how it manages change. Non-destructive editing—the ability to modify images without permanently altering the original
