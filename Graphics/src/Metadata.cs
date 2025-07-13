@@ -110,7 +110,8 @@ public abstract class Metadata : IMetadata
 	/// </summary>
 	/// <param name="dictionary">The dictionary to estimate.</param>
 	/// <returns>Estimated size in bytes.</returns>
-	protected static long EstimateDictionarySize<TKey>(Dictionary<TKey, string>? dictionary) where TKey : notnull
+	protected static long EstimateDictionarySize<TKey>(Dictionary<TKey, string>? dictionary)
+		where TKey : notnull
 	{
 		if (dictionary == null || dictionary.Count == 0)
 			return 0;

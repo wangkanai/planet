@@ -1,5 +1,7 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
 
+using Wangkanai.Graphics.Validation;
+
 namespace Wangkanai.Graphics.Extensions;
 
 /// <summary>
@@ -228,120 +230,4 @@ public static class MetadataValidationExtensions
 
 		return combinedResult;
 	}
-}
-
-/// <summary>
-/// Validation result class for metadata validation operations.
-/// </summary>
-public class ValidationResult
-{
-	private readonly List<ValidationIssue> _issues = new();
-
-	/// <summary>Gets all validation issues.</summary>
-	public IReadOnlyList<ValidationIssue> Issues
-		=> _issues.AsReadOnly();
-
-	/// <summary>Gets all errors.</summary>
-	public IEnumerable<ValidationIssue> Errors
-		=> _issues.Where(i => i.Severity == ValidationSeverity.Error);
-
-	/// <summary>Gets all warnings.</summary>
-	public IEnumerable<ValidationIssue> Warnings
-		=> _issues.Where(i => i.Severity == ValidationSeverity.Warning);
-
-	/// <summary>Gets all informational messages.</summary>
-	public IEnumerable<ValidationIssue> Info
-		=> _issues.Where(i => i.Severity == ValidationSeverity.Info);
-
-	/// <summary>Gets whether validation passed (no errors).</summary>
-	public bool IsValid
-		=> !Errors.Any();
-
-	/// <summary>Gets whether there are any warnings.</summary>
-	public bool HasWarnings
-		=> Warnings.Any();
-
-	/// <summary>Gets the total number of issues.</summary>
-	public int IssueCount
-		=> _issues.Count;
-
-	/// <summary>Adds an error to the validation result.</summary>
-	public void AddError(string message)
-		=> _issues.Add(new ValidationIssue(ValidationSeverity.Error, message));
-
-	/// <summary>Adds a warning to the validation result.</summary>
-	public void AddWarning(string message)
-		=> _issues.Add(new ValidationIssue(ValidationSeverity.Warning, message));
-
-	/// <summary>Adds an informational message to the validation result.</summary>
-	public void AddInfo(string message)
-		=> _issues.Add(new ValidationIssue(ValidationSeverity.Info, message));
-
-	/// <summary>Merges another validation result into this one.</summary>
-	public void Merge(ValidationResult other)
-		=> _issues.AddRange(other._issues);
-
-	/// <summary>Gets a summary string of all issues.</summary>
-	public string GetSummary()
-	{
-		if (!_issues.Any())
-			return "Validation passed with no issues.";
-
-		var errorCount   = Errors.Count();
-		var warningCount = Warnings.Count();
-		var infoCount    = Info.Count();
-
-		return $"Validation completed: {errorCount} errors, {warningCount} warnings, {infoCount} info messages.";
-	}
-}
-
-/// <summary>
-/// Represents a single validation issue.
-/// </summary>
-public record ValidationIssue(ValidationSeverity Severity, string Message);
-
-/// <summary>
-/// Validation severity levels.
-/// </summary>
-public enum ValidationSeverity
-{
-	/// <summary>Informational message.</summary>
-	Info,
-
-	/// <summary>Warning that doesn't prevent usage.</summary>
-	Warning,
-
-	/// <summary>Error that may prevent proper usage.</summary>
-	Error
-}
-
-/// <summary>
-/// Types of validation that can be performed.
-/// </summary>
-[Flags]
-public enum ValidationTypes
-{
-	/// <summary>Basic metadata validation.</summary>
-	Basic = 1,
-
-	/// <summary>Web compatibility validation.</summary>
-	Web = 2,
-
-	/// <summary>Print compatibility validation.</summary>
-	Print = 4,
-
-	/// <summary>Security validation.</summary>
-	Security = 8,
-
-	/// <summary>Archival compatibility validation.</summary>
-	Archival = 16,
-
-	/// <summary>Performance validation.</summary>
-	Performance = 32,
-
-	/// <summary>Professional use validation.</summary>
-	Professional = 64,
-
-	/// <summary>All validation types.</summary>
-	All = Basic | Web | Print | Security | Archival | Performance | Professional
 }

@@ -4,14 +4,10 @@ using System.Text.Json;
 
 namespace Wangkanai.Graphics.Extensions;
 
-/// <summary>
-/// Extension methods for converting metadata between different formats and representations.
-/// </summary>
+/// <summary>Extension methods for converting metadata between different formats and representations.</summary>
 public static class MetadataConversionExtensions
 {
-	/// <summary>
-	/// Converts metadata to a dictionary of properties.
-	/// </summary>
+	/// <summary>Converts metadata to a dictionary of properties. </summary>
 	/// <param name="metadata">The metadata to convert.</param>
 	/// <returns>Dictionary containing all metadata properties.</returns>
 	public static Dictionary<string, object?> ToPropertyDictionary(this IMetadata metadata)
@@ -25,9 +21,7 @@ public static class MetadataConversionExtensions
 			   [nameof(metadata.HasLargeMetadata)]      = metadata.HasLargeMetadata
 		   };
 
-	/// <summary>
-	/// Converts metadata to a JSON string representation.
-	/// </summary>
+	/// <summary> Converts metadata to a JSON string representation. </summary>
 	/// <param name="metadata">The metadata to serialize.</param>
 	/// <param name="indented">Whether to format the JSON with indentation.</param>
 	/// <returns>JSON string representation of the metadata.</returns>
