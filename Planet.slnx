@@ -99,6 +99,7 @@
     <File Path="Graphics\docs\Architecture\appendix-c1-format-compatibility.md" />
     <File Path="Graphics\docs\Architecture\appendix-c2-algorithm-complexity.md" />
     <File Path="Graphics\docs\Architecture\appendix-c3-memory-usage.md" />
+    <File Path="Graphics\docs\Architecture\implementation-guide.md" />
   </Folder>
   <Folder Name="/Graphics/Rasters/">
     <Project Path="Graphics\Rasters\benchmark\Wangkanai.Graphics.Rasters.Benchmark.csproj" Type="Classic C#" />
