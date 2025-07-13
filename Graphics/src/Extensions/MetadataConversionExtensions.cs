@@ -143,9 +143,7 @@ public static class MetadataConversionExtensions
 		return csv.ToString();
 	}
 
-	/// <summary>
-	/// Creates a metadata summary object with key statistics.
-	/// </summary>
+	/// <summary>Creates a metadata summary object with key statistics.</summary>
 	/// <param name="metadata">The metadata to summarize.</param>
 	/// <returns>Metadata summary object.</returns>
 	public static MetadataSummary CreateSummary(this IMetadata metadata)
