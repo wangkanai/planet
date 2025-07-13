@@ -216,10 +216,12 @@ public class SvgMetadata : VectorMetadata, ISvgMetadata
 		=> ElementCount > SvgConstants.PerformanceOptimizationThreshold;
 
 	/// <inheritdoc />
-	public override bool HasLargeMetadata => IsVeryLargeSvg;
+	public override bool HasLargeMetadata
+		=> IsVeryLargeSvg;
 
 	/// <inheritdoc />
-	public override long EstimatedMetadataSize => CalculateEstimatedMetadataSize();
+	public override long EstimatedMetadataSize
+		=> CalculateEstimatedMetadataSize();
 
 	/// <inheritdoc />
 	public long CalculateEstimatedMemoryUsage() => CalculateEstimatedMetadataSize();

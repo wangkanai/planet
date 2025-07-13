@@ -24,13 +24,6 @@ public class BmpMetadata : RasterMetadata
 	/// <summary>Gets or sets the raw BMP height in pixels (positive for bottom-up, negative for top-down).</summary>
 	public int RawHeight { get; set; }
 
-	/// <summary>Gets or sets the image height in pixels (always positive).</summary>
-	public override int Height
-	{
-		get => Math.Abs(RawHeight);
-		set => RawHeight = value;
-	}
-
 	/// <summary>Gets or sets the number of color planes (always 1 for BMP).</summary>
 	public ushort Planes { get; set; } = BmpConstants.Planes;
 
@@ -191,7 +184,7 @@ public class BmpMetadata : RasterMetadata
 	protected override void DisposeManagedResources()
 	{
 		base.DisposeManagedResources();
-		
+
 		// Clear BMP-specific resources
 		ColorPalette = null;
 		CustomFields.Clear();
@@ -219,13 +212,13 @@ public class BmpMetadata : RasterMetadata
 
 	/// <inheritdoc />
 	public override IMetadata Clone() => CloneRaster();
-	
+
 	/// <inheritdoc />
 	public override IRasterMetadata CloneRaster()
 	{
 		var clone = new BmpMetadata();
 		CopyRasterTo(clone);
-		
+
 		// Copy BMP-specific properties
 		clone.FileSignature = FileSignature;
 		clone.FileSize = FileSize;
@@ -252,15 +245,15 @@ public class BmpMetadata : RasterMetadata
 		clone.ProfileSize = ProfileSize;
 		clone.ColorPalette = ColorPalette?.ToArray();
 		clone.CustomFields = new Dictionary<string, object>(CustomFields);
-		
+
 		return clone;
 	}
-	
+
 	/// <inheritdoc />
 	public override void Clear()
 	{
 		base.Clear();
-		
+
 		// Reset BMP-specific properties to defaults
 		FileSignature = "BM";
 		FileSize = 0;
