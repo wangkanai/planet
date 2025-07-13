@@ -8,6 +8,7 @@ context_portal/
 lib/
 dist/
 .idea/
+.obsidian/
 .vscode/
 DS_Store
 Migrations/
