@@ -3,7 +3,7 @@
 namespace Wangkanai.Graphics;
 
 /// <summary>Use cases for functional equivalence testing.</summary>
-public enum UseCase
+public enum ImageUseCase
 {
 	WebDisplay,
 	Printing,

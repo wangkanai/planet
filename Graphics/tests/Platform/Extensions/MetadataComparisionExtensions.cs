@@ -9,13 +9,13 @@ public static class MetadataComparisionExtensions
 	/// <param name="other">The metadata instance to compare with.</param>
 	/// <param name="useCase">The use case to evaluate for.</param>
 	/// <returns>True if functionally equivalent for the use case.</returns>
-	public static bool IsFunctionallyEquivalent(this IMetadata metadata, IMetadata other, UseCase useCase)
+	public static bool IsFunctionallyEquivalent(this IMetadata metadata, IMetadata other, ImageUseCase useCase)
 		=> useCase switch
 		{
-			UseCase.WebDisplay => IsWebEquivalent(metadata, other),
-			UseCase.Printing   => IsPrintEquivalent(metadata, other),
-			UseCase.Archival   => IsArchivalEquivalent(metadata, other),
-			UseCase.Processing => IsProcessingEquivalent(metadata, other),
+			ImageUseCase.WebDisplay => IsWebEquivalent(metadata, other),
+			ImageUseCase.Printing   => IsPrintEquivalent(metadata, other),
+			ImageUseCase.Archival   => IsArchivalEquivalent(metadata, other),
+			ImageUseCase.Processing => IsProcessingEquivalent(metadata, other),
 			_                  => metadata.Compare(other).OverallSimilarity > 0.9
 		};
 
