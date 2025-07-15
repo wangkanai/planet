@@ -59,6 +59,7 @@
   <Folder Name="/Graphics/">
     <Project Path="Graphics\benchmark\Wangkanai.Graphics.Benchmark.csproj" Type="Classic C#" />
     <Project Path="Graphics\src\Wangkanai.Graphics.csproj" Type="Classic C#" />
+    <Project Path="Graphics\tests\Platform\Wangkanai.Graphics.TestPlatform.csproj" Type="Classic C#" />
     <Project Path="Graphics\tests\Unit\Wangkanai.Graphics.UnitTests.csproj" Type="Classic C#" />
     <File Path="Graphics\Directory.Build.props" />
     <File Path="Graphics\README.md" />
@@ -99,6 +100,7 @@
     <File Path="Graphics\docs\Architecture\appendix-c1-format-compatibility.md" />
     <File Path="Graphics\docs\Architecture\appendix-c2-algorithm-complexity.md" />
     <File Path="Graphics\docs\Architecture\appendix-c3-memory-usage.md" />
+    <File Path="Graphics\docs\Architecture\implementation-guide.md" />
   </Folder>
   <Folder Name="/Graphics/Rasters/">
     <Project Path="Graphics\Rasters\benchmark\Wangkanai.Graphics.Rasters.Benchmark.csproj" Type="Classic C#" />

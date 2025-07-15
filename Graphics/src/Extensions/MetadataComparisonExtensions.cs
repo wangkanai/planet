@@ -1,23 +1,19 @@
-// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
-
+// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
 namespace Wangkanai.Graphics.Extensions;
 
-/// <summary>
-/// Extension methods for comparing metadata between different instances.
-/// </summary>
+/// <summary>Extension methods for comparing metadata between different instances.</summary>
 public static class MetadataComparisonExtensions
 {
-	/// <summary>
-	/// Determines if two metadata instances have similar dimensions within a tolerance.
-	/// </summary>
+	/// <summary>Determines if two metadata instances have similar dimensions within a tolerance.</summary>
 	/// <param name="metadata">The first metadata instance.</param>
 	/// <param name="other">The metadata instance to compare with.</param>
 	/// <param name="tolerance">Tolerance as a percentage (default: 1% = 0.01).</param>
 	/// <returns>True if dimensions are similar within tolerance.</returns>
 	public static bool HasSimilarDimensions(this IMetadata metadata, IMetadata other, double tolerance = 0.01)
 	{
-		if (metadata == other) return true;
+		if (metadata == other)
+			return true;
 
 		var widthDiff  = Math.Abs(metadata.Width - other.Width) / (double)Math.Max(metadata.Width, other.Width);
 		var heightDiff = Math.Abs(metadata.Height - other.Height) / (double)Math.Max(metadata.Height, other.Height);
@@ -112,9 +108,7 @@ public static class MetadataComparisonExtensions
 		return groups.Select(kvp => new MetadataGrouping(kvp.Key, kvp.Value));
 	}
 
-	/// <summary>
-	/// Calculates the difference in file size requirements between two metadata instances.
-	/// </summary>
+	/// <summary>Calculates the difference in file size requirements between two metadata instances.</summary>
 	/// <param name="metadata">The first metadata instance.</param>
 	/// <param name="other">The metadata instance to compare with.</param>
 	/// <returns>Size difference information.</returns>
@@ -132,25 +126,6 @@ public static class MetadataComparisonExtensions
 			       IsLarger             = difference > 0,
 			       IsSignificant        = Math.Abs(percentageDifference) > 10 // More than 10% difference
 		       };
-	}
-
-	/// <summary>
-	/// Determines if two metadata instances are functionally equivalent for a specific use case.
-	/// </summary>
-	/// <param name="metadata">The first metadata instance.</param>
-	/// <param name="other">The metadata instance to compare with.</param>
-	/// <param name="useCase">The use case to evaluate for.</param>
-	/// <returns>True if functionally equivalent for the use case.</returns>
-	public static bool IsFunctionallyEquivalent(this IMetadata metadata, IMetadata other, UseCase useCase)
-	{
-		return useCase switch
-		{
-			UseCase.WebDisplay => IsWebEquivalent(metadata, other),
-			UseCase.Printing   => IsPrintEquivalent(metadata, other),
-			UseCase.Archival   => IsArchivalEquivalent(metadata, other),
-			UseCase.Processing => IsProcessingEquivalent(metadata, other),
-			_                  => metadata.Compare(other).OverallSimilarity > 0.9
-		};
 	}
 
 	private static double CalculateDimensionSimilarity(IMetadata metadata1, IMetadata metadata2)
@@ -204,110 +179,15 @@ public static class MetadataComparisonExtensions
 		return scores.Average();
 	}
 
-	private static bool IsWebEquivalent(IMetadata metadata1, IMetadata metadata2)
+	private class MetadataGrouping(int key, List<IMetadata> metadata)
+		: IGrouping<int, IMetadata>
 	{
-		// For web use, dimensions and aspect ratio are most important
-		return metadata1.HasSimilarDimensions(metadata2, 0.05) && // 5% tolerance
-		       Math.Abs(metadata1.GetAspectRatio() - metadata2.GetAspectRatio()) < 0.1;
+		public int Key { get; } = key;
+
+		public IEnumerator<IMetadata> GetEnumerator()
+			=> metadata.GetEnumerator();
+
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+			=> GetEnumerator();
 	}
-
-	private static bool IsPrintEquivalent(IMetadata metadata1, IMetadata metadata2)
-	{
-		// For printing, exact dimensions matter - format-specific extensions can add resolution checks
-		return metadata1.Width == metadata2.Width && metadata1.Height == metadata2.Height;
-	}
-
-	private static bool IsArchivalEquivalent(IMetadata metadata1, IMetadata metadata2)
-	{
-		// For archival, type and basic properties should match
-		return metadata1.GetType() == metadata2.GetType() &&
-		       metadata1.Width == metadata2.Width &&
-		       metadata1.Height == metadata2.Height;
-	}
-
-	private static bool IsProcessingEquivalent(IMetadata metadata1, IMetadata metadata2)
-	{
-		// For processing, dimensions matter - format-specific extensions can add bit depth checks
-		return metadata1.Width == metadata2.Width && metadata1.Height == metadata2.Height;
-	}
-
-	private class MetadataGrouping : IGrouping<int, IMetadata>
-	{
-		public           int             Key { get; }
-		private readonly List<IMetadata> _metadata;
-
-		public MetadataGrouping(int key, List<IMetadata> metadata)
-		{
-			Key       = key;
-			_metadata = metadata;
-		}
-
-		public IEnumerator<IMetadata>                                 GetEnumerator() => _metadata.GetEnumerator();
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
-	}
-}
-
-/// <summary>
-/// Result of comparing two metadata instances.
-/// </summary>
-public class MetadataComparisonResult
-{
-	public bool DimensionsMatch  { get; set; }
-	public bool TitleMatch       { get; set; }
-	public bool OrientationMatch { get; set; }
-	public bool TypeMatch        { get; set; }
-
-	public double DimensionSimilarity   { get; set; }
-	public double AspectRatioSimilarity { get; set; }
-	public double SizeSimilarity        { get; set; }
-	public double OverallSimilarity     { get; set; }
-
-	public RasterComparisonResult? RasterComparison { get; set; }
-	public VectorComparisonResult? VectorComparison { get; set; }
-}
-
-/// <summary>
-/// Raster-specific comparison results.
-/// </summary>
-public class RasterComparisonResult
-{
-	public bool                      BitDepthMatch   { get; set; }
-	public bool                      ResolutionMatch { get; set; }
-	public bool                      ColorSpaceMatch { get; set; }
-	public (bool first, bool second) HasExifData     { get; set; }
-	public (bool first, bool second) HasGpsData      { get; set; }
-	public (bool first, bool second) HasIccProfile   { get; set; }
-}
-
-/// <summary>
-/// Vector-specific comparison results.
-/// </summary>
-public class VectorComparisonResult
-{
-	public double ElementCountSimilarity { get; set; }
-	public bool   CoordinateSystemMatch  { get; set; }
-	public bool   ColorSpaceMatch        { get; set; }
-	public bool   ComplexityLevelMatch   { get; set; }
-}
-
-/// <summary>
-/// Size difference information between two metadata instances.
-/// </summary>
-public record SizeDifference
-{
-	public long   AbsoluteDifference   { get; init; }
-	public double PercentageDifference { get; init; }
-	public bool   IsLarger             { get; init; }
-	public bool   IsSignificant        { get; init; }
-}
-
-/// <summary>
-/// Use cases for functional equivalence testing.
-/// </summary>
-public enum UseCase
-{
-	WebDisplay,
-	Printing,
-	Archival,
-	Processing
 }

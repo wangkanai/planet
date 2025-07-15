@@ -14,37 +14,37 @@ public abstract class Metadata : IMetadata
 	private const int DefaultObjectEstimate = 16;
 
 	/// <inheritdoc />
-	public abstract long EstimatedMetadataSize { get; }
+	public int Width { get; set; }
 
 	/// <inheritdoc />
-	public virtual int Width  { get; set; }
-
-	/// <inheritdoc />
-	public virtual int Height { get; set; }
-
-	/// <summary>Gets or sets the author or artist name.</summary>
-	public virtual string? Author { get; set; }
-
-	/// <summary>Gets or sets the copyright information.</summary>
-	public virtual string? Copyright { get; set; }
-
-	/// <summary>Gets or sets the description.</summary>
-	public virtual string? Description { get; set; }
-
-	/// <summary>Gets or sets the software used to create or modify the content.</summary>
-	public virtual string? Software { get; set; }
-
-	/// <summary>Gets or sets the creation date and time.</summary>
-	public virtual DateTime? CreationTime { get; set; }
-
-	/// <summary>Gets or sets the modification date and time.</summary>
-	public virtual DateTime? ModificationTime { get; set; }
+	public int Height { get; set; }
 
 	/// <summary>Gets or sets the image/document title.</summary>
-	public virtual string? Title { get; set; }
+	public string? Title { get; set; }
 
 	/// <summary>Gets or sets the orientation of the content.</summary>
-	public virtual int? Orientation { get; set; }
+	public int? Orientation { get; set; }
+
+	/// <summary>Gets or sets the author or artist name.</summary>
+	public string? Author { get; set; }
+
+	/// <summary>Gets or sets the copyright information.</summary>
+	public string? Copyright { get; set; }
+
+	/// <summary>Gets or sets the description.</summary>
+	public string? Description { get; set; }
+
+	/// <summary>Gets or sets the software used to create or modify the content.</summary>
+	public string? Software { get; set; }
+
+	/// <summary>Gets or sets the creation date and time.</summary>
+	public DateTime? CreationTime { get; set; }
+
+	/// <summary>Gets or sets the modification date and time.</summary>
+	public DateTime? ModificationTime { get; set; }
+
+	/// <inheritdoc />
+	public abstract long EstimatedMetadataSize { get; }
 
 	/// <inheritdoc />
 	public virtual bool HasLargeMetadata
@@ -54,7 +54,7 @@ public abstract class Metadata : IMetadata
 	/// Gets the base memory size for the metadata object.
 	/// </summary>
 	/// <returns>Base size in bytes.</returns>
-	protected virtual long GetBaseMemorySize()
+	protected long GetBaseMemorySize()
 	{
 		long size = 256; // Base object size estimate
 
@@ -66,8 +66,8 @@ public abstract class Metadata : IMetadata
 		size += EstimateStringSize(Title);
 
 		// Add sizes for basic properties
-		size += sizeof(int) * 2; // Width and Height
-		size += 16 * 2; // CreationTime and ModificationTime (estimated)
+		size += sizeof(int) * 2;            // Width and Height
+		size += 16 * 2;                     // CreationTime and ModificationTime (estimated)
 		size += sizeof(int) + sizeof(bool); // Orientation (estimated, accounting for nullable overhead)
 
 		return size;
@@ -110,7 +110,8 @@ public abstract class Metadata : IMetadata
 	/// </summary>
 	/// <param name="dictionary">The dictionary to estimate.</param>
 	/// <returns>Estimated size in bytes.</returns>
-	protected static long EstimateDictionarySize<TKey>(Dictionary<TKey, string>? dictionary) where TKey : notnull
+	protected static long EstimateDictionarySize<TKey>(Dictionary<TKey, string>? dictionary)
+		where TKey : notnull
 	{
 		if (dictionary == null || dictionary.Count == 0)
 			return 0;
@@ -246,15 +247,15 @@ public abstract class Metadata : IMetadata
 	{
 		ThrowIfDisposed();
 
-		Width = 0;
-		Height = 0;
-		Author = null;
-		Copyright = null;
-		Description = null;
-		Software = null;
-		Title = null;
-		Orientation = null;
-		CreationTime = null;
+		Width            = 0;
+		Height           = 0;
+		Author           = null;
+		Copyright        = null;
+		Description      = null;
+		Software         = null;
+		Title            = null;
+		Orientation      = null;
+		CreationTime     = null;
 		ModificationTime = null;
 	}
 
@@ -262,17 +263,17 @@ public abstract class Metadata : IMetadata
 	/// Copies base metadata properties from this instance to another.
 	/// </summary>
 	/// <param name="target">The target metadata instance.</param>
-	protected virtual void CopyBaseTo(Metadata target)
+	protected void CopyBaseTo(Metadata target)
 	{
-		target.Width = Width;
-		target.Height = Height;
-		target.Author = Author;
-		target.Copyright = Copyright;
-		target.Description = Description;
-		target.Software = Software;
-		target.Title = Title;
-		target.Orientation = Orientation;
-		target.CreationTime = CreationTime;
+		target.Width            = Width;
+		target.Height           = Height;
+		target.Author           = Author;
+		target.Copyright        = Copyright;
+		target.Description      = Description;
+		target.Software         = Software;
+		target.Title            = Title;
+		target.Orientation      = Orientation;
+		target.CreationTime     = CreationTime;
 		target.ModificationTime = ModificationTime;
 	}
 }

@@ -1,39 +1,27 @@
-// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved. Apache License, Version 2.0
+// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
 using System.Text.Json;
 
 namespace Wangkanai.Graphics.Extensions;
 
-/// <summary>
-/// Extension methods for converting metadata between different formats and representations.
-/// </summary>
+/// <summary>Extension methods for converting metadata between different formats and representations.</summary>
 public static class MetadataConversionExtensions
 {
-	/// <summary>
-	/// Converts metadata to a dictionary of properties.
-	/// </summary>
+	/// <summary>Converts metadata to a dictionary of properties. </summary>
 	/// <param name="metadata">The metadata to convert.</param>
 	/// <returns>Dictionary containing all metadata properties.</returns>
 	public static Dictionary<string, object?> ToPropertyDictionary(this IMetadata metadata)
-	{
-		var properties = new Dictionary<string, object?>
-		                 {
-			                 [nameof(metadata.Width)]                 = metadata.Width,
-			                 [nameof(metadata.Height)]                = metadata.Height,
-			                 [nameof(metadata.Title)]                 = metadata.Title,
-			                 [nameof(metadata.Orientation)]           = metadata.Orientation,
-			                 [nameof(metadata.EstimatedMetadataSize)] = metadata.EstimatedMetadataSize,
-			                 [nameof(metadata.HasLargeMetadata)]      = metadata.HasLargeMetadata
-		                 };
+		=> new() // Type-specific properties would be added by format-specific extensions
+		   {
+			   [nameof(metadata.Width)]                 = metadata.Width,
+			   [nameof(metadata.Height)]                = metadata.Height,
+			   [nameof(metadata.Title)]                 = metadata.Title,
+			   [nameof(metadata.Orientation)]           = metadata.Orientation,
+			   [nameof(metadata.EstimatedMetadataSize)] = metadata.EstimatedMetadataSize,
+			   [nameof(metadata.HasLargeMetadata)]      = metadata.HasLargeMetadata
+		   };
 
-		// Type-specific properties would be added by format-specific extensions
-
-		return properties;
-	}
-
-	/// <summary>
-	/// Converts metadata to a JSON string representation.
-	/// </summary>
+	/// <summary> Converts metadata to a JSON string representation. </summary>
 	/// <param name="metadata">The metadata to serialize.</param>
 	/// <param name="indented">Whether to format the JSON with indentation.</param>
 	/// <returns>JSON string representation of the metadata.</returns>
@@ -155,9 +143,7 @@ public static class MetadataConversionExtensions
 		return csv.ToString();
 	}
 
-	/// <summary>
-	/// Creates a metadata summary object with key statistics.
-	/// </summary>
+	/// <summary>Creates a metadata summary object with key statistics.</summary>
 	/// <param name="metadata">The metadata to summarize.</param>
 	/// <returns>Metadata summary object.</returns>
 	public static MetadataSummary CreateSummary(this IMetadata metadata)
