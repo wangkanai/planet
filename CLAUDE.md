@@ -5,7 +5,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Claude Code
 
 - Claude Code local development has MCP access to extra resources like SonarCloud, GitHub issues, and discussions.
-- **ConPort Knowledge Management** is available for project knowledge organization and retrieval
 
 ## Coding Guidelines
 
@@ -186,29 +185,6 @@ Examples of modules that should follow this pattern:
 - `mcp__memory__open_nodes` - Open specific nodes
 
 
-### ConPort Knowledge Management
-- `mcp__conport__get_product_context` - Retrieve project goals, features, and architecture
-- `mcp__conport__update_product_context` - Update product context information
-- `mcp__conport__get_active_context` - Get current working focus and recent changes
-- `mcp__conport__update_active_context` - Update active context information
-- `mcp__conport__log_decision` - Log architectural or implementation decisions
-- `mcp__conport__get_decisions` - Retrieve logged decisions
-- `mcp__conport__search_decisions_fts` - Full-text search across decisions
-- `mcp__conport__log_progress` - Log progress entries or task status
-- `mcp__conport__get_progress` - Retrieve progress entries
-- `mcp__conport__update_progress` - Update existing progress entries
-- `mcp__conport__delete_progress_by_id` - Delete progress entries
-- `mcp__conport__log_system_pattern` - Log system/coding patterns
-- `mcp__conport__get_system_patterns` - Retrieve system patterns
-- `mcp__conport__log_custom_data` - Store custom key-value data
-- `mcp__conport__get_custom_data` - Retrieve custom data
-- `mcp__conport__delete_custom_data` - Delete custom data entries
-- `mcp__conport__search_project_glossary_fts` - Search project glossary
-- `mcp__conport__export_conport_to_markdown` - Export ConPort data to markdown
-- `mcp__conport__import_markdown_to_conport` - Import markdown files to ConPort
-- `mcp__conport__link_conport_items` - Create relationships between items
-- `mcp__conport__get_linked_items` - Retrieve linked items
-- `mcp__conport__semantic_search_conport` - Semantic search across ConPort data
 
 ## GitHub Repository
 
@@ -224,39 +200,6 @@ Examples of modules that should follow this pattern:
 - SonarCube reposts are available via MCP `sonarqube` command.
 
 
-## ConPort Knowledge Management
-
-ConPort provides structured knowledge management for the Planet project:
-
-### Project Context Management
-- **Product Context**: Contains project vision, objectives, technical scope, and success metrics
-- **Active Context**: Tracks current working focus, recent changes, and immediate priorities
-- Use `mcp__conport__get_product_context` and `mcp__conport__get_active_context` to understand project state
-
-### Decision Documentation
-- **Log Architectural Decisions**: Use `mcp__conport__log_decision` for framework choices, design patterns, and technical decisions
-- **Track Rationale**: Include reasoning, implementation details, and tags for categorization
-- **Search Decisions**: Use `mcp__conport__search_decisions_fts` to find relevant past decisions
-
-### Progress Tracking
-- **Task Management**: Use `mcp__conport__log_progress` for tracking development tasks
-- **Status Updates**: Update progress entries with `mcp__conport__update_progress`
-- **Hierarchical Tasks**: Support parent-child task relationships for complex work
-
-### System Patterns
-- **Document Patterns**: Use `mcp__conport__log_system_pattern` for architectural patterns and best practices
-- **Retrieve Patterns**: Use `mcp__conport__get_system_patterns` to find applicable patterns
-- **Pattern Tagging**: Use tags to categorize patterns by domain (e.g., graphics, memory, performance)
-
-### Custom Knowledge Storage
-- **Flexible Data**: Use `mcp__conport__log_custom_data` for any structured project knowledge
-- **Categories**: Organize data by categories like "GraphicsDocumentation", "PerformanceBenchmarks", "TechnicalSpecs"
-- **Search Capabilities**: Full-text search across all custom data with `mcp__conport__search_custom_data_value_fts`
-
-### Knowledge Relationships
-- **Link Items**: Use `mcp__conport__link_conport_items` to create relationships between decisions, patterns, and progress
-- **Knowledge Graph**: Build explicit connections between project knowledge items
-- **Semantic Search**: Use `mcp__conport__semantic_search_conport` for intelligent knowledge retrieval
 
 ## Commands
 
