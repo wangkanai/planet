@@ -6,3 +6,4 @@ Wangkanai Graphics library, including its features, usage, and examples.
 ## Table of Contents
 
 - [Architecture](Architecture/README.md)
+- Datastore
