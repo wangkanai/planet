@@ -88,19 +88,6 @@ Examples of modules that should follow this pattern:
 - `mcp__fetch__fetch` - Fetch URLs with content extraction
 - `mcp__ide__getDiagnostics` - Get IDE diagnostics
 
-### Filesystem Operations
-- `mcp__filesystem__read_file` - Read file contents with optional head/tail
-- `mcp__filesystem__read_multiple_files` - Read multiple files simultaneously
-- `mcp__filesystem__write_file` - Create or overwrite files
-- `mcp__filesystem__edit_file` - Make line-based edits to files
-- `mcp__filesystem__create_directory` - Create directories
-- `mcp__filesystem__list_directory` - List directory contents
-- `mcp__filesystem__list_directory_with_sizes` - List with file sizes
-- `mcp__filesystem__directory_tree` - Get recursive directory tree
-- `mcp__filesystem__move_file` - Move or rename files
-- `mcp__filesystem__search_files` - Search for files by pattern
-- `mcp__filesystem__get_file_info` - Get file metadata
-- `mcp__filesystem__list_allowed_directories` - Show accessible directories
 
 ### GitHub Integration
 - `mcp__github__get_file_contents` - Read repository files
