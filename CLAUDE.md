@@ -5,7 +5,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Claude Code
 
 - Claude Code local development has MCP access to extra resources like SonarCloud, GitHub issues, and discussions.
-- **Serena Code Intelligence** is enabled for advanced code analysis and project understanding
 - **ConPort Knowledge Management** is available for project knowledge organization and retrieval
 
 ## Coding Guidelines
@@ -186,33 +185,6 @@ Examples of modules that should follow this pattern:
 - `mcp__memory__search_nodes` - Search graph nodes
 - `mcp__memory__open_nodes` - Open specific nodes
 
-### Serena Code Intelligence
-- `mcp__serena__list_dir` - List directory contents with recursive option
-- `mcp__serena__find_file` - Find files by name/mask pattern
-- `mcp__serena__replace_regex` - Replace text using regular expressions
-- `mcp__serena__search_for_pattern` - Flexible pattern search in codebase
-- `mcp__serena__replace_symbol_body` - Replace entire symbol body
-- `mcp__serena__insert_after_symbol` - Insert content after symbol
-- `mcp__serena__insert_before_symbol` - Insert content before symbol
-- `mcp__serena__write_memory` - Write project information to memory
-- `mcp__serena__read_memory` - Read memory file contents
-- `mcp__serena__list_memories` - List available memory files
-- `mcp__serena__delete_memory` - Delete memory files
-- `mcp__serena__activate_project` - Activate project by name/path
-- `mcp__serena__remove_project` - Remove project from configuration
-- `mcp__serena__switch_modes` - Switch between operation modes
-- `mcp__serena__get_current_config` - Get current agent configuration
-- `mcp__serena__check_onboarding_performed` - Check if onboarding completed
-- `mcp__serena__onboarding` - Perform project onboarding
-- `mcp__serena__think_about_collected_information` - Analyze collected information
-- `mcp__serena__think_about_task_adherence` - Review task progress
-- `mcp__serena__think_about_whether_you_are_done` - Evaluate task completion
-- `mcp__serena__summarize_changes` - Summarize codebase changes
-- `mcp__serena__prepare_for_new_conversation` - Prepare for new session
-- `mcp__serena__initial_instructions` - Get initial project instructions
-- `mcp__serena__jet_brains_find_symbol` - Find symbols/code entities
-- `mcp__serena__jet_brains_find_referencing_symbols` - Find symbol references
-- `mcp__serena__jet_brains_get_symbols_overview` - Get file symbol overview
 
 ### ConPort Knowledge Management
 - `mcp__conport__get_product_context` - Retrieve project goals, features, and architecture
@@ -251,29 +223,6 @@ Examples of modules that should follow this pattern:
 
 - SonarCube reposts are available via MCP `sonarqube` command.
 
-## Serena Code Intelligence
-
-Serena provides advanced code analysis and project understanding capabilities:
-
-### Usage Guidelines
-- **Always call `mcp__serena__initial_instructions`** before starting any coding task
-- **Use `mcp__serena__check_onboarding_performed`** to verify project setup
-- **Call `mcp__serena__think_about_collected_information`** after research phases
-- **Use `mcp__serena__think_about_task_adherence`** before making code changes
-- **Call `mcp__serena__think_about_whether_you_are_done`** when completing tasks
-- **Use `mcp__serena__summarize_changes`** after completing coding work
-
-### Code Analysis Tools
-- **Symbol Search**: Use `mcp__serena__jet_brains_find_symbol` for finding classes, methods, properties
-- **Reference Analysis**: Use `mcp__serena__jet_brains_find_referencing_symbols` to understand usage
-- **File Overview**: Use `mcp__serena__jet_brains_get_symbols_overview` for file structure understanding
-- **Pattern Search**: Use `mcp__serena__search_for_pattern` for flexible code searches
-- **Regex Replace**: Use `mcp__serena__replace_regex` for complex text replacements
-
-### Memory Management
-- Use `mcp__serena__write_memory` to document important project insights
-- Use `mcp__serena__read_memory` to access previously documented knowledge
-- Keep memories focused and specific to enable efficient retrieval
 
 ## ConPort Knowledge Management
 
