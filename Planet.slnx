@@ -2,8 +2,6 @@
   <Folder Name="/.claude/">
     <File Path="CLAUDE.md" />
     <File Path=".claude\settings.json" />
-    <File Path=".claude\mcp.txt" />
-    <File Path="projectBrief.md" />
   </Folder>
   <Folder Name="/.github/">
     <File Path=".github\workflows\dotnet.yml" />
