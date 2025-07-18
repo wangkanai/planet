@@ -35,22 +35,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Test Project Structure Guidelines
 
 ### Core Principle: Clear Separation
-Maintain clear separation between core source code and test codebase to ensure clean architecture and maintainability throughout the entire repository.
+
+Maintain clear separation between core source code and test codebase to ensure clean architecture and maintainability
+throughout the entire repository.
 
 ### Test Platform Project
+
 The test platform project (`<Module>.TestPlatform`) should contain:
+
 - **Mocks**: All mock implementations and mock factories
 - **Examples**: Sample data, test fixtures, and example implementations
 - **Test Validation Logic**: Common validation helpers and assertion extensions
 - **Test Comparison Logic**: Comparison utilities and result analysis tools
 
 ### Test Organization Rules
+
 - **Core Source Projects**: Should contain only production code with minimal test utilities
 - **Unit Test Projects**: Should contain only actual test methods and simple test setup
 - **Platform Test Projects**: Should contain all reusable test infrastructure, utilities, and complex test logic
 - **Integration Test Projects**: Should focus on integration scenarios, using platform utilities for setup
 
 ### Project Structure Example
+
 This pattern should be applied consistently across all modules in the repository:
 
 ```
@@ -68,14 +74,16 @@ This pattern should be applied consistently across all modules in the repository
 ```
 
 Examples of modules that should follow this pattern:
+
 - **Graphics/**: Graphics processing and image handling
-- **Spatial/**: Geospatial data handling and coordinate systems  
+- **Spatial/**: Geospatial data handling and coordinate systems
 - **Portal/**: Blazor web application components
 - **Engine/**: Console application and tile processing
 - **Providers/**: External map service integrations
 - **Protocols/**: Map service protocol implementations
 
 ### Benefits
+
 - **Maintainability**: Test utilities are centralized and reusable across all modules
 - **Clarity**: Clear distinction between production code and test infrastructure
 - **Consistency**: Standardized test patterns across the entire solution
@@ -84,12 +92,13 @@ Examples of modules that should follow this pattern:
 ## Available MCP Tools
 
 ### Advanced Tools
+
 - `mcp__sequential-thinking__sequentialthinking` - Sequential thinking process
 - `mcp__fetch__fetch` - Fetch URLs with content extraction
 - `mcp__ide__getDiagnostics` - Get IDE diagnostics
 
-
 ### GitHub Integration
+
 - `mcp__github__get_file_contents` - Read repository files
 - `mcp__github__create_or_update_file` - Create/update repository files
 - `mcp__github__push_files` - Push multiple files in single commit
@@ -118,6 +127,7 @@ Examples of modules that should follow this pattern:
 - `mcp__github__search_users` - Search users
 
 ### Container Management (Podman/Docker)
+
 - `mcp__podman__container_list` - List containers
 - `mcp__podman__container_run` - Run containers
 - `mcp__podman__container_stop` - Stop containers
@@ -133,6 +143,7 @@ Examples of modules that should follow this pattern:
 - `mcp__podman__volume_list` - List volumes
 
 ### IDE Integration (JetBrains)
+
 - `mcp__jetbrains__get_open_in_editor_file_text` - Get current file text
 - `mcp__jetbrains__get_open_in_editor_file_path` - Get current file path
 - `mcp__jetbrains__get_selected_in_editor_text` - Get selected text
@@ -161,6 +172,7 @@ Examples of modules that should follow this pattern:
 - `mcp__jetbrains__execute_terminal_command` - Execute terminal commands
 
 ### Memory/Knowledge Management
+
 - `mcp__memory__create_entities` - Create knowledge graph entities
 - `mcp__memory__create_relations` - Create entity relations
 - `mcp__memory__add_observations` - Add entity observations
@@ -170,8 +182,6 @@ Examples of modules that should follow this pattern:
 - `mcp__memory__read_graph` - Read entire knowledge graph
 - `mcp__memory__search_nodes` - Search graph nodes
 - `mcp__memory__open_nodes` - Open specific nodes
-
-
 
 ## GitHub Repository
 
@@ -184,32 +194,67 @@ Examples of modules that should follow this pattern:
 
 ## Code Quality
 
-- SonarCube reposts are available via MCP `sonarqube` command.
+### SonarQube Integration
 
+Project Key: `wangkanai_planet`
 
+- `mcp__sonarqube__projects` - List all SonarQube projects with metadata
+- `mcp__sonarqube__metrics` - Get available metrics from SonarQube
+- `mcp__sonarqube__issues` - Search and filter issues by severity, status, assignee, tags, and more
+- `mcp__sonarqube__markIssueFalsePositive` - Mark an issue as false positive
+- `mcp__sonarqube__markIssueWontFix` - Mark an issue as won't fix
+- `mcp__sonarqube__markIssuesFalsePositive` - Mark multiple issues as false positive (bulk)
+- `mcp__sonarqube__markIssuesWontFix` - Mark multiple issues as won't fix (bulk)
+- `mcp__sonarqube__addCommentToIssue` - Add comments to issues
+- `mcp__sonarqube__assignIssue` - Assign issues to users
+- `mcp__sonarqube__confirmIssue` - Confirm issues
+- `mcp__sonarqube__unconfirmIssue` - Unconfirm issues
+- `mcp__sonarqube__resolveIssue` - Resolve issues
+- `mcp__sonarqube__reopenIssue` - Reopen issues
+- `mcp__sonarqube__system_health` - Get SonarQube instance health status
+- `mcp__sonarqube__system_status` - Get SonarQube instance status
+- `mcp__sonarqube__system_ping` - Ping SonarQube instance
+- `mcp__sonarqube__measures_component` - Get measures for specific components
+- `mcp__sonarqube__measures_components` - Get measures for multiple components
+- `mcp__sonarqube__measures_history` - Get measures history for components
+- `mcp__sonarqube__quality_gates` - List available quality gates
+- `mcp__sonarqube__quality_gate` - Get quality gate conditions
+- `mcp__sonarqube__quality_gate_status` - Get project quality gate status
+- `mcp__sonarqube__source_code` - View source code with issues highlighted
+- `mcp__sonarqube__scm_blame` - Get SCM blame information for source code
+- `mcp__sonarqube__hotspots` - Search for security hotspots
+- `mcp__sonarqube__hotspot` - Get detailed security hotspot information
+- `mcp__sonarqube__update_hotspot_status` - Update security hotspot status
+- `mcp__sonarqube__components` - Search and navigate components (projects, directories, files)
 
 ## Commands
 
 ### Build Commands
+
 - `dotnet build -c Release -tl` - Build the entire solution in Release configuration
 - `dotnet clean -c Release -tl` - Clean build artifacts
 - `./build.ps1` - Full build script that includes clean, restore, build sequence
 
 ### Test Commands
+
 - `dotnet test` - Run all tests across the solution
 - `dotnet test --project <specific-test-project>` - Run tests for a specific project
 - Tests use xUnit v3 framework with testing platform support enabled (check xunit.runner.json files in test projects)
 
 ### Benchmarking Commands
-- `dotnet run --project Graphics/Rasters/src/Root/Graphics.Rasters.Benchmarks -c Release` - Run performance benchmarks for raster operations
+
+- `dotnet run --project Graphics/Rasters/src/Root/Graphics.Rasters.Benchmarks -c Release` - Run performance benchmarks
+  for raster operations
 - BenchmarkDotNet projects available for performance analysis and optimization
 
 ### Development Commands
+
 - `dotnet restore` - Restore NuGet packages
 - `dotnet run --project Portal/src/Server` - Run the Portal web application
 - `dotnet run --project Engine/src/Console` - Run the Engine console application
 
 ### Database Commands (Portal)
+
 - `./Portal/db.ps1 -add "<migration-name>"` - Add new Entity Framework migration
 - `./Portal/db.ps1 -list` - List all migrations
 - `./Portal/db.ps1 -remove` - Remove the last migration
@@ -218,9 +263,11 @@ Examples of modules that should follow this pattern:
 - `./Portal/db.ps1 -reset` - Clean all migrations and create initial migration
 
 ### Engine Console Build
+
 - `./Engine/src/Console/build.ps1` - Build and publish Engine console as 'tiler' executable
 
 ### Frontend Commands (Portal)
+
 - `npm run build` - Build CSS from SCSS sources
 - `npm run watch` - Watch and rebuild CSS on changes
 - `npm run lib` - Copy library files to wwwroot
@@ -230,19 +277,24 @@ Examples of modules that should follow this pattern:
 ## Architecture
 
 ### Solution Structure
-The Planet solution follows a modular architecture with these main components organized in separate libraries for clear separation of concerns:
+
+The Planet solution follows a modular architecture with these main components organized in separate libraries for clear
+separation of concerns:
 
 **Portal** - Blazor Server/WASM hybrid web application with ASP.NET Core Identity
+
 - Uses Clean Architecture patterns (Domain, Application, Infrastructure, Persistence layers)
 - Client project for WebAssembly components
 - Server project for Blazor Server hosting
 - SQLite database with Entity Framework Core
 
 **Engine** - Console application for map tile processing
+
 - Domain layer for core business logic
 - Console layer for CLI operations
 
 **Spatial** - Geospatial data handling library (namespace: `Wangkanai.Spatial`)
+
 - Root: Core coordinate systems (Geodetic, Mercator), map extent and tile calculations
 - MbTiles: MBTiles format support with SQLite-based tile storage
 - GeoPackages: GeoPackage format support for geospatial data containers
@@ -251,26 +303,32 @@ The Planet solution follows a modular architecture with these main components or
 - MtPkgs: Map tile package format support
 
 **Providers** - External map service integrations
+
 - Bing Maps provider
 - Google Maps provider
 - Each provider has corresponding test projects
 
 **Graphics** - Graphics processing and image handling library (namespace: `Wangkanai.Graphics`)
+
 - Abstractions: Core image processing interfaces and contracts
-- Rasters: Raster image processing with multi-format support (TIFF, PNG, JPEG, WebP, AVIF, HEIF), metadata handling, and performance optimizations
+- Rasters: Raster image processing with multi-format support (TIFF, PNG, JPEG, WebP, AVIF, HEIF), metadata handling, and
+  performance optimizations
 - Vectors: Vector graphics processing and manipulation
 - Includes comprehensive benchmarking and validation tools
 - Format specifications documented in Graphics/GRAPHICS_FORMAT_SPECIFICATIONS.md
 
 **Protocols** - Map service protocol implementations
+
 - WMS (Web Map Service) protocol support
 - Root protocol abstractions and utilities
 - Protocol-specific implementations for serving map tiles
 
 **Extensions** - Extension methods and utilities for the Planet ecosystem
+
 - Datastore: Data storage extensions and utilities
 
 ### Key Technologies
+
 - .NET 9.0 with nullable reference types enabled
 - Blazor Server + WebAssembly (hybrid hosting model)
 - ASP.NET Core Identity for authentication
@@ -284,11 +342,13 @@ The Planet solution follows a modular architecture with these main components or
 - Async disposal patterns for efficient resource management in graphics operations
 
 ### Database Context
+
 - Portal uses `PlanetDbContext` with SQLite connection
 - Identity system with custom `PlanetUser` and `PlanetRole` entities
 - Migrations located in Portal/src/Persistence/Migrations
 
 ### Testing Strategy
+
 - All major components have corresponding test projects
 - Tests use xUnit v3 framework with testing platform support enabled
 - Test projects follow naming convention: `<ProjectName>.Tests`
@@ -296,6 +356,7 @@ The Planet solution follows a modular architecture with these main components or
 - Unit test guidelines documented in module-specific GUIDELINES.md files
 
 ### Build Configuration
+
 - Central package management via Directory.Packages.props
 - Directory.Build.props defines common MSBuild properties
 - Target framework: net9.0
@@ -303,6 +364,7 @@ The Planet solution follows a modular architecture with these main components or
 - Frontend assets managed via NPM with Tabler UI components
 
 ### Project Structure Details
+
 - **Engine/src/Console**: Console application for tile processing operations
 - **Engine/src/Domain**: Engine domain logic
 - **Extensions/Datastore/src**: Data storage extensions and utilities
